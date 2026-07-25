@@ -1,0 +1,29 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'register_student_request_model.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+RegisterStudentRequestModel _$RegisterStudentRequestModelFromJson(
+  Map<String, dynamic> json,
+) => RegisterStudentRequestModel(
+  email: json['email'] as String,
+  password: json['password'] as String,
+  fullName: json['fullName'] as String,
+  parentGuardianEmail: json['parentGuardianEmail'] as String,
+  dateOfBirth: json['dateOfBirth'] == null
+      ? null
+      : DateTime.parse(json['dateOfBirth'] as String),
+);
+
+Map<String, dynamic> _$RegisterStudentRequestModelToJson(
+  RegisterStudentRequestModel instance,
+) => <String, dynamic>{
+  'email': instance.email,
+  'password': instance.password,
+  'fullName': instance.fullName,
+  'parentGuardianEmail': instance.parentGuardianEmail,
+  'dateOfBirth': ?instance.dateOfBirth?.toIso8601String(),
+};

@@ -5,7 +5,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.12.2
+  sdk: ^3.10.1
 
 dependencies:
   flutter:
@@ -47,7 +47,7 @@ dependencies:
   cached_network_image: ^3.4.1 
   # to launch urls
   url_launcher: ^6.3.2 
-` # Firebase dependencies
+  # Firebase dependencies
   firebase_core: ^4.6.0
   firebase_messaging: ^16.1.3
   firebase_crashlytics: ^5.1.0
@@ -55,6 +55,17 @@ dependencies:
   flutter_local_notifications: ^21.0.0
 
 dev_dependencies:
+  # for updating your Flutter app's launcher icon.
+  flutter_launcher_icons: ^0.14.4
+  #Customize Flutter's default white native splash screen
+  flutter_native_splash: ^2.4.7
+  #A build system for Dart code generation and modular compilation
+  build_runner: ^2.10.4
+  # Code generator (mainly used with cubit & retrofit)
+  freezed: ^3.2.3
+  # Automatically generate code for converting to and from JSON by annotating Dart classes
+  json_serializable: ^6.9.4
+  retrofit_generator: ^10.2.0
   flutter_test:
     sdk: flutter
 

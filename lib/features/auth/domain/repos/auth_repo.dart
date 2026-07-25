@@ -1,0 +1,19 @@
+import 'package:draya_mobile/core/networking/api_result.dart';
+import 'package:draya_mobile/features/auth/data/models/auth_response_model.dart';
+import 'package:draya_mobile/features/auth/data/models/login_request_model.dart';
+import 'package:draya_mobile/features/auth/data/models/register_student_request_model.dart';
+import 'package:draya_mobile/features/auth/data/models/register_teacher_request_model.dart';
+
+abstract class AuthRepo {
+  Future<ApiResult<AuthResponseModel>> login(
+    LoginRequestModel loginRequestModel,
+  );
+
+  Future<ApiResult<AuthResponseModel>> registerTeacher(
+    RegisterTeacherRequestModel registerTeacherRequestModel,
+  );
+
+  Future<ApiResult<AuthResponseModel>> registerStudent(
+    RegisterStudentRequestModel registerStudentRequestModel,
+  );
+}

@@ -1,0 +1,5 @@
+class AppImages { 
+}
+
+class AppSvgs {
+}
