@@ -1,3 +1,4 @@
+import 'package:draya_mobile/features/home/presentation/home_screen/pages/home_screen_page.dart';
 import 'package:flutter/material.dart';
 
 class DrayaApp extends StatelessWidget {
@@ -12,7 +13,7 @@ class DrayaApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Scaffold(body: Center(child: Text('Welcome to Draya!'))),
+      home: const HomeScreenPage(),
     );
   }
 }
