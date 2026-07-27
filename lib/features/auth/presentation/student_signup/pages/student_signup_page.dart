@@ -177,7 +177,7 @@ class _StudentSignupPageState extends State<StudentSignupPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("already have an account?"),
+                      const Text("Already have an account?"),
                       TextButton(
                         onPressed: () {
                           context.read<StudentSignupCubit>().navigateToSignin();
