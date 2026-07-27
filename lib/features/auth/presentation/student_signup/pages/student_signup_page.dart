@@ -1,8 +1,8 @@
 import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/features/auth/domain/enums/user_role.dart';
-import 'package:draya_mobile/features/auth/domain/validation/email_validator.dart';
-import 'package:draya_mobile/features/auth/domain/validation/password_validator.dart';
-import 'package:draya_mobile/features/auth/domain/validation/validation_result.dart';
+import 'package:draya_mobile/core/enums/user_role.dart';
+import 'package:draya_mobile/core/validation/email_validator.dart';
+import 'package:draya_mobile/core/validation/password_validator.dart';
+import 'package:draya_mobile/core/validation/validation_result.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/pages/signin_page.dart';
 import 'package:draya_mobile/features/auth/presentation/student_signup/cubit/student_signup_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/student_signup/cubit/student_signup_state.dart';

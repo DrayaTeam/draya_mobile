@@ -1,4 +1,4 @@
-import 'package:draya_mobile/features/auth/domain/enums/user_role.dart';
+import 'package:draya_mobile/core/enums/user_role.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
