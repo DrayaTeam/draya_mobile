@@ -2,13 +2,14 @@ import 'package:draya_mobile/features/auth/presentation/teacher_signup/cubit/tea
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TeacherSignupCubit extends Cubit<TeacherSignupState> {
-  TeacherSignupCubit() : super(TeacherSignupInitial());
+  TeacherSignupCubit() : super(const TeacherSignupState.initial());
 
   void navigateToMainScreen() {
-    emit(TeacherSignupSuccess());
+    emit(const TeacherSignupState.success());
   }
 
   void navigateToSignin() {
-    emit(NavigateToSignin());
+    emit(const TeacherSignupState.navigateToSignin());
+    emit(const TeacherSignupState.initial());
   }
 }

@@ -1,5 +1,5 @@
 import 'package:draya_mobile/core/helpers/app_regex.dart';
-import 'package:draya_mobile/features/auth/domain/validation/validation_result.dart';
+import 'package:draya_mobile/core/validation/validation_result.dart';
 
 abstract class PasswordValidator {
   static ValidationResult validate({required String? password}) {

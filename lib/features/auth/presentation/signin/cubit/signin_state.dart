@@ -1,21 +1,18 @@
-import 'package:draya_mobile/features/auth/domain/enums/user_role.dart';
+import 'package:draya_mobile/core/enums/user_role.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-sealed class SigninState {}
+part "signin_state.freezed.dart";
 
-class SigninInitial extends SigninState {}
+@freezed
+sealed class SigninState with _$SigninState {
+  const factory SigninState.initial() = SigninInitial;
 
-class SigninLoading extends SigninState {}
+  const factory SigninState.loading() = SigninLoading;
 
-class SigninSuccess extends SigninState {}
+  const factory SigninState.success() = SigninSuccess;
 
-class SigninFailure extends SigninState {
-  final String message;
+  const factory SigninState.failure({required String message}) = SigninFailure;
 
-  SigninFailure({required this.message});
-}
-
-class NavigateToSignup extends SigninState {
-  final UserRole userRole;
-
-  NavigateToSignup({required this.userRole});
+  const factory SigninState.navigateToSignup({required UserRole userRole}) =
+      NavigateToSignup;
 }

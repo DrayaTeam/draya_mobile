@@ -1,6 +1,6 @@
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/features/auth/domain/enums/user_role.dart';
+import 'package:draya_mobile/core/enums/user_role.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/pages/signin_page.dart';
 import 'package:draya_mobile/features/home/presentation/home_screen/cubit/home_screen_cubit.dart';
 import 'package:draya_mobile/features/home/presentation/home_screen/cubit/home_screen_state.dart';

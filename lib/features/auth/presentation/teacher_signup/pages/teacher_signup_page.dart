@@ -1,8 +1,8 @@
 import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/features/auth/domain/enums/user_role.dart';
-import 'package:draya_mobile/features/auth/domain/validation/email_validator.dart';
-import 'package:draya_mobile/features/auth/domain/validation/password_validator.dart';
-import 'package:draya_mobile/features/auth/domain/validation/validation_result.dart';
+import 'package:draya_mobile/core/enums/user_role.dart';
+import 'package:draya_mobile/core/validation/email_validator.dart';
+import 'package:draya_mobile/core/validation/password_validator.dart';
+import 'package:draya_mobile/core/validation/validation_result.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/pages/signin_page.dart';
 import 'package:draya_mobile/features/auth/presentation/teacher_signup/cubit/teacher_signup_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/teacher_signup/cubit/teacher_signup_state.dart';
@@ -177,7 +177,7 @@ class _TeacherSignupPageState extends State<TeacherSignupPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("already have an account?"),
+                      const Text("Already have an account?"),
                       TextButton(
                         onPressed: () {
                           context.read<TeacherSignupCubit>().navigateToSignin();

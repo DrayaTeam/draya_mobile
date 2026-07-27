@@ -1,15 +1,17 @@
-sealed class StudentSignupState {}
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class StudentSignupInitial extends StudentSignupState {}
+part "student_signup_state.freezed.dart";
 
-class StudentSignupLoading extends StudentSignupState {}
+@freezed
+sealed class StudentSignupState with _$StudentSignupState {
+  const factory StudentSignupState.initial() = StudentSignupInitial;
 
-class StudentSignupSuccess extends StudentSignupState {}
+  const factory StudentSignupState.loading() = StudentSignupLoading;
 
-class StudentSignupFailure extends StudentSignupState {
-  final String message;
+  const factory StudentSignupState.success() = StudentSignupSuccess;
 
-  StudentSignupFailure({required this.message});
+  const factory StudentSignupState.failure({required String message}) =
+      StudentSignupFailure;
+
+  const factory StudentSignupState.navigateToSignin() = NavigateToSignin;
 }
-
-class NavigateToSignin extends StudentSignupState {}
