@@ -1,4 +1,5 @@
 import 'package:draya_mobile/core/router/app_router.dart';
+import 'package:draya_mobile/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class DrayaApp extends StatelessWidget {
@@ -7,11 +8,12 @@ class DrayaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      // debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       title: 'Draya',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      theme: AppTheme.light,
+      builder: (context, child) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: child ?? const SizedBox.shrink(),
       ),
       routerConfig: AppRouter.router,
     );
