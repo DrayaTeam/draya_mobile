@@ -7,9 +7,4 @@ class TeacherSignupCubit extends Cubit<TeacherSignupState> {
   void navigateToMainScreen() {
     emit(const TeacherSignupState.success());
   }
-
-  void navigateToSignin() {
-    emit(const TeacherSignupState.navigateToSignin());
-    emit(const TeacherSignupState.initial());
-  }
 }

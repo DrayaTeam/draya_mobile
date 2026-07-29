@@ -1,7 +1,8 @@
+import 'package:draya_mobile/core/helpers/app_navigator.dart';
+import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/enums/user_role.dart';
-import 'package:draya_mobile/features/auth/presentation/signin/pages/signin_page.dart';
 import 'package:draya_mobile/features/home/presentation/home_screen/cubit/home_screen_cubit.dart';
 import 'package:draya_mobile/features/home/presentation/home_screen/cubit/home_screen_state.dart';
 import 'package:flutter/material.dart';
@@ -10,29 +11,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class HomeScreenPage extends StatelessWidget {
   const HomeScreenPage({super.key});
 
+  void _handleNavigation({
+    required BuildContext context,
+    required UserRole userRole,
+  }) {
+    AppNavigator.push(
+      context: context,
+      path: AppRoutes.signinPage,
+      pathParameters: {AppRoutes.userRoleParameter: userRole.name},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<HomeScreenCubit, HomeScreenState>(
-      listener: (context, state) {
-        if (state is NavigateToStudentSignin) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SigninPage(
-                userRole: UserRole.student,
-              ),
-            ),
-          );
-        } else if (state is NavigateToTeacherSignin) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  const SigninPage(userRole: UserRole.teacher),
-            ),
-          );
-        }
-      },
+      listener: (context, state) {},
       child: Scaffold(
         body: SafeArea(
           child: Center(
@@ -56,18 +49,14 @@ class HomeScreenPage extends StatelessWidget {
                     style: TextStyle(fontSize: AppSizes.s20),
                   ),
                   const SizedBox(height: AppSizes.s12),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<HomeScreenCubit>().navigateToStudentSignin();
-                    },
-                    child: const Text("Student"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<HomeScreenCubit>().navigateToTeacherSignin();
-                    },
-                    child: const Text("Teacher"),
-                  ),
+                  ...UserRole.values.map((user) {
+                    return ElevatedButton(
+                      onPressed: () {
+                        _handleNavigation(context: context, userRole: user);
+                      },
+                      child: Text(user.displayName),
+                    );
+                  }),
                 ],
               ),
             ),

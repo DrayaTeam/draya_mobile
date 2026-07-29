@@ -12,6 +12,4 @@ sealed class StudentSignupState with _$StudentSignupState {
 
   const factory StudentSignupState.failure({required String message}) =
       StudentSignupFailure;
-
-  const factory StudentSignupState.navigateToSignin() = NavigateToSignin;
 }

@@ -55,15 +55,14 @@ extension SigninStatePatterns on SigninState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SigninInitial value)?  initial,TResult Function( SigninLoading value)?  loading,TResult Function( SigninSuccess value)?  success,TResult Function( SigninFailure value)?  failure,TResult Function( NavigateToSignup value)?  navigateToSignup,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SigninInitial value)?  initial,TResult Function( SigninLoading value)?  loading,TResult Function( SigninSuccess value)?  success,TResult Function( SigninFailure value)?  failure,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case SigninInitial() when initial != null:
 return initial(_that);case SigninLoading() when loading != null:
 return loading(_that);case SigninSuccess() when success != null:
 return success(_that);case SigninFailure() when failure != null:
-return failure(_that);case NavigateToSignup() when navigateToSignup != null:
-return navigateToSignup(_that);case _:
+return failure(_that);case _:
   return orElse();
 
 }
@@ -81,15 +80,14 @@ return navigateToSignup(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SigninInitial value)  initial,required TResult Function( SigninLoading value)  loading,required TResult Function( SigninSuccess value)  success,required TResult Function( SigninFailure value)  failure,required TResult Function( NavigateToSignup value)  navigateToSignup,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SigninInitial value)  initial,required TResult Function( SigninLoading value)  loading,required TResult Function( SigninSuccess value)  success,required TResult Function( SigninFailure value)  failure,}){
 final _that = this;
 switch (_that) {
 case SigninInitial():
 return initial(_that);case SigninLoading():
 return loading(_that);case SigninSuccess():
 return success(_that);case SigninFailure():
-return failure(_that);case NavigateToSignup():
-return navigateToSignup(_that);}
+return failure(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -103,15 +101,14 @@ return navigateToSignup(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SigninInitial value)?  initial,TResult? Function( SigninLoading value)?  loading,TResult? Function( SigninSuccess value)?  success,TResult? Function( SigninFailure value)?  failure,TResult? Function( NavigateToSignup value)?  navigateToSignup,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SigninInitial value)?  initial,TResult? Function( SigninLoading value)?  loading,TResult? Function( SigninSuccess value)?  success,TResult? Function( SigninFailure value)?  failure,}){
 final _that = this;
 switch (_that) {
 case SigninInitial() when initial != null:
 return initial(_that);case SigninLoading() when loading != null:
 return loading(_that);case SigninSuccess() when success != null:
 return success(_that);case SigninFailure() when failure != null:
-return failure(_that);case NavigateToSignup() when navigateToSignup != null:
-return navigateToSignup(_that);case _:
+return failure(_that);case _:
   return null;
 
 }
@@ -128,14 +125,13 @@ return navigateToSignup(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  success,TResult Function( String message)?  failure,TResult Function( UserRole userRole)?  navigateToSignup,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  success,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SigninInitial() when initial != null:
 return initial();case SigninLoading() when loading != null:
 return loading();case SigninSuccess() when success != null:
 return success();case SigninFailure() when failure != null:
-return failure(_that.message);case NavigateToSignup() when navigateToSignup != null:
-return navigateToSignup(_that.userRole);case _:
+return failure(_that.message);case _:
   return orElse();
 
 }
@@ -153,14 +149,13 @@ return navigateToSignup(_that.userRole);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  success,required TResult Function( String message)  failure,required TResult Function( UserRole userRole)  navigateToSignup,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  success,required TResult Function( String message)  failure,}) {final _that = this;
 switch (_that) {
 case SigninInitial():
 return initial();case SigninLoading():
 return loading();case SigninSuccess():
 return success();case SigninFailure():
-return failure(_that.message);case NavigateToSignup():
-return navigateToSignup(_that.userRole);}
+return failure(_that.message);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -174,14 +169,13 @@ return navigateToSignup(_that.userRole);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  success,TResult? Function( String message)?  failure,TResult? Function( UserRole userRole)?  navigateToSignup,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  success,TResult? Function( String message)?  failure,}) {final _that = this;
 switch (_that) {
 case SigninInitial() when initial != null:
 return initial();case SigninLoading() when loading != null:
 return loading();case SigninSuccess() when success != null:
 return success();case SigninFailure() when failure != null:
-return failure(_that.message);case NavigateToSignup() when navigateToSignup != null:
-return navigateToSignup(_that.userRole);case _:
+return failure(_that.message);case _:
   return null;
 
 }
@@ -345,72 +339,6 @@ class _$SigninFailureCopyWithImpl<$Res>
   return _then(SigninFailure(
 message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class NavigateToSignup implements SigninState {
-  const NavigateToSignup({required this.userRole});
-  
-
- final  UserRole userRole;
-
-/// Create a copy of SigninState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$NavigateToSignupCopyWith<NavigateToSignup> get copyWith => _$NavigateToSignupCopyWithImpl<NavigateToSignup>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NavigateToSignup&&(identical(other.userRole, userRole) || other.userRole == userRole));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,userRole);
-
-@override
-String toString() {
-  return 'SigninState.navigateToSignup(userRole: $userRole)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $NavigateToSignupCopyWith<$Res> implements $SigninStateCopyWith<$Res> {
-  factory $NavigateToSignupCopyWith(NavigateToSignup value, $Res Function(NavigateToSignup) _then) = _$NavigateToSignupCopyWithImpl;
-@useResult
-$Res call({
- UserRole userRole
-});
-
-
-
-
-}
-/// @nodoc
-class _$NavigateToSignupCopyWithImpl<$Res>
-    implements $NavigateToSignupCopyWith<$Res> {
-  _$NavigateToSignupCopyWithImpl(this._self, this._then);
-
-  final NavigateToSignup _self;
-  final $Res Function(NavigateToSignup) _then;
-
-/// Create a copy of SigninState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? userRole = null,}) {
-  return _then(NavigateToSignup(
-userRole: null == userRole ? _self.userRole : userRole // ignore: cast_nullable_to_non_nullable
-as UserRole,
   ));
 }
 

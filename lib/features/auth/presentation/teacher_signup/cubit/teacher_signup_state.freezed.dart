@@ -55,15 +55,14 @@ extension TeacherSignupStatePatterns on TeacherSignupState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( TeacherSignupInitial value)?  initial,TResult Function( TeacherSignupLoading value)?  loading,TResult Function( TeacherSignupSuccess value)?  success,TResult Function( TeacherSignupFailure value)?  failure,TResult Function( NavigateToSignin value)?  navigateToSignin,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( TeacherSignupInitial value)?  initial,TResult Function( TeacherSignupLoading value)?  loading,TResult Function( TeacherSignupSuccess value)?  success,TResult Function( TeacherSignupFailure value)?  failure,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case TeacherSignupInitial() when initial != null:
 return initial(_that);case TeacherSignupLoading() when loading != null:
 return loading(_that);case TeacherSignupSuccess() when success != null:
 return success(_that);case TeacherSignupFailure() when failure != null:
-return failure(_that);case NavigateToSignin() when navigateToSignin != null:
-return navigateToSignin(_that);case _:
+return failure(_that);case _:
   return orElse();
 
 }
@@ -81,15 +80,14 @@ return navigateToSignin(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( TeacherSignupInitial value)  initial,required TResult Function( TeacherSignupLoading value)  loading,required TResult Function( TeacherSignupSuccess value)  success,required TResult Function( TeacherSignupFailure value)  failure,required TResult Function( NavigateToSignin value)  navigateToSignin,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( TeacherSignupInitial value)  initial,required TResult Function( TeacherSignupLoading value)  loading,required TResult Function( TeacherSignupSuccess value)  success,required TResult Function( TeacherSignupFailure value)  failure,}){
 final _that = this;
 switch (_that) {
 case TeacherSignupInitial():
 return initial(_that);case TeacherSignupLoading():
 return loading(_that);case TeacherSignupSuccess():
 return success(_that);case TeacherSignupFailure():
-return failure(_that);case NavigateToSignin():
-return navigateToSignin(_that);}
+return failure(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -103,15 +101,14 @@ return navigateToSignin(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( TeacherSignupInitial value)?  initial,TResult? Function( TeacherSignupLoading value)?  loading,TResult? Function( TeacherSignupSuccess value)?  success,TResult? Function( TeacherSignupFailure value)?  failure,TResult? Function( NavigateToSignin value)?  navigateToSignin,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( TeacherSignupInitial value)?  initial,TResult? Function( TeacherSignupLoading value)?  loading,TResult? Function( TeacherSignupSuccess value)?  success,TResult? Function( TeacherSignupFailure value)?  failure,}){
 final _that = this;
 switch (_that) {
 case TeacherSignupInitial() when initial != null:
 return initial(_that);case TeacherSignupLoading() when loading != null:
 return loading(_that);case TeacherSignupSuccess() when success != null:
 return success(_that);case TeacherSignupFailure() when failure != null:
-return failure(_that);case NavigateToSignin() when navigateToSignin != null:
-return navigateToSignin(_that);case _:
+return failure(_that);case _:
   return null;
 
 }
@@ -128,14 +125,13 @@ return navigateToSignin(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  success,TResult Function( String message)?  failure,TResult Function()?  navigateToSignin,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  success,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case TeacherSignupInitial() when initial != null:
 return initial();case TeacherSignupLoading() when loading != null:
 return loading();case TeacherSignupSuccess() when success != null:
 return success();case TeacherSignupFailure() when failure != null:
-return failure(_that.message);case NavigateToSignin() when navigateToSignin != null:
-return navigateToSignin();case _:
+return failure(_that.message);case _:
   return orElse();
 
 }
@@ -153,14 +149,13 @@ return navigateToSignin();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  success,required TResult Function( String message)  failure,required TResult Function()  navigateToSignin,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  success,required TResult Function( String message)  failure,}) {final _that = this;
 switch (_that) {
 case TeacherSignupInitial():
 return initial();case TeacherSignupLoading():
 return loading();case TeacherSignupSuccess():
 return success();case TeacherSignupFailure():
-return failure(_that.message);case NavigateToSignin():
-return navigateToSignin();}
+return failure(_that.message);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -174,14 +169,13 @@ return navigateToSignin();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  success,TResult? Function( String message)?  failure,TResult? Function()?  navigateToSignin,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  success,TResult? Function( String message)?  failure,}) {final _that = this;
 switch (_that) {
 case TeacherSignupInitial() when initial != null:
 return initial();case TeacherSignupLoading() when loading != null:
 return loading();case TeacherSignupSuccess() when success != null:
 return success();case TeacherSignupFailure() when failure != null:
-return failure(_that.message);case NavigateToSignin() when navigateToSignin != null:
-return navigateToSignin();case _:
+return failure(_that.message);case _:
   return null;
 
 }
@@ -350,37 +344,5 @@ as String,
 
 
 }
-
-/// @nodoc
-
-
-class NavigateToSignin implements TeacherSignupState {
-  const NavigateToSignin();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NavigateToSignin);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'TeacherSignupState.navigateToSignin()';
-}
-
-
-}
-
-
-
 
 // dart format on
