@@ -5,7 +5,6 @@ import 'package:draya_mobile/core/enums/user_role.dart';
 import 'package:draya_mobile/core/validation/email_validator.dart';
 import 'package:draya_mobile/core/validation/password_validator.dart';
 import 'package:draya_mobile/core/validation/validation_result.dart';
-import 'package:draya_mobile/features/auth/presentation/signin/pages/signin_page.dart';
 import 'package:draya_mobile/features/auth/presentation/teacher_signup/cubit/teacher_signup_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/teacher_signup/cubit/teacher_signup_state.dart';
 import 'package:flutter/material.dart';

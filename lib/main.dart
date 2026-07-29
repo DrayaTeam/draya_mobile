@@ -4,10 +4,20 @@ import 'package:draya_mobile/features/auth/presentation/teacher_signup/cubit/tea
 import 'package:draya_mobile/features/home/presentation/home_screen/cubit/home_screen_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/services.dart';
 import 'app/draya_app.dart';
 
 void main() {
-  // runApp(const DrayaApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Color(0xFFFAFAF8),
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
+
   runApp(
     MultiBlocProvider(
       providers: [
