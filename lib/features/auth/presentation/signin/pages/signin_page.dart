@@ -1,3 +1,5 @@
+import 'package:draya_mobile/core/helpers/app_navigator.dart';
+import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/enums/user_role.dart';
 import 'package:draya_mobile/core/validation/email_validator.dart';
@@ -5,8 +7,6 @@ import 'package:draya_mobile/core/validation/password_validator.dart';
 import 'package:draya_mobile/core/validation/validation_result.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_state.dart';
-import 'package:draya_mobile/features/auth/presentation/student_signup/pages/student_signup_page.dart';
-import 'package:draya_mobile/features/auth/presentation/teacher_signup/pages/teacher_signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,26 +46,10 @@ class _SigninPageState extends State<SigninPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SigninCubit, SigninState>(
-      listener: (context, state) {
-        if (state is NavigateToSignup) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                switch (widget.userRole) {
-                  case UserRole.student:
-                    return const StudentSignupPage();
-                  case UserRole.teacher:
-                    return const TeacherSignupPage();
-                }
-              },
-            ),
-          );
-        }
-      },
+      listener: (context, state) {},
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Sign in as a ${widget.userRole.name}"),
+          title: Text("Sign in as a ${widget.userRole.displayName}"),
         ),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -153,8 +137,12 @@ class _SigninPageState extends State<SigninPage> {
                       const Text("Don't have an account yet?"),
                       TextButton(
                         onPressed: () {
-                          context.read<SigninCubit>().navigateToSignUp(
-                            userRole: widget.userRole,
+                          AppNavigator.pushReplacement(
+                            context: context,
+                            path: switch (widget.userRole) {
+                              UserRole.student => AppRoutes.studentSignupPage,
+                              UserRole.teacher => AppRoutes.teacherSignupPage,
+                            },
                           );
                         },
                         child: const Text("Sign up"),

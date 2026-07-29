@@ -1,4 +1,4 @@
-abstract class AppRegexHelper {
+abstract final class AppRegexHelper {
   /// Regex for validating emails.
   static final RegExp emailValidatorRegExp = RegExp(
     r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+",

@@ -1,6 +1,6 @@
 import 'package:draya_mobile/core/helpers/app_regex_helper.dart';
 
-abstract class AppRegex {
+abstract final class AppRegex {
   static bool isEmailValid(String email) {
     return AppRegexHelper.emailValidatorRegExp.hasMatch(email);
   }

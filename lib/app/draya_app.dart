@@ -1,4 +1,4 @@
-import 'package:draya_mobile/features/home/presentation/home_screen/pages/home_screen_page.dart';
+import 'package:draya_mobile/core/router/app_router.dart';
 import 'package:flutter/material.dart';
 
 class DrayaApp extends StatelessWidget {
@@ -6,14 +6,14 @@ class DrayaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
+    return MaterialApp.router(
+      // debugShowCheckedModeBanner: false,
       title: 'Draya',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomeScreenPage(),
+      routerConfig: AppRouter.router,
     );
   }
 }

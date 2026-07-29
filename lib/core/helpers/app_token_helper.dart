@@ -1,18 +1,15 @@
 import '../constants/app_shared_pref_keys.dart';
-import 'app_extensions.dart';
 import 'app_shared_pref_helper.dart';
 
-class AppTokenHelper {
-  static bool isLoggedInUser = false;
-  static Future<void> checkIfLoggedInUser() async {
-    String? userToken = await AppSharedPrefHelper.getSecuredString(
+abstract final class AppTokenHelper {
+  static Future<bool> isSignedIn() async {
+    final token = await _getToken();
+    return token != null && token.isNotEmpty;
+  }
+
+  static Future<String?> _getToken() async {
+    return await AppSharedPrefHelper.getSecuredString(
       AppSharedPrefKeys.userToken,
     );
-
-    if (!userToken.isNullOrEmpty()) {
-      isLoggedInUser = true;
-    } else {
-      isLoggedInUser = false;
-    }
   }
 }

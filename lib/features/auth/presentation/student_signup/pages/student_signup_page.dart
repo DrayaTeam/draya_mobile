@@ -1,3 +1,5 @@
+import 'package:draya_mobile/core/helpers/app_navigator.dart';
+import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/enums/user_role.dart';
 import 'package:draya_mobile/core/validation/email_validator.dart';
@@ -47,17 +49,7 @@ class _StudentSignupPageState extends State<StudentSignupPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<StudentSignupCubit, StudentSignupState>(
-      listener: (context, state) {
-        if (state is NavigateToSignin) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  const SigninPage(userRole: UserRole.student),
-            ),
-          );
-        }
-      },
+      listener: (context, state) {},
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Student Sign up"),
@@ -180,7 +172,14 @@ class _StudentSignupPageState extends State<StudentSignupPage> {
                       const Text("Already have an account?"),
                       TextButton(
                         onPressed: () {
-                          context.read<StudentSignupCubit>().navigateToSignin();
+                          AppNavigator.pushReplacement(
+                            context: context,
+                            path: AppRoutes.signinPage,
+                            pathParameters: {
+                              AppRoutes.userRoleParameter:
+                                  UserRole.student.name,
+                            },
+                          );
                         },
                         child: const Text("Sign in"),
                       ),

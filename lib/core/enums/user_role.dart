@@ -1,7 +1,13 @@
 enum UserRole {
-  student(name: "Student"),
-  teacher(name: "Teacher");
+  student,
+  teacher;
 
-  final String name;
-  const UserRole({required this.name});
+  String get displayName => switch (this) {
+    UserRole.student => "Student",
+    UserRole.teacher => "Teacher",
+  };
+
+  static UserRole fromName({required String name}) {
+    return UserRole.values.firstWhere((role) => role.name == name);
+  }
 }
