@@ -1,3 +1,5 @@
+import 'package:draya_mobile/core/helpers/app_shared_pref_helper.dart';
+import 'package:draya_mobile/core/localization/locale_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/student_signup/cubit/student_signup_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/teacher_signup/cubit/teacher_signup_cubit.dart';
@@ -7,8 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
 import 'app/draya_app.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AppSharedPrefHelper.init();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -32,6 +35,9 @@ void main() {
         ),
         BlocProvider<TeacherSignupCubit>(
           create: (_) => TeacherSignupCubit(),
+        ),
+        BlocProvider<LocaleCubit>(
+          create: (context) => LocaleCubit(),
         ),
       ],
       child: const DrayaApp(),
