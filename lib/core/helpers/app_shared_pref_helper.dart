@@ -1,65 +1,56 @@
+import 'package:draya_mobile/core/constants/app_shared_pref_keys.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AppSharedPrefHelper {
-  // private constructor as I don't want to allow creating an instance of this class itself.
-  AppSharedPrefHelper._();
+abstract final class AppSharedPrefHelper {
+  static late SharedPreferences _sharedPreferences;
+
+  static Future<void> init() async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+  }
 
   /// Removes a value from SharedPreferences with given [key].
   static Future<void> removeData(String key) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.remove(key);
+    await _sharedPreferences.remove(key);
   }
 
   /// Removes all keys and values in the SharedPreferences
   static Future<void> clearAllData() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.clear();
+    await _sharedPreferences.clear();
   }
 
   /// Saves a [value] with a [key] in the SharedPreferences.
-  static Future<Null> setData(String key, value) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  static Future<void> setData(String key, dynamic value) async {
     switch (value.runtimeType) {
-      case const (String):
-        await sharedPreferences.setString(key, value);
-        break;
-      case const (int):
-        await sharedPreferences.setInt(key, value);
-        break;
-      case const (bool):
-        await sharedPreferences.setBool(key, value);
-        break;
-      case const (double):
-        await sharedPreferences.setDouble(key, value);
-        break;
-      default:
-        return null;
+      case String:
+        await _sharedPreferences.setString(key, value);
+      case int:
+        await _sharedPreferences.setInt(key, value);
+      case bool:
+        await _sharedPreferences.setBool(key, value);
+      case double:
+        await _sharedPreferences.setDouble(key, value);
     }
   }
 
   /// Gets a bool value from SharedPreferences with given [key].
-  static Future<bool?>? getBool(String key) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getBool(key) ?? false;
+  static bool? getBool(String key) {
+    return _sharedPreferences.getBool(key);
   }
 
   /// Gets a double value from SharedPreferences with given [key].
-  static Future<double?>? getDouble(String key) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getDouble(key) ?? 0.0;
+  static double? getDouble(String key) {
+    return _sharedPreferences.getDouble(key);
   }
 
   /// Gets an int value from SharedPreferences with given [key].
-  static Future<int?>? getInt(String key) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getInt(key) ?? 0;
+  static int? getInt(String key) {
+    return _sharedPreferences.getInt(key);
   }
 
   /// Gets an String value from SharedPreferences with given [key].
-  static Future<String?>? getString(String key) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getString(key) ?? '';
+  static String? getString(String key) {
+    return _sharedPreferences.getString(key);
   }
 
   /// Saves a [value] with a [key] in the FlutterSecureStorage.
@@ -83,5 +74,16 @@ class AppSharedPrefHelper {
   static Future<void> clearAllSecuredData() async {
     const flutterSecureStorage = FlutterSecureStorage();
     await flutterSecureStorage.deleteAll();
+  }
+
+  static String getLanguage() {
+    return getString(AppSharedPrefKeys.language) ?? "en";
+  }
+
+  static Future<String> toggleLanguage() async {
+    final language = getLanguage();
+    final otherLanguage = language == "en" ? "ar" : "en";
+    await setData(AppSharedPrefKeys.language, otherLanguage);
+    return otherLanguage;
   }
 }

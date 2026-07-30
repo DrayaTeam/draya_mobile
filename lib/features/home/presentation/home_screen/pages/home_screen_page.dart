@@ -1,4 +1,6 @@
+import 'package:draya_mobile/core/helpers/app_extensions.dart';
 import 'package:draya_mobile/core/helpers/app_navigator.dart';
+import 'package:draya_mobile/core/localization/locale_cubit.dart';
 import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
@@ -61,6 +63,12 @@ class HomeScreenPage extends StatelessWidget {
               ),
             ),
           ),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            context.read<LocaleCubit>().toggleLanguage();
+          },
+          label: Text(context.l10n.oppositeLanguage),
         ),
       ),
     );
