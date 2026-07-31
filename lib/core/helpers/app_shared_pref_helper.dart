@@ -22,13 +22,13 @@ abstract final class AppSharedPrefHelper {
   /// Saves a [value] with a [key] in the SharedPreferences.
   static Future<void> setData(String key, dynamic value) async {
     switch (value.runtimeType) {
-      case String:
+      case const (String):
         await _sharedPreferences.setString(key, value);
-      case int:
+      case const (int):
         await _sharedPreferences.setInt(key, value);
-      case bool:
+      case const (bool):
         await _sharedPreferences.setBool(key, value);
-      case double:
+      case const (double):
         await _sharedPreferences.setDouble(key, value);
     }
   }

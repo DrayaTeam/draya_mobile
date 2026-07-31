@@ -19,22 +19,27 @@ abstract final class AppTextStyles {
   );
 
   static TextStyle get h3 => _style(
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
+    fontSize: 20,
+    fontWeight: FontWeight.w800,
     height: 1.44,
   );
 
   static TextStyle get h4 => _style(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    height: 1.5,
+  );
+  static TextStyle get h5 => _style(
     fontSize: 16,
     fontWeight: FontWeight.w500,
     height: 1.5,
   );
 
-  static TextStyle get body => _style(fontSize: 15, height: 1.5);
+  static TextStyle get body => _style(fontSize: 14, height: 1.5);
 
   static TextStyle get button => _style(
     fontSize: 15,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w700,
     height: 1.5,
   );
 
@@ -50,6 +55,7 @@ abstract final class AppTextStyles {
       displaySmall: h1,
       headlineMedium: h2,
       headlineSmall: h3,
+      titleSmall: h5,
       titleMedium: h4,
       bodyLarge: body,
       bodyMedium: body,

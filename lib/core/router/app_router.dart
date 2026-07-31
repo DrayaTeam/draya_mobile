@@ -1,4 +1,3 @@
-import 'package:draya_mobile/core/enums/user_role.dart';
 import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/pages/signin_page.dart';
 import 'package:draya_mobile/features/auth/presentation/student_signup/pages/student_signup_page.dart';
@@ -8,7 +7,7 @@ import 'package:go_router/go_router.dart';
 
 abstract final class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: AppRoutes.homePage,
+    initialLocation: AppRoutes.signinPage,
 
     // redirect: (context, state) async {
     //   final bool isSignedIn = await AppTokenHelper.isSignedIn();
@@ -35,9 +34,7 @@ abstract final class AppRouter {
       GoRoute(
         path: AppRoutes.signinPage,
         builder: (context, state) {
-          final String userRole =
-              state.pathParameters[AppRoutes.userRoleParameter] as String;
-          return SigninPage(userRole: UserRole.fromName(name: userRole));
+          return const SigninPage();
         },
       ),
       GoRoute(

@@ -1,18 +1,22 @@
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
+import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/enums/user_role.dart';
 import 'package:draya_mobile/core/validation/email_validator.dart';
 import 'package:draya_mobile/core/validation/password_validator.dart';
 import 'package:draya_mobile/core/validation/validation_result.dart';
+import 'package:draya_mobile/core/widgets/app_check_box.dart';
+import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
+import 'package:draya_mobile/core/widgets/app_label.dart';
+import 'package:draya_mobile/core/widgets/app_logo_and_name.dart';
+import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SigninPage extends StatefulWidget {
-  final UserRole userRole;
-  const SigninPage({super.key, required this.userRole});
+  const SigninPage({
+    super.key,
+  });
 
   @override
   State<SigninPage> createState() => _SigninPageState();
@@ -22,7 +26,6 @@ class _SigninPageState extends State<SigninPage> {
   late final GlobalKey<FormState> _formKey;
   late final TextEditingController _textEditingControllerEmail;
   late final TextEditingController _textEditingControllerPassword;
-  bool _isPasswordVisible = false;
 
   @override
   void initState() {
@@ -48,108 +51,111 @@ class _SigninPageState extends State<SigninPage> {
     return BlocListener<SigninCubit, SigninState>(
       listener: (context, state) {},
       child: Scaffold(
-        appBar: AppBar(
-          title: Text("Sign in as a ${widget.userRole.displayName}"),
-        ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(AppSizes.s8),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                spacing: AppSizes.s16,
-                children: [
-                  const SizedBox(height: AppSizes.s20),
-                  Text(
-                    "Sign in to continue.",
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  TextFormField(
-                    controller: _textEditingControllerEmail,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    onTapOutside: (event) {
-                      FocusManager.instance.primaryFocus!.unfocus();
-                    },
-                    decoration: const InputDecoration(
-                      labelText: "Email",
-                      hintText: "Enter your email",
-                      prefixIcon: Icon(Icons.email_outlined),
-                      border: OutlineInputBorder(),
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(AppSizes.s24),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const AppLogoAndName(),
+                    const SizedBox(height: AppSizes.s64),
+                    Text(
+                      "تسجيل الدخول",
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) {
-                      final result = EmailValidator.validate(email: value);
+                    const SizedBox(height: AppSizes.s4),
+                    Text(
+                      "أهلاً بك مجدداً! يرجى إدخال البريد الإلكتروني وكلمة المرور للمتابعة.",
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: AppColors.foregroundMuted,
+                      ),
+                    ),
+                    const SizedBox(height: AppSizes.s32),
+                    const AppLabel(label: "البريد الإلكتروني*"),
+                    const SizedBox(height: AppSizes.s8),
+                    AppTextFormField(
+                      hintText: "name@example.com",
+                      prefixIcon: Icons.email_outlined,
+                      controller: _textEditingControllerEmail,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        final result = EmailValidator.validate(email: value);
 
-                      if (result is Invalid) {
-                        return result.message;
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: _textEditingControllerPassword,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    onTapOutside: (event) {
-                      FocusManager.instance.primaryFocus!.unfocus();
-                    },
-                    decoration: InputDecoration(
-                      labelText: "Password",
-                      hintText: "Enter your password",
-                      prefixIcon: const Icon(Icons.lock_outline),
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _isPasswordVisible = !_isPasswordVisible;
-                          });
-                        },
-                        icon: Icon(
-                          _isPasswordVisible
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
+                        if (result is Invalid) {
+                          return result.message;
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: AppSizes.s16),
+                    const AppLabel(label: "كلمة المرور*"),
+                    const SizedBox(height: AppSizes.s8),
+                    AppTextFormField(
+                      controller: _textEditingControllerPassword,
+                      hintText: "••••••••••••",
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      prefixIcon: Icons.lock_outline,
+                      isObscure: true,
+                      validator: (value) {
+                        final result = PasswordValidator.validate(
+                          password: value,
+                        );
+                        if (result is Invalid) {
+                          return result.message;
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: AppSizes.s16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        AppCheckBox(
+                          label: "تذكرني",
+                          value: false,
+                          onChanged: (value) {},
                         ),
-                      ),
-                      border: const OutlineInputBorder(),
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text("نسيت كلمة المرور؟"),
+                        ),
+                      ],
                     ),
-                    obscureText: !_isPasswordVisible,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) {
-                      final result = PasswordValidator.validate(
-                        password: value,
-                      );
-
-                      if (result is Invalid) {
-                        return result.message;
-                      }
-                      return null;
-                    },
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      _signIn();
-                    },
-                    child: const Text("Sign in"),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Don't have an account yet?"),
-                      TextButton(
-                        onPressed: () {
-                          AppNavigator.pushReplacement(
-                            context: context,
-                            path: switch (widget.userRole) {
-                              UserRole.student => AppRoutes.studentSignupPage,
-                              UserRole.teacher => AppRoutes.teacherSignupPage,
-                            },
-                          );
-                        },
-                        child: const Text("Sign up"),
-                      ),
-                    ],
-                  ),
-                ],
+                    const SizedBox(height: AppSizes.s16),
+                    AppElevatedButton(
+                      onPressed: () {
+                        _signIn();
+                      },
+                      label: "تسجيل الدخول",
+                    ),
+                    const SizedBox(height: AppSizes.s16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("ليس لديك حساب؟"),
+                        TextButton(
+                          onPressed: () {
+                            // AppNavigator.pushReplacement(
+                            //   context: context,
+                            //   // path: switch (widget.userRole) {
+                            //   //   UserRole.student => AppRoutes.studentSignupPage,
+                            //   //   UserRole.teacher => AppRoutes.teacherSignupPage,
+                            //   // },
+                            // );
+                          },
+                          child: const Text(
+                            "أنشئ حساباً جديداً",
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
