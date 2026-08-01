@@ -3,7 +3,7 @@ import 'package:draya_mobile/core/localization/locale_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/student_signup/cubit/student_signup_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/teacher_signup/cubit/teacher_signup_cubit.dart';
-import 'package:draya_mobile/features/home/presentation/home_screen/cubit/home_screen_cubit.dart';
+import 'package:draya_mobile/features/auth/presentation/signup_choice/cubit/signup_choice_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
@@ -24,8 +24,8 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider<HomeScreenCubit>(
-          create: (_) => HomeScreenCubit(),
+        BlocProvider<SignupChoiceCubit>(
+          create: (_) => SignupChoiceCubit(),
         ),
         BlocProvider<SigninCubit>(
           create: (_) => SigninCubit(),

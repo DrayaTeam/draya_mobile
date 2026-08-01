@@ -1,7 +1,6 @@
 import 'package:draya_mobile/core/helpers/app_navigator.dart';
 import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/enums/user_role.dart';
 import 'package:draya_mobile/core/validation/email_validator.dart';
 import 'package:draya_mobile/core/validation/password_validator.dart';
 import 'package:draya_mobile/core/validation/validation_result.dart';
@@ -174,10 +173,6 @@ class _StudentSignupPageState extends State<StudentSignupPage> {
                           AppNavigator.pushReplacement(
                             context: context,
                             path: AppRoutes.signinPage,
-                            pathParameters: {
-                              AppRoutes.userRoleParameter:
-                                  UserRole.student.name,
-                            },
                           );
                         },
                         child: const Text("Sign in"),

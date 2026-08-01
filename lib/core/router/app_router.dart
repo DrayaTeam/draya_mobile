@@ -2,7 +2,8 @@ import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/pages/signin_page.dart';
 import 'package:draya_mobile/features/auth/presentation/student_signup/pages/student_signup_page.dart';
 import 'package:draya_mobile/features/auth/presentation/teacher_signup/pages/teacher_signup_page.dart';
-import 'package:draya_mobile/features/home/presentation/home_screen/pages/home_screen_page.dart';
+import 'package:draya_mobile/features/auth/presentation/signup_choice/pages/signup_choice_page.dart';
+import 'package:draya_mobile/features/auth/presentation/verification_code_page/pages/verification_code_page.dart';
 import 'package:go_router/go_router.dart';
 
 abstract final class AppRouter {
@@ -26,9 +27,9 @@ abstract final class AppRouter {
     // },
     routes: [
       GoRoute(
-        path: AppRoutes.homePage,
+        path: AppRoutes.signupChoice,
         builder: (context, state) {
-          return const HomeScreenPage();
+          return const SignupChoicePage();
         },
       ),
       GoRoute(
@@ -47,6 +48,12 @@ abstract final class AppRouter {
         path: AppRoutes.teacherSignupPage,
         builder: (context, state) {
           return const TeacherSignupPage();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.verificationCodePage,
+        builder: (context, state) {
+          return const VerificationCodePage();
         },
       ),
     ],

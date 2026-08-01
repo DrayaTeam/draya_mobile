@@ -2,16 +2,16 @@ import 'package:draya_mobile/core/helpers/app_extensions.dart';
 import 'package:draya_mobile/core/helpers/app_navigator.dart';
 import 'package:draya_mobile/core/localization/locale_cubit.dart';
 import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/enums/user_role.dart';
-import 'package:draya_mobile/features/home/presentation/home_screen/cubit/home_screen_cubit.dart';
-import 'package:draya_mobile/features/home/presentation/home_screen/cubit/home_screen_state.dart';
+import 'package:draya_mobile/core/widgets/app_logo_and_name.dart';
+import 'package:draya_mobile/features/auth/presentation/signup_choice/cubit/signup_choice_cubit.dart';
+import 'package:draya_mobile/features/auth/presentation/signup_choice/cubit/signup_choice_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeScreenPage extends StatelessWidget {
-  const HomeScreenPage({super.key});
+class SignupChoicePage extends StatelessWidget {
+  const SignupChoicePage({super.key});
 
   void _handleNavigation({
     required BuildContext context,
@@ -19,35 +19,29 @@ class HomeScreenPage extends StatelessWidget {
   }) {
     AppNavigator.push(
       context: context,
-      path: AppRoutes.signinPage,
-      pathParameters: {AppRoutes.userRoleParameter: userRole.name},
+      path: switch (userRole) {
+        UserRole.student => AppRoutes.studentSignupPage,
+        UserRole.teacher => AppRoutes.teacherSignupPage,
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<HomeScreenCubit, HomeScreenState>(
+    return BlocListener<SignupChoiceCubit, SignupChoiceState>(
       listener: (context, state) {},
       child: Scaffold(
         body: SafeArea(
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.all(AppSizes.s12),
+              padding: const EdgeInsets.all(AppSizes.s24),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const CircleAvatar(
-                    backgroundColor: AppColors.primary,
-                    radius: 40,
-                    foregroundColor: AppColors.surface,
-                    child: Text(
-                      "Draya",
-                      style: TextStyle(fontSize: AppSizes.s20),
-                    ),
-                  ),
-                  const SizedBox(height: AppSizes.s32),
+                  const AppLogoAndName(),
+                  const SizedBox(height: AppSizes.s64),
                   const Text(
-                    "Sign in/up as",
+                    "Sign up as",
                     style: TextStyle(fontSize: AppSizes.s20),
                   ),
                   const SizedBox(height: AppSizes.s12),
