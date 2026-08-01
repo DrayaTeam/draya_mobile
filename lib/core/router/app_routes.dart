@@ -1,8 +1,9 @@
 abstract final class AppRoutes {
-  static const String homePage = "/";
-  static const String userRoleParameter = "userRole";
+  static const String signupChoice = "/signup_choice";
+  static const String userRoleParameter = "user_role";
   static const String signinPage = "/signin/:$userRoleParameter";
-  static const String studentSignupPage = "/studentSignup";
-  static const String teacherSignupPage = "/teacherSignup";
+  static const String studentSignupPage = "/student_signup";
+  static const String teacherSignupPage = "/teacher_signup";
   static const String mainPage = "/main";
+  static const String verificationCodePage = "/verification_code";
 }

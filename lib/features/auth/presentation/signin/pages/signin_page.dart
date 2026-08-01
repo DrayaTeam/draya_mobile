@@ -1,3 +1,5 @@
+import 'package:draya_mobile/core/helpers/app_navigator.dart';
+import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/validation/email_validator.dart';
@@ -26,6 +28,7 @@ class _SigninPageState extends State<SigninPage> {
   late final GlobalKey<FormState> _formKey;
   late final TextEditingController _textEditingControllerEmail;
   late final TextEditingController _textEditingControllerPassword;
+  bool _validateEmailOnly = false;
 
   @override
   void initState() {
@@ -43,7 +46,16 @@ class _SigninPageState extends State<SigninPage> {
   }
 
   void _signIn() {
+    _validateEmailOnly = false;
     if (_formKey.currentState!.validate()) {}
+  }
+
+  void _handleForgotPassword() {
+    _validateEmailOnly = true;
+    if (_formKey.currentState!.validate()) {
+      // todo: pass email to verification code page
+      AppNavigator.push(context: context, path: AppRoutes.verificationCodePage);
+    }
   }
 
   @override
@@ -102,6 +114,8 @@ class _SigninPageState extends State<SigninPage> {
                       prefixIcon: Icons.lock_outline,
                       isObscure: true,
                       validator: (value) {
+                        if (_validateEmailOnly) return null;
+
                         final result = PasswordValidator.validate(
                           password: value,
                         );
@@ -121,7 +135,9 @@ class _SigninPageState extends State<SigninPage> {
                           onChanged: (value) {},
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            _handleForgotPassword();
+                          },
                           child: const Text("نسيت كلمة المرور؟"),
                         ),
                       ],
@@ -140,13 +156,10 @@ class _SigninPageState extends State<SigninPage> {
                         const Text("ليس لديك حساب؟"),
                         TextButton(
                           onPressed: () {
-                            // AppNavigator.pushReplacement(
-                            //   context: context,
-                            //   // path: switch (widget.userRole) {
-                            //   //   UserRole.student => AppRoutes.studentSignupPage,
-                            //   //   UserRole.teacher => AppRoutes.teacherSignupPage,
-                            //   // },
-                            // );
+                            AppNavigator.pushReplacement(
+                              context: context,
+                              path: AppRoutes.signupChoice,
+                            );
                           },
                           child: const Text(
                             "أنشئ حساباً جديداً",

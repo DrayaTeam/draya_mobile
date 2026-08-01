@@ -18,3 +18,7 @@ extension StringExtension2 on String {
 extension LocalizationExtensions on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this)!;
 }
+
+extension TextThemeExtension on BuildContext {
+  TextTheme get textTheme => Theme.of(this).textTheme;
+}

@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
-class AppTextFormField extends StatefulWidget {
+class AppTextField extends StatefulWidget {
   final TextEditingController controller;
   final FocusNode? focusNode;
-  final FocusNode? nextFocusNode;
   final TextInputAction? textInputAction;
   final String hintText;
   final bool isObscure;
@@ -16,11 +15,10 @@ class AppTextFormField extends StatefulWidget {
   final bool isReadOnly;
   final bool? isEnabled;
   final int? maxLine;
-  final String? Function(String?)? validator;
   final Function()? onTap;
   final Function(String)? onChanged;
 
-  const AppTextFormField({
+  const AppTextField({
     super.key,
     required this.controller,
     required this.hintText,
@@ -29,21 +27,19 @@ class AppTextFormField extends StatefulWidget {
     this.suffixIcon,
     this.isReadOnly = false,
     this.onTap,
-    this.validator,
     this.maxLine,
     this.onChanged,
     this.isEnabled,
     this.focusNode,
-    this.nextFocusNode,
     this.textInputAction,
     this.prefixIcon,
   });
 
   @override
-  State<AppTextFormField> createState() => _AppTextFormFieldState();
+  State<AppTextField> createState() => _AppTextFieldState();
 }
 
-class _AppTextFormFieldState extends State<AppTextFormField> {
+class _AppTextFieldState extends State<AppTextField> {
   late bool _isPasswordVisible;
 
   @override
@@ -54,13 +50,12 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return TextField(
       controller: widget.controller,
       obscureText: widget.isObscure ? !_isPasswordVisible : false,
       enabled: widget.isEnabled ?? true,
       keyboardType: widget.keyboardType,
       onChanged: widget.onChanged,
-      validator: widget.validator,
       onTap: widget.onTap,
       maxLines: widget.maxLine ?? 1,
       readOnly: widget.isReadOnly,
@@ -68,9 +63,6 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
       focusNode: widget.focusNode,
       textInputAction: widget.textInputAction,
       onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-      onFieldSubmitted: (_) {
-        if (widget.nextFocusNode != null) widget.nextFocusNode?.requestFocus();
-      },
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
