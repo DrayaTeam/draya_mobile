@@ -109,7 +109,7 @@ class _SigninPageState extends State<SigninPage> {
                     AppTextFormField(
                       controller: _textEditingControllerPassword,
                       hintText: "••••••••••••",
-                      keyboardType: TextInputType.emailAddress,
+                      keyboardType: TextInputType.visiblePassword,
                       textInputAction: TextInputAction.next,
                       prefixIcon: Icons.lock_outline,
                       isObscure: true,
@@ -156,9 +156,9 @@ class _SigninPageState extends State<SigninPage> {
                         const Text("ليس لديك حساب؟"),
                         TextButton(
                           onPressed: () {
-                            AppNavigator.pushReplacement(
+                            AppNavigator.push(
                               context: context,
-                              path: AppRoutes.signupChoice,
+                              path: AppRoutes.signupPage,
                             );
                           },
                           child: const Text(
