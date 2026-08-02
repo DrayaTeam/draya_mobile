@@ -1,7 +1,6 @@
 import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/pages/signin_page.dart';
-import 'package:draya_mobile/features/auth/presentation/student_signup/pages/student_signup_page.dart';
-import 'package:draya_mobile/features/auth/presentation/teacher_signup/pages/teacher_signup_page.dart';
+import 'package:draya_mobile/features/auth/presentation/signup/pages/signup_page.dart';
 import 'package:draya_mobile/features/auth/presentation/signup_choice/pages/signup_choice_page.dart';
 import 'package:draya_mobile/features/auth/presentation/verification_code_page/pages/verification_code_page.dart';
 import 'package:go_router/go_router.dart';
@@ -38,16 +37,22 @@ abstract final class AppRouter {
           return const SigninPage();
         },
       ),
+      // GoRoute(
+      //   path: AppRoutes.studentSignupPage,
+      //   builder: (context, state) {
+      //     return const StudentSignupPage();
+      //   },
+      // ),
+      // GoRoute(
+      //   path: AppRoutes.teacherSignupPage,
+      //   builder: (context, state) {
+      //     return const TeacherSignupPage();
+      //   },
+      // ),
       GoRoute(
-        path: AppRoutes.studentSignupPage,
+        path: AppRoutes.signupPage,
         builder: (context, state) {
-          return const StudentSignupPage();
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.teacherSignupPage,
-        builder: (context, state) {
-          return const TeacherSignupPage();
+          return const SignupPage();
         },
       ),
       GoRoute(

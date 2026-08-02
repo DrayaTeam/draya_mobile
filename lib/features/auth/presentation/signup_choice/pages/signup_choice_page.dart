@@ -17,13 +17,13 @@ class SignupChoicePage extends StatelessWidget {
     required BuildContext context,
     required UserRole userRole,
   }) {
-    AppNavigator.push(
-      context: context,
-      path: switch (userRole) {
-        UserRole.student => AppRoutes.studentSignupPage,
-        UserRole.teacher => AppRoutes.teacherSignupPage,
-      },
-    );
+    // AppNavigator.push(
+    //   context: context,
+    //   path: switch (userRole) {
+    //     UserRole.student => AppRoutes.studentSignupPage,
+    //     UserRole.teacher => AppRoutes.teacherSignupPage,
+    //   },
+    // );
   }
 
   @override

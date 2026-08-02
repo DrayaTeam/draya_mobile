@@ -17,7 +17,7 @@ class DrayaApp extends StatelessWidget {
           title: 'Draya',
           theme: AppTheme.light,
           routerConfig: AppRouter.router,
-          locale: state,
+          locale: const Locale("ar"),
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
         );

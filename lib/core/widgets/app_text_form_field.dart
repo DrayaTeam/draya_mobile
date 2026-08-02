@@ -68,6 +68,7 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
       focusNode: widget.focusNode,
       textInputAction: widget.textInputAction,
       onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       onFieldSubmitted: (_) {
         if (widget.nextFocusNode != null) widget.nextFocusNode?.requestFocus();
       },
