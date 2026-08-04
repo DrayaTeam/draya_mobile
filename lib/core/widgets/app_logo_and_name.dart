@@ -3,7 +3,8 @@ import 'package:draya_mobile/core/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 
 class AppLogoAndName extends StatelessWidget {
-  const AppLogoAndName({super.key});
+  final String? subtitle;
+  const AppLogoAndName({super.key, this.subtitle});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class AppLogoAndName extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             Text(
-              "نظام التقييم الذكي للمستقبل",
+              subtitle ?? "نظام التقييم الذكي للمستقبل",
               style:
                   Theme.of(
                     context,

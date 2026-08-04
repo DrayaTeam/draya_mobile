@@ -47,7 +47,12 @@ class _SigninPageState extends State<SigninPage> {
 
   void _signIn() {
     _validateEmailOnly = false;
-    if (_formKey.currentState!.validate()) {}
+    if (_formKey.currentState!.validate()) {
+      AppNavigator.goAndRemove(
+        context: context,
+        path: AppRoutes.teacherDashboardPage,
+      );
+    }
   }
 
   void _handleForgotPassword() {
