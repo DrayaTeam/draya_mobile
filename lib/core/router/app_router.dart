@@ -65,7 +65,7 @@ abstract final class AppRouter {
       GoRoute(
         path: AppRoutes.teacherDashboardPage,
         builder: (context, state) {
-          return const TeacherDashboardScreen();
+          return TeacherDashboardScreen();
         },
       ),
     ],
