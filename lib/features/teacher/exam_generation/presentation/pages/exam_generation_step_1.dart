@@ -34,7 +34,7 @@ class _ExamGenerationStep1State extends State<ExamGenerationStep1> {
     _formKey = GlobalKey();
   }
 
-  void _createExam() {
+  void _nextStep() {
     if (_formKey.currentState!.validate()) {
       AppNavigator.push(
         context: context,
@@ -159,7 +159,7 @@ class _ExamGenerationStep1State extends State<ExamGenerationStep1> {
                         const SizedBox(height: AppSizes.s20),
                         AppElevatedButton(
                           onPressed: () {
-                            _createExam();
+                            _nextStep();
                           },
                           label: "انشاء امتحان",
                         ),

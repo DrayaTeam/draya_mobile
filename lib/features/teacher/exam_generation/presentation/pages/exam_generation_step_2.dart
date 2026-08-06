@@ -1,4 +1,6 @@
 import 'package:draya_mobile/core/helpers/app_extensions.dart';
+import 'package:draya_mobile/core/helpers/app_navigator.dart';
+import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/view_models/drawer_model.dart';
 import 'package:draya_mobile/core/widgets/app_drawer.dart';
@@ -61,6 +63,13 @@ class _ExamGenerationStep2State extends State<ExamGenerationStep2> {
     ),
   ];
 
+  void _nextStep() {
+    AppNavigator.push(
+      context: context,
+      path: AppRoutes.examGenerationPage3,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +127,9 @@ class _ExamGenerationStep2State extends State<ExamGenerationStep2> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   AppElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _nextStep();
+                    },
                     label: "تاكيد الاسئلة ومتابعة التوزيع",
                   ),
                   const SizedBox(height: AppSizes.s20),

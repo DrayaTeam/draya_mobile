@@ -7,4 +7,5 @@ abstract final class AppRoutes {
   static const String teacherDashboardPage = "/teacher/dashboard";
   static const String examGenerationPage1 = "/teacher/exam/generate/step_1";
   static const String examGenerationPage2 = "/teacher/exam/generate/step_2";
+  static const String examGenerationPage3 = "/teacher/exam/generate/step_3";
 }
