@@ -14,9 +14,7 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentRoute = GoRouter.of(
-      context,
-    ).routerDelegate.currentConfiguration.fullPath;
+    final String currentRoute = GoRouterState.of(context).uri.path;
     return Drawer(
       child: ListView(
         padding: const EdgeInsets.symmetric(
@@ -40,42 +38,51 @@ class AppDrawer extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSizes.s8),
                 ...item.items.map(
-                  (item) => ListTile(
-                    selected: currentRoute == item.route,
-                    selectedTileColor: AppColors.primary100,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppSizes.s8),
-                    ),
-                    visualDensity: VisualDensity.compact,
-                    leading: Icon(
-                      item.icon,
-                      color: currentRoute == item.route
-                          ? AppColors.primary
-                          : AppColors.foregroundMuted,
-                      size: 28,
-                    ),
-                    title: Text(
-                      item.title,
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: currentRoute == item.route
+                  (item) {
+                    final isSelected =
+                        item.route != null && currentRoute == item.route;
+
+                    return ListTile(
+                      selected: isSelected,
+                      selectedTileColor: AppColors.primary100,
+
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppSizes.s8),
+                      ),
+
+                      visualDensity: VisualDensity.compact,
+
+                      leading: Icon(
+                        item.icon,
+                        color: isSelected
                             ? AppColors.primary
                             : AppColors.foregroundMuted,
+                        size: 28,
                       ),
-                    ),
-                    onTap: () {
-                      if (item.route != null) {
-                        if (currentRoute == item.route) {
-                          AppNavigator.pop(context: context);
-                        } else {
-                          AppNavigator.push(
-                            context: context,
-                            path: item.route!,
-                          );
-                        }
-                      }
-                    },
-                  ),
+
+                      title: Text(
+                        item.title,
+                        style: Theme.of(context).textTheme.titleMedium!
+                            .copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: isSelected
+                                  ? AppColors.primary
+                                  : AppColors.foregroundMuted,
+                            ),
+                      ),
+
+                      onTap: () {
+                        if (item.route == null) return;
+
+                        AppNavigator.pop(context: context);
+
+                        AppNavigator.goAndRemove(
+                          context: context,
+                          path: item.route!,
+                        );
+                      },
+                    );
+                  },
                 ),
                 const SizedBox(height: AppSizes.s8),
               ],
