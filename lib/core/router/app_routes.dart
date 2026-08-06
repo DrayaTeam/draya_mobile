@@ -5,5 +5,6 @@ abstract final class AppRoutes {
   static const String mainPage = "/main";
   static const String verificationCodePage = "/verification_code";
   static const String teacherDashboardPage = "/teacher/dashboard";
-  static const String examGenerationPage = "/teacher/exam/generate";
+  static const String examGenerationPage1 = "/teacher/exam/generate/step_1";
+  static const String examGenerationPage2 = "/teacher/exam/generate/step_2";
 }

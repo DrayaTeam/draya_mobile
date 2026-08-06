@@ -5,6 +5,7 @@ import 'package:draya_mobile/features/auth/presentation/signup_choice/pages/sign
 import 'package:draya_mobile/features/auth/presentation/verification_code_page/pages/verification_code_page.dart';
 import 'package:draya_mobile/features/teacher/dashboard/presentation/pages/teacher_dashboard_screen.dart';
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_1.dart';
+import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_2.dart';
 import 'package:go_router/go_router.dart';
 
 abstract final class AppRouter {
@@ -58,9 +59,15 @@ abstract final class AppRouter {
         },
       ),
       GoRoute(
-        path: AppRoutes.examGenerationPage,
+        path: AppRoutes.examGenerationPage1,
         builder: (context, state) {
           return const ExamGenerationStep1();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.examGenerationPage2,
+        builder: (context, state) {
+          return const ExamGenerationStep2();
         },
       ),
     ],

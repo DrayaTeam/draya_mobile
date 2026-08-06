@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:draya_mobile/core/helpers/app_extensions.dart';
+import 'package:draya_mobile/core/helpers/app_navigator.dart';
+import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/view_models/drawer_model.dart';
 import 'package:draya_mobile/core/widgets/app_card_container_empty.dart';
@@ -21,9 +23,9 @@ class ExamGenerationStep1 extends StatefulWidget {
 
 class _ExamGenerationStep1State extends State<ExamGenerationStep1> {
   int _numberOfQuestions = 1;
-  String? _academicYear;
-  String? _academicGroup;
-  String? _questionsSource;
+  String? _academicYear = "item1";
+  String? _academicGroup = "item1";
+  String? _questionsSource = "item1";
   late final GlobalKey<FormState> _formKey;
 
   @override
@@ -33,13 +35,18 @@ class _ExamGenerationStep1State extends State<ExamGenerationStep1> {
   }
 
   void _createExam() {
-    if (_formKey.currentState!.validate()) {}
+    if (_formKey.currentState!.validate()) {
+      AppNavigator.push(
+        context: context,
+        path: AppRoutes.examGenerationPage2,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "انشاء امتحان"),
+      appBar: const CustomAppBar(title: "انشاء امتحان الخطوة 1"),
       drawer: AppDrawer(drawerItemsList: getTeacherDrawerItemsList()),
       body: SafeArea(
         child: SingleChildScrollView(
