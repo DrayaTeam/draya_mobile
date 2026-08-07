@@ -111,6 +111,7 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
           vertical: 14,
           horizontal: 16,
         ),
+        visualDensity: VisualDensity.compact,
       ),
     );
   }
