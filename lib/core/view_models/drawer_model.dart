@@ -38,10 +38,12 @@ List<DrawerModel> getTeacherDrawerItemsList() {
         DrawerItemViewModel(
           icon: Icons.people_outlined,
           title: "الطلبة",
+          route: AppRoutes.studentsListPage,
         ),
         DrawerItemViewModel(
           icon: Icons.assignment_outlined,
           title: "الامتحانات",
+          route: AppRoutes.examGenerationPage1,
         ),
       ],
     ),

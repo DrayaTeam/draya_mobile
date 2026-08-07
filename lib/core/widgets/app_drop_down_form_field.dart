@@ -1,4 +1,5 @@
 import 'package:draya_mobile/core/theme/app_colors.dart';
+import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/theme/app_text_styles.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,10 @@ import 'fade_in_up_animation.dart';
 
 class AppDropDownFormField extends StatelessWidget {
   final String? hint;
-  final dynamic value;
+  final String? value;
   final List<String>? items;
-  final List<DropdownMenuItem>? dropDownItems;
-  final Function(dynamic) onChanged;
+  final List<DropdownMenuItem<String>>? dropDownItems;
+  final ValueChanged<String?> onChanged;
   final bool? isRequired;
   final TextStyle? textStyle;
   final double? verticalPadding;
@@ -30,41 +31,42 @@ class AppDropDownFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField2<dynamic>(
+    return DropdownButtonFormField2<String>(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       value: value,
       iconStyleData: const IconStyleData(
-        icon: Padding(
-          padding: EdgeInsetsDirectional.only(end: 8),
-          child: Icon(
-            Icons.keyboard_arrow_down,
-            color: AppColors.textSecondary,
-            size: 24,
-          ),
+        icon: Icon(
+          Icons.keyboard_arrow_down,
+          color: AppColors.textSecondary,
+          size: AppSizes.s24,
         ),
       ),
       isExpanded: true,
       style: textStyle ?? AppTextStyles.body,
       dropdownStyleData: DropdownStyleData(
         elevation: 4,
-        maxHeight: 250,
+        maxHeight: AppSizes.s200,
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: AppColors.primary50,
           borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
         ),
-        offset: const Offset(0, -3),
       ),
-      buttonStyleData: const ButtonStyleData(padding: EdgeInsets.zero),
+      buttonStyleData: const ButtonStyleData(
+        padding: EdgeInsets.zero,
+      ),
       hint: hint == null
           ? null
           : Text(
               hint!,
-              style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+              style: AppTextStyles.body.copyWith(
+                color: AppColors.textSecondary,
+              ),
             ),
       validator: isRequired == true
-          ? (value) => value == null ? 'Please select an option' : null
+          ? (value) => value == null ? "يرجى اختيار قيمة" : null
           : null,
-      isDense: true,
       decoration: InputDecoration(
+        fillColor: AppColors.primary50,
         contentPadding: EdgeInsetsDirectional.symmetric(
           horizontal: 16,
           vertical: verticalPadding ?? 14,
@@ -74,7 +76,7 @@ class AppDropDownFormField extends StatelessWidget {
           dropDownItems ??
           items
               ?.map(
-                (item) => DropdownMenuItem(
+                (item) => DropdownMenuItem<String>(
                   value: item,
                   child: FadeInUp(delay: 200, child: Text(item)),
                 ),

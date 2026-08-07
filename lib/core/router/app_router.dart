@@ -4,6 +4,10 @@ import 'package:draya_mobile/features/auth/presentation/signup/pages/signup_page
 import 'package:draya_mobile/features/auth/presentation/signup_choice/pages/signup_choice_page.dart';
 import 'package:draya_mobile/features/auth/presentation/verification_code_page/pages/verification_code_page.dart';
 import 'package:draya_mobile/features/teacher/dashboard/presentation/pages/teacher_dashboard_screen.dart';
+import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_1.dart';
+import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_2.dart';
+import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_3.dart';
+import 'package:draya_mobile/features/teacher/students_list/presentation/pages/students_list_screen.dart';
 import 'package:go_router/go_router.dart';
 
 abstract final class AppRouter {
@@ -38,18 +42,6 @@ abstract final class AppRouter {
           return const SigninPage();
         },
       ),
-      // GoRoute(
-      //   path: AppRoutes.studentSignupPage,
-      //   builder: (context, state) {
-      //     return const StudentSignupPage();
-      //   },
-      // ),
-      // GoRoute(
-      //   path: AppRoutes.teacherSignupPage,
-      //   builder: (context, state) {
-      //     return const TeacherSignupPage();
-      //   },
-      // ),
       GoRoute(
         path: AppRoutes.signupPage,
         builder: (context, state) {
@@ -65,7 +57,31 @@ abstract final class AppRouter {
       GoRoute(
         path: AppRoutes.teacherDashboardPage,
         builder: (context, state) {
-          return const TeacherDashboardScreen();
+          return TeacherDashboardScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.examGenerationPage1,
+        builder: (context, state) {
+          return const ExamGenerationStep1();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.examGenerationPage2,
+        builder: (context, state) {
+          return const ExamGenerationStep2();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.examGenerationPage3,
+        builder: (context, state) {
+          return const ExamGenerationStep3();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.studentsListPage,
+        builder: (context, state) {
+          return const StudentsListScreen();
         },
       ),
     ],
