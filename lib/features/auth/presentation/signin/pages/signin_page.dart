@@ -44,8 +44,8 @@ class _SigninPageState extends State<SigninPage> {
   void initState() {
     super.initState();
     _formKey = GlobalKey();
-    _textEditingControllerEmail = TextEditingController();
-    _textEditingControllerPassword = TextEditingController();
+    _textEditingControllerEmail = TextEditingController(text: "email@mail.com");
+    _textEditingControllerPassword = TextEditingController(text: "@Aa12345");
   }
 
   @override

@@ -11,7 +11,7 @@ abstract final class AppRegexHelper {
   /// Requires at least 8 characters, one uppercase letter, one lowercase letter,
   /// one number, and one special character.
   static final RegExp passwordValidatorRegExp = RegExp(
-    r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!+%*?&-])[A-Za-z\d@$!+%-*?&]{8,}$',
+    r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!+%*?&-])[A-Za-z\d@$!+%*?&-]{8,}$',
   );
   //010xxxxxxx / 011xxxxxxx / 012xxxxxxx / 015xxxxxxx
   static final RegExp phoneValidatorRegExp = RegExp(
