@@ -125,13 +125,13 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  success,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( AuthEntity authEntity)?  success,TResult Function( ApiErrorModel apiErrorModel)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case StudentSignupInitial() when initial != null:
 return initial();case StudentSignupLoading() when loading != null:
 return loading();case StudentSignupSuccess() when success != null:
-return success();case StudentSignupFailure() when failure != null:
-return failure(_that.message);case _:
+return success(_that.authEntity);case StudentSignupFailure() when failure != null:
+return failure(_that.apiErrorModel);case _:
   return orElse();
 
 }
@@ -149,13 +149,13 @@ return failure(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  success,required TResult Function( String message)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( AuthEntity authEntity)  success,required TResult Function( ApiErrorModel apiErrorModel)  failure,}) {final _that = this;
 switch (_that) {
 case StudentSignupInitial():
 return initial();case StudentSignupLoading():
 return loading();case StudentSignupSuccess():
-return success();case StudentSignupFailure():
-return failure(_that.message);}
+return success(_that.authEntity);case StudentSignupFailure():
+return failure(_that.apiErrorModel);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -169,13 +169,13 @@ return failure(_that.message);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  success,TResult? Function( String message)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( AuthEntity authEntity)?  success,TResult? Function( ApiErrorModel apiErrorModel)?  failure,}) {final _that = this;
 switch (_that) {
 case StudentSignupInitial() when initial != null:
 return initial();case StudentSignupLoading() when loading != null:
 return loading();case StudentSignupSuccess() when success != null:
-return success();case StudentSignupFailure() when failure != null:
-return failure(_that.message);case _:
+return success(_that.authEntity);case StudentSignupFailure() when failure != null:
+return failure(_that.apiErrorModel);case _:
   return null;
 
 }
@@ -251,42 +251,76 @@ String toString() {
 
 
 class StudentSignupSuccess implements StudentSignupState {
-  const StudentSignupSuccess();
+  const StudentSignupSuccess({required this.authEntity});
   
 
+ final  AuthEntity authEntity;
 
-
+/// Create a copy of StudentSignupState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$StudentSignupSuccessCopyWith<StudentSignupSuccess> get copyWith => _$StudentSignupSuccessCopyWithImpl<StudentSignupSuccess>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is StudentSignupSuccess);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is StudentSignupSuccess&&(identical(other.authEntity, authEntity) || other.authEntity == authEntity));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,authEntity);
 
 @override
 String toString() {
-  return 'StudentSignupState.success()';
+  return 'StudentSignupState.success(authEntity: $authEntity)';
 }
 
 
 }
 
+/// @nodoc
+abstract mixin class $StudentSignupSuccessCopyWith<$Res> implements $StudentSignupStateCopyWith<$Res> {
+  factory $StudentSignupSuccessCopyWith(StudentSignupSuccess value, $Res Function(StudentSignupSuccess) _then) = _$StudentSignupSuccessCopyWithImpl;
+@useResult
+$Res call({
+ AuthEntity authEntity
+});
 
 
+
+
+}
+/// @nodoc
+class _$StudentSignupSuccessCopyWithImpl<$Res>
+    implements $StudentSignupSuccessCopyWith<$Res> {
+  _$StudentSignupSuccessCopyWithImpl(this._self, this._then);
+
+  final StudentSignupSuccess _self;
+  final $Res Function(StudentSignupSuccess) _then;
+
+/// Create a copy of StudentSignupState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? authEntity = null,}) {
+  return _then(StudentSignupSuccess(
+authEntity: null == authEntity ? _self.authEntity : authEntity // ignore: cast_nullable_to_non_nullable
+as AuthEntity,
+  ));
+}
+
+
+}
 
 /// @nodoc
 
 
 class StudentSignupFailure implements StudentSignupState {
-  const StudentSignupFailure({required this.message});
+  const StudentSignupFailure({required this.apiErrorModel});
   
 
- final  String message;
+ final  ApiErrorModel apiErrorModel;
 
 /// Create a copy of StudentSignupState
 /// with the given fields replaced by the non-null parameter values.
@@ -298,16 +332,16 @@ $StudentSignupFailureCopyWith<StudentSignupFailure> get copyWith => _$StudentSig
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is StudentSignupFailure&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is StudentSignupFailure&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,apiErrorModel);
 
 @override
 String toString() {
-  return 'StudentSignupState.failure(message: $message)';
+  return 'StudentSignupState.failure(apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -318,7 +352,7 @@ abstract mixin class $StudentSignupFailureCopyWith<$Res> implements $StudentSign
   factory $StudentSignupFailureCopyWith(StudentSignupFailure value, $Res Function(StudentSignupFailure) _then) = _$StudentSignupFailureCopyWithImpl;
 @useResult
 $Res call({
- String message
+ ApiErrorModel apiErrorModel
 });
 
 
@@ -335,10 +369,10 @@ class _$StudentSignupFailureCopyWithImpl<$Res>
 
 /// Create a copy of StudentSignupState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? apiErrorModel = null,}) {
   return _then(StudentSignupFailure(
-message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
+apiErrorModel: null == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
+as ApiErrorModel,
   ));
 }
 

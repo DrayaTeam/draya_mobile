@@ -14,30 +14,64 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SigninState {
 
-
+ CubitStatus get status; bool get rememberMe; AuthEntity? get authEntity; ApiErrorModel? get apiErrorModel;
+/// Create a copy of SigninState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SigninStateCopyWith<SigninState> get copyWith => _$SigninStateCopyWithImpl<SigninState>(this as SigninState, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SigninState);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SigninState&&(identical(other.status, status) || other.status == status)&&(identical(other.rememberMe, rememberMe) || other.rememberMe == rememberMe)&&(identical(other.authEntity, authEntity) || other.authEntity == authEntity)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,status,rememberMe,authEntity,apiErrorModel);
 
 @override
 String toString() {
-  return 'SigninState()';
+  return 'SigninState(status: $status, rememberMe: $rememberMe, authEntity: $authEntity, apiErrorModel: $apiErrorModel)';
 }
 
 
 }
 
 /// @nodoc
-class $SigninStateCopyWith<$Res>  {
-$SigninStateCopyWith(SigninState _, $Res Function(SigninState) __);
+abstract mixin class $SigninStateCopyWith<$Res>  {
+  factory $SigninStateCopyWith(SigninState value, $Res Function(SigninState) _then) = _$SigninStateCopyWithImpl;
+@useResult
+$Res call({
+ CubitStatus status, bool rememberMe, AuthEntity? authEntity, ApiErrorModel? apiErrorModel
+});
+
+
+
+
+}
+/// @nodoc
+class _$SigninStateCopyWithImpl<$Res>
+    implements $SigninStateCopyWith<$Res> {
+  _$SigninStateCopyWithImpl(this._self, this._then);
+
+  final SigninState _self;
+  final $Res Function(SigninState) _then;
+
+/// Create a copy of SigninState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? rememberMe = null,Object? authEntity = freezed,Object? apiErrorModel = freezed,}) {
+  return _then(_self.copyWith(
+status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as CubitStatus,rememberMe: null == rememberMe ? _self.rememberMe : rememberMe // ignore: cast_nullable_to_non_nullable
+as bool,authEntity: freezed == authEntity ? _self.authEntity : authEntity // ignore: cast_nullable_to_non_nullable
+as AuthEntity?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
+as ApiErrorModel?,
+  ));
+}
+
 }
 
 
@@ -55,14 +89,11 @@ extension SigninStatePatterns on SigninState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SigninInitial value)?  initial,TResult Function( SigninLoading value)?  loading,TResult Function( SigninSuccess value)?  success,TResult Function( SigninFailure value)?  failure,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SigninState value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case SigninInitial() when initial != null:
-return initial(_that);case SigninLoading() when loading != null:
-return loading(_that);case SigninSuccess() when success != null:
-return success(_that);case SigninFailure() when failure != null:
-return failure(_that);case _:
+case _SigninState() when $default != null:
+return $default(_that);case _:
   return orElse();
 
 }
@@ -80,14 +111,14 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SigninInitial value)  initial,required TResult Function( SigninLoading value)  loading,required TResult Function( SigninSuccess value)  success,required TResult Function( SigninFailure value)  failure,}){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SigninState value)  $default,){
 final _that = this;
 switch (_that) {
-case SigninInitial():
-return initial(_that);case SigninLoading():
-return loading(_that);case SigninSuccess():
-return success(_that);case SigninFailure():
-return failure(_that);}
+case _SigninState():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -101,14 +132,11 @@ return failure(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SigninInitial value)?  initial,TResult? Function( SigninLoading value)?  loading,TResult? Function( SigninSuccess value)?  success,TResult? Function( SigninFailure value)?  failure,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SigninState value)?  $default,){
 final _that = this;
 switch (_that) {
-case SigninInitial() when initial != null:
-return initial(_that);case SigninLoading() when loading != null:
-return loading(_that);case SigninSuccess() when success != null:
-return success(_that);case SigninFailure() when failure != null:
-return failure(_that);case _:
+case _SigninState() when $default != null:
+return $default(_that);case _:
   return null;
 
 }
@@ -125,13 +153,10 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  success,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus status,  bool rememberMe,  AuthEntity? authEntity,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case SigninInitial() when initial != null:
-return initial();case SigninLoading() when loading != null:
-return loading();case SigninSuccess() when success != null:
-return success();case SigninFailure() when failure != null:
-return failure(_that.message);case _:
+case _SigninState() when $default != null:
+return $default(_that.status,_that.rememberMe,_that.authEntity,_that.apiErrorModel);case _:
   return orElse();
 
 }
@@ -149,13 +174,13 @@ return failure(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  success,required TResult Function( String message)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus status,  bool rememberMe,  AuthEntity? authEntity,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
 switch (_that) {
-case SigninInitial():
-return initial();case SigninLoading():
-return loading();case SigninSuccess():
-return success();case SigninFailure():
-return failure(_that.message);}
+case _SigninState():
+return $default(_that.status,_that.rememberMe,_that.authEntity,_that.apiErrorModel);case _:
+  throw StateError('Unexpected subclass');
+
+}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -169,13 +194,10 @@ return failure(_that.message);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  success,TResult? Function( String message)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus status,  bool rememberMe,  AuthEntity? authEntity,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
 switch (_that) {
-case SigninInitial() when initial != null:
-return initial();case SigninLoading() when loading != null:
-return loading();case SigninSuccess() when success != null:
-return success();case SigninFailure() when failure != null:
-return failure(_that.message);case _:
+case _SigninState() when $default != null:
+return $default(_that.status,_that.rememberMe,_that.authEntity,_that.apiErrorModel);case _:
   return null;
 
 }
@@ -186,139 +208,46 @@ return failure(_that.message);case _:
 /// @nodoc
 
 
-class SigninInitial implements SigninState {
-  const SigninInitial();
+class _SigninState implements SigninState {
+  const _SigninState({this.status = CubitStatus.initial, this.rememberMe = false, this.authEntity, this.apiErrorModel});
   
 
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SigninInitial);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'SigninState.initial()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class SigninLoading implements SigninState {
-  const SigninLoading();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SigninLoading);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'SigninState.loading()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class SigninSuccess implements SigninState {
-  const SigninSuccess();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SigninSuccess);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'SigninState.success()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class SigninFailure implements SigninState {
-  const SigninFailure({required this.message});
-  
-
- final  String message;
+@override@JsonKey() final  CubitStatus status;
+@override@JsonKey() final  bool rememberMe;
+@override final  AuthEntity? authEntity;
+@override final  ApiErrorModel? apiErrorModel;
 
 /// Create a copy of SigninState
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$SigninFailureCopyWith<SigninFailure> get copyWith => _$SigninFailureCopyWithImpl<SigninFailure>(this, _$identity);
+_$SigninStateCopyWith<_SigninState> get copyWith => __$SigninStateCopyWithImpl<_SigninState>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SigninFailure&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SigninState&&(identical(other.status, status) || other.status == status)&&(identical(other.rememberMe, rememberMe) || other.rememberMe == rememberMe)&&(identical(other.authEntity, authEntity) || other.authEntity == authEntity)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,status,rememberMe,authEntity,apiErrorModel);
 
 @override
 String toString() {
-  return 'SigninState.failure(message: $message)';
+  return 'SigninState(status: $status, rememberMe: $rememberMe, authEntity: $authEntity, apiErrorModel: $apiErrorModel)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $SigninFailureCopyWith<$Res> implements $SigninStateCopyWith<$Res> {
-  factory $SigninFailureCopyWith(SigninFailure value, $Res Function(SigninFailure) _then) = _$SigninFailureCopyWithImpl;
-@useResult
+abstract mixin class _$SigninStateCopyWith<$Res> implements $SigninStateCopyWith<$Res> {
+  factory _$SigninStateCopyWith(_SigninState value, $Res Function(_SigninState) _then) = __$SigninStateCopyWithImpl;
+@override @useResult
 $Res call({
- String message
+ CubitStatus status, bool rememberMe, AuthEntity? authEntity, ApiErrorModel? apiErrorModel
 });
 
 
@@ -326,19 +255,22 @@ $Res call({
 
 }
 /// @nodoc
-class _$SigninFailureCopyWithImpl<$Res>
-    implements $SigninFailureCopyWith<$Res> {
-  _$SigninFailureCopyWithImpl(this._self, this._then);
+class __$SigninStateCopyWithImpl<$Res>
+    implements _$SigninStateCopyWith<$Res> {
+  __$SigninStateCopyWithImpl(this._self, this._then);
 
-  final SigninFailure _self;
-  final $Res Function(SigninFailure) _then;
+  final _SigninState _self;
+  final $Res Function(_SigninState) _then;
 
 /// Create a copy of SigninState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(SigninFailure(
-message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? rememberMe = null,Object? authEntity = freezed,Object? apiErrorModel = freezed,}) {
+  return _then(_SigninState(
+status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as CubitStatus,rememberMe: null == rememberMe ? _self.rememberMe : rememberMe // ignore: cast_nullable_to_non_nullable
+as bool,authEntity: freezed == authEntity ? _self.authEntity : authEntity // ignore: cast_nullable_to_non_nullable
+as AuthEntity?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
+as ApiErrorModel?,
   ));
 }
 

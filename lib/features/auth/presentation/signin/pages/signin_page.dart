@@ -1,4 +1,10 @@
+import 'package:draya_mobile/core/constants/app_shared_pref_keys.dart';
+import 'package:draya_mobile/core/enums/cubit_status.dart';
+import 'package:draya_mobile/core/helpers/app_dialog_helper.dart';
 import 'package:draya_mobile/core/helpers/app_navigator.dart';
+import 'package:draya_mobile/core/helpers/app_shared_pref_helper.dart';
+import 'package:draya_mobile/core/helpers/app_token_helper.dart';
+import 'package:draya_mobile/core/networking/dio_factory.dart';
 import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
@@ -6,10 +12,14 @@ import 'package:draya_mobile/core/validation/email_validator.dart';
 import 'package:draya_mobile/core/validation/password_validator.dart';
 import 'package:draya_mobile/core/validation/validation_result.dart';
 import 'package:draya_mobile/core/widgets/app_check_box.dart';
+import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
 import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
+import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
 import 'package:draya_mobile/core/widgets/app_label.dart';
 import 'package:draya_mobile/core/widgets/app_logo_and_name.dart';
 import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
+import 'package:draya_mobile/features/auth/data/models/login_request_model.dart';
+import 'package:draya_mobile/features/auth/domain/entity/auth_entity.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_state.dart';
 import 'package:flutter/material.dart';
@@ -45,28 +55,68 @@ class _SigninPageState extends State<SigninPage> {
     super.dispose();
   }
 
-  void _signIn() {
-    _validateEmailOnly = false;
-    if (_formKey.currentState!.validate()) {
+  void _signIn({
+    required AuthEntity? authEntity,
+    required bool rememberMe,
+  }) async {
+    await AppSharedPrefHelper.setSecuredString(
+      AppSharedPrefKeys.userToken,
+      authEntity?.accessToken ?? '',
+    );
+    await AppSharedPrefHelper.setData(
+      AppSharedPrefKeys.userRole,
+      authEntity?.user?.role ?? '',
+    );
+
+    await AppSharedPrefHelper.setData(
+      AppSharedPrefKeys.rememberMe,
+      rememberMe,
+    );
+    AppTokenHelper.isLoggedIn = true;
+    DioFactory.setTokenIntoHeader(authEntity?.accessToken ?? '');
+    if (mounted) {
       AppNavigator.goAndRemove(
         context: context,
-        path: AppRoutes.teacherDashboardPage,
+        path: authEntity?.user?.role == 'Teacher'
+            ? AppRoutes.teacherDashboardPage
+            : AppRoutes.studentHomePage,
       );
     }
   }
 
   void _handleForgotPassword() {
     _validateEmailOnly = true;
-    if (_formKey.currentState!.validate()) {
-      // todo: pass email to verification code page
-      AppNavigator.push(context: context, path: AppRoutes.verificationCodePage);
-    }
+    // todo: pass email to verification code page
+    AppNavigator.push(context: context, path: AppRoutes.verificationCodePage);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<SigninCubit, SigninState>(
-      listener: (context, state) {},
+      listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        switch (state.status) {
+          case CubitStatus.initial:
+            break;
+          case CubitStatus.loading:
+            AppDialogHelper.display(context, const AppCustomLoading());
+            break;
+          case CubitStatus.error:
+            AppNavigator.pop(context: context);
+            AppDialogHelper.display(
+              context,
+              AppErrorDialog(
+                apiErrorModel: state.apiErrorModel!,
+                onRetry: () {},
+              ),
+            );
+            break;
+          case CubitStatus.success:
+            AppNavigator.pop(context: context);
+            _signIn(authEntity: state.authEntity, rememberMe: state.rememberMe);
+            break;
+        }
+      },
       child: Scaffold(
         body: SafeArea(
           child: Center(
@@ -134,10 +184,16 @@ class _SigninPageState extends State<SigninPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        AppCheckBox(
-                          label: "تذكرني",
-                          value: false,
-                          onChanged: (value) {},
+                        BlocBuilder<SigninCubit, SigninState>(
+                          buildWhen: (previous, current) =>
+                              previous.rememberMe != current.rememberMe,
+                          builder: (context, state) => AppCheckBox(
+                            label: "تذكرني",
+                            value: state.rememberMe,
+                            onChanged: (value) {
+                              context.read<SigninCubit>().toggleRememberMe();
+                            },
+                          ),
                         ),
                         TextButton(
                           onPressed: () {
@@ -150,7 +206,14 @@ class _SigninPageState extends State<SigninPage> {
                     const SizedBox(height: AppSizes.s16),
                     AppElevatedButton(
                       onPressed: () {
-                        _signIn();
+                        if (_formKey.currentState!.validate()) {
+                          context.read<SigninCubit>().signin(
+                            loginRequestModel: LoginRequestModel(
+                              email: _textEditingControllerEmail.text,
+                              password: _textEditingControllerPassword.text,
+                            ),
+                          );
+                        }
                       },
                       label: "تسجيل الدخول",
                     ),
@@ -161,7 +224,7 @@ class _SigninPageState extends State<SigninPage> {
                         const Text("ليس لديك حساب؟"),
                         TextButton(
                           onPressed: () {
-                            AppNavigator.push(
+                            AppNavigator.pushReplacement(
                               context: context,
                               path: AppRoutes.signupPage,
                             );

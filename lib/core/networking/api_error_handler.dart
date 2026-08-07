@@ -9,54 +9,70 @@ class ErrorHandler {
       switch (error.type) {
         case DioExceptionType.connectionError:
           return ApiErrorModel(
-            message: "No internet connection",
+            error: ErrorModel(
+              message: "No internet connection",
+              code: statusCode.toString(),
+            ),
             retry: true,
-            statusCode: statusCode.toString(),
           );
         case DioExceptionType.cancel:
           return ApiErrorModel(
-            message: "Request to the server was cancelled",
+            error: ErrorModel(
+              message: "Request to the server was cancelled",
+              code: statusCode.toString(),
+            ),
             retry: true,
-            statusCode: statusCode.toString(),
           );
         case DioExceptionType.connectionTimeout:
           return ApiErrorModel(
-            message: "Connection timeout",
+            error: ErrorModel(
+              message: "Connection timeout",
+              code: statusCode.toString(),
+            ),
             retry: true,
-            statusCode: statusCode.toString(),
           );
         case DioExceptionType.unknown:
           return ApiErrorModel(
-            message:
-                "Connection to the server failed due to internet connection",
+            error: ErrorModel(
+              message:
+                  "Connection to the server failed due to internet connection",
+              code: statusCode.toString(),
+            ),
             retry: true,
-            statusCode: statusCode.toString(),
           );
         case DioExceptionType.receiveTimeout:
           return ApiErrorModel(
-            message: "Receive timeout in connection with the server",
+            error: ErrorModel(
+              message: "Receive timeout in connection with the server",
+              code: statusCode.toString(),
+            ),
             retry: true,
-            statusCode: statusCode.toString(),
           );
         case DioExceptionType.badResponse:
           return _handleError(error.response?.data, statusCode);
         case DioExceptionType.sendTimeout:
           return ApiErrorModel(
-            message: "Send timeout in connection with the server",
+            error: ErrorModel(
+              message: "Send timeout in connection with the server",
+              code: statusCode.toString(),
+            ),
             retry: true,
-            statusCode: statusCode.toString(),
           );
         default:
           return ApiErrorModel(
-            message: "Something went wrong",
-            statusCode: statusCode.toString(),
+            error: ErrorModel(
+              message: "Something went wrong",
+              code: statusCode.toString(),
+            ),
           );
       }
     } else {
       return ApiErrorModel(
-        message: "Unknown error occurred",
+        error: ErrorModel(
+          message: "Unknown error occurred",
+          code: statusCode.toString(),
+        ),
         retry: true,
-        statusCode: statusCode.toString(),
       );
     }
   }
@@ -65,10 +81,17 @@ class ErrorHandler {
 ApiErrorModel _handleError(dynamic data, int? statusCode) {
   try {
     return ApiErrorModel(
-      message: data['message'],
-      statusCode: statusCode.toString(),
+      error: ErrorModel(
+        message: data['error']['message'],
+        code: statusCode.toString(),
+      ),
     );
   } catch (e) {
-    return ApiErrorModel(message: "Something went wrong");
+    return ApiErrorModel(
+      error: ErrorModel(
+        message: "Something went wrong",
+        code: statusCode.toString(),
+      ),
+    );
   }
 }

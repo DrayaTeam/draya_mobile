@@ -12,11 +12,10 @@ class SignupPage extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Sign Up"),
           bottom: const TabBar(
             tabs: [
-              Tab(text: "Student"),
-              Tab(text: "Teacher"),
+              Tab(text: "طالب"),
+              Tab(text: "معلم"),
             ],
           ),
         ),

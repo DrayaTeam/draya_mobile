@@ -1,11 +1,6 @@
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/helpers/app_shared_pref_helper.dart';
 import 'package:draya_mobile/core/networking/api_error_model.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 
 class AppErrorDialog extends StatelessWidget {
   final ApiErrorModel apiErrorModel;
@@ -20,17 +15,19 @@ class AppErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String errorMessage =
-        apiErrorModel.message != null && apiErrorModel.message!.isNotEmpty
-        ? apiErrorModel.message!
+        apiErrorModel.error?.message != null &&
+            apiErrorModel.error!.message!.isNotEmpty
+        ? apiErrorModel.error!.message!
         : "حصل خطأ ما، يرجى المحاولة لاحقًا";
     return AlertDialog(
       backgroundColor: Colors.white,
       icon: _errorIcon(),
       title: _errorMessageText(context, errorMessage),
       actions: [
-        apiErrorModel.statusCode == "401"
-            ? _logoutTextButton(context)
-            : apiErrorModel.retry
+        // apiErrorModel.error?.code == "401"
+        //     ? _logoutTextButton(context)
+        //     :
+        apiErrorModel.retry
             ? onRetry == null
                   ? _errorTextButton(
                       context,
@@ -43,10 +40,10 @@ class AppErrorDialog extends StatelessWidget {
   }
 
   Widget _errorIcon() {
-    return Icon(
+    return const Icon(
       Icons.error_outline,
       color: Colors.red,
-      size: 48.w,
+      size: 48,
     );
   }
 
@@ -59,26 +56,26 @@ class AppErrorDialog extends StatelessWidget {
     );
   }
 
-  Widget _logoutTextButton(BuildContext context) {
-    return TextButton(
-      onPressed: () async {
-        Navigator.of(context).pop();
-        await AppSharedPrefHelper.clearAllSecuredData();
-        if (context.mounted) {
-          AppNavigator.goAndRemove(
-            context: context,
-            path: AppRoutes.signinPage,
-          );
-        }
-      },
-      child: Text(
-        "تسجيل الخروج",
-        style: Theme.of(context).textTheme.titleMedium!.copyWith(
-          color: AppColors.error,
-        ),
-      ),
-    );
-  }
+  // Widget _logoutTextButton(BuildContext context) {
+  //   return TextButton(
+  //     onPressed: () async {
+  //       Navigator.of(context).pop();
+  //       await AppSharedPrefHelper.clearAllSecuredData();
+  //       if (context.mounted) {
+  //         AppNavigator.goAndRemove(
+  //           context: context,
+  //           path: AppRoutes.signinPage,
+  //         );
+  //       }
+  //     },
+  //     child: Text(
+  //       "تسجيل الخروج",
+  //       style: Theme.of(context).textTheme.titleMedium!.copyWith(
+  //         color: AppColors.error,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _onRetryTextButton(BuildContext context) {
     {

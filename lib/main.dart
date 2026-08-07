@@ -1,5 +1,10 @@
+import 'package:draya_mobile/core/di/dependency_injection.dart';
 import 'package:draya_mobile/core/helpers/app_shared_pref_helper.dart';
+import 'package:draya_mobile/core/helpers/app_token_helper.dart';
 import 'package:draya_mobile/core/localization/locale_cubit.dart';
+import 'package:draya_mobile/features/auth/domain/usecases/login_use_case.dart';
+import 'package:draya_mobile/features/auth/domain/usecases/student_register_use_case.dart';
+import 'package:draya_mobile/features/auth/domain/usecases/teacher_register_use_case.dart';
 import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/student_signup/cubit/student_signup_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/teacher_signup/cubit/teacher_signup_cubit.dart';
@@ -20,7 +25,8 @@ Future<void> main() async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
-
+  await setupGetIt();
+  await AppTokenHelper.clearSessionIfNotRemembered();
   runApp(
     MultiBlocProvider(
       providers: [
@@ -28,13 +34,13 @@ Future<void> main() async {
           create: (_) => SignupChoiceCubit(),
         ),
         BlocProvider<SigninCubit>(
-          create: (_) => SigninCubit(),
+          create: (_) => SigninCubit(getIt<LoginUseCase>()),
         ),
         BlocProvider<StudentSignupCubit>(
-          create: (_) => StudentSignupCubit(),
+          create: (_) => StudentSignupCubit(getIt<StudentRegisterUseCase>()),
         ),
         BlocProvider<TeacherSignupCubit>(
-          create: (_) => TeacherSignupCubit(),
+          create: (_) => TeacherSignupCubit(getIt<TeacherRegisterUseCase>()),
         ),
         BlocProvider<LocaleCubit>(
           create: (context) => LocaleCubit(),

@@ -8,4 +8,5 @@ abstract final class AppRoutes {
   static const String mainPage = "/main";
   static const String verificationCodePage = "/verification_code";
   static const String teacherDashboardPage = "/teacher_dashboard";
+  static const String studentHomePage = "/student_home";
 }

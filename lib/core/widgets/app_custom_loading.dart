@@ -1,8 +1,6 @@
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/widgets/animated_fading_wrapper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 class AppCustomLoading extends StatelessWidget {
   final String? text;
   const AppCustomLoading({super.key, this.text});
@@ -13,14 +11,14 @@ class AppCustomLoading extends StatelessWidget {
       child: Dialog(
         elevation: 0,
         backgroundColor: Colors.white,
-        constraints: BoxConstraints(maxHeight: 500.h, maxWidth: 500.w),
+        constraints: const BoxConstraints(maxHeight: 500, maxWidth: 500),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.circular(12.r),
+          borderRadius: BorderRadiusGeometry.circular(12),
         ),
         child: Padding(
-          padding: EdgeInsetsDirectional.symmetric(
-            horizontal: 50.w,
-            vertical: 32.h,
+          padding: const EdgeInsetsDirectional.symmetric(
+            horizontal: 50,
+            vertical: 32,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -29,8 +27,8 @@ class AppCustomLoading extends StatelessWidget {
               const CircularProgressIndicator(
                 color: AppColors.primary,
               ),
-              SizedBox(
-                height: 12.h,
+              const SizedBox(
+                height: 12,
               ),
               Text(
                 text ?? "تحميل ...",

@@ -13,4 +13,8 @@ abstract final class AppRegexHelper {
   static final RegExp passwordValidatorRegExp = RegExp(
     r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!+%*?&-])[A-Za-z\d@$!+%-*?&]{8,}$',
   );
+  //010xxxxxxx / 011xxxxxxx / 012xxxxxxx / 015xxxxxxx
+  static final RegExp phoneValidatorRegExp = RegExp(
+    r'^01[0125][0-9]{8}$',
+  );
 }

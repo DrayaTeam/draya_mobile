@@ -12,7 +12,7 @@ part of 'auth_api_service.dart';
 
 class _AuthApiService implements AuthApiService {
   _AuthApiService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'https://api.draya.com';
+    baseUrl ??= 'http://draya-api.runasp.net/api/v1/';
   }
 
   final Dio _dio;

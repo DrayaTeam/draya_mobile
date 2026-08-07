@@ -67,3 +67,52 @@ List<DrawerModel> getTeacherDrawerItemsList() {
     ),
   ];
 }
+
+List<DrawerModel> getStudentDrawerItemsList() {
+  return [
+    DrawerModel(
+      title: "التدريس",
+      items: [
+        DrawerItemViewModel(
+          icon: Icons.dashboard_outlined,
+          title: "الرئيسية",
+          route: AppRoutes.studentHomePage,
+        ),
+        DrawerItemViewModel(
+          icon: Icons.school_outlined,
+          title: "باقاتى",
+        ),
+        DrawerItemViewModel(
+          icon: Icons.menu_book_outlined,
+          title: "تفاصيل المحاضرات",
+        ),
+        DrawerItemViewModel(
+          icon: Icons.book_outlined,
+          title: "الكتب",
+        ),
+      ],
+    ),
+    DrawerModel(
+      title: "التقييم",
+      items: [
+        DrawerItemViewModel(
+          icon: Icons.grading_outlined,
+          title: "درجاتى",
+        ),
+        DrawerItemViewModel(
+          icon: Icons.assignment_outlined,
+          title: "الامتحانات",
+        ),
+      ],
+    ),
+    DrawerModel(
+      title: "التواصل",
+      items: [
+        DrawerItemViewModel(
+          icon: Icons.tv_outlined,
+          title: "القناة الرئيسية",
+        ),
+      ],
+    ),
+  ];
+}
