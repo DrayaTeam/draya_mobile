@@ -9,6 +9,9 @@ import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_cubi
 import 'package:draya_mobile/features/auth/presentation/student_signup/cubit/student_signup_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/teacher_signup/cubit/teacher_signup_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/signup_choice/cubit/signup_choice_cubit.dart';
+import 'package:draya_mobile/features/teacher/subjects/domain/usecases/add_subject_use_case.dart';
+import 'package:draya_mobile/features/teacher/subjects/domain/usecases/get_subjects_use_case.dart';
+import 'package:draya_mobile/features/teacher/subjects/presentation/cubit/subject_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
@@ -46,6 +49,12 @@ Future<void> main() async {
         ),
         BlocProvider<LocaleCubit>(
           create: (context) => LocaleCubit(),
+        ),
+        BlocProvider<SubjectCubit>(
+          create: (context) => SubjectCubit(
+            getIt<AddSubjectUseCase>(),
+            getIt<GetSubjectsUseCase>(),
+          ),
         ),
       ],
       child: const DrayaApp(),

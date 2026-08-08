@@ -10,6 +10,7 @@ import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_2.dart';
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_3.dart';
 import 'package:draya_mobile/features/teacher/students_list/presentation/pages/students_list_screen.dart';
+import 'package:draya_mobile/features/teacher/subjects/presentation/pages/create_subject_page.dart';
 import 'package:go_router/go_router.dart';
 
 const authRoutes = {
@@ -100,6 +101,12 @@ abstract final class AppRouter {
         path: AppRoutes.studentHomePage,
         builder: (context, state) {
           return const StudentHomeScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.subjectsPage,
+        builder: (context, state) {
+          return const CreateSubjectPage();
         },
       ),
     ],
