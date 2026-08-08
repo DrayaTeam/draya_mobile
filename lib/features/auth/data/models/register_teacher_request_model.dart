@@ -3,7 +3,6 @@ part 'register_teacher_request_model.g.dart';
 
 @JsonSerializable(includeIfNull: false)
 class RegisterTeacherRequestModel {
-
   final String email;
   final String password;
   final String fullName;
@@ -16,11 +15,8 @@ class RegisterTeacherRequestModel {
     this.phone,
   });
 
-  factory RegisterTeacherRequestModel.fromJson(
-      Map<String,dynamic> json)
-      => _$RegisterTeacherRequestModelFromJson(json);
+  factory RegisterTeacherRequestModel.fromJson(Map<String, dynamic> json) =>
+      _$RegisterTeacherRequestModelFromJson(json);
 
-  Map<String,dynamic> toJson()
-      => _$RegisterTeacherRequestModelToJson(this);
-
+  Map<String, dynamic> toJson() => _$RegisterTeacherRequestModelToJson(this);
 }
