@@ -34,6 +34,7 @@ List<DrawerModel> getTeacherDrawerItemsList() {
         DrawerItemViewModel(
           icon: Icons.menu_book_outlined,
           title: "الفصول",
+          route: AppRoutes.classroomsPage,
         ),
       ],
     ),

@@ -11,6 +11,9 @@ import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_3.dart';
 import 'package:draya_mobile/features/teacher/students_list/presentation/pages/students_list_screen.dart';
 import 'package:draya_mobile/features/teacher/subjects/presentation/pages/create_subject_page.dart';
+import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/classrooms_page.dart';
+import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/classroom_students_page.dart';
+import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
 import 'package:go_router/go_router.dart';
 
 const authRoutes = {
@@ -107,6 +110,18 @@ abstract final class AppRouter {
         path: AppRoutes.subjectsPage,
         builder: (context, state) {
           return const CreateSubjectPage();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.classroomsPage,
+        builder: (context, state) {
+          return const ClassroomsPage();
+        },
+      ),
+      GoRoute(
+        path: '/teacher/classrooms/:classroomId/students',
+        builder: (context, state) {
+          return ClassroomStudentsPage(classroom: state.extra! as ClassroomModel);
         },
       ),
     ],

@@ -37,7 +37,7 @@ class TeacherDashboardScreen extends StatelessWidget {
             children: [
               Text(DateFormat.yMMMMEEEEd("ar").format(currentDate)),
               Text(
-                "مساء الخير أ. " + teacherName,
+                "مساء الخير أ. $teacherName",
                 style: context.textTheme.displaySmall,
               ),
               const Text("اليك ملخص نشاط اكاديميتك اليوم"),

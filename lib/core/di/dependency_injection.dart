@@ -11,6 +11,18 @@ import 'package:draya_mobile/features/teacher/subjects/data/source/subject_api_s
 import 'package:draya_mobile/features/teacher/subjects/domain/repos/subject_repo.dart';
 import 'package:draya_mobile/features/teacher/subjects/domain/usecases/add_subject_use_case.dart';
 import 'package:draya_mobile/features/teacher/subjects/domain/usecases/get_subjects_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/data/repos/classroom_repo_impl.dart';
+import 'package:draya_mobile/features/teacher/classrooms/data/source/classroom_remote_data_source.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/repos/classroom_repo.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/create_classroom_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/delete_classroom_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classroom_by_id_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classroom_pricing_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classroom_students_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classrooms_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/regenerate_classroom_code_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/set_classroom_pricing_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/update_classroom_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
@@ -56,5 +68,42 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<GetSubjectsUseCase>(
     () => GetSubjectsUseCase(getIt<SubjectRepo>()),
+  );
+
+  // classrooms
+  getIt.registerLazySingleton<ClassroomRemoteDataSource>(
+    () => ClassroomRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<ClassroomRepo>(
+    () => ClassroomRepoImpl(getIt<ClassroomRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<CreateClassroomUseCase>(
+    () => CreateClassroomUseCase(getIt<ClassroomRepo>()),
+  );
+  getIt.registerLazySingleton<GetClassroomsUseCase>(
+    () => GetClassroomsUseCase(getIt<ClassroomRepo>()),
+  );
+  getIt.registerLazySingleton<GetClassroomByIdUseCase>(
+    () => GetClassroomByIdUseCase(getIt<ClassroomRepo>()),
+  );
+  getIt.registerLazySingleton<UpdateClassroomUseCase>(
+    () => UpdateClassroomUseCase(getIt<ClassroomRepo>()),
+  );
+  getIt.registerLazySingleton<DeleteClassroomUseCase>(
+    () => DeleteClassroomUseCase(getIt<ClassroomRepo>()),
+  );
+  getIt.registerLazySingleton<RegenerateClassroomCodeUseCase>(
+    () => RegenerateClassroomCodeUseCase(getIt<ClassroomRepo>()),
+  );
+  getIt.registerLazySingleton<GetClassroomStudentsUseCase>(
+    () => GetClassroomStudentsUseCase(getIt<ClassroomRepo>()),
+  );
+  getIt.registerLazySingleton<SetClassroomPricingUseCase>(
+    () => SetClassroomPricingUseCase(getIt<ClassroomRepo>()),
+  );
+  getIt.registerLazySingleton<GetClassroomPricingUseCase>(
+    () => GetClassroomPricingUseCase(getIt<ClassroomRepo>()),
   );
 }

@@ -12,6 +12,11 @@ import 'package:draya_mobile/features/auth/presentation/signup_choice/cubit/sign
 import 'package:draya_mobile/features/teacher/subjects/domain/usecases/add_subject_use_case.dart';
 import 'package:draya_mobile/features/teacher/subjects/domain/usecases/get_subjects_use_case.dart';
 import 'package:draya_mobile/features/teacher/subjects/presentation/cubit/subject_cubit.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/create_classroom_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classrooms_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classroom_students_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart';
+import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
@@ -54,6 +59,17 @@ Future<void> main() async {
           create: (context) => SubjectCubit(
             getIt<AddSubjectUseCase>(),
             getIt<GetSubjectsUseCase>(),
+          ),
+        ),
+        BlocProvider<ClassroomCubit>(
+          create: (context) => ClassroomCubit(
+            getIt<GetClassroomsUseCase>(),
+            getIt<CreateClassroomUseCase>(),
+          ),
+        ),
+        BlocProvider<ClassroomStudentsCubit>(
+          create: (context) => ClassroomStudentsCubit(
+            getIt<GetClassroomStudentsUseCase>(),
           ),
         ),
       ],
