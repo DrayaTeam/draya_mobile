@@ -22,14 +22,19 @@ List<DrawerModel> getTeacherDrawerItemsList() {
           title: "لوحة التحكم",
           route: AppRoutes.teacherDashboardPage,
         ),
+        // DrawerItemViewModel(
+        //   icon: Icons.school_outlined,
+        //   title: "باقات",
+        // ),
+        // DrawerItemViewModel(
+        //   title: "المواد الدراسية",
+        //   icon: Icons.book_outlined,
+        //   route: AppRoutes.subjectsPage,
+        // ),
         DrawerItemViewModel(
-          icon: Icons.school_outlined,
-          title: "باقات",
-        ),
-        DrawerItemViewModel(
-          title: "المواد الدراسية",
-          icon: Icons.book_outlined,
-          route: AppRoutes.subjectsPage,
+          title: "عن حسابى",
+          icon: Icons.person_outline,
+          route: AppRoutes.teacherProfilePage,
         ),
         DrawerItemViewModel(
           icon: Icons.menu_book_outlined,

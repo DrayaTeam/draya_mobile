@@ -9,6 +9,8 @@ import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_cubi
 import 'package:draya_mobile/features/auth/presentation/student_signup/cubit/student_signup_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/teacher_signup/cubit/teacher_signup_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/signup_choice/cubit/signup_choice_cubit.dart';
+import 'package:draya_mobile/features/teacher/profile/domain/usecases/get_teacher_profile_use_case.dart';
+import 'package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart';
 import 'package:draya_mobile/features/teacher/subjects/domain/usecases/add_subject_use_case.dart';
 import 'package:draya_mobile/features/teacher/subjects/domain/usecases/get_subjects_use_case.dart';
 import 'package:draya_mobile/features/teacher/subjects/presentation/cubit/subject_cubit.dart';
@@ -71,6 +73,10 @@ Future<void> main() async {
           create: (context) => ClassroomStudentsCubit(
             getIt<GetClassroomStudentsUseCase>(),
           ),
+        ),
+        BlocProvider<TeacherProfileCubit>(
+          create: (context) =>
+              TeacherProfileCubit(getIt<GetTeacherProfileUseCase>()),
         ),
       ],
       child: const DrayaApp(),

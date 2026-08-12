@@ -6,6 +6,10 @@ import 'package:draya_mobile/features/auth/domain/repos/auth_repo.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/login_use_case.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/student_register_use_case.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/teacher_register_use_case.dart';
+import 'package:draya_mobile/features/teacher/profile/data/repos/teacher_profile_repo_impl.dart';
+import 'package:draya_mobile/features/teacher/profile/data/source/teacher_profile_api_service.dart';
+import 'package:draya_mobile/features/teacher/profile/domain/repos/teacher_profile_repo.dart';
+import 'package:draya_mobile/features/teacher/profile/domain/usecases/get_teacher_profile_use_case.dart';
 import 'package:draya_mobile/features/teacher/subjects/data/repos/subject_repo_impl.dart';
 import 'package:draya_mobile/features/teacher/subjects/data/source/subject_api_service.dart';
 import 'package:draya_mobile/features/teacher/subjects/domain/repos/subject_repo.dart';
@@ -105,5 +109,18 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<GetClassroomPricingUseCase>(
     () => GetClassroomPricingUseCase(getIt<ClassroomRepo>()),
+  );
+
+  // teacher profile
+  getIt.registerLazySingleton<TeacherProfileApiService>(
+    () => TeacherProfileApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<TeacherProfileRepo>(
+    () => TeacherProfileRepoImpl(getIt<TeacherProfileApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetTeacherProfileUseCase>(
+    () => GetTeacherProfileUseCase(getIt<TeacherProfileRepo>()),
   );
 }
