@@ -1,27 +1,25 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part "grade_level_model.g.dart";
+part "classroom_type_model.g.dart";
 
 @JsonSerializable()
-class GradeLevelModel {
+class ClassroomTypeModel {
   final String id;
   final String name;
   final String description;
-  final int sortOrder;
   final bool isActive;
   final DateTime createdAt;
 
-  const GradeLevelModel({
+  const ClassroomTypeModel({
     required this.id,
     required this.name,
     required this.description,
-    required this.sortOrder,
     required this.isActive,
     required this.createdAt,
   });
 
-  factory GradeLevelModel.fromJson(Map<String, dynamic> json) =>
-      _$GradeLevelModelFromJson(json);
+  factory ClassroomTypeModel.fromJson(Map<String, dynamic> json) =>
+      _$ClassroomTypeModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GradeLevelModelToJson(this);
+  Map<String, dynamic> toJson() => _$ClassroomTypeModelToJson(this);
 }

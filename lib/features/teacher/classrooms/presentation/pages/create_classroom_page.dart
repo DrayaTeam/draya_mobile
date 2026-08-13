@@ -6,10 +6,14 @@ import 'package:draya_mobile/core/widgets/app_drop_down_form_field.dart';
 import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
 import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
-import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
-import 'package:draya_mobile/features/teacher/classrooms/data/models/grade_level_model.dart';
-import 'package:draya_mobile/features/teacher/subjects/data/models/subject_model.dart';
+import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_types_cubit.dart';
+import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_types_state.dart';
+import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/grade_levels_cubit.dart';
+import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/grade_levels_state.dart';
+import 'package:draya_mobile/features/teacher/subjects/presentation/cubit/subject_cubit.dart';
+import 'package:draya_mobile/features/teacher/subjects/presentation/cubit/subject_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class CreateClassroomPage extends StatefulWidget {
@@ -27,13 +31,10 @@ class _CreateClassroomPageState extends State<CreateClassroomPage> {
   late final TextEditingController _textEditingControllerPrice;
 
   String? _selectedSubjectId;
-  List<SubjectModel> _subjects = [];
 
   String? _selectedClassroomTypeId;
-  List<ClassroomModel> _classrooms = [];
 
   String? _selectedGradeLevelId;
-  List<GradeLevelModel> _gradeLevels = [];
 
   DateTime? _startDate;
   DateTime? _endDate;
@@ -42,10 +43,15 @@ class _CreateClassroomPageState extends State<CreateClassroomPage> {
   void initState() {
     super.initState();
     _formKey = GlobalKey();
+
     _textEditingControllerName = TextEditingController();
     _textEditingControllerStartDate = TextEditingController();
     _textEditingControllerEndDate = TextEditingController();
     _textEditingControllerPrice = TextEditingController();
+
+    context.read<SubjectCubit>().getSubjects();
+    context.read<ClassroomTypesCubit>().getClassroomTypes();
+    context.read<GradeLevelsCubit>().getGradeLevels();
   }
 
   @override
@@ -102,76 +108,16 @@ class _CreateClassroomPageState extends State<CreateClassroomPage> {
                           : null,
                     ),
                     const SizedBox(height: AppSizes.s20),
-                    Text(
-                      "اختر المادة الدراسية",
-                      style: context.textTheme.labelLarge,
-                    ),
-                    const SizedBox(height: AppSizes.s8),
-                    AppDropDownFormField(
-                      hint: 'اختر المادة الدراسية',
-                      value: _selectedSubjectId,
-                      dropDownItems: _subjects
-                          .map(
-                            (SubjectModel subject) => DropdownMenuItem<String>(
-                              value: subject.id,
-                              child: Text(subject.name),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() => _selectedSubjectId = value);
-                      },
-                      isRequired: true,
-                    ),
+
+                    _buildSubjectDropdown(context),
                     const SizedBox(height: AppSizes.s20),
-                    Text(
-                      "اختر نوع الفصل",
-                      style: context.textTheme.labelLarge,
-                    ),
-                    const SizedBox(height: AppSizes.s8),
-                    AppDropDownFormField(
-                      hint: "اختر نوع الفصل",
-                      value: _selectedClassroomTypeId,
-                      dropDownItems: _classrooms
-                          .map(
-                            (classroom) => DropdownMenuItem<String>(
-                              value: classroom.classroomId,
-                              child: Text(classroom.name),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedClassroomTypeId = value;
-                        });
-                      },
-                      isRequired: true,
-                    ),
+
+                    _buildClassroomTypeDropdown(context),
                     const SizedBox(height: AppSizes.s20),
-                    Text(
-                      "اختر نوع المرحلة",
-                      style: context.textTheme.labelLarge,
-                    ),
-                    const SizedBox(height: AppSizes.s8),
-                    AppDropDownFormField(
-                      hint: "اختر نوع المرحلة",
-                      value: _selectedGradeLevelId,
-                      dropDownItems: _gradeLevels
-                          .map(
-                            (gradeLevel) => DropdownMenuItem<String>(
-                              value: gradeLevel.id,
-                              child: Text(gradeLevel.name),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedGradeLevelId = value;
-                        });
-                      },
-                      isRequired: true,
-                    ),
+
+                    _buildGradeLevelDropdown(context),
                     const SizedBox(height: AppSizes.s20),
+
                     Text(
                       "تاريخ البداية",
                       style: context.textTheme.labelLarge,
@@ -285,6 +231,114 @@ class _CreateClassroomPageState extends State<CreateClassroomPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSubjectDropdown(BuildContext context) {
+    return BlocBuilder<SubjectCubit, SubjectState>(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "اختر المادة الدراسية",
+              style: context.textTheme.labelLarge,
+            ),
+            const SizedBox(height: AppSizes.s8),
+
+            AppDropDownFormField(
+              hint: 'اختر المادة الدراسية',
+              value: _selectedSubjectId,
+              dropDownItems: state.subjects
+                  .map(
+                    (subject) => DropdownMenuItem<String>(
+                      value: subject.id,
+                      child: Text(subject.name),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedSubjectId = value;
+                });
+              },
+              isRequired: true,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildClassroomTypeDropdown(BuildContext context) {
+    return BlocBuilder<ClassroomTypesCubit, ClassroomTypesState>(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "اختر نوع الفصل",
+              style: context.textTheme.labelLarge,
+            ),
+            const SizedBox(height: AppSizes.s8),
+
+            AppDropDownFormField(
+              hint: "اختر نوع الفصل",
+              value: _selectedClassroomTypeId,
+              dropDownItems: state.classroomTypes
+                  .map(
+                    (classroomType) => DropdownMenuItem<String>(
+                      value: classroomType.id,
+                      child: Text(classroomType.name),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedClassroomTypeId = value;
+                });
+              },
+              isRequired: true,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildGradeLevelDropdown(BuildContext context) {
+    return BlocBuilder<GradeLevelsCubit, GradeLevelsState>(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "اختر المرحلة الدراسية",
+              style: context.textTheme.labelLarge,
+            ),
+            const SizedBox(height: AppSizes.s8),
+
+            AppDropDownFormField(
+              hint: "اختر المرحلة الدراسية",
+              value: _selectedGradeLevelId,
+              dropDownItems: state.gradeLevels
+                  .map(
+                    (gradeLevel) => DropdownMenuItem<String>(
+                      value: gradeLevel.id,
+                      child: Text(gradeLevel.name),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedGradeLevelId = value;
+                });
+              },
+              isRequired: true,
+            ),
+          ],
+        );
+      },
     );
   }
 }
