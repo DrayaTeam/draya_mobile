@@ -5,6 +5,7 @@ import 'package:draya_mobile/features/auth/presentation/signup/pages/signup_page
 import 'package:draya_mobile/features/auth/presentation/signup_choice/pages/signup_choice_page.dart';
 import 'package:draya_mobile/features/auth/presentation/verification_code_page/pages/verification_code_page.dart';
 import 'package:draya_mobile/features/student/home/presentation/pages/student_home_screen.dart';
+import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/create_classroom_page.dart';
 import 'package:draya_mobile/features/teacher/dashboard/presentation/pages/teacher_dashboard_screen.dart';
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_1.dart';
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_2.dart';
@@ -117,6 +118,12 @@ abstract final class AppRouter {
         path: AppRoutes.classroomsPage,
         builder: (context, state) {
           return const ClassroomsPage();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.createClassroomPage,
+        builder: (context, state) {
+          return const CreateClassroomPage();
         },
       ),
       GoRoute(

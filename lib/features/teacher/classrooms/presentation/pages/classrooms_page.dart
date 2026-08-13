@@ -1,5 +1,6 @@
 import 'package:draya_mobile/core/enums/cubit_status.dart';
 import 'package:draya_mobile/core/helpers/app_extensions.dart';
+import 'package:draya_mobile/core/helpers/app_navigator.dart';
 import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
@@ -52,6 +53,13 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
           .toLowerCase();
       return searchableText.contains(_query.toLowerCase());
     }).toList();
+  }
+
+  void _createClassroom() {
+    AppNavigator.push(
+      context: context,
+      path: AppRoutes.createClassroomPage,
+    );
   }
 
   @override
@@ -108,7 +116,8 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
                         ),
                         const SizedBox(height: AppSizes.s16),
                         AppElevatedButton(
-                          onPressed: _showCreateClassroomSheet,
+                          onPressed: _createClassroom,
+                          // onPressed: _showCreateClassroomSheet,
                           label: 'إنشاء فصل دراسي جديد',
                           icon: const Icon(Icons.add, size: 18),
                           size: const Size(double.infinity, 40),
@@ -148,104 +157,104 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
     );
   }
 
-  Future<void> _showCreateClassroomSheet() async {
-    final nameController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-    String? selectedSubjectId;
+  // Future<void> _showCreateClassroomSheet() async {
+  //   final nameController = TextEditingController();
+  //   final formKey = GlobalKey<FormState>();
+  //   String? selectedSubjectId;
 
-    final subjectCubit = context.read<SubjectCubit>();
-    if (subjectCubit.state.subjects.isEmpty) {
-      await subjectCubit.getSubjects();
-    }
+  //   final subjectCubit = context.read<SubjectCubit>();
+  //   if (subjectCubit.state.subjects.isEmpty) {
+  //     await subjectCubit.getSubjects();
+  //   }
 
-    if (!mounted) return;
+  //   if (!mounted) return;
 
-    await showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      builder: (sheetContext) => StatefulBuilder(
-        builder: (sheetContext, setSheetState) {
-          return BlocBuilder<SubjectCubit, SubjectState>(
-            builder: (context, subjectState) {
-              final subjects = subjectState.subjects;
-              return SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: AppSizes.s24,
-                    right: AppSizes.s24,
-                    top: AppSizes.s24,
-                    bottom:
-                        MediaQuery.viewInsetsOf(sheetContext).bottom +
-                        AppSizes.s24,
-                  ),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'إنشاء فصل دراسي جديد',
-                          textAlign: TextAlign.right,
-                          style: sheetContext.textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: AppSizes.s16),
-                        AppTextFormField(
-                          controller: nameController,
-                          hintText: 'اسم الفصل الدراسي',
-                          validator: (value) =>
-                              value == null || value.trim().isEmpty
-                              ? 'أدخل اسم الفصل'
-                              : null,
-                        ),
-                        const SizedBox(height: AppSizes.s12),
-                        AppDropDownFormField(
-                          hint: 'اختر المادة الدراسية',
-                          value: selectedSubjectId,
-                          dropDownItems: subjects
-                              .map(
-                                (SubjectModel subject) =>
-                                    DropdownMenuItem<String>(
-                                      value: subject.id,
-                                      child: Text(subject.name),
-                                    ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
-                            setSheetState(() => selectedSubjectId = value);
-                          },
-                          isRequired: true,
-                        ),
-                        const SizedBox(height: AppSizes.s16),
-                        AppElevatedButton(
-                          onPressed: () async {
-                            if (!formKey.currentState!.validate()) return;
-                            final created = await context
-                                .read<ClassroomCubit>()
-                                .createClassroom(
-                                  CreateClassroomRequestModel(
-                                    subjectId: selectedSubjectId!,
-                                    name: nameController.text.trim(),
-                                  ),
-                                );
-                            if (created && sheetContext.mounted) {
-                              Navigator.pop(sheetContext);
-                            }
-                          },
-                          label: 'إنشاء الفصل',
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      ),
-    );
-    nameController.dispose();
-  }
+  //   await showModalBottomSheet<void>(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     builder: (sheetContext) => StatefulBuilder(
+  //       builder: (sheetContext, setSheetState) {
+  //         return BlocBuilder<SubjectCubit, SubjectState>(
+  //           builder: (context, subjectState) {
+  //             final subjects = subjectState.subjects;
+  //             return SafeArea(
+  //               child: Padding(
+  //                 padding: EdgeInsets.only(
+  //                   left: AppSizes.s24,
+  //                   right: AppSizes.s24,
+  //                   top: AppSizes.s24,
+  //                   bottom:
+  //                       MediaQuery.viewInsetsOf(sheetContext).bottom +
+  //                       AppSizes.s24,
+  //                 ),
+  //                 child: Form(
+  //                   key: formKey,
+  //                   child: Column(
+  //                     mainAxisSize: MainAxisSize.min,
+  //                     crossAxisAlignment: CrossAxisAlignment.stretch,
+  //                     children: [
+  //                       Text(
+  //                         'إنشاء فصل دراسي جديد',
+  //                         textAlign: TextAlign.right,
+  //                         style: sheetContext.textTheme.titleMedium,
+  //                       ),
+  //                       const SizedBox(height: AppSizes.s16),
+  //                       AppTextFormField(
+  //                         controller: nameController,
+  //                         hintText: 'اسم الفصل الدراسي',
+  //                         validator: (value) =>
+  //                             value == null || value.trim().isEmpty
+  //                             ? 'أدخل اسم الفصل'
+  //                             : null,
+  //                       ),
+  //                       const SizedBox(height: AppSizes.s12),
+  //                       AppDropDownFormField(
+  //                         hint: 'اختر المادة الدراسية',
+  //                         value: selectedSubjectId,
+  //                         dropDownItems: subjects
+  //                             .map(
+  //                               (SubjectModel subject) =>
+  //                                   DropdownMenuItem<String>(
+  //                                     value: subject.id,
+  //                                     child: Text(subject.name),
+  //                                   ),
+  //                             )
+  //                             .toList(),
+  //                         onChanged: (value) {
+  //                           setSheetState(() => selectedSubjectId = value);
+  //                         },
+  //                         isRequired: true,
+  //                       ),
+  //                       const SizedBox(height: AppSizes.s16),
+  //                       AppElevatedButton(
+  //                         onPressed: () async {
+  //                           if (!formKey.currentState!.validate()) return;
+  //                           final created = await context
+  //                               .read<ClassroomCubit>()
+  //                               .createClassroom(
+  //                                 CreateClassroomRequestModel(
+  //                                   subjectId: selectedSubjectId!,
+  //                                   name: nameController.text.trim(),
+  //                                 ),
+  //                               );
+  //                           if (created && sheetContext.mounted) {
+  //                             Navigator.pop(sheetContext);
+  //                           }
+  //                         },
+  //                         label: 'إنشاء الفصل',
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         );
+  //       },
+  //     ),
+  //   );
+  //   nameController.dispose();
+  // }
 }
 
 class _SearchSummary extends StatelessWidget {
