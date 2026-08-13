@@ -3,7 +3,9 @@ import 'package:draya_mobile/core/networking/api_result.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_paged_result_model.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_pricing_model.dart';
+import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_type_model.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/create_classroom_request_model.dart';
+import 'package:draya_mobile/features/teacher/classrooms/data/models/grade_level_model.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/set_classroom_pricing_request_model.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/student_roster_paged_result_model.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/update_classroom_request_model.dart';
@@ -39,8 +41,9 @@ class ClassroomRepoImpl implements ClassroomRepo {
       _guard(() => _remoteDataSource.deleteClassroom(classroomId));
 
   @override
-  Future<ApiResult<ClassroomModel>> regenerateClassroomCode(String classroomId) =>
-      _guard(() => _remoteDataSource.regenerateClassroomCode(classroomId));
+  Future<ApiResult<ClassroomModel>> regenerateClassroomCode(
+    String classroomId,
+  ) => _guard(() => _remoteDataSource.regenerateClassroomCode(classroomId));
 
   @override
   Future<ApiResult<StudentRosterPagedResultModel>> getClassroomStudents(
@@ -51,12 +54,23 @@ class ClassroomRepoImpl implements ClassroomRepo {
   Future<ApiResult<ClassroomPricingModel>> setClassroomPricing(
     String classroomId,
     SetClassroomPricingRequestModel request,
-  ) => _guard(() => _remoteDataSource.setClassroomPricing(classroomId, request));
+  ) =>
+      _guard(() => _remoteDataSource.setClassroomPricing(classroomId, request));
 
   @override
   Future<ApiResult<ClassroomPricingModel>> getClassroomPricing(
     String classroomId,
   ) => _guard(() => _remoteDataSource.getClassroomPricing(classroomId));
+
+  @override
+  Future<ApiResult<List<ClassroomTypeModel>>> getClassroomTypes() {
+    return _guard(() => _remoteDataSource.getClassroomTypes());
+  }
+
+  @override
+  Future<ApiResult<List<GradeLevelModel>>> getGradeLevels() {
+    return _guard(() => _remoteDataSource.getGradeLevels());
+  }
 
   Future<ApiResult<T>> _guard<T>(Future<T> Function() request) async {
     try {
