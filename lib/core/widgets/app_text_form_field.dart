@@ -19,6 +19,7 @@ class AppTextFormField extends StatefulWidget {
   final String? Function(String?)? validator;
   final Function()? onTap;
   final Function(String)? onChanged;
+  final String? errorText;
 
   const AppTextFormField({
     super.key,
@@ -37,6 +38,7 @@ class AppTextFormField extends StatefulWidget {
     this.nextFocusNode,
     this.textInputAction,
     this.prefixIcon,
+    this.errorText,
   });
 
   @override
@@ -112,6 +114,7 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
           horizontal: 16,
         ),
         visualDensity: VisualDensity.compact,
+        errorText: widget.errorText,
       ),
     );
   }

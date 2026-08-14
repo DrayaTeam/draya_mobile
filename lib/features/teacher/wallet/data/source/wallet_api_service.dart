@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:draya_mobile/core/networking/api_constants.dart';
 import 'package:draya_mobile/features/teacher/wallet/data/models/balance_model.dart';
+import 'package:draya_mobile/features/teacher/wallet/data/models/top_up_request_model.dart';
+import 'package:draya_mobile/features/teacher/wallet/data/models/top_up_response_model.dart';
 import 'package:draya_mobile/features/teacher/wallet/data/source/wallet_api_constants.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -12,4 +14,7 @@ abstract class WalletApiService {
 
   @GET(WalletApiConstants.balance)
   Future<BalanceModel> getTeacherBalance();
+
+  @POST(WalletApiConstants.topUp)
+  Future<TopUpResponseModel> topUp(@Body() TopUpRequestModel topUpRequestModel);
 }

@@ -24,6 +24,8 @@ import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_cla
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart';
 import 'package:draya_mobile/features/teacher/wallet/domain/usecases/get_teacher_balance_use_case.dart';
+import 'package:draya_mobile/features/teacher/wallet/domain/usecases/top_up_use_case.dart';
+import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/top_up_cubit.dart';
 import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -93,6 +95,9 @@ Future<void> main() async {
         ),
         BlocProvider<WalletCubit>(
           create: (context) => WalletCubit(getIt<GetTeacherBalanceUseCase>()),
+        ),
+        BlocProvider<TopUpCubit>(
+          create: (context) => TopUpCubit(getIt<TopUpUseCase>()),
         ),
       ],
       child: const DrayaApp(),
