@@ -1,4 +1,6 @@
-class AppImages { 
+class AppImages {
+  static const String studentDashboardImage =
+      "assets/images/student_dashboard_image.jpg";
 }
 
 class AppSvgs {

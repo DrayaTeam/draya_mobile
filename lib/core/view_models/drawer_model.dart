@@ -91,6 +91,11 @@ List<DrawerModel> getStudentDrawerItemsList() {
           title: "باقاتى",
         ),
         DrawerItemViewModel(
+          icon: Icons.people_outlined,
+          title: "المعلمون",
+          route: AppRoutes.browseTeachersPage,
+        ),
+        DrawerItemViewModel(
           icon: Icons.menu_book_outlined,
           title: "تفاصيل المحاضرات",
         ),
@@ -110,6 +115,7 @@ List<DrawerModel> getStudentDrawerItemsList() {
         DrawerItemViewModel(
           icon: Icons.assignment_outlined,
           title: "الامتحانات",
+          route: AppRoutes.studentExamsPage,
         ),
       ],
     ),

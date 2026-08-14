@@ -6,6 +6,12 @@ import 'package:draya_mobile/features/auth/domain/repos/auth_repo.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/login_use_case.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/student_register_use_case.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/teacher_register_use_case.dart';
+import 'package:draya_mobile/features/student/teachers/data/repos/teacher_repo_impl.dart';
+import 'package:draya_mobile/features/student/teachers/data/source/teacher_api_service.dart';
+import 'package:draya_mobile/features/student/teachers/domain/repos/teacher_repo.dart';
+import 'package:draya_mobile/features/student/teachers/domain/usecases/get_teacher_classrooms_use_case.dart';
+import 'package:draya_mobile/features/student/teachers/domain/usecases/get_teachers_use_case.dart';
+import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_cubit.dart';
 import 'package:draya_mobile/features/teacher/subjects/data/repos/subject_repo_impl.dart';
 import 'package:draya_mobile/features/teacher/subjects/data/source/subject_api_service.dart';
 import 'package:draya_mobile/features/teacher/subjects/domain/repos/subject_repo.dart';
@@ -105,5 +111,26 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<GetClassroomPricingUseCase>(
     () => GetClassroomPricingUseCase(getIt<ClassroomRepo>()),
+  );
+
+  // student teachers
+  getIt.registerLazySingleton<TeacherApiService>(
+    () => TeacherApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<TeacherRepo>(
+    () => TeacherRepoImpl(getIt<TeacherApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetTeachersUseCase>(
+    () => GetTeachersUseCase(getIt<TeacherRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetTeacherClassroomsUseCase>(
+    () => GetTeacherClassroomsUseCase(getIt<TeacherRepo>()),
+  );
+
+  getIt.registerFactory<TeacherClassroomsCubit>(
+    () => TeacherClassroomsCubit(getIt<GetTeacherClassroomsUseCase>()),
   );
 }

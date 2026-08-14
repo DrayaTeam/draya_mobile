@@ -4,7 +4,12 @@ import 'package:draya_mobile/features/auth/presentation/signin/pages/signin_page
 import 'package:draya_mobile/features/auth/presentation/signup/pages/signup_page.dart';
 import 'package:draya_mobile/features/auth/presentation/signup_choice/pages/signup_choice_page.dart';
 import 'package:draya_mobile/features/auth/presentation/verification_code_page/pages/verification_code_page.dart';
+import 'package:draya_mobile/features/student/exams/presentation/models/exam_item.dart';
+import 'package:draya_mobile/features/student/exams/presentation/pages/student_exam_details_screen.dart';
+import 'package:draya_mobile/features/student/exams/presentation/pages/student_exams_screen.dart';
 import 'package:draya_mobile/features/student/home/presentation/pages/student_home_screen.dart';
+import 'package:draya_mobile/features/student/teachers/presentation/pages/browse_teachers_screen.dart';
+import 'package:draya_mobile/features/student/teachers/presentation/pages/teacher_classrooms_page.dart';
 import 'package:draya_mobile/features/teacher/dashboard/presentation/pages/teacher_dashboard_screen.dart';
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_1.dart';
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_2.dart';
@@ -13,6 +18,7 @@ import 'package:draya_mobile/features/teacher/students_list/presentation/pages/s
 import 'package:draya_mobile/features/teacher/subjects/presentation/pages/create_subject_page.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/classrooms_page.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/classroom_students_page.dart';
+import 'package:draya_mobile/features/student/teachers/data/models/teacher_model.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
 import 'package:go_router/go_router.dart';
 
@@ -119,9 +125,41 @@ abstract final class AppRouter {
         },
       ),
       GoRoute(
+        path: AppRoutes.browseTeachersPage,
+        builder: (context, state) {
+          return const BrowseTeachersScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.studentExamsPage,
+        builder: (context, state) {
+          return const StudentExamsScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.teacherClassroomsPage(':teacherId'),
+        builder: (context, state) {
+          final teacherId = state.pathParameters['teacherId'] ?? '';
+          final teacher = state.extra as TeacherModel?;
+          return TeacherClassroomsPage(
+            teacherId: teacherId,
+            teacher: teacher,
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.studentExamDetailsPage,
+        builder: (context, state) {
+          final exam = state.extra as ExamItem? ?? const ExamItem.empty();
+          return StudentExamDetailsScreen(exam: exam);
+        },
+      ),
+      GoRoute(
         path: '/teacher/classrooms/:classroomId/students',
         builder: (context, state) {
-          return ClassroomStudentsPage(classroom: state.extra! as ClassroomModel);
+          return ClassroomStudentsPage(
+            classroom: state.extra! as ClassroomModel,
+          );
         },
       ),
     ],
