@@ -6,6 +6,12 @@ import 'package:draya_mobile/features/auth/domain/repos/auth_repo.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/login_use_case.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/student_register_use_case.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/teacher_register_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classroom_types_use_case.dart';
+import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_grade_levels_use_case.dart';
+import 'package:draya_mobile/features/teacher/profile/data/repos/teacher_profile_repo_impl.dart';
+import 'package:draya_mobile/features/teacher/profile/data/source/teacher_profile_api_service.dart';
+import 'package:draya_mobile/features/teacher/profile/domain/repos/teacher_profile_repo.dart';
+import 'package:draya_mobile/features/teacher/profile/domain/usecases/get_teacher_profile_use_case.dart';
 import 'package:draya_mobile/features/student/teachers/data/repos/teacher_repo_impl.dart';
 import 'package:draya_mobile/features/student/teachers/data/source/teacher_api_service.dart';
 import 'package:draya_mobile/features/student/teachers/domain/repos/teacher_repo.dart';
@@ -29,6 +35,11 @@ import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_cla
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/regenerate_classroom_code_use_case.dart';
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/set_classroom_pricing_use_case.dart';
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/update_classroom_use_case.dart';
+import 'package:draya_mobile/features/teacher/wallet/data/repos/wallet_repo_impl.dart';
+import 'package:draya_mobile/features/teacher/wallet/data/source/wallet_api_service.dart';
+import 'package:draya_mobile/features/teacher/wallet/domain/repos/wallet_repo.dart';
+import 'package:draya_mobile/features/teacher/wallet/domain/usecases/get_teacher_balance_use_case.dart';
+import 'package:draya_mobile/features/teacher/wallet/domain/usecases/top_up_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
@@ -111,6 +122,44 @@ Future<void> setupGetIt() async {
   );
   getIt.registerLazySingleton<GetClassroomPricingUseCase>(
     () => GetClassroomPricingUseCase(getIt<ClassroomRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetClassroomTypesUseCase>(
+    () => GetClassroomTypesUseCase(getIt<ClassroomRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetGradeLevelsUseCase>(
+    () => GetGradeLevelsUseCase(getIt<ClassroomRepo>()),
+  );
+
+  // teacher profile
+  getIt.registerLazySingleton<TeacherProfileApiService>(
+    () => TeacherProfileApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<TeacherProfileRepo>(
+    () => TeacherProfileRepoImpl(getIt<TeacherProfileApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetTeacherProfileUseCase>(
+    () => GetTeacherProfileUseCase(getIt<TeacherProfileRepo>()),
+  );
+
+  // wallet
+  getIt.registerLazySingleton<WalletApiService>(
+    () => WalletApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<WalletRepo>(
+    () => WalletRepoImpl(getIt<WalletApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetTeacherBalanceUseCase>(
+    () => GetTeacherBalanceUseCase(getIt<WalletRepo>()),
+  );
+
+  getIt.registerLazySingleton<TopUpUseCase>(
+    () => TopUpUseCase(getIt<WalletRepo>()),
   );
 
   // student teachers

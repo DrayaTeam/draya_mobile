@@ -91,7 +91,7 @@ class AppDrawer extends StatelessWidget {
           const SizedBox(height: AppSizes.s16),
           const Divider(),
           const SizedBox(height: AppSizes.s16),
-          _buildProfileListTile(context),
+          // _buildProfileListTile(context),
           _buildLogoutListTile(context),
         ],
       ),

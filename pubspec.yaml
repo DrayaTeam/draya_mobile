@@ -57,6 +57,7 @@ dependencies:
   # local notification
   flutter_local_notifications: ^21.0.0
   go_router: ^17.3.0
+  webview_flutter: ^4.14.1
 
 dev_dependencies:
   # for updating your Flutter app's launcher icon.

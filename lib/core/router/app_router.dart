@@ -8,12 +8,16 @@ import 'package:draya_mobile/features/student/exams/presentation/models/exam_ite
 import 'package:draya_mobile/features/student/exams/presentation/pages/student_exam_details_screen.dart';
 import 'package:draya_mobile/features/student/exams/presentation/pages/student_exams_screen.dart';
 import 'package:draya_mobile/features/student/home/presentation/pages/student_home_screen.dart';
+import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/create_classroom_page.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/pages/browse_teachers_screen.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/pages/teacher_classrooms_page.dart';
 import 'package:draya_mobile/features/teacher/dashboard/presentation/pages/teacher_dashboard_screen.dart';
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_1.dart';
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_2.dart';
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_3.dart';
+import 'package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart';
+import 'package:draya_mobile/features/teacher/payments/presentation/pages/payment_web_view_page.dart';
+import 'package:draya_mobile/features/teacher/profile/presentation/pages/teacher_profile_page.dart';
 import 'package:draya_mobile/features/teacher/students_list/presentation/pages/students_list_screen.dart';
 import 'package:draya_mobile/features/teacher/subjects/presentation/pages/create_subject_page.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/classrooms_page.dart';
@@ -125,6 +129,12 @@ abstract final class AppRouter {
         },
       ),
       GoRoute(
+        path: AppRoutes.createClassroomPage,
+        builder: (context, state) {
+          return const CreateClassroomPage();
+        },
+      ),
+      GoRoute(
         path: AppRoutes.browseTeachersPage,
         builder: (context, state) {
           return const BrowseTeachersScreen();
@@ -157,9 +167,28 @@ abstract final class AppRouter {
       GoRoute(
         path: '/teacher/classrooms/:classroomId/students',
         builder: (context, state) {
-          return ClassroomStudentsPage(
+          return ClassroomStudentsPage(     
             classroom: state.extra! as ClassroomModel,
           );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.teacherProfilePage,
+        builder: (context, state) {
+          return const TeacherProfilePage();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.paymentWebViewPage,
+        builder: (context, state) {
+          final model = state.extra is PaymentWebviewModel
+              ? state.extra as PaymentWebviewModel
+              : const PaymentWebviewModel(
+                  appBarTitle: "invalid",
+                  url: "invalid",
+                );
+
+          return PaymentWebViewPage(model);
         },
       ),
     ],

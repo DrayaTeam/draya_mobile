@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'api_error_model.dart';
 
-class ErrorHandler {
+abstract final class ErrorHandler {
   static ApiErrorModel handle(dynamic error) {
     final statusCode = error.response?.statusCode;
     if (error is DioException) {
