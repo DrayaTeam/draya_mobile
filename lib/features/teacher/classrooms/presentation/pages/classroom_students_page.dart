@@ -10,6 +10,7 @@ import 'package:draya_mobile/features/teacher/classrooms/data/models/student_ros
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
@@ -199,6 +200,26 @@ class _ClassroomSummary extends StatelessWidget {
           label: 'حالة الفصل',
           value: classroom.isActive ? 'نشط' : 'غير نشط',
         ),
+        const SizedBox(height: AppSizes.s12),
+        _SummaryRow(
+          icon: Icons.copy,
+          label: "كود الاشتراك",
+          value: classroom.enrollmentCode,
+          onTap: () async {
+            await Clipboard.setData(
+              ClipboardData(text: classroom.enrollmentCode),
+            );
+
+            if (!context.mounted) return;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("تم نسخ كود الاشتراك"),
+                duration: Duration(seconds: 2),
+              ),
+            );
+          },
+        ),
       ],
     ),
   );
@@ -208,29 +229,53 @@ class _SummaryRow extends StatelessWidget {
   final IconData icon;
   final String label;
   final String value;
+  final VoidCallback? onTap;
   const _SummaryRow({
     required this.icon,
     required this.label,
     required this.value,
+    this.onTap,
   });
 
   @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(AppSizes.s12),
-    decoration: BoxDecoration(
-      color: AppColors.backgroundMuted,
-      border: Border.all(color: AppColors.border),
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Row(
-      children: [
-        Icon(icon, color: AppColors.primary700),
-        const SizedBox(width: AppSizes.s12),
-        Expanded(child: Text(label, style: context.textTheme.labelMedium)),
-        Text(value, style: context.textTheme.labelLarge),
-      ],
-    ),
-  );
+  Widget build(BuildContext context) {
+    final child = Container(
+      padding: const EdgeInsets.all(AppSizes.s12),
+      decoration: BoxDecoration(
+        color: AppColors.backgroundMuted,
+        border: Border.all(color: AppColors.border),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: AppColors.primary700,
+          ),
+          const SizedBox(width: AppSizes.s12),
+          Expanded(
+            child: Text(
+              label,
+              style: context.textTheme.labelMedium,
+            ),
+          ),
+          Text(
+            value,
+            style: context.textTheme.labelLarge,
+          ),
+        ],
+      ),
+    );
+
+    if (onTap == null) {
+      return child;
+    }
+
+    return GestureDetector(
+      onTap: onTap,
+      child: child,
+    );
+  }
 }
 
 class _StudentCard extends StatelessWidget {
