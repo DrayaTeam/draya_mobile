@@ -16,6 +16,9 @@ import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
 import 'package:draya_mobile/features/teacher/profile/data/models/teacher_model.dart';
 import 'package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart';
 import 'package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_state.dart';
+import 'package:draya_mobile/features/teacher/wallet/data/models/balance_model.dart';
+import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_cubit.dart';
+import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:draya_mobile/core/enums/cubit_status.dart';
@@ -42,6 +45,7 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
     _textEditingControllerPhoneNumber = TextEditingController();
 
     context.read<TeacherProfileCubit>().getTeacherProfile();
+    context.read<WalletCubit>().getTeacherBalance();
   }
 
   @override
@@ -174,6 +178,80 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                       _editTeacherProfile();
                     },
                     label: "حفظ التغييرات",
+                  ),
+                  const SizedBox(height: AppSizes.s12),
+                  const Divider(),
+                  const SizedBox(height: AppSizes.s12),
+                  BlocBuilder<WalletCubit, WalletState>(
+                    builder: (context, state) {
+                      final balance = state.teacherBalance;
+
+                      if (state.status == CubitStatus.loading) {
+                        return const Center(
+                          child: AppCustomLoading(),
+                        );
+                      }
+
+                      if (balance == null) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            "المحفظة",
+                            style: context.textTheme.headlineLarge,
+                          ),
+
+                          const SizedBox(height: AppSizes.s8),
+
+                          Row(
+                            children: [
+                              Text(
+                                "الرصيد المكتسب:",
+                                style: context.textTheme.titleLarge,
+                              ),
+                              const SizedBox(width: AppSizes.s12),
+                              Text(
+                                "${balance.earnedBalance}",
+                                style: context.textTheme.headlineMedium,
+                              ),
+                            ],
+                          ),
+
+                          Row(
+                            children: [
+                              Text(
+                                "الرصيد المشتري:",
+                                style: context.textTheme.titleLarge,
+                              ),
+                              const SizedBox(width: AppSizes.s12),
+                              Text(
+                                "${balance.purchasedBalance}",
+                                style: context.textTheme.headlineMedium,
+                              ),
+                            ],
+                          ),
+
+                          Row(
+                            children: [
+                              Text(
+                                "الرصيد المكتسب المتاح:",
+                                style: context.textTheme.titleLarge,
+                              ),
+                              const SizedBox(width: AppSizes.s12),
+                              Text(
+                                "${balance.availableEarnedBalance}",
+                                style: context.textTheme.headlineMedium,
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: AppSizes.s12),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
