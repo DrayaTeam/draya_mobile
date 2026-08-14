@@ -29,6 +29,11 @@ import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_cla
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/regenerate_classroom_code_use_case.dart';
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/set_classroom_pricing_use_case.dart';
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/update_classroom_use_case.dart';
+import 'package:draya_mobile/features/teacher/wallet/data/repos/wallet_repo_impl.dart';
+import 'package:draya_mobile/features/teacher/wallet/data/source/wallet_api_service.dart';
+import 'package:draya_mobile/features/teacher/wallet/domain/repos/wallet_repo.dart';
+import 'package:draya_mobile/features/teacher/wallet/domain/usecases/get_teacher_balance_use_case.dart';
+import 'package:draya_mobile/features/teacher/wallet/domain/usecases/top_up_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
@@ -132,5 +137,22 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<GetTeacherProfileUseCase>(
     () => GetTeacherProfileUseCase(getIt<TeacherProfileRepo>()),
+  );
+
+  // wallet
+  getIt.registerLazySingleton<WalletApiService>(
+    () => WalletApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<WalletRepo>(
+    () => WalletRepoImpl(getIt<WalletApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetTeacherBalanceUseCase>(
+    () => GetTeacherBalanceUseCase(getIt<WalletRepo>()),
+  );
+
+  getIt.registerLazySingleton<TopUpUseCase>(
+    () => TopUpUseCase(getIt<WalletRepo>()),
   );
 }
