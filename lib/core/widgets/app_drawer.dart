@@ -114,24 +114,6 @@ Widget _buildLogoAndCloseIconRow(BuildContext context) {
   );
 }
 
-Widget _buildProfileListTile(BuildContext context) {
-  return ListTile(
-    visualDensity: VisualDensity.compact,
-    leading: const Icon(
-      Icons.person_outline,
-      color: AppColors.foregroundMuted,
-      size: 28,
-    ),
-    title: Text(
-      "عن حسابى",
-      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-        color: AppColors.foregroundMuted,
-      ),
-    ),
-    onTap: () {},
-  );
-}
-
 Widget _buildLogoutListTile(BuildContext context) {
   return ListTile(
     visualDensity: VisualDensity.compact,

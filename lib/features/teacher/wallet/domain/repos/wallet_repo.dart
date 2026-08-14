@@ -9,4 +9,9 @@ abstract class WalletRepo {
   Future<ApiResult<TopUpResponseModel>> topUp({
     required TopUpRequestModel topUpRequestModel,
   });
+
+  Future<ApiResult<void>> confirmPayment({
+    required String paymentId,
+    bool isSuccess,
+  });
 }

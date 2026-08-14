@@ -34,4 +34,18 @@ class WalletRepoImpl implements WalletRepo {
       return ApiResult.failure(ErrorHandler.handle(e));
     }
   }
+
+  @override
+  Future<ApiResult<void>> confirmPayment({
+    required String paymentId,
+    bool isSuccess = true,
+  }) async {
+    try {
+      await _walletApiService.confirmPayment(paymentId, isSuccess);
+
+      return const ApiResult<void>.success(null);
+    } catch (e) {
+      return ApiResult.failure(ErrorHandler.handle(e));
+    }
+  }
 }

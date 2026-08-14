@@ -27,8 +27,10 @@ import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_cla
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classroom_students_use_case.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart';
+import 'package:draya_mobile/features/teacher/wallet/domain/usecases/confirm_payment_use_case.dart';
 import 'package:draya_mobile/features/teacher/wallet/domain/usecases/get_teacher_balance_use_case.dart';
 import 'package:draya_mobile/features/teacher/wallet/domain/usecases/top_up_use_case.dart';
+import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/confirm_payment_cubit.dart';
 import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/top_up_cubit.dart';
 import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
@@ -108,6 +110,10 @@ Future<void> main() async {
         ),
         BlocProvider<TopUpCubit>(
           create: (context) => TopUpCubit(getIt<TopUpUseCase>()),
+        ),
+        BlocProvider<ConfirmPaymentCubit>(
+          create: (context) =>
+              ConfirmPaymentCubit(getIt<ConfirmPaymentUseCase>()),
         ),
       ],
       child: const DrayaApp(),

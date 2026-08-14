@@ -17,4 +17,10 @@ abstract class WalletApiService {
 
   @POST(WalletApiConstants.topUp)
   Future<TopUpResponseModel> topUp(@Body() TopUpRequestModel topUpRequestModel);
+
+  @POST("${WalletApiConstants.confirmPayment}/{id}")
+  Future<void> confirmPayment(
+    @Path('id') String id,
+    @Query('isSuccess') bool isSuccess,
+  );
 }

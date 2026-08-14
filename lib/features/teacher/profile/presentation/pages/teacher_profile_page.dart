@@ -160,6 +160,7 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                   extra: PaymentWebviewModel(
                     appBarTitle: "شحن رصيد",
                     url: response.checkoutUrl,
+                    transactionId: response.transactionId,
                   ),
                 );
 

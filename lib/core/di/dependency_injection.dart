@@ -38,8 +38,10 @@ import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/update_
 import 'package:draya_mobile/features/teacher/wallet/data/repos/wallet_repo_impl.dart';
 import 'package:draya_mobile/features/teacher/wallet/data/source/wallet_api_service.dart';
 import 'package:draya_mobile/features/teacher/wallet/domain/repos/wallet_repo.dart';
+import 'package:draya_mobile/features/teacher/wallet/domain/usecases/confirm_payment_use_case.dart';
 import 'package:draya_mobile/features/teacher/wallet/domain/usecases/get_teacher_balance_use_case.dart';
 import 'package:draya_mobile/features/teacher/wallet/domain/usecases/top_up_use_case.dart';
+import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/confirm_payment_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
@@ -160,6 +162,14 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<TopUpUseCase>(
     () => TopUpUseCase(getIt<WalletRepo>()),
+  );
+
+  getIt.registerLazySingleton<ConfirmPaymentUseCase>(
+    () => ConfirmPaymentUseCase(getIt<WalletRepo>()),
+  );
+
+  getIt.registerFactory<ConfirmPaymentCubit>(
+    () => ConfirmPaymentCubit(getIt<ConfirmPaymentUseCase>()),
   );
 
   // student teachers
