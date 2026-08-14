@@ -1,4 +1,5 @@
 import 'package:draya_mobile/core/helpers/app_extensions.dart';
+import 'package:draya_mobile/core/helpers/app_navigator.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/view_models/drawer_model.dart';
 import 'package:draya_mobile/core/widgets/app_drawer.dart';
@@ -6,6 +7,8 @@ import 'package:draya_mobile/core/widgets/app_drop_down_form_field.dart';
 import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
 import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
+import 'package:draya_mobile/features/teacher/classrooms/data/models/create_classroom_request_model.dart';
+import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_types_cubit.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_types_state.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/grade_levels_cubit.dart';
@@ -72,8 +75,24 @@ class _CreateClassroomPageState extends State<CreateClassroomPage> {
     );
   }
 
-  void _createClassroom() {
-    if (_formKey.currentState!.validate()) {}
+  Future<void> _createClassroom() async {
+    if (_formKey.currentState!.validate()) {
+      await context.read<ClassroomCubit>().createClassroom(
+        CreateClassroomRequestModel(
+          subjectId: _selectedSubjectId!,
+          name: _textEditingControllerName.text,
+          classroomTypeId: _selectedClassroomTypeId!,
+          gradeLevelId: _selectedGradeLevelId!,
+          startDate: _startDate!,
+          endDate: _endDate!,
+          price: double.parse(_textEditingControllerPrice.text),
+        ),
+      );
+
+      if (mounted) {
+        AppNavigator.pop(context: context);
+      }
+    }
   }
 
   @override
@@ -197,7 +216,7 @@ class _CreateClassroomPageState extends State<CreateClassroomPage> {
                     AppTextFormField(
                       controller: _textEditingControllerPrice,
                       hintText: "سعر الفصل",
-                      keyboardType: TextInputType.name,
+                      keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
@@ -219,8 +238,8 @@ class _CreateClassroomPageState extends State<CreateClassroomPage> {
                     ),
                     const SizedBox(height: AppSizes.s20),
                     AppElevatedButton(
-                      onPressed: () {
-                        _createClassroom();
+                      onPressed: () async {
+                        await _createClassroom();
                       },
                       label: "انشئ فصل جديد",
                     ),
