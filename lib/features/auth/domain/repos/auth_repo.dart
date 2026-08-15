@@ -3,6 +3,7 @@ import 'package:draya_mobile/features/auth/data/models/auth_response_model.dart'
 import 'package:draya_mobile/features/auth/data/models/login_request_model.dart';
 import 'package:draya_mobile/features/auth/data/models/register_student_request_model.dart';
 import 'package:draya_mobile/features/auth/data/models/register_teacher_request_model.dart';
+import 'package:draya_mobile/features/auth/data/models/user_profile_model.dart';
 
 abstract class AuthRepo {
   Future<ApiResult<AuthResponseModel>> login(
@@ -16,4 +17,6 @@ abstract class AuthRepo {
   Future<ApiResult<AuthResponseModel>> registerStudent(
     RegisterStudentRequestModel registerStudentRequestModel,
   );
+
+  Future<ApiResult<UserProfileModel>> getCurrentUserProfile();
 }

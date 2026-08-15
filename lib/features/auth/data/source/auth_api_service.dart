@@ -4,6 +4,7 @@ import 'package:draya_mobile/features/auth/data/models/auth_response_model.dart'
 import 'package:draya_mobile/features/auth/data/models/login_request_model.dart';
 import 'package:draya_mobile/features/auth/data/models/register_student_request_model.dart';
 import 'package:draya_mobile/features/auth/data/models/register_teacher_request_model.dart';
+import 'package:draya_mobile/features/auth/data/models/user_profile_model.dart';
 import 'package:draya_mobile/features/auth/data/source/auth_api_constants.dart';
 import 'package:retrofit/retrofit.dart';
 part 'auth_api_service.g.dart';
@@ -24,4 +25,7 @@ abstract class AuthApiService {
   Future<AuthResponseModel> registerStudent(
     @Body() RegisterStudentRequestModel request,
   );
+
+  @GET(AuthApiConstants.me)
+  Future<UserProfileModel> getCurrentUserProfile();
 }

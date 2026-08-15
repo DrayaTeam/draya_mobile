@@ -3,9 +3,30 @@ import 'package:draya_mobile/core/networking/dio_factory.dart';
 import 'package:draya_mobile/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:draya_mobile/features/auth/data/source/auth_api_service.dart';
 import 'package:draya_mobile/features/auth/domain/repos/auth_repo.dart';
+import 'package:draya_mobile/features/auth/domain/usecases/get_current_user_profile_use_case.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/login_use_case.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/student_register_use_case.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/teacher_register_use_case.dart';
+import 'package:draya_mobile/features/student/profile/data/repos/student_profile_repo_impl.dart';
+import 'package:draya_mobile/features/student/profile/data/source/student_profile_api_service.dart';
+import 'package:draya_mobile/features/student/profile/domain/repos/student_profile_repo.dart';
+import 'package:draya_mobile/features/student/profile/domain/usecases/get_student_profile_use_case.dart';
+import 'package:draya_mobile/features/student/profile/domain/usecases/update_student_profile_use_case.dart';
+import 'package:draya_mobile/features/student/profile/presentation/cubit/student_profile_cubit.dart';
+import 'package:draya_mobile/features/student/student_enrolled_classrooms/data/repos/student_enrolled_classrooms_repo_impl.dart';
+import 'package:draya_mobile/features/student/student_enrolled_classrooms/data/source/student_enrolled_classrooms_api_service.dart';
+import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/repos/student_enrolled_classrooms_repo.dart';
+import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/enroll_classroom_use_case.dart';
+import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/get_student_enrolled_classrooms_use_case.dart';
+import 'package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_cubit.dart';
+import 'package:draya_mobile/features/student/teachers/data/repos/teacher_repo_impl.dart';
+import 'package:draya_mobile/features/student/teachers/data/source/teacher_api_service.dart';
+import 'package:draya_mobile/features/student/teachers/domain/repos/teacher_repo.dart';
+import 'package:draya_mobile/features/student/teachers/domain/usecases/checkout_classroom_use_case.dart';
+import 'package:draya_mobile/features/student/teachers/domain/usecases/get_teacher_classrooms_use_case.dart';
+import 'package:draya_mobile/features/student/teachers/domain/usecases/get_teachers_use_case.dart';
+import 'package:draya_mobile/features/student/teachers/presentation/cubit/student_checkout_cubit.dart';
+import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_cubit.dart';
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classroom_types_use_case.dart';
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_grade_levels_use_case.dart';
 import 'package:draya_mobile/features/teacher/materials/data/repos/materials_repo_impl.dart';
@@ -16,12 +37,6 @@ import 'package:draya_mobile/features/teacher/profile/data/repos/teacher_profile
 import 'package:draya_mobile/features/teacher/profile/data/source/teacher_profile_api_service.dart';
 import 'package:draya_mobile/features/teacher/profile/domain/repos/teacher_profile_repo.dart';
 import 'package:draya_mobile/features/teacher/profile/domain/usecases/get_teacher_profile_use_case.dart';
-import 'package:draya_mobile/features/student/teachers/data/repos/teacher_repo_impl.dart';
-import 'package:draya_mobile/features/student/teachers/data/source/teacher_api_service.dart';
-import 'package:draya_mobile/features/student/teachers/domain/repos/teacher_repo.dart';
-import 'package:draya_mobile/features/student/teachers/domain/usecases/get_teacher_classrooms_use_case.dart';
-import 'package:draya_mobile/features/student/teachers/domain/usecases/get_teachers_use_case.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_cubit.dart';
 import 'package:draya_mobile/features/teacher/subjects/data/repos/subject_repo_impl.dart';
 import 'package:draya_mobile/features/teacher/subjects/data/source/subject_api_service.dart';
 import 'package:draya_mobile/features/teacher/subjects/domain/repos/subject_repo.dart';
@@ -74,6 +89,37 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<LoginUseCase>(
     () => LoginUseCase(getIt<AuthRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetCurrentUserProfileUseCase>(
+    () => GetCurrentUserProfileUseCase(getIt<AuthRepo>()),
+  );
+
+  // student profile
+  getIt.registerLazySingleton<StudentProfileApiService>(
+    () => StudentProfileApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<StudentProfileRepo>(
+    () => StudentProfileRepoImpl(
+      getIt<StudentProfileApiService>(),
+      getIt<AuthApiService>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetStudentProfileUseCase>(
+    () => GetStudentProfileUseCase(getIt<StudentProfileRepo>()),
+  );
+
+  getIt.registerLazySingleton<UpdateStudentProfileUseCase>(
+    () => UpdateStudentProfileUseCase(getIt<StudentProfileRepo>()),
+  );
+
+  getIt.registerFactory<StudentProfileCubit>(
+    () => StudentProfileCubit(
+      getIt<GetStudentProfileUseCase>(),
+      getIt<UpdateStudentProfileUseCase>(),
+    ),
   );
 
   // subjects
@@ -193,8 +239,45 @@ Future<void> setupGetIt() async {
     () => GetTeacherClassroomsUseCase(getIt<TeacherRepo>()),
   );
 
+  getIt.registerLazySingleton<StudentEnrolledClassroomsApiService>(
+    () => StudentEnrolledClassroomsApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<StudentEnrolledClassroomsRepo>(
+    () => StudentEnrolledClassroomsRepoImpl(
+      getIt<StudentEnrolledClassroomsApiService>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetStudentEnrolledClassroomsUseCase>(
+    () => GetStudentEnrolledClassroomsUseCase(
+      getIt<StudentEnrolledClassroomsRepo>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<EnrollClassroomUseCase>(
+    () => EnrollClassroomUseCase(
+      getIt<StudentEnrolledClassroomsRepo>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<CheckoutClassroomUseCase>(
+    () => CheckoutClassroomUseCase(getIt<TeacherRepo>()),
+  );
+
   getIt.registerFactory<TeacherClassroomsCubit>(
     () => TeacherClassroomsCubit(getIt<GetTeacherClassroomsUseCase>()),
+  );
+
+  getIt.registerFactory<StudentEnrolledClassroomsCubit>(
+    () => StudentEnrolledClassroomsCubit(
+      getIt<GetStudentEnrolledClassroomsUseCase>(),
+      getIt<EnrollClassroomUseCase>(),
+    ),
+  );
+
+  getIt.registerFactory<StudentCheckoutCubit>(
+    () => StudentCheckoutCubit(getIt<CheckoutClassroomUseCase>()),
   );
 
   // materials

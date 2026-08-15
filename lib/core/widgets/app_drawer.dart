@@ -91,7 +91,6 @@ class AppDrawer extends StatelessWidget {
           const SizedBox(height: AppSizes.s16),
           const Divider(),
           const SizedBox(height: AppSizes.s16),
-          // _buildProfileListTile(context),
           _buildLogoutListTile(context),
         ],
       ),
@@ -103,7 +102,7 @@ Widget _buildLogoAndCloseIconRow(BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      const AppLogoAndName(subtitle: "لوحة المعلم"),
+      const AppLogoAndName(subtitle:  "لوحة التحكم"),
       IconButton(
         icon: const Icon(Icons.close),
         onPressed: () {

@@ -8,6 +8,8 @@ import 'package:draya_mobile/features/student/exams/presentation/models/exam_ite
 import 'package:draya_mobile/features/student/exams/presentation/pages/student_exam_details_screen.dart';
 import 'package:draya_mobile/features/student/exams/presentation/pages/student_exams_screen.dart';
 import 'package:draya_mobile/features/student/home/presentation/pages/student_home_screen.dart';
+import 'package:draya_mobile/features/student/profile/presentation/pages/student_profile_page.dart';
+import 'package:draya_mobile/features/student/student_enrolled_classrooms/presentation/pages/student_enrolled_classrooms_screen.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/create_classroom_page.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/pages/browse_teachers_screen.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/pages/teacher_classrooms_page.dart';
@@ -180,6 +182,12 @@ abstract final class AppRouter {
         },
       ),
       GoRoute(
+        path: AppRoutes.studentProfilePage,
+        builder: (context, state) {
+          return const StudentProfilePage();
+        },
+      ),
+      GoRoute(
         path: AppRoutes.paymentWebViewPage,
         builder: (context, state) {
           final model = state.extra is PaymentWebviewModel
@@ -198,6 +206,12 @@ abstract final class AppRouter {
           return MaterialsPage(
             state.extra as ClassroomModel,
           );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.studentEnrolledClassroomsPage,
+        builder: (context, state) {
+          return const StudentEnrolledClassroomsScreen();
         },
       ),
     ],

@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:draya_mobile/core/enums/cubit_status.dart';
+import 'package:draya_mobile/core/helpers/app_navigator.dart';
+import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/theme/app_text_styles.dart';
@@ -6,8 +10,11 @@ import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
 import 'package:draya_mobile/features/student/teachers/data/models/teacher_classroom_model.dart';
 import 'package:draya_mobile/features/student/teachers/data/models/teacher_model.dart';
+import 'package:draya_mobile/features/student/teachers/presentation/cubit/student_checkout_cubit.dart';
+import 'package:draya_mobile/features/student/teachers/presentation/cubit/student_checkout_state.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_cubit.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_state.dart';
+import 'package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -37,70 +44,135 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<TeacherClassroomsCubit, TeacherClassroomsState>(
-      listenWhen: (previous, current) =>
-          previous.status != current.status &&
-          current.status == CubitStatus.error,
-      listener: (context, state) {
-        if (state.apiErrorModel != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                state.apiErrorModel?.error?.message ??
-                    'تعذر تحميل الفصول الدراسية',
-              ),
-              backgroundColor: AppColors.error,
-            ),
-          );
-        }
-      },
-      builder: (context, state) {
-        final classrooms = state.classrooms;
-        return Scaffold(
-          backgroundColor: AppColors.background,
-          appBar: CustomAppBar(
-            title: widget.teacher?.fullName ?? 'الفصول الدراسية',
-          ),
-          body: SafeArea(
-            child: state.status == CubitStatus.loading && classrooms.isEmpty
-                ? const Center(
-                    child: AppCustomLoading(text: 'جاري تحميل الفصول...'),
-                  )
-                : RefreshIndicator(
-                    onRefresh: () => context
-                        .read<TeacherClassroomsCubit>()
-                        .getTeacherClassrooms(widget.teacherId),
-                    child: ListView(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSizes.s20,
-                        AppSizes.s20,
-                        AppSizes.s20,
-                        AppSizes.s32,
-                      ),
-                      children: [
-                        _HeaderCard(
-                          teacherName: widget.teacher?.fullName ?? 'المعلم',
-                          specialization:
-                              widget.teacher?.specialization ?? 'الصفحة',
-                        ),
-                        const SizedBox(height: AppSizes.s20),
-                        if (classrooms.isEmpty)
-                          _EmptyClassroomsState(
-                            teacherName: widget.teacher?.fullName ?? 'المعلم',
-                          )
-                        else
-                          ...classrooms.map(
-                            (classroom) => _ClassroomCard(
-                              classroom: classroom,
-                              onEnroll: () => _handleEnroll(context, classroom),
-                            ),
-                          ),
-                      ],
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<TeacherClassroomsCubit, TeacherClassroomsState>(
+          listenWhen: (previous, current) =>
+              previous.status != current.status &&
+              current.status == CubitStatus.error,
+          listener: (context, state) {
+            if (state.apiErrorModel != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    state.apiErrorModel?.error?.message ??
+                        'تعذر تحميل الفصول الدراسية',
+                  ),
+                  backgroundColor: AppColors.error,
+                ),
+              );
+            }
+          },
+        ),
+        BlocListener<StudentCheckoutCubit, StudentCheckoutState>(
+          listenWhen: (previous, current) => previous.status != current.status,
+          listener: (context, state) async {
+            switch (state.status) {
+              case CubitStatus.loading:
+                unawaited(
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => const Center(
+                      child: CircularProgressIndicator(),
                     ),
                   ),
-          ),
-        );
-      },
+                );
+                break;
+              case CubitStatus.success:
+                if (Navigator.of(context, rootNavigator: true).canPop()) {
+                  Navigator.of(context, rootNavigator: true).pop();
+                }
+
+                final checkoutUrl = state.checkoutResponse?.checkoutUrl;
+                if (checkoutUrl == null || checkoutUrl.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('تعذر إنشاء رابط الدفع.'),
+                      backgroundColor: AppColors.error,
+                    ),
+                  );
+                  break;
+                }
+
+                await AppNavigator.push(
+                  context: context,
+                  path: AppRoutes.paymentWebViewPage,
+                  extra: PaymentWebviewModel(
+                    appBarTitle: 'الدفع',
+                    url: checkoutUrl,
+                  ),
+                );
+                break;
+              case CubitStatus.error:
+                if (Navigator.of(context, rootNavigator: true).canPop()) {
+                  Navigator.of(context, rootNavigator: true).pop();
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      state.apiErrorModel?.error?.message ??
+                          'تعذر إتمام تسجيل الفصل',
+                    ),
+                    backgroundColor: AppColors.error,
+                  ),
+                );
+                break;
+              case CubitStatus.initial:
+                break;
+            }
+          },
+        ),
+      ],
+      child: BlocBuilder<TeacherClassroomsCubit, TeacherClassroomsState>(
+        builder: (context, state) {
+          final classrooms = state.classrooms;
+          return Scaffold(
+            backgroundColor: AppColors.background,
+            appBar: CustomAppBar(
+              title: widget.teacher?.fullName ?? 'الفصول الدراسية',
+            ),
+            body: SafeArea(
+              child: state.status == CubitStatus.loading && classrooms.isEmpty
+                  ? const Center(
+                      child: AppCustomLoading(text: 'جاري تحميل الفصول...'),
+                    )
+                  : RefreshIndicator(
+                      onRefresh: () => context
+                          .read<TeacherClassroomsCubit>()
+                          .getTeacherClassrooms(widget.teacherId),
+                      child: ListView(
+                        padding: const EdgeInsets.fromLTRB(
+                          AppSizes.s20,
+                          AppSizes.s20,
+                          AppSizes.s20,
+                          AppSizes.s32,
+                        ),
+                        children: [
+                          _HeaderCard(
+                            teacherName: widget.teacher?.fullName ?? 'المعلم',
+                            specialization:
+                                widget.teacher?.specialization ?? 'الصفحة',
+                          ),
+                          const SizedBox(height: AppSizes.s20),
+                          if (classrooms.isEmpty)
+                            _EmptyClassroomsState(
+                              teacherName: widget.teacher?.fullName ?? 'المعلم',
+                            )
+                          else
+                            ...classrooms.map(
+                              (classroom) => _ClassroomCard(
+                                classroom: classroom,
+                                onEnroll: () => _handleEnroll(context, classroom),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -113,7 +185,7 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
       builder: (dialogContext) => AlertDialog(
         title: const Text('تسجيل في الفصل'),
         content: Text(
-          'هل تريد التسجيل في الفصل "${classroom.name}" مقابل ${classroom.price.toStringAsFixed(0)} ر.س عبر Paymob؟',
+          'هل تريد التسجيل في الفصل "${classroom.name}" مقابل ${classroom.price.toStringAsFixed(0)} جنيه عبر Paymob؟',
         ),
         actions: [
           TextButton(
@@ -129,10 +201,9 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
     );
 
     if (confirmed == true && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('سيتم ربط بوابة Paymob في هذه المرحلة.'),
-          backgroundColor: AppColors.primary700,
+      unawaited(
+        context.read<StudentCheckoutCubit>().checkoutClassroom(
+          classroom.classroomId,
         ),
       );
     }

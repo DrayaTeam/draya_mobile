@@ -9,8 +9,16 @@ import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_cubi
 import 'package:draya_mobile/features/auth/presentation/student_signup/cubit/student_signup_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/teacher_signup/cubit/teacher_signup_cubit.dart';
 import 'package:draya_mobile/features/auth/presentation/signup_choice/cubit/signup_choice_cubit.dart';
+import 'package:draya_mobile/features/student/profile/domain/usecases/get_student_profile_use_case.dart';
+import 'package:draya_mobile/features/student/profile/domain/usecases/update_student_profile_use_case.dart';
+import 'package:draya_mobile/features/student/profile/presentation/cubit/student_profile_cubit.dart';
+import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/enroll_classroom_use_case.dart';
+import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/get_student_enrolled_classrooms_use_case.dart';
+import 'package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_cubit.dart';
+import 'package:draya_mobile/features/student/teachers/domain/usecases/checkout_classroom_use_case.dart';
 import 'package:draya_mobile/features/student/teachers/domain/usecases/get_teacher_classrooms_use_case.dart';
 import 'package:draya_mobile/features/student/teachers/domain/usecases/get_teachers_use_case.dart';
+import 'package:draya_mobile/features/student/teachers/presentation/cubit/student_checkout_cubit.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_cubit.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_cubit.dart';
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classroom_types_use_case.dart';
@@ -104,9 +112,25 @@ Future<void> main() async {
           create: (context) =>
               TeacherClassroomsCubit(getIt<GetTeacherClassroomsUseCase>()),
         ),
+        BlocProvider<StudentEnrolledClassroomsCubit>(
+          create: (context) => StudentEnrolledClassroomsCubit(
+            getIt<GetStudentEnrolledClassroomsUseCase>(),
+            getIt<EnrollClassroomUseCase>(),
+          ),
+        ),
+        BlocProvider<StudentCheckoutCubit>(
+          create: (context) =>
+              StudentCheckoutCubit(getIt<CheckoutClassroomUseCase>()),
+        ),
         BlocProvider<TeacherProfileCubit>(
           create: (context) =>
               TeacherProfileCubit(getIt<GetTeacherProfileUseCase>()),
+        ),
+        BlocProvider<StudentProfileCubit>(
+          create: (context) => StudentProfileCubit(
+            getIt<GetStudentProfileUseCase>(),
+            getIt<UpdateStudentProfileUseCase>(),
+          ),
         ),
         BlocProvider<WalletCubit>(
           create: (context) => WalletCubit(getIt<GetTeacherBalanceUseCase>()),
