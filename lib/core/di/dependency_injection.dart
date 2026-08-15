@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:draya_mobile/core/networking/dio_factory.dart';
+import 'package:draya_mobile/core/signalr/signalr_service.dart';
+import 'package:draya_mobile/core/signalr/signalr_client_service.dart';
 import 'package:draya_mobile/features/auth/data/repos/auth_repo_impl.dart';
 import 'package:draya_mobile/features/auth/data/source/auth_api_service.dart';
 import 'package:draya_mobile/features/auth/domain/repos/auth_repo.dart';
@@ -13,6 +15,16 @@ import 'package:draya_mobile/features/student/profile/domain/repos/student_profi
 import 'package:draya_mobile/features/student/profile/domain/usecases/get_student_profile_use_case.dart';
 import 'package:draya_mobile/features/student/profile/domain/usecases/update_student_profile_use_case.dart';
 import 'package:draya_mobile/features/student/profile/presentation/cubit/student_profile_cubit.dart';
+import 'package:draya_mobile/features/student/student_channel/data/repos/student_channel_repo_impl.dart';
+import 'package:draya_mobile/features/student/student_channel/data/source/student_channel_remote_data_source.dart';
+import 'package:draya_mobile/features/student/student_channel/domain/repos/student_channel_repo.dart';
+import 'package:draya_mobile/features/student/student_channel/domain/usecases/create_question_use_case.dart';
+import 'package:draya_mobile/features/student/student_channel/domain/usecases/create_reply_use_case.dart';
+import 'package:draya_mobile/features/student/student_channel/domain/usecases/get_question_details_use_case.dart';
+import 'package:draya_mobile/features/student/student_channel/domain/usecases/get_questions_use_case.dart';
+import 'package:draya_mobile/features/student/student_channel/domain/usecases/unvote_question_use_case.dart';
+import 'package:draya_mobile/features/student/student_channel/domain/usecases/vote_question_use_case.dart';
+import 'package:draya_mobile/features/student/student_channel/presentation/cubit/student_channel_cubit.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/data/repos/student_enrolled_classrooms_repo_impl.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/data/source/student_enrolled_classrooms_api_service.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/repos/student_enrolled_classrooms_repo.dart';
@@ -274,5 +286,55 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactory<StudentCheckoutCubit>(
     () => StudentCheckoutCubit(getIt<CheckoutClassroomUseCase>()),
+  );
+
+  // SignalR Service
+  getIt.registerLazySingleton<SignalRService>(
+    () => SignalRClientService(),
+  );
+
+  // Student Channel (Q&A)
+  getIt.registerLazySingleton<StudentChannelRemoteDataSource>(
+    () => StudentChannelRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<StudentChannelRepo>(
+    () => StudentChannelRepoImpl(getIt<StudentChannelRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<GetQuestionsUseCase>(
+    () => GetQuestionsUseCase(getIt<StudentChannelRepo>()),
+  );
+
+  getIt.registerLazySingleton<CreateQuestionUseCase>(
+    () => CreateQuestionUseCase(getIt<StudentChannelRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetQuestionDetailsUseCase>(
+    () => GetQuestionDetailsUseCase(getIt<StudentChannelRepo>()),
+  );
+
+  getIt.registerLazySingleton<CreateReplyUseCase>(
+    () => CreateReplyUseCase(getIt<StudentChannelRepo>()),
+  );
+
+  getIt.registerLazySingleton<VoteQuestionUseCase>(
+    () => VoteQuestionUseCase(getIt<StudentChannelRepo>()),
+  );
+
+  getIt.registerLazySingleton<UnvoteQuestionUseCase>(
+    () => UnvoteQuestionUseCase(getIt<StudentChannelRepo>()),
+  );
+
+  getIt.registerFactory<StudentChannelCubit>(
+    () => StudentChannelCubit(
+      getIt<GetQuestionsUseCase>(),
+      getIt<CreateQuestionUseCase>(),
+      getIt<GetQuestionDetailsUseCase>(),
+      getIt<CreateReplyUseCase>(),
+      getIt<VoteQuestionUseCase>(),
+      getIt<UnvoteQuestionUseCase>(),
+      getIt<SignalRService>(),
+    ),
   );
 }

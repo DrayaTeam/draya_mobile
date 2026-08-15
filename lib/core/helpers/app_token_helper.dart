@@ -15,6 +15,8 @@ abstract final class AppTokenHelper {
     );
   }
 
+  static Future<String?> getAccessToken() => _getToken();
+
   static Future<String?> getUserRole() async {
     return AppSharedPrefHelper.getString(AppSharedPrefKeys.userRole);
   }

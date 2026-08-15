@@ -1,4 +1,5 @@
 import 'package:draya_mobile/core/enums/cubit_status.dart';
+import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/theme/app_text_styles.dart';
@@ -12,6 +13,7 @@ import 'package:draya_mobile/features/student/student_enrolled_classrooms/presen
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 
 class StudentEnrolledClassroomsScreen extends StatefulWidget {
   const StudentEnrolledClassroomsScreen({super.key});
@@ -442,6 +444,17 @@ class _ClassroomCard extends StatelessWidget {
                 color: AppColors.primary700,
                 fontWeight: FontWeight.w700,
               ),
+            ),
+          ),
+          const SizedBox(height: AppSizes.s12),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () => context.push(
+                AppRoutes.studentChannelPage(classroom.classroomId),
+              ),
+              icon: const Icon(Icons.forum_outlined),
+              label: const Text('قناة الأسئلة'),
             ),
           ),
         ],
