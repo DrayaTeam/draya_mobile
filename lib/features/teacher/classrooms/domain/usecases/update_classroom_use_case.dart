@@ -7,10 +7,14 @@ import 'package:draya_mobile/features/teacher/classrooms/domain/repos/classroom_
 class UpdateClassroomParams {
   final String classroomId;
   final UpdateClassroomRequestModel request;
-  const UpdateClassroomParams({required this.classroomId, required this.request});
+  const UpdateClassroomParams({
+    required this.classroomId,
+    required this.request,
+  });
 }
 
-class UpdateClassroomUseCase implements AppUseCase<ApiResult<ClassroomModel>, UpdateClassroomParams> {
+class UpdateClassroomUseCase
+    implements AppUseCase<ApiResult<ClassroomModel>, UpdateClassroomParams> {
   final ClassroomRepo _repo;
   UpdateClassroomUseCase(this._repo);
 

@@ -25,6 +25,8 @@ import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_cla
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_grade_levels_use_case.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_types_cubit.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/grade_levels_cubit.dart';
+import 'package:draya_mobile/features/teacher/materials/domain/usecases/upload_materials_use_case.dart';
+import 'package:draya_mobile/features/teacher/materials/presentation/cubit/materials_cubit.dart';
 import 'package:draya_mobile/features/teacher/profile/domain/usecases/get_teacher_profile_use_case.dart';
 import 'package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart';
 import 'package:draya_mobile/features/teacher/subjects/domain/usecases/add_subject_use_case.dart';
@@ -139,6 +141,9 @@ Future<void> main() async {
         BlocProvider<ConfirmPaymentCubit>(
           create: (context) =>
               ConfirmPaymentCubit(getIt<ConfirmPaymentUseCase>()),
+        ),
+        BlocProvider<MaterialsCubit>(
+          create: (context) => MaterialsCubit(getIt<UploadMaterialsUseCase>()),
         ),
       ],
       child: const DrayaApp(),
