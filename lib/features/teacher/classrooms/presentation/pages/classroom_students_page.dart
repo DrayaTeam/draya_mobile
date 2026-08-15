@@ -2,6 +2,7 @@ import 'package:draya_mobile/core/enums/cubit_status.dart';
 import 'package:draya_mobile/core/helpers/app_extensions.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
+import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
 import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
 import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
@@ -95,7 +96,10 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
                           ),
                         ),
                         const SizedBox(height: AppSizes.s16),
-                        _ClassroomSummary(classroom: widget.classroom),
+                        _ClassroomSummary(
+                          classroom: widget.classroom,
+                          students: students,
+                        ),
                         const SizedBox(height: AppSizes.s32),
                         Row(
                           children: [
@@ -158,7 +162,11 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
 
 class _ClassroomSummary extends StatelessWidget {
   final ClassroomModel classroom;
-  const _ClassroomSummary({required this.classroom});
+  final List<StudentRosterItemModel> students;
+  const _ClassroomSummary({
+    required this.classroom,
+    required this.students,
+  });
 
   @override
   Widget build(BuildContext context) => Container(
@@ -190,7 +198,7 @@ class _ClassroomSummary extends StatelessWidget {
         _SummaryRow(
           icon: Icons.groups_outlined,
           label: 'عدد الطلبة المقيدين',
-          value: '${classroom.studentCount} طالب',
+          value: '${students.length} طالب',
         ),
         const SizedBox(height: AppSizes.s12),
         _SummaryRow(

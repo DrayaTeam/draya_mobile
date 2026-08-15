@@ -94,7 +94,7 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
       appBar: AppBar(
         title: Text(widget._paymentWebviewModel.appBarTitle),
       ),
-      body: WebViewWidget(controller: _webViewController),
+      body: SafeArea(child: WebViewWidget(controller: _webViewController)),
     );
   }
 }
