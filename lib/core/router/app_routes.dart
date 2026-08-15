@@ -21,5 +21,10 @@ abstract final class AppRoutes {
   static String classroomStudentsPage(String classroomId) =>
       "/teacher/classrooms/$classroomId/students";
   static const String teacherProfilePage = "/teacher/profile";
+  static const String studentProfilePage = "/student/profile";
   static const String paymentWebViewPage = "/payment/pay";
+  static const String studentEnrolledClassroomsPage =
+      "/student/enrolled_classrooms";
+
+
 }

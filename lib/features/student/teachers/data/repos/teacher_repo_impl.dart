@@ -1,5 +1,6 @@
 import 'package:draya_mobile/core/networking/api_error_handler.dart';
 import 'package:draya_mobile/core/networking/api_result.dart';
+import 'package:draya_mobile/features/student/teachers/data/models/classroom_checkout_response_model.dart';
 import 'package:draya_mobile/features/student/teachers/data/models/teacher_classroom_paged_result_model.dart';
 import 'package:draya_mobile/features/student/teachers/data/models/teacher_model.dart';
 import 'package:draya_mobile/features/student/teachers/data/source/teacher_api_service.dart';
@@ -32,6 +33,18 @@ class TeacherRepoImpl implements TeacherRepo {
         page,
         pageSize,
       );
+      return ApiResult.success(response);
+    } catch (e) {
+      return ApiResult.failure(ErrorHandler.handle(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<ClassroomCheckoutResponseModel>> checkoutClassroom(
+    String classroomId,
+  ) async {
+    try {
+      final response = await _teacherApiService.checkoutClassroom(classroomId);
       return ApiResult.success(response);
     } catch (e) {
       return ApiResult.failure(ErrorHandler.handle(e));

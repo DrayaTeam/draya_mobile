@@ -93,7 +93,8 @@ List<DrawerModel> getStudentDrawerItemsList() {
         ),
         DrawerItemViewModel(
           icon: Icons.school_outlined,
-          title: "باقاتى",
+          title: "فصولى",
+          route: AppRoutes.studentEnrolledClassroomsPage,
         ),
         DrawerItemViewModel(
           icon: Icons.people_outlined,
@@ -130,6 +131,11 @@ List<DrawerModel> getStudentDrawerItemsList() {
         DrawerItemViewModel(
           icon: Icons.tv_outlined,
           title: "القناة الرئيسية",
+        ),
+         DrawerItemViewModel(
+          title: "عن حسابى",
+          icon: Icons.person_outline,
+          route: AppRoutes.studentProfilePage,
         ),
       ],
     ),

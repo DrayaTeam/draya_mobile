@@ -133,10 +133,9 @@ For every new API feature, follow this order:
 10. Create Cubit and states.
 11. Connect Cubit to the presentation/UI.
 12. Implement loading, success, empty, and error UI states.
-13. Generate Freezed/json_serializable code.
-14. Run analyzer/tests/build checks.
-15. Fix issues caused by the implementation.
-16. Do not modify unrelated features.
+13. Generate Freezed/json_serializable code..
+14. Fix issues caused by the implementation.
+15. Do not modify unrelated features.
 
 ------------------------------------------------------------------------
 
