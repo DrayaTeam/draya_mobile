@@ -18,6 +18,7 @@ import 'package:draya_mobile/features/teacher/dashboard/presentation/pages/teach
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_1.dart';
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_2.dart';
 import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_3.dart';
+import 'package:draya_mobile/features/teacher/materials/presentation/pages/materials_page.dart';
 import 'package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart';
 import 'package:draya_mobile/features/teacher/payments/presentation/pages/payment_web_view_page.dart';
 import 'package:draya_mobile/features/teacher/profile/presentation/pages/teacher_profile_page.dart';
@@ -206,6 +207,14 @@ abstract final class AppRouter {
                 );
 
           return PaymentWebViewPage(model);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.materialsPage,
+        builder: (context, state) {
+          return MaterialsPage(
+            state.extra as ClassroomModel,
+          );
         },
       ),
       GoRoute(

@@ -41,6 +41,10 @@ import 'package:draya_mobile/features/student/teachers/presentation/cubit/studen
 import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_cubit.dart';
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classroom_types_use_case.dart';
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_grade_levels_use_case.dart';
+import 'package:draya_mobile/features/teacher/materials/data/repos/materials_repo_impl.dart';
+import 'package:draya_mobile/features/teacher/materials/data/source/materials_api_service.dart';
+import 'package:draya_mobile/features/teacher/materials/domain/repos/materials_repo.dart';
+import 'package:draya_mobile/features/teacher/materials/domain/usecases/upload_materials_use_case.dart';
 import 'package:draya_mobile/features/teacher/profile/data/repos/teacher_profile_repo_impl.dart';
 import 'package:draya_mobile/features/teacher/profile/data/source/teacher_profile_api_service.dart';
 import 'package:draya_mobile/features/teacher/profile/domain/repos/teacher_profile_repo.dart';
@@ -336,5 +340,17 @@ Future<void> setupGetIt() async {
       getIt<UnvoteQuestionUseCase>(),
       getIt<SignalRService>(),
     ),
+  );
+  // materials
+  getIt.registerLazySingleton<MaterialsApiService>(
+    () => MaterialsApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<MaterialsRepo>(
+    () => MaterialsRepoImpl(getIt<MaterialsApiService>()),
+  );
+
+  getIt.registerLazySingleton<UploadMaterialsUseCase>(
+    () => UploadMaterialsUseCase(getIt<MaterialsRepo>()),
   );
 }

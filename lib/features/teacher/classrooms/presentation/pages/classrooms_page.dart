@@ -13,6 +13,8 @@ import 'package:draya_mobile/core/view_models/drawer_model.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_state.dart';
+import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart';
+import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -294,10 +296,23 @@ class _SearchSummary extends StatelessWidget {
   );
 }
 
-class _ClassroomCard extends StatelessWidget {
+class _ClassroomCard extends StatefulWidget {
   final ClassroomModel classroom;
   final VoidCallback onView;
   const _ClassroomCard({required this.classroom, required this.onView});
+
+  @override
+  State<_ClassroomCard> createState() => _ClassroomCardState();
+}
+
+class _ClassroomCardState extends State<_ClassroomCard> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ClassroomStudentsCubit>().getStudents(
+      widget.classroom.classroomId,
+    );
+  }
 
   @override
   Widget build(BuildContext context) => Container(
@@ -315,21 +330,13 @@ class _ClassroomCard extends StatelessWidget {
             Expanded(
               child: Align(
                 alignment: Alignment.centerRight,
-                child: _SubjectChip(label: classroom.subjectName),
+                child: _SubjectChip(label: widget.classroom.subjectName),
               ),
             ),
-            // IconButton(
-            //   onPressed: () {},
-            //   icon: const Icon(
-            //     Icons.more_horiz,
-            //     color: AppColors.foregroundMuted,
-            //   ),
-            //   tooltip: 'خيارات الفصل',
-            // ),
           ],
         ),
         Text(
-          classroom.name,
+          widget.classroom.name,
           textAlign: TextAlign.right,
           style: context.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w800,
@@ -337,7 +344,7 @@ class _ClassroomCard extends StatelessWidget {
         ),
         const SizedBox(height: AppSizes.s4),
         Text(
-          classroom.isActive ? 'فصل نشط' : 'فصل غير نشط',
+          widget.classroom.isActive ? 'فصل نشط' : 'فصل غير نشط',
           textAlign: TextAlign.right,
           style: context.textTheme.bodyMedium?.copyWith(
             color: AppColors.foregroundMuted,
@@ -357,18 +364,31 @@ class _ClassroomCard extends StatelessWidget {
               const SizedBox(width: AppSizes.s8),
               Text('إجمالي الطلبة', style: context.textTheme.labelMedium),
               const Spacer(),
-              Text(
-                '${classroom.studentCount} طالب',
-                style: context.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
+              BlocBuilder<ClassroomStudentsCubit, ClassroomStudentsState>(
+                builder: (context, state) {
+                  if (state.status == CubitStatus.success) {
+                    final students = state.students;
+                    return Text(
+                      '${students.length} طالب',
+                      style: context.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    );
+                  }
+                  return Text(
+                    '0 طالب',
+                    style: context.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  );
+                },
               ),
             ],
           ),
         ),
         const SizedBox(height: AppSizes.s20),
         AppElevatedButton(
-          onPressed: onView,
+          onPressed: widget.onView,
           label: 'عرض الفصل',
           icon: const Icon(Icons.arrow_back, size: 17),
           radius: 8,
