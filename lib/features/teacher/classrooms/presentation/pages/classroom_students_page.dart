@@ -1,5 +1,7 @@
 import 'package:draya_mobile/core/enums/cubit_status.dart';
 import 'package:draya_mobile/core/helpers/app_extensions.dart';
+import 'package:draya_mobile/core/helpers/app_navigator.dart';
+import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
@@ -227,6 +229,17 @@ class _ClassroomSummary extends StatelessWidget {
               ),
             );
           },
+        ),
+        const SizedBox(height: AppSizes.s12),
+        AppElevatedButton(
+          onPressed: () {
+            AppNavigator.push(
+              context: context,
+              path: AppRoutes.materialsPage,
+              extra: classroom,
+            );
+          },
+          label: "ادارة المواد الدراسية",
         ),
       ],
     ),

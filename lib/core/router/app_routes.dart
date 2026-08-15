@@ -22,4 +22,5 @@ abstract final class AppRoutes {
       "/teacher/classrooms/$classroomId/students";
   static const String teacherProfilePage = "/teacher/profile";
   static const String paymentWebViewPage = "/payment/pay";
+  static const String materialsPage = "/teacher/classrooms/materials";
 }
