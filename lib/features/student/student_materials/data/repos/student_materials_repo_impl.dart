@@ -1,7 +1,6 @@
 import 'package:draya_mobile/core/networking/api_error_handler.dart';
 import 'package:draya_mobile/core/networking/api_result.dart';
 import 'package:draya_mobile/features/student/student_materials/data/models/material_stream_model.dart';
-import 'package:draya_mobile/features/student/student_materials/data/models/student_material_model.dart';
 import 'package:draya_mobile/features/student/student_materials/data/models/student_material_paged_result_model.dart';
 import 'package:draya_mobile/features/student/student_materials/data/source/student_materials_api_service.dart';
 import 'package:draya_mobile/features/student/student_materials/domain/entity/material_stream.dart';
@@ -41,17 +40,7 @@ class StudentMaterialsRepoImpl implements StudentMaterialsRepo {
         page: page,
         pageSize: pageSize,
       );
-      return ApiResult.success(
-        StudentMaterialsPage(
-          items: response.map((material) => material.toEntity()).toList(),
-          pageNumber: page,
-          pageSize: pageSize,
-          totalCount: response.length,
-          totalPages: response.length < pageSize ? page : page + 1,
-          hasPreviousPage: page > 1,
-          hasNextPage: response.length == pageSize,
-        ),
-      );
+      return ApiResult.success(response.toEntity());
     } catch (error) {
       return ApiResult.failure(ErrorHandler.handle(error));
     }

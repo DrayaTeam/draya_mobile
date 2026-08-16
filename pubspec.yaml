@@ -61,6 +61,9 @@ dependencies:
   # ASP.NET Core SignalR client for real-time classroom updates.
   signalr_netcore: ^1.4.4
   file_picker: ^11.0.3
+  video_player: ^2.14.0
+  chewie: ^1.13.1
+  pdfrx: ^2.4.7
 
 dev_dependencies:
   # for updating your Flutter app's launcher icon.

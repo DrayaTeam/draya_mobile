@@ -49,8 +49,16 @@ class _StudentClassroomsMaterialsScreenState extends State<StudentClassroomsMate
       backgroundColor: AppColors.background,
       body: BlocConsumer<StudentMaterialsCubit, StudentMaterialsState>(
         listener: (context, state) {
-          if (state.openingStatus == CubitStatus.success && state.openUrl != null) AppUrlHelper.launchURL(state.openUrl!, context);
-          if (state.openingStatus == CubitStatus.error && state.apiErrorModel?.error?.message != null) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.apiErrorModel!.error!.message!), backgroundColor: AppColors.error));
+          if (state.openingStatus == CubitStatus.success && state.openUrl != null) {
+            final url = state.openUrl!;
+            context.read<StudentMaterialsCubit>().clearOpeningResult();
+            AppUrlHelper.launchURL(url, context);
+          }
+          if (state.openingStatus == CubitStatus.error && state.apiErrorModel?.error?.message != null) {
+            final message = state.apiErrorModel!.error!.message!;
+            context.read<StudentMaterialsCubit>().clearOpeningResult();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message), backgroundColor: AppColors.error));
+          }
         },
         builder: (context, state) {
           if (state.materialsStatus == CubitStatus.loading && state.materials.isEmpty) return const Center(child: AppCustomLoading(text: 'جارٍ تحميل المواد...'));

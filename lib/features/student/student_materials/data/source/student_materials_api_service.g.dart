@@ -55,7 +55,7 @@ class _StudentMaterialsApiService implements StudentMaterialsApiService {
   }
 
   @override
-  Future<List<StudentMaterialModel>> getClassroomMaterials(
+  Future<StudentMaterialPagedResultModel> getClassroomMaterials(
     String classroomId, {
     int page = 1,
     int pageSize = 20,
@@ -67,7 +67,7 @@ class _StudentMaterialsApiService implements StudentMaterialsApiService {
     };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<StudentMaterialModel>>(
+    final _options = _setStreamType<StudentMaterialPagedResultModel>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -77,15 +77,10 @@ class _StudentMaterialsApiService implements StudentMaterialsApiService {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<StudentMaterialModel> _value;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late StudentMaterialPagedResultModel _value;
     try {
-      _value = _result.data!
-          .map(
-            (dynamic i) =>
-                StudentMaterialModel.fromJson(i as Map<String, dynamic>),
-          )
-          .toList();
+      _value = StudentMaterialPagedResultModel.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

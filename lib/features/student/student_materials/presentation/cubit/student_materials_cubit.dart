@@ -99,4 +99,14 @@ class StudentMaterialsCubit extends Cubit<StudentMaterialsState> {
       );
     }
   }
+
+  void clearOpeningResult() {
+    emit(
+      state.copyWith(
+        openingStatus: CubitStatus.initial,
+        clearOpeningMaterialId: true,
+        clearOpenUrl: true,
+      ),
+    );
+  }
 }
