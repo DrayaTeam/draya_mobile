@@ -435,26 +435,34 @@ class _ClassroomCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSizes.s12),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '${classroom.price.toStringAsFixed(0)} ج.م',
-              style: AppTextStyles.textTheme.titleSmall?.copyWith(
-                color: AppColors.primary700,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          const SizedBox(height: AppSizes.s12),
+          const SizedBox(height: AppSizes.s24),
           SizedBox(
             width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () => context.push(
-                AppRoutes.studentChannelPage(classroom.classroomId),
-              ),
-              icon: const Icon(Icons.forum_outlined),
-              label: const Text('قناة الأسئلة'),
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () => context.push(
+                      AppRoutes.studentChannelPage(classroom.classroomId),
+                    ),
+                    icon: const Icon(Icons.forum_outlined),
+                    label: const Text('قناة الأسئلة'),
+                  ),
+                ),
+                const SizedBox(width: AppSizes.s8),
+                Expanded(
+                  child: FilledButton.icon(
+                    onPressed: () => context.push(
+                      AppRoutes.studentClassroomMaterialsPage(
+                        classroom.classroomId,
+                      ),
+                      extra: classroom.name,
+                    ),
+                    icon: const Icon(Icons.folder_copy_outlined),
+                    label: const Text('المواد'),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

@@ -104,6 +104,7 @@ List<DrawerModel> getStudentDrawerItemsList() {
         DrawerItemViewModel(
           icon: Icons.menu_book_outlined,
           title: "تفاصيل المحاضرات",
+          route: AppRoutes.studentClassroomsMaterialsPage,
         ),
         DrawerItemViewModel(
           icon: Icons.book_outlined,

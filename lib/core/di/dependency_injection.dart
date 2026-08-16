@@ -31,6 +31,12 @@ import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/enroll_classroom_use_case.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/get_student_enrolled_classrooms_use_case.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_cubit.dart';
+import 'package:draya_mobile/features/student/student_materials/data/repos/student_materials_repo_impl.dart';
+import 'package:draya_mobile/features/student/student_materials/data/source/student_materials_api_service.dart';
+import 'package:draya_mobile/features/student/student_materials/domain/repos/student_materials_repo.dart';
+import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_enrolled_materials_use_case.dart';
+import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_material_stream_use_case.dart';
+import 'package:draya_mobile/features/student/student_materials/presentation/cubit/student_materials_cubit.dart';
 import 'package:draya_mobile/features/student/teachers/data/repos/teacher_repo_impl.dart';
 import 'package:draya_mobile/features/student/teachers/data/source/teacher_api_service.dart';
 import 'package:draya_mobile/features/student/teachers/domain/repos/teacher_repo.dart';
@@ -290,6 +296,30 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactory<StudentCheckoutCubit>(
     () => StudentCheckoutCubit(getIt<CheckoutClassroomUseCase>()),
+  );
+
+  // student materials
+  getIt.registerLazySingleton<StudentMaterialsApiService>(
+    () => StudentMaterialsApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<StudentMaterialsRepo>(
+    () => StudentMaterialsRepoImpl(getIt<StudentMaterialsApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetEnrolledMaterialsUseCase>(
+    () => GetEnrolledMaterialsUseCase(getIt<StudentMaterialsRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetMaterialStreamUseCase>(
+    () => GetMaterialStreamUseCase(getIt<StudentMaterialsRepo>()),
+  );
+
+  getIt.registerFactory<StudentMaterialsCubit>(
+    () => StudentMaterialsCubit(
+      getIt<GetEnrolledMaterialsUseCase>(),
+      getIt<GetMaterialStreamUseCase>(),
+    ),
   );
 
   // SignalR Service
