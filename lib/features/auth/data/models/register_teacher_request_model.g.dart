@@ -11,6 +11,7 @@ RegisterTeacherRequestModel _$RegisterTeacherRequestModelFromJson(
 ) => RegisterTeacherRequestModel(
   email: json['email'] as String,
   password: json['password'] as String,
+  confirmPassword: json['confirmPassword'] as String,
   fullName: json['fullName'] as String,
   phone: json['phone'] as String?,
 );
@@ -20,6 +21,7 @@ Map<String, dynamic> _$RegisterTeacherRequestModelToJson(
 ) => <String, dynamic>{
   'email': instance.email,
   'password': instance.password,
+  'confirmPassword': instance.confirmPassword,
   'fullName': instance.fullName,
   'phone': ?instance.phone,
 };

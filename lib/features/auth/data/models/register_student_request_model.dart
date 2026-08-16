@@ -3,28 +3,24 @@ part 'register_student_request_model.g.dart';
 
 @JsonSerializable(includeIfNull: false)
 class RegisterStudentRequestModel {
-
   final String email;
   final String password;
+  final String confirmPassword;
   final String fullName;
   final String parentGuardianEmail;
-  final DateTime? dateOfBirth;
+  final DateTime dateOfBirth;
 
   const RegisterStudentRequestModel({
-
     required this.email,
     required this.password,
+    required this.confirmPassword,
     required this.fullName,
     required this.parentGuardianEmail,
-    this.dateOfBirth,
-
+    required this.dateOfBirth,
   });
 
-  factory RegisterStudentRequestModel.fromJson(
-      Map<String,dynamic> json)
-      => _$RegisterStudentRequestModelFromJson(json);
+  factory RegisterStudentRequestModel.fromJson(Map<String, dynamic> json) =>
+      _$RegisterStudentRequestModelFromJson(json);
 
-  Map<String,dynamic> toJson()
-      => _$RegisterStudentRequestModelToJson(this);
-
+  Map<String, dynamic> toJson() => _$RegisterStudentRequestModelToJson(this);
 }
