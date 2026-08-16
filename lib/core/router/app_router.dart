@@ -29,6 +29,7 @@ import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/clas
 import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/classroom_students_page.dart';
 import 'package:draya_mobile/features/student/teachers/data/models/teacher_model.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
+import 'package:draya_mobile/features/teacher/teacher_channel/presentation/pages/teacher_channel_screen.dart';
 import 'package:go_router/go_router.dart';
 
 const authRoutes = {
@@ -193,6 +194,14 @@ abstract final class AppRouter {
         path: AppRoutes.studentChannelRoute,
         builder: (context, state) {
           return StudentChannelScreen(
+            classroomId: state.pathParameters['classroomId']!,
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.teacherChannelRoute,
+        builder: (context, state) {
+          return TeacherChannelScreen(
             classroomId: state.pathParameters['classroomId']!,
           );
         },

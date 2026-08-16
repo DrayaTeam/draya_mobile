@@ -19,7 +19,7 @@ class MaterialsRepoImpl implements MaterialsRepo {
       final response = await _materialsApiService.uploadMaterials(
         classroomId,
         materialsRequestModel.title,
-        materialsRequestModel.materialType,
+        materialsRequestModel.materialType.name,
         await MultipartFile.fromFile(
           materialsRequestModel.file.path!,
           filename: materialsRequestModel.file.name,
