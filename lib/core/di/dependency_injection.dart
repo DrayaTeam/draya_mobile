@@ -18,12 +18,30 @@ import 'package:draya_mobile/features/student/profile/presentation/cubit/student
 import 'package:draya_mobile/features/student/student_channel/data/repos/student_channel_repo_impl.dart';
 import 'package:draya_mobile/features/student/student_channel/data/source/student_channel_remote_data_source.dart';
 import 'package:draya_mobile/features/student/student_channel/domain/repos/student_channel_repo.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/usecases/create_question_use_case.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/usecases/create_reply_use_case.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/usecases/get_question_details_use_case.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/usecases/get_questions_use_case.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/usecases/unvote_question_use_case.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/usecases/vote_question_use_case.dart';
+import 'package:draya_mobile/features/student/student_channel/domain/usecases/create_question_use_case.dart'
+    as student;
+import 'package:draya_mobile/features/teacher/teacher_channel/domain/usecases/create_question_use_case.dart'
+    as teacher;
+import 'package:draya_mobile/features/student/student_channel/domain/usecases/create_reply_use_case.dart'
+    as student;
+import 'package:draya_mobile/features/teacher/teacher_channel/domain/usecases/create_reply_use_case.dart'
+    as teacher;
+import 'package:draya_mobile/features/student/student_channel/domain/usecases/get_question_details_use_case.dart'
+    as student;
+import 'package:draya_mobile/features/teacher/teacher_channel/domain/usecases/get_question_details_use_case.dart'
+    as teacher;
+import 'package:draya_mobile/features/student/student_channel/domain/usecases/get_questions_use_case.dart'
+    as student;
+import 'package:draya_mobile/features/teacher/teacher_channel/domain/usecases/get_questions_use_case.dart'
+    as teacher;
+import 'package:draya_mobile/features/student/student_channel/domain/usecases/unvote_question_use_case.dart'
+    as student;
+import 'package:draya_mobile/features/teacher/teacher_channel/domain/usecases/unvote_question_use_case.dart'
+    as teacher;
+import 'package:draya_mobile/features/student/student_channel/domain/usecases/vote_question_use_case.dart'
+    as student;
+import 'package:draya_mobile/features/teacher/teacher_channel/domain/usecases/vote_question_use_case.dart'
+    as teacher;
 import 'package:draya_mobile/features/student/student_channel/presentation/cubit/student_channel_cubit.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/data/repos/student_enrolled_classrooms_repo_impl.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/data/source/student_enrolled_classrooms_api_service.dart';
@@ -72,6 +90,10 @@ import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_cla
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/regenerate_classroom_code_use_case.dart';
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/set_classroom_pricing_use_case.dart';
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/update_classroom_use_case.dart';
+import 'package:draya_mobile/features/teacher/teacher_channel/data/repos/teacher_channel_repo_impl.dart';
+import 'package:draya_mobile/features/teacher/teacher_channel/data/source/teacher_channel_remote_data_source.dart';
+import 'package:draya_mobile/features/teacher/teacher_channel/domain/repos/teacher_channel_repo.dart';
+import 'package:draya_mobile/features/teacher/teacher_channel/presentation/cubit/teacher_channel_cubit.dart';
 import 'package:draya_mobile/features/teacher/wallet/data/repos/wallet_repo_impl.dart';
 import 'package:draya_mobile/features/teacher/wallet/data/source/wallet_api_service.dart';
 import 'package:draya_mobile/features/teacher/wallet/domain/repos/wallet_repo.dart';
@@ -336,41 +358,87 @@ Future<void> setupGetIt() async {
     () => StudentChannelRepoImpl(getIt<StudentChannelRemoteDataSource>()),
   );
 
-  getIt.registerLazySingleton<GetQuestionsUseCase>(
-    () => GetQuestionsUseCase(getIt<StudentChannelRepo>()),
+  getIt.registerLazySingleton<student.GetQuestionsUseCase>(
+    () => student.GetQuestionsUseCase(getIt<StudentChannelRepo>()),
   );
 
-  getIt.registerLazySingleton<CreateQuestionUseCase>(
-    () => CreateQuestionUseCase(getIt<StudentChannelRepo>()),
+  getIt.registerLazySingleton<student.CreateQuestionUseCase>(
+    () => student.CreateQuestionUseCase(getIt<StudentChannelRepo>()),
   );
 
-  getIt.registerLazySingleton<GetQuestionDetailsUseCase>(
-    () => GetQuestionDetailsUseCase(getIt<StudentChannelRepo>()),
+  getIt.registerLazySingleton<student.GetQuestionDetailsUseCase>(
+    () => student.GetQuestionDetailsUseCase(getIt<StudentChannelRepo>()),
   );
 
-  getIt.registerLazySingleton<CreateReplyUseCase>(
-    () => CreateReplyUseCase(getIt<StudentChannelRepo>()),
+  getIt.registerLazySingleton<student.CreateReplyUseCase>(
+    () => student.CreateReplyUseCase(getIt<StudentChannelRepo>()),
   );
 
-  getIt.registerLazySingleton<VoteQuestionUseCase>(
-    () => VoteQuestionUseCase(getIt<StudentChannelRepo>()),
+  getIt.registerLazySingleton<student.VoteQuestionUseCase>(
+    () => student.VoteQuestionUseCase(getIt<StudentChannelRepo>()),
   );
 
-  getIt.registerLazySingleton<UnvoteQuestionUseCase>(
-    () => UnvoteQuestionUseCase(getIt<StudentChannelRepo>()),
+  getIt.registerLazySingleton<student.UnvoteQuestionUseCase>(
+    () => student.UnvoteQuestionUseCase(getIt<StudentChannelRepo>()),
   );
 
   getIt.registerFactory<StudentChannelCubit>(
     () => StudentChannelCubit(
-      getIt<GetQuestionsUseCase>(),
-      getIt<CreateQuestionUseCase>(),
-      getIt<GetQuestionDetailsUseCase>(),
-      getIt<CreateReplyUseCase>(),
-      getIt<VoteQuestionUseCase>(),
-      getIt<UnvoteQuestionUseCase>(),
+      getIt<student.GetQuestionsUseCase>(),
+      getIt<student.CreateQuestionUseCase>(),
+      getIt<student.GetQuestionDetailsUseCase>(),
+      getIt<student.CreateReplyUseCase>(),
+      getIt<student.VoteQuestionUseCase>(),
+      getIt<student.UnvoteQuestionUseCase>(),
       getIt<SignalRService>(),
     ),
   );
+
+  // Teacher Channel (Q&A)
+  getIt.registerLazySingleton<TeacherChannelRemoteDataSource>(
+    () => TeacherChannelRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<TeacherChannelRepo>(
+    () => TeacherChannelRepoImpl(getIt<TeacherChannelRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<teacher.GetQuestionsUseCase>(
+    () => teacher.GetQuestionsUseCase(getIt<TeacherChannelRepo>()),
+  );
+
+  getIt.registerLazySingleton<teacher.CreateQuestionUseCase>(
+    () => teacher.CreateQuestionUseCase(getIt<TeacherChannelRepo>()),
+  );
+
+  getIt.registerLazySingleton<teacher.GetQuestionDetailsUseCase>(
+    () => teacher.GetQuestionDetailsUseCase(getIt<TeacherChannelRepo>()),
+  );
+
+  getIt.registerLazySingleton<teacher.CreateReplyUseCase>(
+    () => teacher.CreateReplyUseCase(getIt<TeacherChannelRepo>()),
+  );
+
+  getIt.registerLazySingleton<teacher.VoteQuestionUseCase>(
+    () => teacher.VoteQuestionUseCase(getIt<TeacherChannelRepo>()),
+  );
+
+  getIt.registerLazySingleton<teacher.UnvoteQuestionUseCase>(
+    () => teacher.UnvoteQuestionUseCase(getIt<TeacherChannelRepo>()),
+  );
+
+  getIt.registerFactory<TeacherChannelCubit>(
+    () => TeacherChannelCubit(
+      getIt<teacher.GetQuestionsUseCase>(),
+      getIt<teacher.CreateQuestionUseCase>(),
+      getIt<teacher.GetQuestionDetailsUseCase>(),
+      getIt<teacher.CreateReplyUseCase>(),
+      getIt<teacher.VoteQuestionUseCase>(),
+      getIt<teacher.UnvoteQuestionUseCase>(),
+      getIt<SignalRService>(),
+    ),
+  );
+
   // materials
   getIt.registerLazySingleton<MaterialsApiService>(
     () => MaterialsApiService(getIt<Dio>()),
