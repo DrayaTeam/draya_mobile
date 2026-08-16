@@ -35,6 +35,7 @@ class StudentMaterial {
   });
 
   bool get isVideo => materialType.toLowerCase() == 'video';
+  bool get isPdf => materialType.toLowerCase() == 'pdf';
 }
 
 class StudentMaterialsPage {

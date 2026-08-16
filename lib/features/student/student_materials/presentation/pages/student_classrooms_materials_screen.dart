@@ -6,8 +6,10 @@ import 'package:draya_mobile/core/view_models/drawer_model.dart';
 import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
 import 'package:draya_mobile/core/widgets/app_drawer.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
+import 'package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart';
 import 'package:draya_mobile/features/student/student_materials/presentation/cubit/student_materials_cubit.dart';
 import 'package:draya_mobile/features/student/student_materials/presentation/cubit/student_materials_state.dart';
+import 'package:draya_mobile/features/student/student_materials/presentation/pages/material_viewer_screen.dart';
 import 'package:draya_mobile/features/student/student_materials/presentation/widgets/material_card.dart';
 import 'package:draya_mobile/features/student/student_materials/presentation/widgets/materials_feedback.dart';
 import 'package:draya_mobile/features/student/student_materials/presentation/widgets/materials_header.dart';
@@ -29,6 +31,16 @@ class StudentClassroomsMaterialsScreen extends StatefulWidget {
 }
 
 class _StudentClassroomsMaterialsScreenState extends State<StudentClassroomsMaterialsScreen> {
+  StudentMaterial? _materialById(
+    List<StudentMaterial> materials,
+    String? materialId,
+  ) {
+    for (final material in materials) {
+      if (material.materialId == materialId) return material;
+    }
+    return null;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -50,9 +62,33 @@ class _StudentClassroomsMaterialsScreenState extends State<StudentClassroomsMate
       body: BlocConsumer<StudentMaterialsCubit, StudentMaterialsState>(
         listener: (context, state) {
           if (state.openingStatus == CubitStatus.success && state.openUrl != null) {
+            final material = _materialById(
+              state.materials,
+              state.openingMaterialId,
+            );
             final url = state.openUrl!;
             context.read<StudentMaterialsCubit>().clearOpeningResult();
-            AppUrlHelper.launchURL(url, context);
+            if (material?.isVideo == true) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => VideoMaterialViewerScreen(
+                    title: material!.title,
+                    streamUrl: url,
+                  ),
+                ),
+              );
+            } else if (material?.isPdf == true) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => PdfMaterialViewerScreen(
+                    title: material!.title,
+                    pdfUrl: url,
+                  ),
+                ),
+              );
+            } else {
+              AppUrlHelper.launchURL(url, context);
+            }
           }
           if (state.openingStatus == CubitStatus.error && state.apiErrorModel?.error?.message != null) {
             final message = state.apiErrorModel!.error!.message!;
