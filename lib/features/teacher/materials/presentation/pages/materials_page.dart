@@ -1,8 +1,10 @@
 import 'package:draya_mobile/core/enums/cubit_status.dart';
+import 'package:draya_mobile/core/enums/material_type_enum.dart';
 import 'package:draya_mobile/core/helpers/app_dialog_helper.dart';
 import 'package:draya_mobile/core/helpers/app_extensions.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/widgets/app_card_container_empty.dart';
+import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
 import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
 import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
@@ -79,7 +81,7 @@ class _MaterialsPageState extends State<MaterialsPage> {
 
     final request = MaterialsRequestModel(
       title: title,
-      materialType: materialType,
+      materialType: MaterialTypeEnum.fromExtension(extension: materialType),
       file: _selectedFile!,
     );
 
@@ -93,6 +95,10 @@ class _MaterialsPageState extends State<MaterialsPage> {
   Widget build(BuildContext context) {
     return BlocListener<MaterialsCubit, MaterialsState>(
       listener: (BuildContext context, MaterialsState state) {
+        if (state.status == CubitStatus.loading) {
+          AppDialogHelper.display(context, const AppCustomLoading());
+        }
+        
         if (state.status == CubitStatus.success) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

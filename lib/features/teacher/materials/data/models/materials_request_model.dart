@@ -1,8 +1,9 @@
+import 'package:draya_mobile/core/enums/material_type_enum.dart';
 import 'package:file_picker/file_picker.dart';
 
 class MaterialsRequestModel {
   final String title;
-  final String materialType;
+  final MaterialTypeEnum materialType;
   final PlatformFile file;
 
   const MaterialsRequestModel({
@@ -14,7 +15,7 @@ class MaterialsRequestModel {
   factory MaterialsRequestModel.fromJson(Map<String, dynamic> json) {
     return MaterialsRequestModel(
       title: json["title"],
-      materialType: json["materialType"],
+      materialType: MaterialTypeEnum.fromJson(value: json["materialType"]),
       file: json["file"],
     );
   }
@@ -22,7 +23,7 @@ class MaterialsRequestModel {
   Map<String, dynamic> toJson() {
     return {
       "title": title,
-      "materialType": materialType,
+      "materialType": materialType.name,
       "file": file,
     };
   }
