@@ -18,6 +18,9 @@ abstract final class AppRoutes {
   static const String studentChannelRoute = "/student/channel/:classroomId";
   static String studentChannelPage(String classroomId) =>
       "/student/channel/$classroomId";
+  static const String teacherChannelRoute = "/teacher/channel/:classroomId";
+  static String teacherChannelPage(String classroomId) =>
+      "/teacher/channel/$classroomId";
   static String teacherClassroomsPage(String teacherId) =>
       "/student/teachers/$teacherId/classrooms";
   static const String createClassroomPage = "/teacher/classrooms/create";
@@ -27,7 +30,8 @@ abstract final class AppRoutes {
   static const String studentProfilePage = "/student/profile";
   static const String paymentWebViewPage = "/payment/pay";
   static const String materialsPage = "/teacher/classrooms/materials";
-  static const String studentClassroomsMaterialsPage = "/student/classrooms/materials";
+  static const String studentClassroomsMaterialsPage =
+      "/student/classrooms/materials";
   static const String studentClassroomMaterialsRoute =
       "/student/classrooms/:classroomId/materials";
   static String studentClassroomMaterialsPage(String classroomId) =>

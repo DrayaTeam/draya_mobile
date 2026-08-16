@@ -6,6 +6,7 @@ import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
 import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
+import 'package:draya_mobile/core/widgets/app_outlined_button.dart';
 import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
@@ -63,7 +64,7 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
       builder: (context, state) {
         final students = _filterStudents(state.students);
         return Scaffold(
-          appBar: const CustomAppBar(title: 'قايمة الطلاب'),
+          appBar: const CustomAppBar(title: 'قائمة الطلاب'),
           body: SafeArea(
             child: RefreshIndicator(
               onRefresh: () =>
@@ -240,6 +241,19 @@ class _ClassroomSummary extends StatelessWidget {
             );
           },
           label: "ادارة المواد الدراسية",
+        ),
+        const SizedBox(height: AppSizes.s12),
+        AppOutlinedButton(
+          onPressed: () {
+            AppNavigator.push(
+              context: context,
+              path: AppRoutes.teacherChannelPage(
+                classroom.classroomId,
+              ),
+              extra: classroom.name,
+            );
+          },
+          label: "قناة الأسئلة",
         ),
       ],
     ),
