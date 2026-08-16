@@ -21,6 +21,7 @@ import 'package:draya_mobile/features/auth/presentation/student_signup/cubit/stu
 import 'package:draya_mobile/features/auth/presentation/student_signup/cubit/student_signup_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class StudentSignupTab extends StatefulWidget {
   const StudentSignupTab({super.key});
@@ -36,6 +37,9 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
   late final TextEditingController _textEditingControllerConfirmPassword;
   late final TextEditingController _textEditingControllerFullName;
   late final TextEditingController _textEditingControllerParentGuardianEmail;
+  late final TextEditingController _textEditingControllerDateOfBirth;
+
+  DateTime? _dateOfBirth;
 
   @override
   void initState() {
@@ -46,6 +50,7 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
     _textEditingControllerConfirmPassword = TextEditingController();
     _textEditingControllerFullName = TextEditingController();
     _textEditingControllerParentGuardianEmail = TextEditingController();
+    _textEditingControllerDateOfBirth = TextEditingController();
   }
 
   @override
@@ -55,7 +60,17 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
     _textEditingControllerConfirmPassword.dispose();
     _textEditingControllerFullName.dispose();
     _textEditingControllerParentGuardianEmail.dispose();
+    _textEditingControllerDateOfBirth.dispose();
     super.dispose();
+  }
+
+  Future<DateTime?> _pickDate() async {
+    return await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
   }
 
   void _signUp({
@@ -133,6 +148,31 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
                       return "الاسم الكامل يجب ان يكون اكثر من 3 حروف";
                     }
                     return null;
+                  },
+                ),
+                const AppLabel(label: "تاريخ الميلاد*"),
+                AppTextFormField(
+                  controller: _textEditingControllerDateOfBirth,
+                  hintText: "yyyy/MM/dd",
+                  isReadOnly: true,
+                  validator: (value) {
+                    if (_dateOfBirth == null) {
+                      return 'يرجى اختيار تاريخ الميلاد';
+                    }
+
+                    return null;
+                  },
+                  onTap: () async {
+                    final picked = await _pickDate();
+
+                    if (picked != null) {
+                      setState(() {
+                        _dateOfBirth = picked;
+                        _textEditingControllerDateOfBirth.text = DateFormat(
+                          "yyyy/MM/dd",
+                        ).format(picked);
+                      });
+                    }
                   },
                 ),
                 const AppLabel(label: "البريد الالكتروني*"),
@@ -215,6 +255,9 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
                                   _textEditingControllerParentGuardianEmail
                                       .text,
                               password: _textEditingControllerPassword.text,
+                              confirmPassword:
+                                  _textEditingControllerConfirmPassword.text,
+                              dateOfBirth: _dateOfBirth!,
                             ),
                       );
                     }
