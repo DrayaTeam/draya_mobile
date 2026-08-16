@@ -213,6 +213,8 @@ class _TeacherSignupTabState extends State<TeacherSignupTab> {
                         password: _textEditingControllerPassword.text,
                         fullName: _textEditingControllerFullName.text,
                         phone: _textEditingControllerPhone.text,
+                        confirmPassword:
+                            _textEditingControllerConfirmPassword.text,
                       ),
                     );
                   },

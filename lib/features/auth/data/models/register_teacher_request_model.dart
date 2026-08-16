@@ -5,12 +5,14 @@ part 'register_teacher_request_model.g.dart';
 class RegisterTeacherRequestModel {
   final String email;
   final String password;
+  final String confirmPassword;
   final String fullName;
   final String? phone;
 
   const RegisterTeacherRequestModel({
     required this.email,
     required this.password,
+    required this.confirmPassword,
     required this.fullName,
     this.phone,
   });
