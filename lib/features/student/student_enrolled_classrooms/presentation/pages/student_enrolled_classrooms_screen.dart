@@ -417,7 +417,6 @@ class _ClassroomCard extends StatelessWidget {
             children: [
               _InfoChip(label: 'المرحلة', value: classroom.gradeLevelName),
               _InfoChip(label: 'النوع', value: classroom.classroomTypeName),
-              _InfoChip(label: 'الطلاب', value: '${classroom.studentCount}'),
             ],
           ),
           const SizedBox(height: AppSizes.s12),

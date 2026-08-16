@@ -27,15 +27,15 @@ class TeacherChannelScreen extends StatelessWidget {
       create: (_) =>
           getIt<TeacherChannelCubit>()
             ..initializeChannel(classroomId: classroomId),
-      child: _teacherChannelContent(classroomId: classroomId),
+      child: _TeacherChannelContent(classroomId: classroomId),
     );
   }
 }
 
-class _teacherChannelContent extends StatelessWidget {
+class _TeacherChannelContent extends StatelessWidget {
   final String classroomId;
 
-  const _teacherChannelContent({required this.classroomId});
+  const _TeacherChannelContent({required this.classroomId});
 
   @override
   Widget build(BuildContext context) {

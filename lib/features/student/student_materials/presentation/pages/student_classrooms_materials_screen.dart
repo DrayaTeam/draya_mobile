@@ -68,21 +68,16 @@ class _StudentClassroomsMaterialsScreenState extends State<StudentClassroomsMate
             );
             final url = state.openUrl!;
             context.read<StudentMaterialsCubit>().clearOpeningResult();
-            if (material?.isVideo == true) {
+            if (material?.isVideo == true || material?.isPdf == true) {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => VideoMaterialViewerScreen(
-                    title: material!.title,
-                    streamUrl: url,
-                  ),
-                ),
-              );
-            } else if (material?.isPdf == true) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => PdfMaterialViewerScreen(
-                    title: material!.title,
-                    pdfUrl: url,
+                  builder: (_) => StudentMaterialsViewerScreen(
+                    initialMaterial: material!,
+                    initialUrl: url,
+                    materials: state.materials,
+                    resolveMaterialUrl: context
+                        .read<StudentMaterialsCubit>()
+                        .resolveMaterialUrl,
                   ),
                 ),
               );

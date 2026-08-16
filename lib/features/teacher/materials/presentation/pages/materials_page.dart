@@ -2,6 +2,7 @@ import 'package:draya_mobile/core/enums/cubit_status.dart';
 import 'package:draya_mobile/core/enums/material_type_enum.dart';
 import 'package:draya_mobile/core/helpers/app_dialog_helper.dart';
 import 'package:draya_mobile/core/helpers/app_extensions.dart';
+import 'package:draya_mobile/core/helpers/app_navigator.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/widgets/app_card_container_empty.dart';
 import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
@@ -100,6 +101,7 @@ class _MaterialsPageState extends State<MaterialsPage> {
         }
         
         if (state.status == CubitStatus.success) {
+          AppNavigator.pop(context: context);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("تم رفع الملف بنجاح"),
@@ -108,6 +110,7 @@ class _MaterialsPageState extends State<MaterialsPage> {
         }
 
         if (state.status == CubitStatus.error) {
+          AppNavigator.pop(context: context);
           AppDialogHelper.display(
             context,
             AppErrorDialog(

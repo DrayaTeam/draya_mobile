@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:draya_mobile/core/theme/app_colors.dart';
 
 class QuestionFilterWidget extends StatelessWidget {
   final String currentSort;
@@ -18,7 +19,7 @@ class QuestionFilterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Row(
         children: [
           Semantics(
@@ -148,14 +149,19 @@ class _FilterChip extends StatelessWidget {
       ),
       selected: isSelected,
       onSelected: (_) => onTap(),
-      backgroundColor: Colors.transparent,
+      showCheckmark: false,
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 7),
+      backgroundColor: AppColors.surface,
       side: BorderSide(
-        color: theme.colorScheme.primary,
+        color: isSelected ? theme.colorScheme.primary : AppColors.borderStrong,
       ),
-      selectedColor: theme.colorScheme.primary,
+      selectedColor: theme.colorScheme.primaryContainer,
       checkmarkColor: Colors.white,
       labelStyle: TextStyle(
-        color: isSelected ? Colors.white : theme.colorScheme.primary,
+        color: isSelected
+            ? theme.colorScheme.onPrimaryContainer
+            : AppColors.foregroundMuted,
+        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
       ),
     );
   }

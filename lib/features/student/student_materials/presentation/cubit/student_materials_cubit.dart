@@ -100,6 +100,24 @@ class StudentMaterialsCubit extends Cubit<StudentMaterialsState> {
     }
   }
 
+  Future<String?> resolveMaterialUrl(StudentMaterial material) async {
+    if (!material.currentVersion.isReady) return null;
+
+    if (!material.isVideo) {
+      final fileUrl = material.currentVersion.fileUrl;
+      return fileUrl == null || fileUrl.isEmpty ? null : fileUrl;
+    }
+
+    final result = await _getMaterialStreamUseCase.call(
+      params: material.materialId,
+    );
+    return switch (result) {
+      Success(data: final stream) => stream.streamUrl,
+      Failure() => null,
+      _ => null,
+    };
+  }
+
   void clearOpeningResult() {
     emit(
       state.copyWith(

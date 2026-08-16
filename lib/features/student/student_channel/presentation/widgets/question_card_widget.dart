@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/features/student/student_channel/domain/entity/question_entity.dart';
 import 'package:intl/intl.dart';
 
@@ -23,12 +24,19 @@ class QuestionCardWidget extends StatelessWidget {
     
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      elevation: 2,
+      elevation: 0,
+      color: theme.colorScheme.surface,
+      surfaceTintColor: Colors.transparent,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: const BorderSide(color: AppColors.border),
+      ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(20),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

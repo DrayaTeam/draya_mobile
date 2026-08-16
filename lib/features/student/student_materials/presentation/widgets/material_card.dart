@@ -20,7 +20,6 @@ class MaterialCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final status = material.currentVersion;
-    final type = material.materialType.toUpperCase();
     final date = DateFormat('d MMM yyyy', 'ar').format(material.createdAt);
     final color = _typeColor(material.materialType);
 
@@ -42,7 +41,7 @@ class MaterialCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 width: AppSizes.s48,
@@ -60,9 +59,8 @@ class MaterialCard extends StatelessWidget {
                   children: [
                     Text(
                       material.title,
-                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.textTheme.titleMedium?.copyWith(
+                      style: AppTextStyles.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -76,31 +74,31 @@ class MaterialCard extends StatelessWidget {
                   ],
                 ),
               ),
-              _TypePill(label: type, color: color),
-            ],
-          ),
-          const SizedBox(height: AppSizes.s16),
-          _MaterialStatus(version: status),
-          const SizedBox(height: AppSizes.s12),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton.icon(
-              onPressed: status.isReady && !isOpening ? onOpen : null,
-              icon: isOpening
-                  ? const SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Icon(material.isVideo ? Icons.play_circle_outline : Icons.open_in_new_rounded),
-              label: Text(
-                isOpening
-                    ? 'جارٍ الفتح...'
-                    : material.isVideo
-                    ? 'مشاهدة الفيديو'
-                    : 'فتح المادة',
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(AppSizes.s12),
+                ),
+                child: IconButton(
+                  onPressed: status.isReady && !isOpening ? onOpen : null,
+                  icon: isOpening
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        )
+                      : Icon(
+                          material.isVideo
+                              ? Icons.play_circle_outline
+                              : Icons.open_in_new_rounded,
+                          color: AppColors.surface,    
+                        ),
+                 
+                ),
               ),
-            ),
+            ],
           ),
         ],
       ),
@@ -109,55 +107,35 @@ class MaterialCard extends StatelessWidget {
 
   IconData _typeIcon(String type) {
     switch (type.toLowerCase()) {
-      case 'video': return Icons.play_circle_fill_rounded;
-      case 'pdf': return Icons.picture_as_pdf_rounded;
-      case 'docx': return Icons.article_rounded;
-      case 'pptx': return Icons.slideshow_rounded;
-      case 'image': return Icons.image_rounded;
-      default: return Icons.insert_drive_file_rounded;
+      case 'video':
+        return Icons.play_circle_fill_rounded;
+      case 'pdf':
+        return Icons.picture_as_pdf_rounded;
+      case 'docx':
+        return Icons.article_rounded;
+      case 'pptx':
+        return Icons.slideshow_rounded;
+      case 'image':
+        return Icons.image_rounded;
+      default:
+        return Icons.insert_drive_file_rounded;
     }
   }
 
   Color _typeColor(String type) {
     switch (type.toLowerCase()) {
-      case 'video': return AppColors.ai700;
-      case 'pdf': return AppColors.error;
-      case 'docx': return AppColors.mathPhysics;
-      case 'pptx': return AppColors.amber;
-      case 'image': return AppColors.chemistryBiology;
-      default: return AppColors.primary700;
+      case 'video':
+        return AppColors.ai700;
+      case 'pdf':
+        return AppColors.error;
+      case 'docx':
+        return AppColors.mathPhysics;
+      case 'pptx':
+        return AppColors.amber;
+      case 'image':
+        return AppColors.chemistryBiology;
+      default:
+        return AppColors.primary700;
     }
-  }
-}
-
-class _TypePill extends StatelessWidget {
-  final String label;
-  final Color color;
-  const _TypePill({required this.label, required this.color});
-
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: AppSizes.s8, vertical: AppSizes.s4),
-    decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(AppSizes.s8)),
-    child: Text(label, style: AppTextStyles.textTheme.labelMedium?.copyWith(color: color, fontWeight: FontWeight.w700)),
-  );
-}
-
-class _MaterialStatus extends StatelessWidget {
-  final StudentMaterialVersion version;
-  const _MaterialStatus({required this.version});
-
-  @override
-  Widget build(BuildContext context) {
-    final (label, color, icon) = switch (version.parseStatus.toLowerCase()) {
-      'parsed' => ('جاهزة للعرض', AppColors.success, Icons.check_circle_outline_rounded),
-      'failed' => ('تعذّرت معالجة المادة', AppColors.error, Icons.error_outline_rounded),
-      _ => ('جارٍ تجهيز المادة', AppColors.amber, Icons.hourglass_top_rounded),
-    };
-    return Row(children: [
-      Icon(icon, size: 18, color: color),
-      const SizedBox(width: AppSizes.s8),
-      Expanded(child: Text(version.hasFailed && version.errorMessage != null ? version.errorMessage! : label, maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.textTheme.bodyMedium?.copyWith(color: color))),
-    ]);
   }
 }
