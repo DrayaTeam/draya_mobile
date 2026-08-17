@@ -20,6 +20,7 @@ import 'package:draya_mobile/features/student/student_channel/data/source/studen
 import 'package:draya_mobile/features/student/student_channel/domain/repos/student_channel_repo.dart';
 import 'package:draya_mobile/features/student/student_channel/domain/usecases/create_question_use_case.dart'
     as student;
+import 'package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart';
 import 'package:draya_mobile/features/teacher/teacher_channel/domain/usecases/create_question_use_case.dart'
     as teacher;
 import 'package:draya_mobile/features/student/student_channel/domain/usecases/create_reply_use_case.dart'
@@ -450,5 +451,9 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<UploadMaterialsUseCase>(
     () => UploadMaterialsUseCase(getIt<MaterialsRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetMaterialsUseCase>(
+    () => GetMaterialsUseCase(getIt<MaterialsRepo>()),
   );
 }
