@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TeacherProfileState {
 
- CubitStatus get status; TeacherModel? get teacher; ApiErrorModel? get apiErrorModel;
+ CubitStatus get status; TeacherModel? get teacher; bool get isUploadingPicture; ApiErrorModel? get apiErrorModel;
 /// Create a copy of TeacherProfileState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TeacherProfileStateCopyWith<TeacherProfileState> get copyWith => _$TeacherProfi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeacherProfileState&&(identical(other.status, status) || other.status == status)&&(identical(other.teacher, teacher) || other.teacher == teacher)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeacherProfileState&&(identical(other.status, status) || other.status == status)&&(identical(other.teacher, teacher) || other.teacher == teacher)&&(identical(other.isUploadingPicture, isUploadingPicture) || other.isUploadingPicture == isUploadingPicture)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,teacher,apiErrorModel);
+int get hashCode => Object.hash(runtimeType,status,teacher,isUploadingPicture,apiErrorModel);
 
 @override
 String toString() {
-  return 'TeacherProfileState(status: $status, teacher: $teacher, apiErrorModel: $apiErrorModel)';
+  return 'TeacherProfileState(status: $status, teacher: $teacher, isUploadingPicture: $isUploadingPicture, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $TeacherProfileStateCopyWith<$Res>  {
   factory $TeacherProfileStateCopyWith(TeacherProfileState value, $Res Function(TeacherProfileState) _then) = _$TeacherProfileStateCopyWithImpl;
 @useResult
 $Res call({
- CubitStatus status, TeacherModel? teacher, ApiErrorModel? apiErrorModel
+ CubitStatus status, TeacherModel? teacher, bool isUploadingPicture, ApiErrorModel? apiErrorModel
 });
 
 
@@ -62,11 +62,12 @@ class _$TeacherProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of TeacherProfileState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? teacher = freezed,Object? apiErrorModel = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? teacher = freezed,Object? isUploadingPicture = null,Object? apiErrorModel = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as CubitStatus,teacher: freezed == teacher ? _self.teacher : teacher // ignore: cast_nullable_to_non_nullable
-as TeacherModel?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
+as TeacherModel?,isUploadingPicture: null == isUploadingPicture ? _self.isUploadingPicture : isUploadingPicture // ignore: cast_nullable_to_non_nullable
+as bool,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
 as ApiErrorModel?,
   ));
 }
@@ -152,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus status,  TeacherModel? teacher,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus status,  TeacherModel? teacher,  bool isUploadingPicture,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TeacherProfileState() when $default != null:
-return $default(_that.status,_that.teacher,_that.apiErrorModel);case _:
+return $default(_that.status,_that.teacher,_that.isUploadingPicture,_that.apiErrorModel);case _:
   return orElse();
 
 }
@@ -173,10 +174,10 @@ return $default(_that.status,_that.teacher,_that.apiErrorModel);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus status,  TeacherModel? teacher,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus status,  TeacherModel? teacher,  bool isUploadingPicture,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
 switch (_that) {
 case _TeacherProfileState():
-return $default(_that.status,_that.teacher,_that.apiErrorModel);case _:
+return $default(_that.status,_that.teacher,_that.isUploadingPicture,_that.apiErrorModel);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +194,10 @@ return $default(_that.status,_that.teacher,_that.apiErrorModel);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus status,  TeacherModel? teacher,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus status,  TeacherModel? teacher,  bool isUploadingPicture,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
 switch (_that) {
 case _TeacherProfileState() when $default != null:
-return $default(_that.status,_that.teacher,_that.apiErrorModel);case _:
+return $default(_that.status,_that.teacher,_that.isUploadingPicture,_that.apiErrorModel);case _:
   return null;
 
 }
@@ -208,11 +209,12 @@ return $default(_that.status,_that.teacher,_that.apiErrorModel);case _:
 
 
 class _TeacherProfileState implements TeacherProfileState {
-  const _TeacherProfileState({this.status = CubitStatus.initial, this.teacher = null, this.apiErrorModel});
+  const _TeacherProfileState({this.status = CubitStatus.initial, this.teacher = null, this.isUploadingPicture = false, this.apiErrorModel});
   
 
 @override@JsonKey() final  CubitStatus status;
 @override@JsonKey() final  TeacherModel? teacher;
+@override@JsonKey() final  bool isUploadingPicture;
 @override final  ApiErrorModel? apiErrorModel;
 
 /// Create a copy of TeacherProfileState
@@ -225,16 +227,16 @@ _$TeacherProfileStateCopyWith<_TeacherProfileState> get copyWith => __$TeacherPr
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeacherProfileState&&(identical(other.status, status) || other.status == status)&&(identical(other.teacher, teacher) || other.teacher == teacher)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeacherProfileState&&(identical(other.status, status) || other.status == status)&&(identical(other.teacher, teacher) || other.teacher == teacher)&&(identical(other.isUploadingPicture, isUploadingPicture) || other.isUploadingPicture == isUploadingPicture)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,teacher,apiErrorModel);
+int get hashCode => Object.hash(runtimeType,status,teacher,isUploadingPicture,apiErrorModel);
 
 @override
 String toString() {
-  return 'TeacherProfileState(status: $status, teacher: $teacher, apiErrorModel: $apiErrorModel)';
+  return 'TeacherProfileState(status: $status, teacher: $teacher, isUploadingPicture: $isUploadingPicture, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -245,7 +247,7 @@ abstract mixin class _$TeacherProfileStateCopyWith<$Res> implements $TeacherProf
   factory _$TeacherProfileStateCopyWith(_TeacherProfileState value, $Res Function(_TeacherProfileState) _then) = __$TeacherProfileStateCopyWithImpl;
 @override @useResult
 $Res call({
- CubitStatus status, TeacherModel? teacher, ApiErrorModel? apiErrorModel
+ CubitStatus status, TeacherModel? teacher, bool isUploadingPicture, ApiErrorModel? apiErrorModel
 });
 
 
@@ -262,11 +264,12 @@ class __$TeacherProfileStateCopyWithImpl<$Res>
 
 /// Create a copy of TeacherProfileState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? teacher = freezed,Object? apiErrorModel = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? teacher = freezed,Object? isUploadingPicture = null,Object? apiErrorModel = freezed,}) {
   return _then(_TeacherProfileState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as CubitStatus,teacher: freezed == teacher ? _self.teacher : teacher // ignore: cast_nullable_to_non_nullable
-as TeacherModel?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
+as TeacherModel?,isUploadingPicture: null == isUploadingPicture ? _self.isUploadingPicture : isUploadingPicture // ignore: cast_nullable_to_non_nullable
+as bool,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
 as ApiErrorModel?,
   ));
 }

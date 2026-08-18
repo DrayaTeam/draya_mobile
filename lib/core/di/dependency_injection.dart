@@ -14,6 +14,7 @@ import 'package:draya_mobile/features/student/profile/data/source/student_profil
 import 'package:draya_mobile/features/student/profile/domain/repos/student_profile_repo.dart';
 import 'package:draya_mobile/features/student/profile/domain/usecases/get_student_profile_use_case.dart';
 import 'package:draya_mobile/features/student/profile/domain/usecases/update_student_profile_use_case.dart';
+import 'package:draya_mobile/features/student/profile/domain/usecases/upload_student_profile_picture_use_case.dart';
 import 'package:draya_mobile/features/student/profile/presentation/cubit/student_profile_cubit.dart';
 import 'package:draya_mobile/features/student/student_channel/data/repos/student_channel_repo_impl.dart';
 import 'package:draya_mobile/features/student/student_channel/data/source/student_channel_remote_data_source.dart';
@@ -58,11 +59,15 @@ import 'package:draya_mobile/features/student/student_materials/presentation/cub
 import 'package:draya_mobile/features/student/teachers/data/repos/teacher_repo_impl.dart';
 import 'package:draya_mobile/features/student/teachers/data/source/teacher_api_service.dart';
 import 'package:draya_mobile/features/student/teachers/domain/repos/teacher_repo.dart';
+import 'package:draya_mobile/core/services/deep_link_service.dart';
 import 'package:draya_mobile/features/student/teachers/domain/usecases/checkout_classroom_use_case.dart';
+import 'package:draya_mobile/features/student/teachers/domain/usecases/get_payment_status_use_case.dart';
 import 'package:draya_mobile/features/student/teachers/domain/usecases/get_teacher_classrooms_use_case.dart';
 import 'package:draya_mobile/features/student/teachers/domain/usecases/get_teachers_use_case.dart';
+import 'package:draya_mobile/features/student/teachers/presentation/cubit/payment_verification_cubit.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/cubit/student_checkout_cubit.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_cubit.dart';
+
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classroom_types_use_case.dart';
 import 'package:draya_mobile/features/teacher/classrooms/domain/usecases/get_grade_levels_use_case.dart';
 import 'package:draya_mobile/features/teacher/materials/data/repos/materials_repo_impl.dart';
@@ -73,6 +78,7 @@ import 'package:draya_mobile/features/teacher/profile/data/repos/teacher_profile
 import 'package:draya_mobile/features/teacher/profile/data/source/teacher_profile_api_service.dart';
 import 'package:draya_mobile/features/teacher/profile/domain/repos/teacher_profile_repo.dart';
 import 'package:draya_mobile/features/teacher/profile/domain/usecases/get_teacher_profile_use_case.dart';
+import 'package:draya_mobile/features/teacher/profile/domain/usecases/upload_teacher_profile_picture_use_case.dart';
 import 'package:draya_mobile/features/teacher/subjects/data/repos/subject_repo_impl.dart';
 import 'package:draya_mobile/features/teacher/subjects/data/source/subject_api_service.dart';
 import 'package:draya_mobile/features/teacher/subjects/domain/repos/subject_repo.dart';
@@ -155,10 +161,15 @@ Future<void> setupGetIt() async {
     () => UpdateStudentProfileUseCase(getIt<StudentProfileRepo>()),
   );
 
+  getIt.registerLazySingleton<UploadStudentProfilePictureUseCase>(
+    () => UploadStudentProfilePictureUseCase(getIt<StudentProfileRepo>()),
+  );
+
   getIt.registerFactory<StudentProfileCubit>(
     () => StudentProfileCubit(
       getIt<GetStudentProfileUseCase>(),
       getIt<UpdateStudentProfileUseCase>(),
+      getIt<UploadStudentProfilePictureUseCase>(),
     ),
   );
 
@@ -237,6 +248,10 @@ Future<void> setupGetIt() async {
     () => GetTeacherProfileUseCase(getIt<TeacherProfileRepo>()),
   );
 
+  getIt.registerLazySingleton<UploadTeacherProfilePictureUseCase>(
+    () => UploadTeacherProfilePictureUseCase(getIt<TeacherProfileRepo>()),
+  );
+
   // wallet
   getIt.registerLazySingleton<WalletApiService>(
     () => WalletApiService(getIt<Dio>()),
@@ -305,6 +320,14 @@ Future<void> setupGetIt() async {
     () => CheckoutClassroomUseCase(getIt<TeacherRepo>()),
   );
 
+  getIt.registerLazySingleton<GetPaymentStatusUseCase>(
+    () => GetPaymentStatusUseCase(getIt<TeacherRepo>()),
+  );
+
+  getIt.registerLazySingleton<DeepLinkService>(
+    () => DeepLinkService(),
+  );
+
   getIt.registerFactory<TeacherClassroomsCubit>(
     () => TeacherClassroomsCubit(getIt<GetTeacherClassroomsUseCase>()),
   );
@@ -319,6 +342,11 @@ Future<void> setupGetIt() async {
   getIt.registerFactory<StudentCheckoutCubit>(
     () => StudentCheckoutCubit(getIt<CheckoutClassroomUseCase>()),
   );
+
+  getIt.registerFactory<PaymentVerificationCubit>(
+    () => PaymentVerificationCubit(getIt<GetPaymentStatusUseCase>()),
+  );
+
 
   // student materials
   getIt.registerLazySingleton<StudentMaterialsApiService>(

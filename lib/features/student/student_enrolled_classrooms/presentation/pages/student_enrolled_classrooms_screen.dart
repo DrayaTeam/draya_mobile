@@ -4,9 +4,9 @@ import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/theme/app_text_styles.dart';
 import 'package:draya_mobile/core/view_models/drawer_model.dart';
-import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
 import 'package:draya_mobile/core/widgets/app_drawer.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
+import 'package:draya_mobile/core/widgets/fade_in_up_animation.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/entity/student_enrolled_classroom.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_cubit.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_state.dart';
@@ -30,7 +30,9 @@ class _StudentEnrolledClassroomsScreenState
   @override
   void initState() {
     super.initState();
-    context.read<StudentEnrolledClassroomsCubit>().getStudentEnrolledClassrooms();
+    context
+        .read<StudentEnrolledClassroomsCubit>()
+        .getStudentEnrolledClassrooms();
   }
 
   @override
@@ -42,142 +44,165 @@ class _StudentEnrolledClassroomsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'فصولي'),
+      appBar: const CustomAppBar(title: 'فصولي المسجلة'),
       drawer: AppDrawer(drawerItemsList: getStudentDrawerItemsList()),
       backgroundColor: AppColors.background,
-      body: BlocConsumer<StudentEnrolledClassroomsCubit,
-          StudentEnrolledClassroomsState>(
-        listener: (context, state) {
-          if (state.status == CubitStatus.error &&
-              state.apiErrorModel?.error?.message != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.apiErrorModel!.error!.message!),
-                backgroundColor: AppColors.error,
-              ),
-            );
-          }
-          if (state.status == CubitStatus.success &&
-              state.apiErrorModel == null) {
-            _enrollmentCodeController.clear();
-          }
-        },
-        builder: (context, state) {
-          if (state.status == CubitStatus.loading && state.classrooms.isEmpty) {
-            return const Center(
-              child: AppCustomLoading(text: 'جاري تحميل الفصول...'),
-            );
-          }
-
-          if (state.status == CubitStatus.error && state.classrooms.isEmpty) {
-            return _ErrorState(
-              message: state.apiErrorModel?.error?.message ??
-                  'تعذر تحميل الفصول الدراسية.',
-              onRetry: () => context
-                  .read<StudentEnrolledClassroomsCubit>()
-                  .getStudentEnrolledClassrooms(),
-            );
-          }
-
-          final classrooms = state.classrooms;
-
-          return RefreshIndicator(
-            onRefresh: () => context
-                .read<StudentEnrolledClassroomsCubit>()
-                .getStudentEnrolledClassrooms(),
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(
-                AppSizes.s16,
-                AppSizes.s16,
-                AppSizes.s16,
-                AppSizes.s32,
-              ),
-              children: [
-                _TopSummaryCard(
-                  totalClassrooms: classrooms.length,
-                  totalCount: state.totalCount,
-                  enrollmentCodeController: _enrollmentCodeController,
-                  onEnroll: () {
-                    final code = _enrollmentCodeController.text;
-                    if (code.trim().isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('يرجى إدخال رمز الفصل'),
-                          backgroundColor: AppColors.error,
-                        ),
-                      );
-                      return;
-                    }
-
-                    context
-                        .read<StudentEnrolledClassroomsCubit>()
-                        .enrollClassroom(code);
-                  },
-                  isLoading: state.status == CubitStatus.loading,
-                ),
-                const SizedBox(height: AppSizes.s20),
-                if (classrooms.isEmpty)
-                  _EmptyState(
-                    onRefresh: () => context
-                        .read<StudentEnrolledClassroomsCubit>()
-                        .getStudentEnrolledClassrooms(),
-                  )
-                else
-                  ...classrooms.asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final classroom = entry.value;
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        bottom: index == classrooms.length - 1
-                            ? AppSizes.s8
-                            : AppSizes.s12,
-                      ),
-                      child: _ClassroomCard(classroom: classroom),
-                    );
-                  }),
-                if (state.status == CubitStatus.loading && classrooms.isNotEmpty)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: AppSizes.s16),
-                    child: Center(
-                      child: SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: CircularProgressIndicator(strokeWidth: 2.5),
-                      ),
+      body:
+          BlocConsumer<
+            StudentEnrolledClassroomsCubit,
+            StudentEnrolledClassroomsState
+          >(
+            listener: (context, state) {
+              if (state.status == CubitStatus.error &&
+                  state.apiErrorModel?.error?.message != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      state.apiErrorModel!.error!.message!,
+                      style: AppTextStyles.body.copyWith(color: Colors.white),
                     ),
+                    backgroundColor: AppColors.error,
                   ),
-                if (state.page < state.totalPages)
-                  Padding(
-                    padding: const EdgeInsets.only(top: AppSizes.s16),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: state.status == CubitStatus.loading
-                            ? null
-                            : () => context
-                                .read<StudentEnrolledClassroomsCubit>()
-                                .getStudentEnrolledClassrooms(
-                                  page: state.page + 1,
-                                  pageSize: state.pageSize,
+                );
+              }
+              if (state.status == CubitStatus.success &&
+                  state.apiErrorModel == null) {
+                _enrollmentCodeController.clear();
+              }
+            },
+            builder: (context, state) {
+              if (state.status == CubitStatus.loading &&
+                  state.classrooms.isEmpty) {
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.primary),
+                );
+              }
+
+              if (state.status == CubitStatus.error &&
+                  state.classrooms.isEmpty) {
+                return _ErrorState(
+                  message:
+                      state.apiErrorModel?.error?.message ??
+                      'تعذر تحميل الفصول الدراسية.',
+                  onRetry: () => context
+                      .read<StudentEnrolledClassroomsCubit>()
+                      .getStudentEnrolledClassrooms(),
+                );
+              }
+
+              final classrooms = state.classrooms;
+
+              return RefreshIndicator(
+                color: AppColors.primary,
+                onRefresh: () => context
+                    .read<StudentEnrolledClassroomsCubit>()
+                    .getStudentEnrolledClassrooms(),
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSizes.s16,
+                    AppSizes.s16,
+                    AppSizes.s16,
+                    AppSizes.s32,
+                  ),
+                  children: [
+                    _TopSummaryCard(
+                      totalClassrooms: classrooms.length,
+                      totalCount: state.totalCount,
+                      enrollmentCodeController: _enrollmentCodeController,
+                      onEnroll: () {
+                        final code = _enrollmentCodeController.text;
+                        if (code.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'يرجى إدخال رمز الفصل',
+                                style: AppTextStyles.body.copyWith(
+                                  color: Colors.white,
                                 ),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.primary700,
-                          side: const BorderSide(color: AppColors.primary300),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppSizes.s12),
+                              ),
+                              backgroundColor: AppColors.error,
+                            ),
+                          );
+                          return;
+                        }
+
+                        context
+                            .read<StudentEnrolledClassroomsCubit>()
+                            .enrollClassroom(code);
+                      },
+                      isLoading: state.status == CubitStatus.loading,
+                    ),
+                    const SizedBox(height: 18),
+                    if (classrooms.isEmpty)
+                      _EmptyState(
+                        onRefresh: () => context
+                            .read<StudentEnrolledClassroomsCubit>()
+                            .getStudentEnrolledClassrooms(),
+                      )
+                    else
+                      ...classrooms.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final classroom = entry.value;
+                        final card = Padding(
+                          padding: const EdgeInsets.only(bottom: 14),
+                          child: _ClassroomCard(classroom: classroom),
+                        );
+
+                        if (index < 6) {
+                          return FadeInUp(
+                            delay: index * 50,
+                            child: card,
+                          );
+                        }
+                        return card;
+                      }),
+                    if (state.page < state.totalPages)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Center(
+                          child: SizedBox(
+                            width: 200,
+                            child: OutlinedButton.icon(
+                              onPressed: state.status == CubitStatus.loading
+                                  ? null
+                                  : () => context
+                                        .read<StudentEnrolledClassroomsCubit>()
+                                        .getStudentEnrolledClassrooms(
+                                          page: state.page + 1,
+                                          pageSize: state.pageSize,
+                                        ),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: AppColors.primary,
+                                side: const BorderSide(
+                                  color: AppColors.primary300,
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                              ),
+                              icon: const Icon(
+                                Icons.expand_more_rounded,
+                                size: 20,
+                              ),
+                              label: Text(
+                                'تحميل المزيد',
+                                style: AppTextStyles.label.copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                        icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                        label: const Text('تحميل المزيد'),
                       ),
-                    ),
-                  ),
-              ],
-            ),
-          );
-        },
-      ),
+                  ],
+                ),
+              );
+            },
+          ),
     );
   }
 }
@@ -200,19 +225,19 @@ class _TopSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppSizes.s20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.primary700, AppColors.primary500],
+          colors: [AppColors.primary800, AppColors.primary600],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(AppSizes.s20),
-        boxShadow: const [
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
           BoxShadow(
-            color: Color.fromRGBO(27, 109, 99, 0.18),
-            blurRadius: 18,
-            offset: Offset(0, 12),
+            color: AppColors.primary700.withValues(alpha: 0.25),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -222,31 +247,36 @@ class _TopSummaryCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 52,
-                height: 52,
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(AppSizes.s12),
+                  color: Colors.white.withValues(alpha: 0.18),
+                  borderRadius: BorderRadius.circular(14),
                 ),
-                child: const Icon(Icons.school_rounded, color: Colors.white, size: 28),
+                child: const Icon(
+                  Icons.school_rounded,
+                  color: Colors.white,
+                  size: 26,
+                ),
               ),
-              const SizedBox(width: AppSizes.s16),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'الفصول المسجلة',
-                      style: AppTextStyles.textTheme.bodyLarge?.copyWith(
+                      'فصولي الدراسية',
+                      style: AppTextStyles.h4.copyWith(
                         color: Colors.white,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
-                    const SizedBox(height: AppSizes.s4),
+                    const SizedBox(height: 2),
                     Text(
-                      '$totalClassrooms من $totalCount فصلاً',
-                      style: AppTextStyles.textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withValues(alpha: 0.9),
+                      '$totalClassrooms من إجمالي $totalCount فصلاً مسجلاً',
+                      style: AppTextStyles.body.copyWith(
+                        color: Colors.white.withValues(alpha: 0.85),
+                        fontSize: 13,
                       ),
                     ),
                   ],
@@ -254,14 +284,14 @@ class _TopSummaryCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSizes.s16),
+          const SizedBox(height: 18),
           Container(
-            padding: const EdgeInsets.all(AppSizes.s12),
+            padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(AppSizes.s16),
+              color: Colors.white.withValues(alpha: 0.14),
+              borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: Colors.white.withValues(alpha: 0.25),
               ),
             ),
             child: Row(
@@ -270,47 +300,65 @@ class _TopSummaryCard extends StatelessWidget {
                   child: TextField(
                     controller: enrollmentCodeController,
                     textAlign: TextAlign.right,
-                    style: const TextStyle(color: Colors.white),
+                    style: AppTextStyles.body.copyWith(
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
                     decoration: InputDecoration(
-                      hintText: 'أدخل رمز الفصل',
-                      hintStyle: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.75),
+                      hintText: 'أدخل رمز الانضمام للفصل...',
+                      fillColor: Colors.white.withValues(alpha: 0.1),
+                      hintStyle: AppTextStyles.body.copyWith(
+                        color: Colors.white.withValues(alpha: 0.7),
+                        fontSize: 13,
                       ),
-                      filled: true,
-                      fillColor: Colors.white.withValues(alpha: 0.08),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppSizes.s12),
-                        borderSide: BorderSide.none,
+                      prefixIcon: const Icon(
+                        Icons.vpn_key_rounded,
+                        color: Colors.white,
+                        size: 18,
                       ),
+                      border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(
-                        horizontal: AppSizes.s12,
-                        vertical: AppSizes.s8,
+                        horizontal: 12,
+                        vertical: 10,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: AppSizes.s8),
-                FilledButton.icon(
+                const SizedBox(width: 8),
+                ElevatedButton.icon(
                   onPressed: isLoading ? null : onEnroll,
-                  style: FilledButton.styleFrom(
+                  style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    foregroundColor: AppColors.primary700,
+                    foregroundColor: AppColors.primary,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: AppSizes.s12,
-                      vertical: AppSizes.s12,
+                      horizontal: 16,
+                      vertical: 10,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppSizes.s12),
+                      borderRadius: BorderRadius.circular(12),
                     ),
+                    elevation: 0,
                   ),
                   icon: isLoading
                       ? const SizedBox(
                           width: 16,
                           height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              AppColors.primary,
+                            ),
+                          ),
                         )
-                      : const Icon(Icons.add_rounded),
-                  label: Text(isLoading ? 'جارِ...' : 'تسجيل'),
+                      : const Icon(Icons.add_rounded, size: 18),
+                  label: Text(
+                    isLoading ? 'جارِ...' : 'انضمام',
+                    style: AppTextStyles.button.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -331,164 +379,227 @@ class _ClassroomCard extends StatelessWidget {
     final dateFormat = DateFormat('d MMM yyyy', 'ar');
     final startDate = classroom.startDate != null
         ? dateFormat.format(classroom.startDate!)
-        : 'تاريخ غير محدد';
+        : 'غير محدد';
     final endDate = classroom.endDate != null
         ? dateFormat.format(classroom.endDate!)
-        : 'حتى الآن';
+        : 'مستمر';
 
     return Container(
-      padding: const EdgeInsets.all(AppSizes.s16),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppSizes.s16),
-        border: Border.all(color: AppColors.border, width: 1),
-        boxShadow: const [
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.border),
+        boxShadow: [
           BoxShadow(
-            color: Color.fromRGBO(17, 24, 39, 0.04),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 12,
-            offset: Offset(0, 6),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: AppColors.primary100,
-                  borderRadius: BorderRadius.circular(AppSizes.s12),
-                ),
-                child: const Icon(
-                  Icons.menu_book_rounded,
-                  color: AppColors.primary700,
-                ),
-              ),
-              const SizedBox(width: AppSizes.s12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      classroom.name,
-                      style: AppTextStyles.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: AppSizes.s4),
-                    Text(
-                      'المادة: ${classroom.subjectName}',
-                      style: AppTextStyles.textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSizes.s8,
-                  vertical: AppSizes.s4,
-                ),
-                decoration: BoxDecoration(
-                  color: classroom.isActive
-                      ? AppColors.primary100
-                      : AppColors.backgroundMuted,
-                  borderRadius: BorderRadius.circular(AppSizes.s8),
-                ),
-                child: Text(
-                  classroom.isActive ? 'نشط' : 'غير نشط',
-                  style: AppTextStyles.textTheme.labelMedium?.copyWith(
-                    color: classroom.isActive ? AppColors.primary700 : AppColors.textSecondary,
-                    fontWeight: FontWeight.w700,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary50,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.primary200),
+                  ),
+                  child: const Icon(
+                    Icons.menu_book_rounded,
+                    color: AppColors.primary,
+                    size: 22,
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSizes.s16),
-          Wrap(
-            spacing: AppSizes.s8,
-            runSpacing: AppSizes.s8,
-            children: [
-              _InfoChip(label: 'المرحلة', value: classroom.gradeLevelName),
-              _InfoChip(label: 'النوع', value: classroom.classroomTypeName),
-            ],
-          ),
-          const SizedBox(height: AppSizes.s12),
-          Row(
-            children: [
-              const Icon(Icons.calendar_today_rounded, size: 16, color: AppColors.primary700),
-              const SizedBox(width: AppSizes.s4),
-              Expanded(
-                child: Text(
-                  '$startDate - $endDate',
-                  style: AppTextStyles.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textSecondary,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        classroom.name,
+                        style: AppTextStyles.h5.copyWith(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        classroom.subjectName,
+                        style: AppTextStyles.body.copyWith(
+                          color: AppColors.textSecondary,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSizes.s24),
-          SizedBox(
-            width: double.infinity,
-            child: Row(
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: classroom.isActive
+                        ? AppColors.success.withValues(alpha: 0.12)
+                        : AppColors.backgroundMuted,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: classroom.isActive
+                          ? AppColors.success.withValues(alpha: 0.3)
+                          : AppColors.border,
+                    ),
+                  ),
+                  child: Text(
+                    classroom.isActive ? 'نشط' : 'مكتمل',
+                    style: AppTextStyles.label.copyWith(
+                      color: classroom.isActive
+                          ? AppColors.success
+                          : AppColors.textSecondary,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 11,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                _InfoPill(
+                  icon: Icons.grade_outlined,
+                  text: classroom.gradeLevelName,
+                ),
+                const SizedBox(width: 8),
+                _InfoPill(
+                  icon: Icons.category_outlined,
+                  text: classroom.classroomTypeName,
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                const Icon(
+                  Icons.calendar_today_outlined,
+                  size: 14,
+                  color: AppColors.foregroundMuted,
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    '$startDate - $endDate',
+                    style: AppTextStyles.body.copyWith(
+                      color: AppColors.textSecondary,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            const Divider(color: AppColors.border, height: 1),
+            const SizedBox(height: 12),
+            Row(
               children: [
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: () => context.push(
                       AppRoutes.studentChannelPage(classroom.classroomId),
                     ),
-                    icon: const Icon(Icons.forum_outlined),
-                    label: const Text('قناة الأسئلة'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      side: const BorderSide(color: AppColors.primary300),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    icon: const Icon(Icons.forum_outlined, size: 18),
+                    label: Text(
+                      'قناة الأسئلة',
+                      style: AppTextStyles.label.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ),
-                const SizedBox(width: AppSizes.s8),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: FilledButton.icon(
+                  child: ElevatedButton.icon(
                     onPressed: () => context.push(
                       AppRoutes.studentClassroomMaterialsPage(
                         classroom.classroomId,
                       ),
                       extra: classroom.name,
                     ),
-                    icon: const Icon(Icons.folder_copy_outlined),
-                    label: const Text('المواد'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    icon: const Icon(Icons.folder_copy_outlined, size: 18),
+                    label: Text(
+                      'المواد الدراسية',
+                      style: AppTextStyles.button.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13,
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
-class _InfoChip extends StatelessWidget {
-  final String label;
-  final String value;
+class _InfoPill extends StatelessWidget {
+  final IconData icon;
+  final String text;
 
-  const _InfoChip({required this.label, required this.value});
+  const _InfoPill({required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSizes.s8, vertical: AppSizes.s4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: AppColors.backgroundSecondary,
-        borderRadius: BorderRadius.circular(AppSizes.s8),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColors.border),
       ),
-      child: Text(
-        '$label: $value',
-        style: AppTextStyles.textTheme.labelMedium?.copyWith(
-          color: AppColors.textSecondary,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: AppColors.foregroundMuted),
+          const SizedBox(width: 4),
+          Text(
+            text,
+            style: AppTextStyles.label.copyWith(
+              color: AppColors.foregroundMuted,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -504,22 +615,54 @@ class _ErrorState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppSizes.s24),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline_rounded, size: 56, color: AppColors.error),
-            const SizedBox(height: AppSizes.s16),
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: AppColors.error.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.error_outline_rounded,
+                size: 32,
+                color: AppColors.error,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'حدث خطأ في تحميل الفصول',
+              style: AppTextStyles.h5.copyWith(
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 6),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: AppTextStyles.textTheme.titleMedium,
+              style: AppTextStyles.body.copyWith(
+                color: AppColors.textSecondary,
+              ),
             ),
-            const SizedBox(height: AppSizes.s16),
-            FilledButton.icon(
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
               onPressed: onRetry,
-              icon: const Icon(Icons.refresh_rounded),
-              label: const Text('إعادة المحاولة'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              icon: const Icon(Icons.refresh_rounded, size: 18),
+              label: Text(
+                'إعادة المحاولة',
+                style: AppTextStyles.button.copyWith(color: Colors.white),
+              ),
             ),
           ],
         ),
@@ -537,7 +680,7 @@ class _EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppSizes.s24),
+        padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -545,33 +688,51 @@ class _EmptyState extends StatelessWidget {
               width: 88,
               height: 88,
               decoration: BoxDecoration(
-                color: AppColors.primary100,
-                borderRadius: BorderRadius.circular(AppSizes.s20),
+                color: AppColors.primary50,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.primary200, width: 1.5),
               ),
               child: const Icon(
-                Icons.menu_book_rounded,
-                size: 42,
-                color: AppColors.primary700,
+                Icons.school_outlined,
+                size: 40,
+                color: AppColors.primary,
               ),
             ),
-            const SizedBox(height: AppSizes.s20),
+            const SizedBox(height: 20),
             Text(
               'لا توجد فصول مسجلة بعد',
-              style: AppTextStyles.textTheme.titleMedium,
+              style: AppTextStyles.h4.copyWith(
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary,
+              ),
             ),
-            const SizedBox(height: AppSizes.s8),
+            const SizedBox(height: 8),
             Text(
-              'ستظهر الفصول التي تنضم إليها هنا.',
+              'ستظهر الفصول التي تنضم إليها برمز أو تشترك بها هنا.',
               textAlign: TextAlign.center,
-              style: AppTextStyles.textTheme.bodyMedium?.copyWith(
+              style: AppTextStyles.body.copyWith(
                 color: AppColors.textSecondary,
               ),
             ),
-            const SizedBox(height: AppSizes.s20),
-            TextButton.icon(
+            const SizedBox(height: 20),
+            OutlinedButton.icon(
               onPressed: onRefresh,
-              icon: const Icon(Icons.refresh_rounded),
-              label: const Text('تحديث'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                side: const BorderSide(color: AppColors.primary300),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              icon: const Icon(Icons.refresh_rounded, size: 18),
+              label: Text(
+                'تحديث القائمة',
+                style: AppTextStyles.label.copyWith(color: AppColors.primary),
+              ),
             ),
           ],
         ),

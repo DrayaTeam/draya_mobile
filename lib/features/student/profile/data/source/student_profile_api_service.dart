@@ -15,4 +15,10 @@ abstract class StudentProfileApiService {
   Future<StudentProfileModel> updateStudentProfile(
     @Body() UpdateStudentProfileRequestModel request,
   );
+
+  @POST(StudentProfileApiConstants.uploadProfilePicture)
+  @MultiPart()
+  Future<dynamic> uploadProfilePicture(
+    @Part(name: "file") MultipartFile file,
+  );
 }

@@ -2,9 +2,9 @@ import 'package:draya_mobile/core/enums/cubit_status.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
 import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
 import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
+import 'package:draya_mobile/core/widgets/fade_in_up_animation.dart';
 import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/features/student/teachers/data/models/teacher_model.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_cubit.dart';
@@ -79,8 +79,8 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSizes.s20,
-              vertical: AppSizes.s16,
+              horizontal: AppSizes.s16,
+              vertical: AppSizes.s12,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,22 +89,21 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: Text(
-                        'المعلمون',
-                        style: AppTextStyles.h3.copyWith(
-                          color: AppColors.textPrimary,
-                        ),
+                    Text(
+                      'المعلمون المتاحون',
+                      style: AppTextStyles.h3.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: AppSizes.s12,
-                        vertical: AppSizes.s8,
+                        horizontal: 12,
+                        vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primary100,
-                        borderRadius: BorderRadius.circular(999),
+                        color: AppColors.primary50,
+                        borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: AppColors.primary200,
                           width: 1,
@@ -113,34 +112,34 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                       child: Text(
                         '${teachers.length} معلم',
                         style: AppTextStyles.label.copyWith(
-                          color: AppColors.primary700,
+                          color: AppColors.primary,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: AppSizes.s8),
+                const SizedBox(height: 6),
                 Text(
-                  'تصفح المعلمين المتاحين حسب الاسم أو التخصص، ثم تواصل معهم مباشرة عبر البريد أو الهاتف.',
+                  'تصفح المعلمين المتاحين واكتشف فصولهم الدراسية للتسجيل بها.',
                   style: AppTextStyles.body.copyWith(
                     color: AppColors.textSecondary,
-                    height: 1.5,
+                    fontSize: 13,
                   ),
                 ),
-                const SizedBox(height: AppSizes.s20),
+                const SizedBox(height: 16),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(AppSizes.s16),
+                  padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(AppSizes.s20),
-                    border: Border.all(color: AppColors.border, width: 1),
-                    boxShadow: const [
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(color: AppColors.border),
+                    boxShadow: [
                       BoxShadow(
-                        color: Color.fromRGBO(17, 24, 39, 0.04),
-                        blurRadius: 20,
-                        offset: Offset(0, 8),
+                        color: Colors.black.withValues(alpha: 0.02),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
@@ -149,49 +148,68 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                     children: [
                       AppTextFormField(
                         controller: _searchController,
-                        hintText: 'ابحث باسم المعلم أو البريد أو التخصص...',
-                        prefixIcon: Icons.search,
+                        hintText: 'ابحث باسم المعلم أو التخصص...',
+                        prefixIcon: Icons.search_rounded,
                         onChanged: _onSearchChanged,
                       ),
-                      const SizedBox(height: AppSizes.s16),
+                      const SizedBox(height: 12),
                       SizedBox(
-                        height: 42,
+                        height: 38,
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemCount: specializations.length,
                           separatorBuilder: (_, _) =>
-                              const SizedBox(width: AppSizes.s8),
+                              const SizedBox(width: 8),
                           itemBuilder: (context, index) {
                             final specialization = specializations[index];
                             final isSelected =
                                 specialization == _selectedSpecialization;
-                            return GestureDetector(
-                              onTap: () =>
-                                  _onSpecializationSelected(specialization),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: AppSizes.s12,
-                                  vertical: AppSizes.s8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? AppColors.primary700
-                                      : AppColors.backgroundMuted,
-                                  borderRadius: BorderRadius.circular(999),
-                                  border: Border.all(
-                                    color: isSelected
-                                        ? AppColors.primary700
-                                        : AppColors.border,
-                                    width: 1,
+                            return Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () =>
+                                    _onSpecializationSelected(specialization),
+                                borderRadius: BorderRadius.circular(20),
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                    vertical: 6,
                                   ),
-                                ),
-                                child: Text(
-                                  specialization,
-                                  style: AppTextStyles.label.copyWith(
+                                  decoration: BoxDecoration(
                                     color: isSelected
-                                        ? AppColors.surface
-                                        : AppColors.textPrimary,
-                                    fontWeight: FontWeight.w700,
+                                        ? AppColors.primary
+                                        : AppColors.backgroundSecondary,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? AppColors.primary
+                                          : AppColors.border,
+                                      width: 1,
+                                    ),
+                                    boxShadow: isSelected
+                                        ? [
+                                            BoxShadow(
+                                              color: AppColors.primary
+                                                  .withValues(alpha: 0.2),
+                                              blurRadius: 6,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ]
+                                        : null,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      specialization,
+                                      style: AppTextStyles.label.copyWith(
+                                        color: isSelected
+                                            ? Colors.white
+                                            : AppColors.foregroundMuted,
+                                        fontWeight: isSelected
+                                            ? FontWeight.w700
+                                            : FontWeight.w600,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -202,44 +220,67 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                     ],
                   ),
                 ),
-                const SizedBox(height: AppSizes.s20),
+                const SizedBox(height: 16),
                 Expanded(
                   child: state.status == CubitStatus.loading && teachers.isEmpty
                       ? const Center(
-                          child: AppCustomLoading(
-                            text: 'جاري تحميل المعلمين...',
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
                           ),
                         )
                       : state.status == CubitStatus.error && teachers.isEmpty
                       ? Center(
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(AppSizes.s20),
-                            decoration: BoxDecoration(
-                              color: AppColors.surface,
-                              borderRadius: BorderRadius.circular(
-                                AppSizes.s20,
-                              ),
-                              border: Border.all(
-                                color: AppColors.border,
-                                width: 1,
-                              ),
-                            ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(24),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(
-                                  Icons.error_outline_rounded,
-                                  color: AppColors.error,
-                                  size: 32,
+                                Container(
+                                  width: 64,
+                                  height: 64,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.error.withValues(alpha: 0.1),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.error_outline_rounded,
+                                    color: AppColors.error,
+                                    size: 32,
+                                  ),
                                 ),
-                                const SizedBox(height: AppSizes.s12),
+                                const SizedBox(height: 14),
                                 Text(
-                                  'تعذر تحميل المعلمين في الوقت الحالي.',
+                                  'تعذر تحميل قائمة المعلمين',
+                                  style: AppTextStyles.h5.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.textPrimary,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  'يرجى التحقق من اتصالك والمحاولة مرة أخرى.',
                                   style: AppTextStyles.body.copyWith(
                                     color: AppColors.textSecondary,
                                   ),
                                   textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 16),
+                                ElevatedButton.icon(
+                                  onPressed: () => context
+                                      .read<TeacherCubit>()
+                                      .getTeachers(),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.primary,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  icon: const Icon(Icons.refresh_rounded, size: 18),
+                                  label: Text(
+                                    'إعادة المحاولة',
+                                    style: AppTextStyles.button.copyWith(color: Colors.white),
+                                  ),
                                 ),
                               ],
                             ),
@@ -247,30 +288,35 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                         )
                       : filteredTeachers.isEmpty
                       ? Center(
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(AppSizes.s20),
-                            decoration: BoxDecoration(
-                              color: AppColors.surface,
-                              borderRadius: BorderRadius.circular(
-                                AppSizes.s20,
-                              ),
-                              border: Border.all(
-                                color: AppColors.border,
-                                width: 1,
-                              ),
-                            ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(24),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(
-                                  Icons.search_off_rounded,
-                                  color: AppColors.textSecondary,
-                                  size: 32,
+                                Container(
+                                  width: 64,
+                                  height: 64,
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.primary50,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.person_search_rounded,
+                                    color: AppColors.primary,
+                                    size: 32,
+                                  ),
                                 ),
-                                const SizedBox(height: AppSizes.s12),
+                                const SizedBox(height: 14),
                                 Text(
-                                  'لا يوجد معلمين مطابقين.',
+                                  'لا يوجد معلمون مطابقون للبحث',
+                                  style: AppTextStyles.h5.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.textPrimary,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  'جرب البحث باسم آخر أو تغيير فلتر التخصص.',
                                   style: AppTextStyles.body.copyWith(
                                     color: AppColors.textSecondary,
                                   ),
@@ -280,33 +326,47 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                             ),
                           ),
                         )
-                      : ListView.builder(
-                          itemCount: filteredTeachers.length,
-                          padding: EdgeInsets.zero,
-                          physics: const BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            final teacher = filteredTeachers[index];
-                            return TeacherCardItem(
-                              fullName: teacher.fullName ?? 'N/A',
-                              email: teacher.email ?? 'N/A',
-                              phone: teacher.phone ?? 'N/A',
-                              specialization: teacher.specialization ?? 'N/A',
-                              onViewClassrooms: () {
-                                final teacherId = teacher.userId;
-                                if (teacherId == null ||
-                                    teacherId.trim().isEmpty) {
-                                  return;
-                                }
+                      : RefreshIndicator(
+                          color: AppColors.primary,
+                          onRefresh: () =>
+                              context.read<TeacherCubit>().getTeachers(),
+                          child: ListView.builder(
+                            itemCount: filteredTeachers.length,
+                            padding: const EdgeInsets.only(bottom: 24),
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              final teacher = filteredTeachers[index];
+                              final card = TeacherCardItem(
+                                fullName: teacher.fullName ?? 'غير معروف',
+                                email: teacher.email ?? '',
+                                phone: teacher.phone ?? '',
+                                specialization:
+                                    teacher.specialization ?? 'عام',
+                                onViewClassrooms: () {
+                                  final teacherId = teacher.userId;
+                                  if (teacherId == null ||
+                                      teacherId.trim().isEmpty) {
+                                    return;
+                                  }
 
-                                context.push(
-                                  AppRoutes.teacherClassroomsPage(
-                                    teacherId,
-                                  ),
-                                  extra: teacher,
+                                  context.push(
+                                    AppRoutes.teacherClassroomsPage(
+                                      teacherId,
+                                    ),
+                                    extra: teacher,
+                                  );
+                                },
+                              );
+
+                              if (index < 6) {
+                                return FadeInUp(
+                                  delay: index * 50,
+                                  child: card,
                                 );
-                              },
-                            );
-                          },
+                              }
+                              return card;
+                            },
+                          ),
                         ),
                 ),
               ],
@@ -320,8 +380,9 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
   List<TeacherModel> _filterTeachers(List<TeacherModel> teachers) {
     final query = _searchController.text.trim().toLowerCase();
     return teachers.where((teacher) {
-      final matchesQuery =
-          query.isEmpty || teacher.fullName!.toLowerCase().contains(query);
+      final name = (teacher.fullName ?? '').toLowerCase();
+      final spec = (teacher.specialization ?? '').toLowerCase();
+      final matchesQuery = query.isEmpty || name.contains(query) || spec.contains(query);
       final matchesSpecialization =
           _selectedSpecialization == 'كل التخصصات' ||
           teacher.specialization == _selectedSpecialization;

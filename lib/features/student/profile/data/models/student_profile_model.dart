@@ -9,6 +9,7 @@ class StudentProfileModel {
   final String? fullName;
   final String? parentGuardianEmail;
   final DateTime? dateOfBirth;
+  final String? profilePictureUrl;
 
   const StudentProfileModel({
     this.userId,
@@ -16,6 +17,7 @@ class StudentProfileModel {
     this.fullName,
     this.parentGuardianEmail,
     this.dateOfBirth,
+    this.profilePictureUrl,
   });
 
   factory StudentProfileModel.fromJson(Map<String, dynamic> json) =>

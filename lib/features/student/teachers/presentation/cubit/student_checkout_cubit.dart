@@ -10,6 +10,8 @@ class StudentCheckoutCubit extends Cubit<StudentCheckoutState> {
   StudentCheckoutCubit(this._checkoutClassroomUseCase)
       : super(const StudentCheckoutState());
 
+  static const paymentResultRedirectUrl = 'https://draya.com/payment/result';
+
   Future<void> checkoutClassroom(String classroomId) async {
     if (classroomId.trim().isEmpty) {
       emit(
@@ -23,7 +25,12 @@ class StudentCheckoutCubit extends Cubit<StudentCheckoutState> {
 
     emit(state.copyWith(status: CubitStatus.loading, apiErrorModel: null));
 
-    final result = await _checkoutClassroomUseCase.call(params: classroomId);
+    final result = await _checkoutClassroomUseCase.call(
+      params: CheckoutClassroomParams(
+        classroomId: classroomId,
+        redirectionUrl: paymentResultRedirectUrl,
+      ),
+    );
 
     result.when(
       success: (response) {

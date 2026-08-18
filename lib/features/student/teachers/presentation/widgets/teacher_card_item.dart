@@ -27,114 +27,154 @@ class TeacherCardItem extends StatelessWidget {
       label: 'بطاقة المعلم $fullName، تخصص $specialization',
       child: Container(
         margin: const EdgeInsets.only(bottom: AppSizes.s16),
-        padding: const EdgeInsets.all(AppSizes.s16),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(AppSizes.s20),
-          border: Border.all(color: AppColors.border, width: 1),
-          boxShadow: const [
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.border),
+          boxShadow: [
             BoxShadow(
-              color: Color.fromRGBO(17, 24, 39, 0.04),
-              blurRadius: 20,
-              offset: Offset(0, 8),
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 52,
-                  height: 52,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary100,
-                    borderRadius: BorderRadius.circular(AppSizes.s16),
-                  ),
-                  child: Text(
-                    initials,
-                    style: AppTextStyles.h5.copyWith(
-                      color: AppColors.primary700,
-                      fontWeight: FontWeight.w800,
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [AppColors.primary700, AppColors.primary500],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      initials,
+                      style: AppTextStyles.h4.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                fullName,
+                                style: AppTextStyles.h4.copyWith(
+                                  color: AppColors.textPrimary,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            const Icon(
+                              Icons.verified_rounded,
+                              color: AppColors.primary,
+                              size: 18,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 3,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary50,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: AppColors.primary200,
+                              width: 1,
+                            ),
+                          ),
+                          child: Text(
+                            specialization,
+                            style: AppTextStyles.label.copyWith(
+                              fontSize: 12,
+                              color: AppColors.primary700,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundSecondary,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: AppColors.border),
                 ),
-                const SizedBox(width: AppSizes.s12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        fullName,
-                        style: AppTextStyles.h4.copyWith(
-                          color: AppColors.textPrimary,
-                          fontWeight: FontWeight.w700,
-                        ),
+                child: Column(
+                  children: [
+                    _buildInfoRow(
+                      icon: Icons.email_outlined,
+                      label: email.isEmpty ? 'غير متوفر' : email,
+                    ),
+                    if (phone.isNotEmpty) ...[
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 6),
+                        child: Divider(color: AppColors.border, height: 1),
                       ),
-                      const SizedBox(height: AppSizes.s4),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSizes.s8,
-                          vertical: AppSizes.s4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary50,
-                          borderRadius: BorderRadius.circular(999),
-                          border: Border.all(
-                            color: AppColors.primary100,
-                            width: 1,
-                          ),
-                        ),
-                        child: Text(
-                          specialization,
-                          style: AppTextStyles.label.copyWith(
-                            color: AppColors.primary700,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
+                      _buildInfoRow(
+                        icon: Icons.phone_outlined,
+                        label: phone,
                       ),
                     ],
-                  ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: AppSizes.s16),
-            Column(
-              children: [
-                _buildInfoRow(
-                  icon: Icons.email_outlined,
-                  label: email.isEmpty ? 'N/A' : email,
-                ),
-                const SizedBox(height: AppSizes.s8),
-                _buildInfoRow(
-                  icon: Icons.phone_outlined,
-                  label: phone,
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSizes.s16),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: onViewClassrooms,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary700,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: AppSizes.s12,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppSizes.s12),
-                  ),
-                ),
-                icon: const Icon(Icons.school_outlined, size: 18),
-                label: const Text('عرض الفصول'),
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                height: 46,
+                child: ElevatedButton.icon(
+                  onPressed: onViewClassrooms,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    elevation: 0,
+                  ),
+                  icon: const Icon(Icons.school_rounded, size: 20),
+                  label: Text(
+                    'عرض الفصول الدراسية',
+                    style: AppTextStyles.button.copyWith(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -153,38 +193,22 @@ class TeacherCardItem extends StatelessWidget {
     required IconData icon,
     required String label,
   }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSizes.s12,
-        vertical: AppSizes.s8,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundMuted,
-        borderRadius: BorderRadius.circular(AppSizes.s12),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 28,
-            height: 28,
-            decoration: BoxDecoration(
-              color: AppColors.primary100,
-              borderRadius: BorderRadius.circular(AppSizes.s8),
-            ),
-            child: Icon(icon, size: 16, color: AppColors.primary700),
-          ),
-          const SizedBox(width: AppSizes.s8),
-          Expanded(
-            child: Text(
-              label,
-              style: AppTextStyles.body.copyWith(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.w600,
-              ),
+    return Row(
+      children: [
+        Icon(icon, size: 16, color: AppColors.primary),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            label,
+            style: AppTextStyles.body.copyWith(
+              color: AppColors.textPrimary,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
+

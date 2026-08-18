@@ -12,4 +12,10 @@ abstract class TeacherProfileApiService {
 
   @GET(TeacherProfileApiConstants.teacherProfile)
   Future<TeacherModel> getTeacherProfile();
+
+  @POST(TeacherProfileApiConstants.uploadProfilePicture)
+  @MultiPart()
+  Future<dynamic> uploadProfilePicture(
+    @Part(name: "file") MultipartFile file,
+  );
 }

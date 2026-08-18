@@ -12,6 +12,7 @@ class UserProfileModel {
   final String? role;
   final String? parentGuardianEmail;
   final DateTime? dateOfBirth;
+  final String? profilePictureUrl;
 
   const UserProfileModel({
     this.userId,
@@ -20,6 +21,7 @@ class UserProfileModel {
     this.role,
     this.parentGuardianEmail,
     this.dateOfBirth,
+    this.profilePictureUrl,
   });
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) =>
@@ -36,6 +38,7 @@ extension UserProfileModelX on UserProfileModel {
       fullName: fullName ?? '',
       parentGuardianEmail: parentGuardianEmail ?? '',
       dateOfBirth: dateOfBirth,
+      profilePictureUrl: profilePictureUrl,
     );
   }
 }

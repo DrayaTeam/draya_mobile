@@ -8,12 +8,14 @@ class TeacherModel {
   final String email;
   final String fullName;
   final String phone;
+  final String? profilePictureUrl;
 
   const TeacherModel({
     required this.userId,
     required this.email,
     required this.fullName,
     required this.phone,
+    this.profilePictureUrl,
   });
 
   factory TeacherModel.fromJson(Map<String, dynamic> json) =>

@@ -28,9 +28,11 @@ import 'package:draya_mobile/features/teacher/subjects/presentation/pages/create
 import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/classrooms_page.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/classroom_students_page.dart';
 import 'package:draya_mobile/features/student/teachers/data/models/teacher_model.dart';
+import 'package:draya_mobile/features/student/teachers/presentation/pages/payment_result_page.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
 import 'package:draya_mobile/features/teacher/teacher_channel/presentation/pages/teacher_channel_screen.dart';
 import 'package:go_router/go_router.dart';
+
 
 const authRoutes = {
   AppRoutes.signinPage,
@@ -217,6 +219,15 @@ abstract final class AppRouter {
                 );
 
           return PaymentWebViewPage(model);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.paymentResultPage,
+        builder: (context, state) {
+          final transactionId = state.extra as String? ??
+              state.uri.queryParameters['transactionId'] ??
+              '';
+          return PaymentResultPage(transactionId: transactionId);
         },
       ),
       GoRoute(

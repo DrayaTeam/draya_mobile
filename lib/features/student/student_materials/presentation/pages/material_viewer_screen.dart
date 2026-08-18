@@ -1,7 +1,8 @@
 import 'package:chewie/chewie.dart';
 import 'package:draya_mobile/core/helpers/app_token_helper.dart';
+import 'package:draya_mobile/core/helpers/app_url_helper.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
+import 'package:draya_mobile/core/theme/app_text_styles.dart';
 import 'package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart';
 import 'package:flutter/material.dart';
 import 'package:pdfrx/pdfrx.dart';
@@ -82,115 +83,193 @@ class _StudentMaterialsViewerScreenState
     });
   }
 
+  void _downloadCurrentMaterial() {
+    final fileUrl = _selectedMaterial.currentVersion.fileUrl;
+    final downloadUrl = (fileUrl != null && fileUrl.isNotEmpty)
+        ? fileUrl
+        : _selectedUrl;
+    AppUrlHelper.launchURL(downloadUrl, context);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final hasDownload =
+        _selectedMaterial.currentVersion.isReady &&
+        ((_selectedMaterial.currentVersion.fileUrl != null &&
+                _selectedMaterial.currentVersion.fileUrl!.isNotEmpty) ||
+            !_selectedMaterial.isVideo);
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        backgroundColor: AppColors.surface,
+        elevation: 0,
+        centerTitle: false,
         title: Text(
           _selectedMaterial.title,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.titleSmall,
+          style: AppTextStyles.h5.copyWith(
+            fontWeight: FontWeight.w700,
+            color: AppColors.textPrimary,
+          ),
         ),
+        actions: [
+          if (hasDownload)
+            IconButton(
+              icon: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: AppColors.primary50,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColors.primary200),
+                ),
+                child: const Icon(
+                  Icons.download_rounded,
+                  color: AppColors.primary,
+                  size: 20,
+                ),
+              ),
+              tooltip: 'تحميل المادة',
+              onPressed: _downloadCurrentMaterial,
+            ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) => Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: (constraints.maxHeight * 0.42).clamp(180.0, 300.0),
-              child: _buildViewer(),
-            ),
-            const Divider(height: 1),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              child: Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(Icons.collections_bookmark_outlined,
-                        color: Colors.white),
-                  ),
-                  const SizedBox(width: AppSizes.s16),
-                  Text(
-                    'مواد الفصول المسجّل بها:',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ],
+            children: [
+              SizedBox(
+                width: double.infinity,
+                height: (constraints.maxHeight * 0.44).clamp(180.0, 320.0),
+                child: _buildViewer(),
               ),
-            ),
-            const SizedBox(height: AppSizes.s8),
-            Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-                itemCount: _viewableMaterials.length,
-                separatorBuilder: (_, _) => const SizedBox(height: 8),
-                itemBuilder: (context, index) {
-                  final material = _viewableMaterials[index];
-                  final isSelected =
-                      material.materialId == _selectedMaterial.materialId;
-                  return Semantics(
-                    button: true,
-                    selected: isSelected,
-                    label: 'Open ${material.title}',
-                    child: Material(
-                      color: isSelected
-                          ? AppColors.primary100
-                          : AppColors.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        onTap: () => _selectMaterial(material),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: isSelected
-                                  ? AppColors.primary
-                                  : AppColors.border,
+              const Divider(color: AppColors.border, height: 1),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary50,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: AppColors.primary200),
+                      ),
+                      child: const Icon(
+                        Icons.collections_bookmark_rounded,
+                        color: AppColors.primary,
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      'مواد الفصل الدراسي:',
+                      style: AppTextStyles.h5.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '${_viewableMaterials.length} مادة',
+                      style: AppTextStyles.label.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 4),
+              Expanded(
+                child: ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+                  itemCount: _viewableMaterials.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    final material = _viewableMaterials[index];
+                    final isSelected =
+                        material.materialId == _selectedMaterial.materialId;
+                    return Semantics(
+                      button: true,
+                      selected: isSelected,
+                      label: 'Open ${material.title}',
+                      child: Material(
+                        color: isSelected
+                            ? AppColors.primary50
+                            : AppColors.surface,
+                        borderRadius: BorderRadius.circular(14),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(14),
+                          onTap: () => _selectMaterial(material),
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: isSelected
+                                    ? AppColors.primary
+                                    : AppColors.border,
+                                width: isSelected ? 1.5 : 1,
+                              ),
+                              borderRadius: BorderRadius.circular(14),
                             ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                material.isVideo
-                                    ? Icons.play_circle_outline_rounded
-                                    : Icons.picture_as_pdf_outlined,
-                                color: material.isVideo
-                                    ? AppColors.ai700
-                                    : AppColors.error,
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  material.title,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        (material.isVideo
+                                                ? AppColors.ai700
+                                                : AppColors.error)
+                                            .withValues(alpha: 0.1),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Icon(
+                                    material.isVideo
+                                        ? Icons.play_circle_fill_rounded
+                                        : Icons.picture_as_pdf_rounded,
+                                    color: material.isVideo
+                                        ? AppColors.ai700
+                                        : AppColors.error,
+                                    size: 20,
+                                  ),
                                 ),
-                              ),
-                              if (isSelected)
-                                const Icon(
-                                  Icons.check_circle_rounded,
-                                  color: AppColors.primary,
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    material.title,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppTextStyles.body.copyWith(
+                                      color: isSelected
+                                          ? AppColors.primary700
+                                          : AppColors.textPrimary,
+                                      fontWeight: isSelected
+                                          ? FontWeight.w700
+                                          : FontWeight.w500,
+                                    ),
+                                  ),
                                 ),
-                            ],
+                                if (isSelected)
+                                  const Icon(
+                                    Icons.check_circle_rounded,
+                                    color: AppColors.primary,
+                                    size: 20,
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
         ),
       ),
     );
@@ -200,19 +279,35 @@ class _StudentMaterialsViewerScreenState
     if (_isLoadingMaterial) {
       return const ColoredBox(
         color: Colors.black,
-        child: Center(child: CircularProgressIndicator(color: Colors.white)),
+        child: Center(
+          child: CircularProgressIndicator(color: AppColors.primary),
+        ),
       );
     }
     if (_hasLoadingError) {
-      return const ColoredBox(
-        color: Colors.black,
+      return ColoredBox(
+        color: AppColors.backgroundSecondary,
         child: Center(
           child: Padding(
-            padding: EdgeInsets.all(24),
-            child: Text(
-              'Unable to open this material. Please try again.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.error_outline_rounded,
+                  color: AppColors.error,
+                  size: 36,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'تعذر فتح هذه المادة حالياً.',
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.body.copyWith(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -220,20 +315,25 @@ class _StudentMaterialsViewerScreenState
     }
     if (!_selectedMaterial.isVideo && _isLoadingAccessToken) {
       return const ColoredBox(
-        color: AppColors.backgroundMuted,
-        child: Center(child: CircularProgressIndicator()),
+        color: AppColors.backgroundSecondary,
+        child: Center(
+          child: CircularProgressIndicator(color: AppColors.primary),
+        ),
       );
     }
     if (!_selectedMaterial.isVideo &&
         (_accessToken == null || _accessToken!.isEmpty)) {
-      return const ColoredBox(
-        color: AppColors.backgroundMuted,
+      return ColoredBox(
+        color: AppColors.backgroundSecondary,
         child: Center(
           child: Padding(
-            padding: EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
             child: Text(
-              'Your session has expired. Please sign in again.',
+              'انتهت جلستك. يرجى تسجيل الدخول مجدداً.',
               textAlign: TextAlign.center,
+              style: AppTextStyles.body.copyWith(
+                color: AppColors.textPrimary,
+              ),
             ),
           ),
         ),
@@ -251,7 +351,7 @@ class _StudentMaterialsViewerScreenState
               key: ValueKey(_selectedUrl),
               headers: {'Authorization': 'Bearer $_accessToken'},
               params: const PdfViewerParams(
-                backgroundColor: AppColors.backgroundMuted,
+                backgroundColor: AppColors.backgroundSecondary,
               ),
             ),
     );
