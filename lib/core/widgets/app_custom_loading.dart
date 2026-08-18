@@ -1,6 +1,7 @@
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/widgets/animated_fading_wrapper.dart';
 import 'package:flutter/material.dart';
+
 class AppCustomLoading extends StatelessWidget {
   final String? text;
   const AppCustomLoading({super.key, this.text});
@@ -10,10 +11,10 @@ class AppCustomLoading extends StatelessWidget {
     return AnimatedFadingWrapper(
       child: Dialog(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.surface,
         constraints: const BoxConstraints(maxHeight: 500, maxWidth: 500),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.circular(12),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(
           padding: const EdgeInsetsDirectional.symmetric(

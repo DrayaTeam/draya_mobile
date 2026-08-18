@@ -3,7 +3,6 @@ import 'package:draya_mobile/core/enums/material_type_enum.dart';
 import 'package:draya_mobile/core/helpers/app_dialog_helper.dart';
 import 'package:draya_mobile/core/helpers/app_extensions.dart';
 import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/widgets/app_card_container_empty.dart';
 import 'package:draya_mobile/core/widgets/app_card_container_info.dart';
@@ -131,7 +130,6 @@ class _MaterialsPageState extends State<MaterialsPage> {
             context,
             AppErrorDialog(
               apiErrorModel: state.apiErrorModel!,
-              onRetry: () {},
             ),
           );
         }

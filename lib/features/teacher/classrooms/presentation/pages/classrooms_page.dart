@@ -14,7 +14,6 @@ import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_m
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_state.dart';
 import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -114,7 +113,6 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
                         const SizedBox(height: AppSizes.s16),
                         AppElevatedButton(
                           onPressed: _createClassroom,
-                          // onPressed: _showCreateClassroomSheet,
                           label: 'إنشاء فصل دراسي جديد',
                           icon: const Icon(Icons.add, size: 18),
                           size: const Size(double.infinity, 40),
@@ -153,105 +151,6 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
       },
     );
   }
-
-  // Future<void> _showCreateClassroomSheet() async {
-  //   final nameController = TextEditingController();
-  //   final formKey = GlobalKey<FormState>();
-  //   String? selectedSubjectId;
-
-  //   final subjectCubit = context.read<SubjectCubit>();
-  //   if (subjectCubit.state.subjects.isEmpty) {
-  //     await subjectCubit.getSubjects();
-  //   }
-
-  //   if (!mounted) return;
-
-  //   await showModalBottomSheet<void>(
-  //     context: context,
-  //     isScrollControlled: true,
-  //     builder: (sheetContext) => StatefulBuilder(
-  //       builder: (sheetContext, setSheetState) {
-  //         return BlocBuilder<SubjectCubit, SubjectState>(
-  //           builder: (context, subjectState) {
-  //             final subjects = subjectState.subjects;
-  //             return SafeArea(
-  //               child: Padding(
-  //                 padding: EdgeInsets.only(
-  //                   left: AppSizes.s24,
-  //                   right: AppSizes.s24,
-  //                   top: AppSizes.s24,
-  //                   bottom:
-  //                       MediaQuery.viewInsetsOf(sheetContext).bottom +
-  //                       AppSizes.s24,
-  //                 ),
-  //                 child: Form(
-  //                   key: formKey,
-  //                   child: Column(
-  //                     mainAxisSize: MainAxisSize.min,
-  //                     crossAxisAlignment: CrossAxisAlignment.stretch,
-  //                     children: [
-  //                       Text(
-  //                         'إنشاء فصل دراسي جديد',
-  //                         textAlign: TextAlign.right,
-  //                         style: sheetContext.textTheme.titleMedium,
-  //                       ),
-  //                       const SizedBox(height: AppSizes.s16),
-  //                       AppTextFormField(
-  //                         controller: nameController,
-  //                         hintText: 'اسم الفصل الدراسي',
-  //                         validator: (value) =>
-  //                             value == null || value.trim().isEmpty
-  //                             ? 'أدخل اسم الفصل'
-  //                             : null,
-  //                       ),
-  //                       const SizedBox(height: AppSizes.s12),
-  //                       AppDropDownFormField(
-  //                         hint: 'اختر المادة الدراسية',
-  //                         value: selectedSubjectId,
-  //                         dropDownItems: subjects
-  //                             .map(
-  //                               (SubjectModel subject) =>
-  //                                   DropdownMenuItem<String>(
-  //                                     value: subject.id,
-  //                                     child: Text(subject.name),
-  //                                   ),
-  //                             )
-  //                             .toList(),
-  //                         onChanged: (value) {
-  //                           setSheetState(() => selectedSubjectId = value);
-  //                         },
-  //                         isRequired: true,
-  //                       ),
-  //                       const SizedBox(height: AppSizes.s16),
-  //                       AppElevatedButton(
-  //                         onPressed: () async {
-  //                           if (!formKey.currentState!.validate()) return;
-  //                           final created = await context
-  //                               .read<ClassroomCubit>()
-  //                               .createClassroom(
-  //                                 CreateClassroomRequestModel(
-  //                                   subjectId: selectedSubjectId!,
-  //                                   name: nameController.text.trim(),
-  //                                 ),
-  //                               );
-  //                           if (created && sheetContext.mounted) {
-  //                             Navigator.pop(sheetContext);
-  //                           }
-  //                         },
-  //                         label: 'إنشاء الفصل',
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //         );
-  //       },
-  //     ),
-  //   );
-  //   nameController.dispose();
-  // }
 }
 
 class _SearchSummary extends StatelessWidget {
@@ -364,24 +263,11 @@ class _ClassroomCardState extends State<_ClassroomCard> {
               const SizedBox(width: AppSizes.s8),
               Text('إجمالي الطلبة', style: context.textTheme.labelMedium),
               const Spacer(),
-              BlocBuilder<ClassroomStudentsCubit, ClassroomStudentsState>(
-                builder: (context, state) {
-                  if (state.status == CubitStatus.success) {
-                    final students = state.students;
-                    return Text(
-                      '${students.length} طالب',
-                      style: context.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
-                    );
-                  }
-                  return Text(
-                    '0 طالب',
-                    style: context.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  );
-                },
+              Text(
+                '${context.watch<ClassroomStudentsCubit>().state.students.length} طالب',
+                style: context.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ],
           ),

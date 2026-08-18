@@ -128,7 +128,6 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                   context,
                   AppErrorDialog(
                     apiErrorModel: state.apiErrorModel!,
-                    onRetry: () {},
                   ),
                 );
                 break;
