@@ -30,6 +30,7 @@ import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/clas
 import 'package:draya_mobile/features/student/teachers/data/models/teacher_model.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
 import 'package:draya_mobile/features/teacher/teacher_channel/presentation/pages/teacher_channel_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 const authRoutes = {
@@ -39,7 +40,10 @@ const authRoutes = {
 };
 
 abstract final class AppRouter {
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+
   static final GoRouter router = GoRouter(
+    navigatorKey: navigatorKey,
     initialLocation: AppRoutes.signinPage,
 
     redirect: (context, state) async {

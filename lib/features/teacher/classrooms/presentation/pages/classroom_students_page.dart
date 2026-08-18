@@ -1,5 +1,6 @@
 import 'package:draya_mobile/core/enums/cubit_status.dart';
 import 'package:draya_mobile/core/helpers/app_extensions.dart';
+import 'package:draya_mobile/core/helpers/app_loading.dart';
 import 'package:draya_mobile/core/helpers/app_navigator.dart';
 import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
@@ -29,14 +30,21 @@ class ClassroomStudentsPage extends StatefulWidget {
 
 class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
   late final TextEditingController _searchController;
+
   String _query = '';
+
+  String get _normalizedQuery => _query.trim().toLowerCase();
 
   @override
   void initState() {
     super.initState();
+
     _searchController = TextEditingController();
-    context.read<ClassroomStudentsCubit>().getStudents(
-      widget.classroom.classroomId,
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        _loadStudents();
+      },
     );
   }
 
@@ -46,129 +54,160 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
     super.dispose();
   }
 
+  Future<void> _loadStudents() {
+    return context.read<ClassroomStudentsCubit>().getStudents(
+      widget.classroom.classroomId,
+    );
+  }
+
+  void _loadInitialStudents() {
+    AppLoading.show();
+
+    _loadStudents();
+  }
+
+  Future<void> _refreshStudents() {
+    return _loadStudents();
+  }
+
+  void _onSearchChanged(String value) {
+    setState(() {
+      _query = value;
+    });
+  }
+
+  List<StudentRosterItemModel> _filterStudents({
+    required List<StudentRosterItemModel> students,
+  }) {
+    final query = _normalizedQuery;
+
+    if (query.isEmpty) {
+      return students;
+    }
+
+    return students
+        .where(
+          (student) => student.fullName.toLowerCase().contains(query),
+        )
+        .toList(growable: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ClassroomStudentsCubit, ClassroomStudentsState>(
-      listenWhen: (previous, current) =>
-          previous.status != current.status &&
-          current.status == CubitStatus.error,
-      listener: (context, state) => showDialog<void>(
-        context: context,
-        builder: (_) => AppErrorDialog(
-          apiErrorModel: state.apiErrorModel!,
-          onRetry: () => context.read<ClassroomStudentsCubit>().getStudents(
-            widget.classroom.classroomId,
-          ),
-        ),
-      ),
+      listenWhen: (previous, current) {
+        return previous.status != current.status;
+      },
+      listener: (context, state) {
+        if (state.status != CubitStatus.loading) {
+          AppLoading.hide();
+        }
+
+        if (state.status == CubitStatus.error) {
+          final error = state.apiErrorModel;
+
+          if (error == null || !context.mounted) {
+            return;
+          }
+
+          showDialog<void>(
+            context: context,
+            builder: (_) => AppErrorDialog(
+              apiErrorModel: error,
+              onRetry: _loadInitialStudents,
+            ),
+          );
+        }
+      },
+
       builder: (context, state) {
-        final students = _filterStudents(state.students);
+        final students = _filterStudents(students: state.students);
+
         return Scaffold(
           appBar: const CustomAppBar(title: 'قائمة الطلاب'),
           body: SafeArea(
             child: RefreshIndicator(
-              onRefresh: () =>
-                  context.read<ClassroomStudentsCubit>().getStudents(
-                    widget.classroom.classroomId,
+              onRefresh: _refreshStudents,
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(
+                  AppSizes.s24,
+                  AppSizes.s20,
+                  AppSizes.s24,
+                  AppSizes.s40,
+                ),
+                children: [
+                  Text(
+                    'تفاصيل الفصل الدراسي',
+                    textAlign: TextAlign.right,
+                    style: context.textTheme.headlineMedium,
                   ),
-              child:
-                  state.status == CubitStatus.loading && state.students.isEmpty
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                      ),
-                    )
-                  : ListView(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSizes.s24,
-                        AppSizes.s20,
-                        AppSizes.s24,
-                        AppSizes.s40,
-                      ),
-                      children: [
-                        Text(
-                          'تفاصيل الفصل الدراسي',
-                          textAlign: TextAlign.right,
-                          style: context.textTheme.headlineMedium,
-                        ),
-                        const SizedBox(height: AppSizes.s8),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: _SubjectChip(
-                            label: widget.classroom.subjectName,
-                          ),
-                        ),
-                        const SizedBox(height: AppSizes.s16),
-                        _ClassroomSummary(
-                          classroom: widget.classroom,
-                          students: students,
-                        ),
-                        const SizedBox(height: AppSizes.s32),
-                        Row(
-                          children: [
-                            Text(
-                              'قائمة طلاب الفصل',
-                              style: context.textTheme.headlineSmall,
-                            ),
-                            _CountChip(count: state.students.length),
-                            const SizedBox(width: AppSizes.s12),
-                          ],
-                        ),
-                        const SizedBox(height: AppSizes.s8),
-                        Text(
-                          'يمكنك عرض الطلاب المسجلين في هذا الفصل والبحث عنهم.',
-                          textAlign: TextAlign.right,
-                          style: context.textTheme.bodyMedium?.copyWith(
-                            color: AppColors.foregroundMuted,
-                          ),
-                        ),
-                        const SizedBox(height: AppSizes.s16),
-                        AppTextFormField(
-                          controller: _searchController,
-                          hintText: 'بحث باسم الطالب...',
-                          prefixIcon: Icons.search,
-                          onChanged: (value) => setState(() => _query = value),
-                        ),
-                        const SizedBox(height: AppSizes.s16),
-                        if (students.isEmpty)
-                          const _EmptyStudents()
-                        else
-                          ...students.map(
-                            (student) => Padding(
-                              padding: const EdgeInsets.only(
-                                bottom: AppSizes.s12,
-                              ),
-                              child: _StudentCard(student: student),
-                            ),
-                          ),
-                      ],
+                  const SizedBox(height: AppSizes.s8),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: _SubjectChip(
+                      label: widget.classroom.subjectName,
                     ),
+                  ),
+                  const SizedBox(height: AppSizes.s16),
+                  _ClassroomSummary(
+                    classroom: widget.classroom,
+                    numberOfStudents: state.students.length,
+                  ),
+                  const SizedBox(height: AppSizes.s32),
+                  Row(
+                    children: [
+                      Text(
+                        'قائمة طلاب الفصل',
+                        style: context.textTheme.headlineSmall,
+                      ),
+                      const SizedBox(width: AppSizes.s12),
+                      _CountChip(count: students.length),
+                    ],
+                  ),
+                  const SizedBox(height: AppSizes.s8),
+                  Text(
+                    'يمكنك عرض الطلاب المسجلين في هذا الفصل والبحث عنهم.',
+                    textAlign: TextAlign.right,
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: AppColors.foregroundMuted,
+                    ),
+                  ),
+                  const SizedBox(height: AppSizes.s16),
+                  AppTextFormField(
+                    controller: _searchController,
+                    hintText: 'بحث باسم الطالب...',
+                    prefixIcon: Icons.search,
+                    onChanged: _onSearchChanged,
+                  ),
+                  const SizedBox(height: AppSizes.s16),
+                  if (students.isEmpty)
+                    const _EmptyStudents()
+                  else
+                    ...students.map(
+                      (student) => Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: AppSizes.s12,
+                        ),
+                        child: _StudentCard(student: student),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         );
       },
     );
   }
-
-  List<StudentRosterItemModel> _filterStudents(
-    List<StudentRosterItemModel> students,
-  ) {
-    if (_query.isEmpty) return students;
-    return students
-        .where(
-          (student) =>
-              student.fullName.toLowerCase().contains(_query.toLowerCase()),
-        )
-        .toList();
-  }
 }
 
 class _ClassroomSummary extends StatelessWidget {
   final ClassroomModel classroom;
-  final List<StudentRosterItemModel> students;
+  final int numberOfStudents;
   const _ClassroomSummary({
     required this.classroom,
-    required this.students,
+    required this.numberOfStudents,
   });
 
   @override
@@ -201,7 +240,7 @@ class _ClassroomSummary extends StatelessWidget {
         _SummaryRow(
           icon: Icons.groups_outlined,
           label: 'عدد الطلبة المقيدين',
-          value: '${students.length} طالب',
+          value: '$numberOfStudents طالب',
         ),
         const SizedBox(height: AppSizes.s12),
         _SummaryRow(
@@ -279,7 +318,7 @@ class _SummaryRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.backgroundMuted,
         border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSizes.s12),
       ),
       child: Row(
         children: [
@@ -306,8 +345,9 @@ class _SummaryRow extends StatelessWidget {
       return child;
     }
 
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(AppSizes.s12),
       child: child,
     );
   }
@@ -315,6 +355,8 @@ class _SummaryRow extends StatelessWidget {
 
 class _StudentCard extends StatelessWidget {
   final StudentRosterItemModel student;
+  static final DateFormat _dateFormat = DateFormat.yMMMd("ar");
+
   const _StudentCard({required this.student});
 
   @override
@@ -339,7 +381,7 @@ class _StudentCard extends StatelessWidget {
             children: [
               Text(student.fullName, style: context.textTheme.titleSmall),
               Text(
-                'انضم في ${DateFormat.yMMMd('ar').format(student.enrolledAt)}',
+                'انضم في ${_dateFormat.format(student.enrolledAt)}',
                 style: context.textTheme.bodyMedium?.copyWith(
                   color: AppColors.foregroundMuted,
                 ),
@@ -427,14 +469,23 @@ class _EmptyStudents extends StatelessWidget {
   const _EmptyStudents();
 
   @override
-  Widget build(BuildContext context) => const Padding(
-    padding: EdgeInsets.symmetric(vertical: AppSizes.s48),
-    child: Center(
-      child: Icon(
-        Icons.people_outline,
-        size: AppSizes.s48,
-        color: AppColors.primary700,
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSizes.s48),
+      child: Column(
+        children: [
+          const Icon(
+            Icons.people_outline,
+            size: AppSizes.s48,
+            color: AppColors.primary700,
+          ),
+          const SizedBox(height: AppSizes.s12),
+          Text(
+            "لا يوجد طلاب",
+            style: context.textTheme.titleMedium,
+          ),
+        ],
       ),
-    ),
-  );
+    );
+  }
 }
