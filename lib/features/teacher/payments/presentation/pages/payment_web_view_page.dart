@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:draya_mobile/core/helpers/app_navigator.dart';
 import 'package:draya_mobile/core/router/app_routes.dart';
@@ -25,7 +24,7 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
   bool _hasHandledRedirect = false;
   int _loadingProgress = 0;
 
-  void _handlePaymentRedirect(String url) {
+  void _handlePaymentRedirect(String url) async {
     if (_hasHandledRedirect || !mounted) return;
     _hasHandledRedirect = true;
 
@@ -38,17 +37,24 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
         uri?.queryParameters['order'] ??
         widget._paymentWebviewModel.transactionId;
 
-    log(url);
-
     if (transactionId == null || transactionId.isEmpty) {
       transactionId = widget._paymentWebviewModel.transactionId ?? '';
     }
-
-    AppNavigator.pushReplacement(
-      context: context,
-      path: AppRoutes.paymentResultPage,
-      extra: transactionId,
-    );
+    try {
+      await context.read<ConfirmPaymentCubit>().confirmPayment(
+        paymentId: transactionId,
+        isSuccess: true,
+      );
+    } catch (e) {
+      //log(e.toString());
+    }
+    if (mounted) {
+      AppNavigator.pushReplacement(
+        context: context,
+        path: AppRoutes.paymentResultPage,
+        extra: transactionId,
+      );
+    }
   }
 
   Future<void> _confirmPaymentSuccess() async {
@@ -133,6 +139,9 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
             }
 
             return NavigationDecision.navigate;
+          },
+          onSslAuthError: (e) {
+            e.proceed();
           },
           onWebResourceError: (WebResourceError error) {
             final failingUrl = error.url;

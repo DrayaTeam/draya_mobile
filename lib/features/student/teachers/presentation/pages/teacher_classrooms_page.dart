@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:draya_mobile/core/enums/cubit_status.dart';
 import 'package:draya_mobile/core/helpers/app_navigator.dart';
 import 'package:draya_mobile/core/router/app_routes.dart';
@@ -160,6 +161,7 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
                             specialization:
                                 widget.teacher?.specialization ?? 'عام',
                             classroomCount: classrooms.length,
+                            imageUrl: widget.teacher?.profilePictureUrl,
                           ),
                           const SizedBox(height: 18),
                           if (classrooms.isEmpty)
@@ -312,15 +314,19 @@ class _HeaderCard extends StatelessWidget {
   final String teacherName;
   final String specialization;
   final int classroomCount;
+  final String? imageUrl;
 
   const _HeaderCard({
     required this.teacherName,
     required this.specialization,
     required this.classroomCount,
+    this.imageUrl,
   });
 
   @override
   Widget build(BuildContext context) {
+    final hasValidUrl = imageUrl != null && imageUrl!.trim().isNotEmpty;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -349,11 +355,40 @@ class _HeaderCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.3),
+                    width: 1,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.school_rounded,
-                  color: Colors.white,
-                  size: 26,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(13),
+                  child: hasValidUrl
+                      ? CachedNetworkImage(
+                          imageUrl: imageUrl!.trim(),
+                          width: 48,
+                          height: 48,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Center(
+                            child: SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white.withValues(alpha: 0.8),
+                              ),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => const Icon(
+                            Icons.school_rounded,
+                            color: Colors.white,
+                            size: 26,
+                          ),
+                        )
+                      : const Icon(
+                          Icons.school_rounded,
+                          color: Colors.white,
+                          size: 26,
+                        ),
                 ),
               ),
               const SizedBox(width: 14),

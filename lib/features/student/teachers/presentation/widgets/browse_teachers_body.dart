@@ -342,6 +342,7 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                                 phone: teacher.phone ?? '',
                                 specialization:
                                     teacher.specialization ?? 'عام',
+                                imageUrl: teacher.profilePictureUrl,
                                 onViewClassrooms: () {
                                   final teacherId = teacher.userId;
                                   if (teacherId == null ||
@@ -382,7 +383,8 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
     return teachers.where((teacher) {
       final name = (teacher.fullName ?? '').toLowerCase();
       final spec = (teacher.specialization ?? '').toLowerCase();
-      final matchesQuery = query.isEmpty || name.contains(query) || spec.contains(query);
+      final matchesQuery =
+          query.isEmpty || name.contains(query) || spec.contains(query);
       final matchesSpecialization =
           _selectedSpecialization == 'كل التخصصات' ||
           teacher.specialization == _selectedSpecialization;

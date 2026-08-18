@@ -40,7 +40,9 @@ class _PaymentResultPageState extends State<PaymentResultPage>
     );
 
     // Start verification immediately
-    context.read<PaymentVerificationCubit>().verifyPayment(widget.transactionId);
+    context.read<PaymentVerificationCubit>().verifyPayment(
+      widget.transactionId,
+    );
   }
 
   @override
@@ -53,9 +55,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const CustomAppBar(
-        title: 'نتيجة الدفع'
-      ),
+      appBar: const CustomAppBar(title: 'نتيجة الدفع'),
       body: SafeArea(
         child: BlocConsumer<PaymentVerificationCubit, PaymentVerificationState>(
           listener: (context, state) {
@@ -150,26 +150,26 @@ class _PaymentResultPageState extends State<PaymentResultPage>
           ),
           textAlign: TextAlign.center,
         ),
-        if (attempt > 1) ...[
-          const SizedBox(height: AppSizes.s16),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSizes.s16,
-              vertical: AppSizes.s8,
-            ),
-            decoration: BoxDecoration(
-              color: AppColors.backgroundMuted,
-              borderRadius: BorderRadius.circular(999),
-              border: Border.all(color: AppColors.border),
-            ),
-            child: Text(
-              'محاولة $attempt من ${PaymentVerificationCubit.maxRetryAttempts}',
-              style: AppTextStyles.label.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ),
-        ],
+        // if (attempt > 1) ...[
+        //   const SizedBox(height: AppSizes.s16),
+        //   Container(
+        //     padding: const EdgeInsets.symmetric(
+        //       horizontal: AppSizes.s16,
+        //       vertical: AppSizes.s8,
+        //     ),
+        //     decoration: BoxDecoration(
+        //       color: AppColors.backgroundMuted,
+        //       borderRadius: BorderRadius.circular(999),
+        //       border: Border.all(color: AppColors.border),
+        //     ),
+        //     child: Text(
+        //       'محاولة $attempt من ${PaymentVerificationCubit.maxRetryAttempts}',
+        //       style: AppTextStyles.label.copyWith(
+        //         color: AppColors.textSecondary,
+        //       ),
+        //     ),
+        //   ),
+        // ],
       ],
     );
   }
@@ -358,9 +358,9 @@ class _PaymentResultPageState extends State<PaymentResultPage>
               Expanded(
                 child: OutlinedButton(
                   onPressed: () {
-                    context
-                        .read<PaymentVerificationCubit>()
-                        .verifyPayment(widget.transactionId);
+                    context.read<PaymentVerificationCubit>().verifyPayment(
+                      widget.transactionId,
+                    );
                   },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: AppSizes.s16),
@@ -401,7 +401,8 @@ class _PaymentResultPageState extends State<PaymentResultPage>
     BuildContext context,
     PaymentVerificationState state,
   ) {
-    final errorMessage = state.apiErrorModel?.error?.message ??
+    final errorMessage =
+        state.apiErrorModel?.error?.message ??
         'حدث خطأ أثناء التحقق من حالة الدفع.';
 
     return Column(
@@ -438,9 +439,9 @@ class _PaymentResultPageState extends State<PaymentResultPage>
         const SizedBox(height: AppSizes.s24),
         FilledButton.icon(
           onPressed: () {
-            context
-                .read<PaymentVerificationCubit>()
-                .verifyPayment(widget.transactionId);
+            context.read<PaymentVerificationCubit>().verifyPayment(
+              widget.transactionId,
+            );
           },
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.primary700,
@@ -480,8 +481,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
           _buildRow(
             'حالة الاشتراك',
             status.isEnrolled ? 'تم الاشتراك' : 'غير مكتمل',
-            valueColor:
-                status.isEnrolled ? AppColors.success : AppColors.error,
+            valueColor: status.isEnrolled ? AppColors.success : AppColors.error,
           ),
         ],
       ),
@@ -521,7 +521,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
     if (classroomId != null && classroomId.isNotEmpty) {
       AppNavigator.pushReplacement(
         context: context,
-        path: AppRoutes.studentChannelPage(classroomId),
+        path: AppRoutes.studentEnrolledClassroomsPage,
       );
     } else {
       AppNavigator.pushReplacement(

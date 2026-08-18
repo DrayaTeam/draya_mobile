@@ -9,6 +9,7 @@ class TeacherModel {
   final String? fullName;
   final String? phone;
   final String? specialization;
+  final String? profilePictureUrl;
 
   const TeacherModel({
     required this.userId,
@@ -16,6 +17,7 @@ class TeacherModel {
     required this.fullName,
     required this.phone,
     required this.specialization,
+    this.profilePictureUrl,
   });
 
   factory TeacherModel.fromJson(Map<String, dynamic> json) =>
