@@ -5,12 +5,14 @@ import 'package:draya_mobile/core/helpers/app_extensions.dart';
 import 'package:draya_mobile/core/helpers/app_navigator.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/widgets/app_card_container_empty.dart';
+import 'package:draya_mobile/core/widgets/app_card_container_info.dart';
 import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
 import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
 import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
 import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
 import 'package:draya_mobile/features/teacher/materials/data/models/materials_request_model.dart';
+import 'package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart';
 import 'package:draya_mobile/features/teacher/materials/presentation/cubit/materials_cubit.dart';
 import 'package:draya_mobile/features/teacher/materials/presentation/cubit/materials_state.dart';
 import 'package:file_picker/file_picker.dart';
@@ -93,14 +95,26 @@ class _MaterialsPageState extends State<MaterialsPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    context.read<MaterialsCubit>().getMaterials(
+      getMaterialsParams: GetMaterialsParams(
+        classroomId: widget._classroomModel.classroomId,
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<MaterialsCubit, MaterialsState>(
       listener: (BuildContext context, MaterialsState state) {
-        if (state.status == CubitStatus.loading) {
+        if (state.uploadMaterialsStatus == CubitStatus.loading ||
+            state.getMaterialsStatus == CubitStatus.loading) {
           AppDialogHelper.display(context, const AppCustomLoading());
         }
-        
-        if (state.status == CubitStatus.success) {
+
+        if (state.uploadMaterialsStatus == CubitStatus.success) {
           AppNavigator.pop(context: context);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -109,13 +123,13 @@ class _MaterialsPageState extends State<MaterialsPage> {
           );
         }
 
-        if (state.status == CubitStatus.error) {
+        if (state.uploadMaterialsStatus == CubitStatus.error ||
+            state.getMaterialsStatus == CubitStatus.error) {
           AppNavigator.pop(context: context);
           AppDialogHelper.display(
             context,
             AppErrorDialog(
               apiErrorModel: state.apiErrorModel!,
-              onRetry: () {},
             ),
           );
         }
@@ -160,9 +174,45 @@ class _MaterialsPageState extends State<MaterialsPage> {
                 const SizedBox(height: AppSizes.s12),
                 const Divider(),
                 const SizedBox(height: AppSizes.s12),
-                Text(
-                  "جميع الملفات",
-                  style: context.textTheme.labelLarge,
+
+                BlocBuilder<MaterialsCubit, MaterialsState>(
+                  builder: (BuildContext context, MaterialsState state) {
+                    if (state.getMaterialsStatus != CubitStatus.success) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    final materials =
+                        state.teacherMaterialPagedResultModel!.items;
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "جميع الملفات",
+                          style: context.textTheme.labelLarge,
+                        ),
+                        const SizedBox(height: AppSizes.s12),
+                        ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final material = materials[index];
+                            return AppCardContainerInfo(
+                              icon: Icons.book_outlined,
+                              title: material.title,
+                              subtitle: material.materialType,
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(height: AppSizes.s8);
+                          },
+                          itemCount: materials.length,
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ],
             ),

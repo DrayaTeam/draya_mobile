@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MaterialsState {
 
- CubitStatus get status; ApiErrorModel? get apiErrorModel;
+ CubitStatus get getMaterialsStatus; CubitStatus get uploadMaterialsStatus; TeacherMaterialPagedResultModel? get teacherMaterialPagedResultModel; ApiErrorModel? get apiErrorModel;
 /// Create a copy of MaterialsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $MaterialsStateCopyWith<MaterialsState> get copyWith => _$MaterialsStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MaterialsState&&(identical(other.status, status) || other.status == status)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MaterialsState&&(identical(other.getMaterialsStatus, getMaterialsStatus) || other.getMaterialsStatus == getMaterialsStatus)&&(identical(other.uploadMaterialsStatus, uploadMaterialsStatus) || other.uploadMaterialsStatus == uploadMaterialsStatus)&&(identical(other.teacherMaterialPagedResultModel, teacherMaterialPagedResultModel) || other.teacherMaterialPagedResultModel == teacherMaterialPagedResultModel)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,apiErrorModel);
+int get hashCode => Object.hash(runtimeType,getMaterialsStatus,uploadMaterialsStatus,teacherMaterialPagedResultModel,apiErrorModel);
 
 @override
 String toString() {
-  return 'MaterialsState(status: $status, apiErrorModel: $apiErrorModel)';
+  return 'MaterialsState(getMaterialsStatus: $getMaterialsStatus, uploadMaterialsStatus: $uploadMaterialsStatus, teacherMaterialPagedResultModel: $teacherMaterialPagedResultModel, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $MaterialsStateCopyWith<$Res>  {
   factory $MaterialsStateCopyWith(MaterialsState value, $Res Function(MaterialsState) _then) = _$MaterialsStateCopyWithImpl;
 @useResult
 $Res call({
- CubitStatus status, ApiErrorModel? apiErrorModel
+ CubitStatus getMaterialsStatus, CubitStatus uploadMaterialsStatus, TeacherMaterialPagedResultModel? teacherMaterialPagedResultModel, ApiErrorModel? apiErrorModel
 });
 
 
@@ -62,10 +62,12 @@ class _$MaterialsStateCopyWithImpl<$Res>
 
 /// Create a copy of MaterialsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? apiErrorModel = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? getMaterialsStatus = null,Object? uploadMaterialsStatus = null,Object? teacherMaterialPagedResultModel = freezed,Object? apiErrorModel = freezed,}) {
   return _then(_self.copyWith(
-status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as CubitStatus,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
+getMaterialsStatus: null == getMaterialsStatus ? _self.getMaterialsStatus : getMaterialsStatus // ignore: cast_nullable_to_non_nullable
+as CubitStatus,uploadMaterialsStatus: null == uploadMaterialsStatus ? _self.uploadMaterialsStatus : uploadMaterialsStatus // ignore: cast_nullable_to_non_nullable
+as CubitStatus,teacherMaterialPagedResultModel: freezed == teacherMaterialPagedResultModel ? _self.teacherMaterialPagedResultModel : teacherMaterialPagedResultModel // ignore: cast_nullable_to_non_nullable
+as TeacherMaterialPagedResultModel?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
 as ApiErrorModel?,
   ));
 }
@@ -151,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus status,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus getMaterialsStatus,  CubitStatus uploadMaterialsStatus,  TeacherMaterialPagedResultModel? teacherMaterialPagedResultModel,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MaterialsState() when $default != null:
-return $default(_that.status,_that.apiErrorModel);case _:
+return $default(_that.getMaterialsStatus,_that.uploadMaterialsStatus,_that.teacherMaterialPagedResultModel,_that.apiErrorModel);case _:
   return orElse();
 
 }
@@ -172,10 +174,10 @@ return $default(_that.status,_that.apiErrorModel);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus status,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus getMaterialsStatus,  CubitStatus uploadMaterialsStatus,  TeacherMaterialPagedResultModel? teacherMaterialPagedResultModel,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
 switch (_that) {
 case _MaterialsState():
-return $default(_that.status,_that.apiErrorModel);case _:
+return $default(_that.getMaterialsStatus,_that.uploadMaterialsStatus,_that.teacherMaterialPagedResultModel,_that.apiErrorModel);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +194,10 @@ return $default(_that.status,_that.apiErrorModel);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus status,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus getMaterialsStatus,  CubitStatus uploadMaterialsStatus,  TeacherMaterialPagedResultModel? teacherMaterialPagedResultModel,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
 switch (_that) {
 case _MaterialsState() when $default != null:
-return $default(_that.status,_that.apiErrorModel);case _:
+return $default(_that.getMaterialsStatus,_that.uploadMaterialsStatus,_that.teacherMaterialPagedResultModel,_that.apiErrorModel);case _:
   return null;
 
 }
@@ -207,10 +209,12 @@ return $default(_that.status,_that.apiErrorModel);case _:
 
 
 class _MaterialsState implements MaterialsState {
-  const _MaterialsState({this.status = CubitStatus.initial, this.apiErrorModel});
+  const _MaterialsState({this.getMaterialsStatus = CubitStatus.initial, this.uploadMaterialsStatus = CubitStatus.initial, this.teacherMaterialPagedResultModel, this.apiErrorModel});
   
 
-@override@JsonKey() final  CubitStatus status;
+@override@JsonKey() final  CubitStatus getMaterialsStatus;
+@override@JsonKey() final  CubitStatus uploadMaterialsStatus;
+@override final  TeacherMaterialPagedResultModel? teacherMaterialPagedResultModel;
 @override final  ApiErrorModel? apiErrorModel;
 
 /// Create a copy of MaterialsState
@@ -223,16 +227,16 @@ _$MaterialsStateCopyWith<_MaterialsState> get copyWith => __$MaterialsStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MaterialsState&&(identical(other.status, status) || other.status == status)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MaterialsState&&(identical(other.getMaterialsStatus, getMaterialsStatus) || other.getMaterialsStatus == getMaterialsStatus)&&(identical(other.uploadMaterialsStatus, uploadMaterialsStatus) || other.uploadMaterialsStatus == uploadMaterialsStatus)&&(identical(other.teacherMaterialPagedResultModel, teacherMaterialPagedResultModel) || other.teacherMaterialPagedResultModel == teacherMaterialPagedResultModel)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,apiErrorModel);
+int get hashCode => Object.hash(runtimeType,getMaterialsStatus,uploadMaterialsStatus,teacherMaterialPagedResultModel,apiErrorModel);
 
 @override
 String toString() {
-  return 'MaterialsState(status: $status, apiErrorModel: $apiErrorModel)';
+  return 'MaterialsState(getMaterialsStatus: $getMaterialsStatus, uploadMaterialsStatus: $uploadMaterialsStatus, teacherMaterialPagedResultModel: $teacherMaterialPagedResultModel, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -243,7 +247,7 @@ abstract mixin class _$MaterialsStateCopyWith<$Res> implements $MaterialsStateCo
   factory _$MaterialsStateCopyWith(_MaterialsState value, $Res Function(_MaterialsState) _then) = __$MaterialsStateCopyWithImpl;
 @override @useResult
 $Res call({
- CubitStatus status, ApiErrorModel? apiErrorModel
+ CubitStatus getMaterialsStatus, CubitStatus uploadMaterialsStatus, TeacherMaterialPagedResultModel? teacherMaterialPagedResultModel, ApiErrorModel? apiErrorModel
 });
 
 
@@ -260,10 +264,12 @@ class __$MaterialsStateCopyWithImpl<$Res>
 
 /// Create a copy of MaterialsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? apiErrorModel = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? getMaterialsStatus = null,Object? uploadMaterialsStatus = null,Object? teacherMaterialPagedResultModel = freezed,Object? apiErrorModel = freezed,}) {
   return _then(_MaterialsState(
-status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as CubitStatus,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
+getMaterialsStatus: null == getMaterialsStatus ? _self.getMaterialsStatus : getMaterialsStatus // ignore: cast_nullable_to_non_nullable
+as CubitStatus,uploadMaterialsStatus: null == uploadMaterialsStatus ? _self.uploadMaterialsStatus : uploadMaterialsStatus // ignore: cast_nullable_to_non_nullable
+as CubitStatus,teacherMaterialPagedResultModel: freezed == teacherMaterialPagedResultModel ? _self.teacherMaterialPagedResultModel : teacherMaterialPagedResultModel // ignore: cast_nullable_to_non_nullable
+as TeacherMaterialPagedResultModel?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
 as ApiErrorModel?,
   ));
 }

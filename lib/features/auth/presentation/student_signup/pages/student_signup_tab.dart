@@ -116,7 +116,6 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
               context,
               AppErrorDialog(
                 apiErrorModel: apiErrorModel,
-                onRetry: () {},
               ),
             );
           },

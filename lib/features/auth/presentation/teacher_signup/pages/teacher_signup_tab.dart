@@ -102,7 +102,6 @@ class _TeacherSignupTabState extends State<TeacherSignupTab> {
               context,
               AppErrorDialog(
                 apiErrorModel: apiErrorModel,
-                onRetry: () {},
               ),
             );
           },

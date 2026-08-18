@@ -75,7 +75,6 @@ class _CreateSubjectPageState extends State<CreateSubjectPage> {
               context,
               AppErrorDialog(
                 apiErrorModel: state.apiErrorModel!,
-                onRetry: () {},
               ),
             );
             break;
