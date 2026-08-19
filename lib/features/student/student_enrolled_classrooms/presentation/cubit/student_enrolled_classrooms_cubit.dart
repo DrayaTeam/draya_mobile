@@ -75,7 +75,7 @@ class StudentEnrolledClassroomsCubit
       emit(
         state.copyWith(
           status: CubitStatus.error,
-          apiErrorModel: ApiErrorModel(
+          apiErrorModel: const ApiErrorModel(
             retry: false,
             error: ErrorModel(message: 'يرجى إدخال رمز الفصل'),
           ),

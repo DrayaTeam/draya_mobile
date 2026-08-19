@@ -1,11 +1,10 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/helpers/app_debug.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/teacher/subjects/data/models/add_subject_request_model.dart';
-import 'package:draya_mobile/features/teacher/subjects/domain/usecases/add_subject_use_case.dart';
-import 'package:draya_mobile/features/teacher/subjects/domain/usecases/get_subjects_use_case.dart';
-import 'package:draya_mobile/features/teacher/subjects/presentation/cubit/subject_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/teacher/subjects/data/models/add_subject_request_model.dart";
+import "package:draya_mobile/features/teacher/subjects/domain/usecases/add_subject_use_case.dart";
+import "package:draya_mobile/features/teacher/subjects/domain/usecases/get_subjects_use_case.dart";
+import "package:draya_mobile/features/teacher/subjects/presentation/cubit/subject_state.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class SubjectCubit extends Cubit<SubjectState> {
   final AddSubjectUseCase _addSubjectUseCase;
@@ -24,7 +23,6 @@ class SubjectCubit extends Cubit<SubjectState> {
 
     result.when(
       success: (subjectModel) {
-        d(message: "add subject success response");
         emit(
           state.copyWith(
             status: CubitStatus.success,
@@ -33,7 +31,6 @@ class SubjectCubit extends Cubit<SubjectState> {
         );
       },
       failure: (apiErrorModel) {
-        d(message: "add subject error response");
         emit(
           state.copyWith(
             status: CubitStatus.error,

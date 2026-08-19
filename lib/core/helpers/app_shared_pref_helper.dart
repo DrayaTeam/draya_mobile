@@ -1,9 +1,10 @@
-import 'package:draya_mobile/core/constants/app_shared_pref_keys.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import "package:draya_mobile/core/constants/app_shared_pref_keys.dart";
+import "package:flutter_secure_storage/flutter_secure_storage.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 abstract final class AppSharedPrefHelper {
   static late SharedPreferences _sharedPreferences;
+  static const _flutterSecureStorage = FlutterSecureStorage();
 
   static Future<void> init() async {
     _sharedPreferences = await SharedPreferences.getInstance();
@@ -55,25 +56,22 @@ abstract final class AppSharedPrefHelper {
 
   /// Saves a [value] with a [key] in the FlutterSecureStorage.
   static Future<void> setSecuredString(String key, String value) async {
-    const flutterSecureStorage = FlutterSecureStorage();
-    await flutterSecureStorage.write(key: key, value: value);
+    await _flutterSecureStorage.write(key: key, value: value);
   }
 
   /// Gets an String value from FlutterSecureStorage with given [key].
   static Future<String?>? getSecuredString(String key) async {
-    const flutterSecureStorage = FlutterSecureStorage();
     try {
-      return await flutterSecureStorage.read(key: key) ?? '';
+      return await _flutterSecureStorage.read(key: key) ?? "";
     } catch (e) {
-      await flutterSecureStorage.deleteAll();
+      await _flutterSecureStorage.deleteAll();
       return null;
     }
   }
 
   /// Removes all keys and values in the FlutterSecureStorage
   static Future<void> clearAllSecuredData() async {
-    const flutterSecureStorage = FlutterSecureStorage();
-    await flutterSecureStorage.deleteAll();
+    await _flutterSecureStorage.deleteAll();
   }
 
   static String getLanguage() {

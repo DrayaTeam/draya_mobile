@@ -1,27 +1,23 @@
-import 'package:draya_mobile/core/constants/app_shared_pref_keys.dart';
-import 'package:draya_mobile/core/helpers/app_dialog_helper.dart';
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/helpers/app_shared_pref_helper.dart';
-import 'package:draya_mobile/core/helpers/app_token_helper.dart';
-import 'package:draya_mobile/core/networking/dio_factory.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/validation/email_validator.dart';
-import 'package:draya_mobile/core/validation/password_validator.dart';
-import 'package:draya_mobile/core/validation/validation_result.dart';
-import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
-import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
-import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
-import 'package:draya_mobile/core/widgets/app_label.dart';
-import 'package:draya_mobile/core/widgets/app_logo_and_name.dart';
-import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
-import 'package:draya_mobile/features/auth/data/models/register_student_request_model.dart';
-import 'package:draya_mobile/features/auth/domain/entity/auth_entity.dart';
-import 'package:draya_mobile/features/auth/presentation/student_signup/cubit/student_signup_cubit.dart';
-import 'package:draya_mobile/features/auth/presentation/student_signup/cubit/student_signup_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import "package:draya_mobile/core/helpers/app_dialog_helper.dart";
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/validation/email_validator.dart";
+import "package:draya_mobile/core/validation/password_validator.dart";
+import "package:draya_mobile/core/validation/validation_result.dart";
+import "package:draya_mobile/core/widgets/app_custom_loading.dart";
+import "package:draya_mobile/core/widgets/app_elevated_button.dart";
+import "package:draya_mobile/core/widgets/app_error_dialog.dart";
+import "package:draya_mobile/core/widgets/app_label.dart";
+import "package:draya_mobile/core/widgets/app_logo_and_name.dart";
+import "package:draya_mobile/core/widgets/app_text_form_field.dart";
+import "package:draya_mobile/features/auth/data/models/register_student_request_model.dart";
+import "package:draya_mobile/features/auth/domain/entity/auth_entity.dart";
+import "package:draya_mobile/features/auth/presentation/student_signup/cubit/student_signup_cubit.dart";
+import "package:draya_mobile/features/auth/presentation/student_signup/cubit/student_signup_state.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:intl/intl.dart";
 
 class StudentSignupTab extends StatefulWidget {
   const StudentSignupTab({super.key});
@@ -73,27 +69,13 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
     );
   }
 
-  void _signUp({
-    required AuthEntity? authEntity,
-  }) async {
-    await AppSharedPrefHelper.setSecuredString(
-      AppSharedPrefKeys.userToken,
-      authEntity?.accessToken ?? '',
+  void _signUp({required AuthEntity? authEntity}) {
+    AppNavigator.goAndRemove(
+      context: context,
+      path: authEntity?.user?.role == "Teacher"
+          ? AppRoutes.teacherDashboardPage
+          : AppRoutes.studentHomePage,
     );
-    await AppSharedPrefHelper.setData(
-      AppSharedPrefKeys.userRole,
-      authEntity?.user?.role ?? '',
-    );
-    AppTokenHelper.isLoggedIn = true;
-    DioFactory.setTokenIntoHeader(authEntity?.accessToken ?? '');
-    if (mounted) {
-      AppNavigator.goAndRemove(
-        context: context,
-        path: authEntity?.user?.role == 'Teacher'
-            ? AppRoutes.teacherDashboardPage
-            : AppRoutes.studentHomePage,
-      );
-    }
   }
 
   @override
@@ -156,7 +138,7 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
                   isReadOnly: true,
                   validator: (value) {
                     if (_dateOfBirth == null) {
-                      return 'يرجى اختيار تاريخ الميلاد';
+                      return "يرجى اختيار تاريخ الميلاد";
                     }
 
                     return null;
