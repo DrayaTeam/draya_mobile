@@ -12,6 +12,7 @@ class SectionExpandableCard extends StatefulWidget {
   final void Function(SectionDocument doc)? onOpenDocument;
   final void Function(SectionDocument doc)? onDownloadDocument;
   final void Function(SectionVideo video)? onOpenVideo;
+  final void Function(SectionExam exam)? onStartExam;
 
   const SectionExpandableCard({
     super.key,
@@ -22,6 +23,7 @@ class SectionExpandableCard extends StatefulWidget {
     this.onOpenDocument,
     this.onDownloadDocument,
     this.onOpenVideo,
+    this.onStartExam,
   });
 
   @override
@@ -263,7 +265,11 @@ class _SectionExpandableCardState extends State<SectionExpandableCard>
                         ...section.exams.map((exam) {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 8),
-                            child: _ExamTile(exam: exam),
+                            child: _ExamTile(
+                              exam: exam,
+                              isReadOnly: widget.isReadOnly,
+                              onStart: () => widget.onStartExam?.call(exam),
+                            ),
                           );
                         }),
                       ],
@@ -653,8 +659,14 @@ class _VideoTile extends StatelessWidget {
 
 class _ExamTile extends StatelessWidget {
   final SectionExam exam;
+  final bool isReadOnly;
+  final VoidCallback? onStart;
 
-  const _ExamTile({required this.exam});
+  const _ExamTile({
+    required this.exam,
+    this.isReadOnly = false,
+    this.onStart,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -709,22 +721,60 @@ class _ExamTile extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppColors.amber.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.amber.withValues(alpha: 0.3)),
-            ),
-            child: Text(
-              '${exam.questionsCount} أسئلة',
-              style: AppTextStyles.label.copyWith(
-                color: AppColors.amber,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
+          if (isReadOnly) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.lock_outline_rounded,
+                    size: 13,
+                    color: AppColors.foregroundMuted,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'مغلق',
+                    style: AppTextStyles.label.copyWith(
+                      color: AppColors.foregroundMuted,
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
+          ] else ...[
+            SizedBox(
+              height: 32,
+              child: ElevatedButton.icon(
+                onPressed: onStart,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.amber,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  elevation: 0,
+                ),
+                icon: const Icon(Icons.play_arrow_rounded, size: 16),
+                label: Text(
+                  'بدء',
+                  style: AppTextStyles.button.copyWith(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

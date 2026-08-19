@@ -21,6 +21,15 @@ import "package:draya_mobile/features/student/student_channel/domain/repos/stude
 import "package:draya_mobile/features/student/profile/domain/usecases/upload_student_profile_picture_use_case.dart";
 import "package:draya_mobile/features/student/student_channel/domain/usecases/create_question_use_case.dart"
     as student;
+import "package:draya_mobile/features/student/exams/data/repos/student_exam_repo_impl.dart";
+import "package:draya_mobile/features/student/exams/data/source/student_exam_api_service.dart";
+import "package:draya_mobile/features/student/exams/domain/repos/student_exam_repo.dart";
+import "package:draya_mobile/features/student/exams/domain/usecases/get_attempt_results_use_case.dart";
+import "package:draya_mobile/features/student/exams/domain/usecases/get_exam_details_use_case.dart";
+import "package:draya_mobile/features/student/exams/domain/usecases/get_grading_job_status_use_case.dart";
+import "package:draya_mobile/features/student/exams/domain/usecases/start_exam_attempt_use_case.dart";
+import "package:draya_mobile/features/student/exams/domain/usecases/submit_exam_attempt_use_case.dart";
+import "package:draya_mobile/features/student/exams/presentation/cubit/student_exam_cubit.dart";
 import "package:draya_mobile/features/student/student_materials/data/source/student_classrooms_sections_api_service.dart";
 import "package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart";
 import "package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart";
@@ -496,5 +505,44 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<GetMaterialsUseCase>(
     () => GetMaterialsUseCase(getIt<MaterialsRepo>()),
+  );
+
+  // student exams
+  getIt.registerLazySingleton<StudentExamApiService>(
+    () => StudentExamApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<StudentExamRepo>(
+    () => StudentExamRepoImpl(getIt<StudentExamApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetExamDetailsUseCase>(
+    () => GetExamDetailsUseCase(getIt<StudentExamRepo>()),
+  );
+
+  getIt.registerLazySingleton<StartExamAttemptUseCase>(
+    () => StartExamAttemptUseCase(getIt<StudentExamRepo>()),
+  );
+
+  getIt.registerLazySingleton<SubmitExamAttemptUseCase>(
+    () => SubmitExamAttemptUseCase(getIt<StudentExamRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetGradingJobStatusUseCase>(
+    () => GetGradingJobStatusUseCase(getIt<StudentExamRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetAttemptResultsUseCase>(
+    () => GetAttemptResultsUseCase(getIt<StudentExamRepo>()),
+  );
+
+  getIt.registerFactory<StudentExamCubit>(
+    () => StudentExamCubit(
+      getIt<GetExamDetailsUseCase>(),
+      getIt<StartExamAttemptUseCase>(),
+      getIt<SubmitExamAttemptUseCase>(),
+      getIt<GetGradingJobStatusUseCase>(),
+      getIt<GetAttemptResultsUseCase>(),
+    ),
   );
 }

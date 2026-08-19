@@ -1,5 +1,7 @@
 import 'package:draya_mobile/core/enums/cubit_status.dart';
+import 'package:draya_mobile/core/helpers/app_navigator.dart';
 import 'package:draya_mobile/core/helpers/app_url_helper.dart';
+import 'package:draya_mobile/core/router/app_routes.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/theme/app_text_styles.dart';
@@ -312,6 +314,16 @@ class _StudentClassroomsMaterialsScreenState
                     _handleOpenDocument(doc, state.sections),
                 onDownloadDocument: (doc) => _downloadFile(doc.fileUrl),
                 onOpenVideo: (vid) => _handleOpenVideo(vid, state.sections),
+                onStartExam: (exam) {
+                  AppNavigator.push(
+                    context: context,
+                    path: AppRoutes.studentExamDetailsPage,
+                    extra: {
+                      'examId': exam.id,
+                      'classroomName': widget.classroomName,
+                    },
+                  );
+                },
               );
 
               if (index < 6) {
