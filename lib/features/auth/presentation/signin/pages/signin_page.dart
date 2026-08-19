@@ -1,29 +1,25 @@
-import 'package:draya_mobile/core/constants/app_shared_pref_keys.dart';
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/helpers/app_dialog_helper.dart';
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/helpers/app_shared_pref_helper.dart';
-import 'package:draya_mobile/core/helpers/app_token_helper.dart';
-import 'package:draya_mobile/core/networking/dio_factory.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/validation/email_validator.dart';
-import 'package:draya_mobile/core/validation/password_validator.dart';
-import 'package:draya_mobile/core/validation/validation_result.dart';
-import 'package:draya_mobile/core/widgets/app_check_box.dart';
-import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
-import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
-import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
-import 'package:draya_mobile/core/widgets/app_label.dart';
-import 'package:draya_mobile/core/widgets/app_logo_and_name.dart';
-import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
-import 'package:draya_mobile/features/auth/data/models/login_request_model.dart';
-import 'package:draya_mobile/features/auth/domain/entity/auth_entity.dart';
-import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_cubit.dart';
-import 'package:draya_mobile/features/auth/presentation/signin/cubit/signin_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/helpers/app_dialog_helper.dart";
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/validation/email_validator.dart";
+import "package:draya_mobile/core/validation/password_validator.dart";
+import "package:draya_mobile/core/validation/validation_result.dart";
+import "package:draya_mobile/core/widgets/app_check_box.dart";
+import "package:draya_mobile/core/widgets/app_custom_loading.dart";
+import "package:draya_mobile/core/widgets/app_elevated_button.dart";
+import "package:draya_mobile/core/widgets/app_error_dialog.dart";
+import "package:draya_mobile/core/widgets/app_label.dart";
+import "package:draya_mobile/core/widgets/app_logo_and_name.dart";
+import "package:draya_mobile/core/widgets/app_text_form_field.dart";
+import "package:draya_mobile/features/auth/data/models/login_request_model.dart";
+import "package:draya_mobile/features/auth/domain/entity/auth_entity.dart";
+import "package:draya_mobile/features/auth/presentation/signin/cubit/signin_cubit.dart";
+import "package:draya_mobile/features/auth/presentation/signin/cubit/signin_state.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class SigninPage extends StatefulWidget {
   const SigninPage({
@@ -57,33 +53,13 @@ class _SigninPageState extends State<SigninPage> {
     super.dispose();
   }
 
-  void _signIn({
-    required AuthEntity? authEntity,
-    required bool rememberMe,
-  }) async {
-    await AppSharedPrefHelper.setSecuredString(
-      AppSharedPrefKeys.userToken,
-      authEntity?.accessToken ?? '',
+  void _signIn({required AuthEntity? authEntity}) {
+    AppNavigator.goAndRemove(
+      context: context,
+      path: authEntity?.user?.role == "Teacher"
+          ? AppRoutes.teacherDashboardPage
+          : AppRoutes.studentHomePage,
     );
-    await AppSharedPrefHelper.setData(
-      AppSharedPrefKeys.userRole,
-      authEntity?.user?.role ?? '',
-    );
-
-    await AppSharedPrefHelper.setData(
-      AppSharedPrefKeys.rememberMe,
-      rememberMe,
-    );
-    AppTokenHelper.isLoggedIn = true;
-    DioFactory.setTokenIntoHeader(authEntity?.accessToken ?? '');
-    if (mounted) {
-      AppNavigator.goAndRemove(
-        context: context,
-        path: authEntity?.user?.role == 'Teacher'
-            ? AppRoutes.teacherDashboardPage
-            : AppRoutes.studentHomePage,
-      );
-    }
   }
 
   void _handleForgotPassword() {
@@ -114,7 +90,7 @@ class _SigninPageState extends State<SigninPage> {
             break;
           case CubitStatus.success:
             AppNavigator.pop(context: context);
-            _signIn(authEntity: state.authEntity, rememberMe: state.rememberMe);
+            _signIn(authEntity: state.authEntity);
             break;
         }
       },

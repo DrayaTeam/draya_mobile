@@ -1,7 +1,7 @@
-import 'package:draya_mobile/features/auth/data/models/user_role_model.dart';
-import 'package:draya_mobile/features/auth/domain/entity/auth_entity.dart';
-import 'package:json_annotation/json_annotation.dart';
-part 'auth_response_model.g.dart';
+import "package:draya_mobile/features/auth/data/models/user_role_model.dart";
+import "package:draya_mobile/features/auth/domain/entity/auth_entity.dart";
+import "package:json_annotation/json_annotation.dart";
+part "auth_response_model.g.dart";
 
 @JsonSerializable()
 class AuthResponseModel {

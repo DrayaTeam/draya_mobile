@@ -1,13 +1,13 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
 
-part 'api_error_model.g.dart';
+part "api_error_model.g.dart";
 
 @JsonSerializable()
 class ApiErrorModel {
   final ErrorModel? error;
   final bool retry;
 
-  ApiErrorModel({
+  const ApiErrorModel({
     this.retry = false,
     this.error,
   });
@@ -23,7 +23,7 @@ class ErrorModel {
   final String? message;
   final String? code;
 
-  ErrorModel({this.message, this.code});
+  const ErrorModel({this.message, this.code});
 
   factory ErrorModel.fromJson(Map<String, dynamic> json) =>
       _$ErrorModelFromJson(json);
