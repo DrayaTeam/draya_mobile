@@ -21,6 +21,7 @@ import 'package:draya_mobile/features/student/student_channel/data/source/studen
 import 'package:draya_mobile/features/student/student_channel/domain/repos/student_channel_repo.dart';
 import 'package:draya_mobile/features/student/student_channel/domain/usecases/create_question_use_case.dart'
     as student;
+import 'package:draya_mobile/features/student/student_materials/data/source/student_classrooms_sections_api_service.dart';
 import 'package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart';
 import 'package:draya_mobile/features/teacher/teacher_channel/domain/usecases/create_question_use_case.dart'
     as teacher;
@@ -54,6 +55,7 @@ import 'package:draya_mobile/features/student/student_enrolled_classrooms/presen
 import 'package:draya_mobile/features/student/student_materials/data/repos/student_materials_repo_impl.dart';
 import 'package:draya_mobile/features/student/student_materials/data/source/student_materials_api_service.dart';
 import 'package:draya_mobile/features/student/student_materials/domain/repos/student_materials_repo.dart';
+import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart';
 import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_enrolled_materials_use_case.dart';
 import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_material_stream_use_case.dart';
 import 'package:draya_mobile/features/student/student_materials/presentation/cubit/student_materials_cubit.dart';
@@ -348,14 +350,20 @@ Future<void> setupGetIt() async {
     () => PaymentVerificationCubit(getIt<GetPaymentStatusUseCase>()),
   );
 
-
   // student materials
   getIt.registerLazySingleton<StudentMaterialsApiService>(
     () => StudentMaterialsApiService(getIt<Dio>()),
   );
 
+  getIt.registerLazySingleton<StudentClassroomSectionsApiService>(
+    () => StudentClassroomSectionsApiService(getIt<Dio>()),
+  );
+
   getIt.registerLazySingleton<StudentMaterialsRepo>(
-    () => StudentMaterialsRepoImpl(getIt<StudentMaterialsApiService>()),
+    () => StudentMaterialsRepoImpl(
+      getIt<StudentMaterialsApiService>(),
+      getIt<StudentClassroomSectionsApiService>(),
+    ),
   );
 
   getIt.registerLazySingleton<GetEnrolledMaterialsUseCase>(
@@ -366,10 +374,15 @@ Future<void> setupGetIt() async {
     () => GetMaterialStreamUseCase(getIt<StudentMaterialsRepo>()),
   );
 
+  getIt.registerLazySingleton<GetClassroomSectionsUseCase>(
+    () => GetClassroomSectionsUseCase(getIt<StudentMaterialsRepo>()),
+  );
+
   getIt.registerFactory<StudentMaterialsCubit>(
     () => StudentMaterialsCubit(
       getIt<GetEnrolledMaterialsUseCase>(),
       getIt<GetMaterialStreamUseCase>(),
+      getIt<GetClassroomSectionsUseCase>(),
     ),
   );
 

@@ -3,23 +3,86 @@ import 'package:draya_mobile/core/helpers/app_token_helper.dart';
 import 'package:draya_mobile/core/helpers/app_url_helper.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_text_styles.dart';
+import 'package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart';
 import 'package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart';
 import 'package:flutter/material.dart';
 import 'package:pdfrx/pdfrx.dart';
 import 'package:video_player/video_player.dart';
 
+class ViewerMaterialItem {
+  final String id;
+  final String title;
+  final bool isVideo;
+  final bool isPdf;
+  final String? directUrl;
+  final String? sectionTitle;
+
+  const ViewerMaterialItem({
+    required this.id,
+    required this.title,
+    required this.isVideo,
+    required this.isPdf,
+    this.directUrl,
+    this.sectionTitle,
+  });
+
+  factory ViewerMaterialItem.fromStudentMaterial(StudentMaterial material) {
+    return ViewerMaterialItem(
+      id: material.materialId,
+      title: material.title,
+      isVideo: material.isVideo,
+      isPdf: material.isPdf,
+      directUrl: material.currentVersion.fileUrl,
+    );
+  }
+
+  factory ViewerMaterialItem.fromSectionDocument(
+    SectionDocument doc, {
+    String? sectionTitle,
+  }) {
+    return ViewerMaterialItem(
+      id: doc.id,
+      title: doc.title,
+      isVideo: false,
+      isPdf: doc.isPdf,
+      directUrl: doc.fileUrl,
+      sectionTitle: sectionTitle,
+    );
+  }
+
+  factory ViewerMaterialItem.fromSectionVideo(
+    SectionVideo vid, {
+    String? sectionTitle,
+  }) {
+    return ViewerMaterialItem(
+      id: vid.id,
+      title: vid.title,
+      isVideo: true,
+      isPdf: false,
+      directUrl: vid.videoUrl,
+      sectionTitle: sectionTitle,
+    );
+  }
+}
+
 class StudentMaterialsViewerScreen extends StatefulWidget {
-  final StudentMaterial initialMaterial;
+  final ViewerMaterialItem? initialItem;
+  final StudentMaterial? initialMaterial;
   final String initialUrl;
   final List<StudentMaterial> materials;
-  final Future<String?> Function(StudentMaterial material) resolveMaterialUrl;
+  final List<ClassroomSection> sections;
+  final Future<String?> Function(StudentMaterial material)? resolveMaterialUrl;
+  final Future<String?> Function(String materialId, bool isVideo)? resolveItemUrl;
 
   const StudentMaterialsViewerScreen({
     super.key,
-    required this.initialMaterial,
+    this.initialItem,
+    this.initialMaterial,
     required this.initialUrl,
-    required this.materials,
-    required this.resolveMaterialUrl,
+    this.materials = const [],
+    this.sections = const [],
+    this.resolveMaterialUrl,
+    this.resolveItemUrl,
   });
 
   @override
@@ -29,26 +92,39 @@ class StudentMaterialsViewerScreen extends StatefulWidget {
 
 class _StudentMaterialsViewerScreenState
     extends State<StudentMaterialsViewerScreen> {
-  late StudentMaterial _selectedMaterial;
+  late ViewerMaterialItem _selectedItem;
   late String _selectedUrl;
   bool _isLoadingMaterial = false;
   bool _hasLoadingError = false;
   String? _accessToken;
   bool _isLoadingAccessToken = true;
 
-  List<StudentMaterial> get _viewableMaterials => widget.materials
-      .where(
-        (material) =>
-            material.currentVersion.isReady &&
-            (material.isVideo || material.isPdf),
-      )
-      .toList();
+  // Map to track expanded state of each section
+  final Map<String, bool> _expandedSections = {};
 
   @override
   void initState() {
     super.initState();
-    _selectedMaterial = widget.initialMaterial;
+    if (widget.initialItem != null) {
+      _selectedItem = widget.initialItem!;
+    } else if (widget.initialMaterial != null) {
+      _selectedItem =
+          ViewerMaterialItem.fromStudentMaterial(widget.initialMaterial!);
+    } else {
+      _selectedItem = const ViewerMaterialItem(
+        id: '',
+        title: 'المادة التعليمية',
+        isVideo: false,
+        isPdf: true,
+      );
+    }
     _selectedUrl = widget.initialUrl;
+
+    // By default, expand all sections with items
+    for (final section in widget.sections) {
+      _expandedSections[section.id] = true;
+    }
+
     _loadAccessToken();
   }
 
@@ -61,19 +137,31 @@ class _StudentMaterialsViewerScreenState
     });
   }
 
-  Future<void> _selectMaterial(StudentMaterial material) async {
-    if (_isLoadingMaterial ||
-        material.materialId == _selectedMaterial.materialId) {
+  Future<void> _selectItem(ViewerMaterialItem item) async {
+    if (_isLoadingMaterial || item.id == _selectedItem.id) {
       return;
     }
 
     setState(() {
-      _selectedMaterial = material;
+      _selectedItem = item;
       _isLoadingMaterial = true;
       _hasLoadingError = false;
     });
 
-    final url = await widget.resolveMaterialUrl(material);
+    String? url;
+    if (item.directUrl != null && item.directUrl!.isNotEmpty) {
+      url = item.directUrl;
+    } else if (widget.resolveItemUrl != null) {
+      url = await widget.resolveItemUrl!(item.id, item.isVideo);
+    } else if (widget.resolveMaterialUrl != null && widget.materials.isNotEmpty) {
+      final match = widget.materials
+          .where((m) => m.materialId == item.id)
+          .firstOrNull;
+      if (match != null) {
+        url = await widget.resolveMaterialUrl!(match);
+      }
+    }
+
     if (!mounted) return;
 
     setState(() {
@@ -84,20 +172,38 @@ class _StudentMaterialsViewerScreenState
   }
 
   void _downloadCurrentMaterial() {
-    final fileUrl = _selectedMaterial.currentVersion.fileUrl;
-    final downloadUrl = (fileUrl != null && fileUrl.isNotEmpty)
-        ? fileUrl
+    final downloadUrl = _selectedItem.directUrl != null &&
+            _selectedItem.directUrl!.isNotEmpty
+        ? _selectedItem.directUrl!
         : _selectedUrl;
     AppUrlHelper.launchURL(downloadUrl, context);
   }
 
+  int get _totalViewableCount {
+    if (widget.sections.isNotEmpty) {
+      return widget.sections.fold<int>(
+        0,
+        (sum, s) =>
+            sum +
+            s.documents.where((d) => d.isPdf).length +
+            s.videos.length,
+      );
+    }
+    return widget.materials
+        .where(
+          (material) =>
+              material.currentVersion.isReady &&
+              (material.isVideo || material.isPdf),
+        )
+        .length;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final hasDownload =
-        _selectedMaterial.currentVersion.isReady &&
-        ((_selectedMaterial.currentVersion.fileUrl != null &&
-                _selectedMaterial.currentVersion.fileUrl!.isNotEmpty) ||
-            !_selectedMaterial.isVideo);
+    final hasDownload = !_selectedItem.isVideo &&
+        ((_selectedItem.directUrl != null &&
+                _selectedItem.directUrl!.isNotEmpty) ||
+            _selectedUrl.isNotEmpty);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -106,7 +212,7 @@ class _StudentMaterialsViewerScreenState
         elevation: 0,
         centerTitle: false,
         title: Text(
-          _selectedMaterial.title,
+          _selectedItem.title,
           overflow: TextOverflow.ellipsis,
           style: AppTextStyles.h5.copyWith(
             fontWeight: FontWeight.w700,
@@ -165,7 +271,7 @@ class _StudentMaterialsViewerScreenState
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      'مواد الفصل الدراسي:',
+                      'محتوى الفصل الدراسي:',
                       style: AppTextStyles.h5.copyWith(
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
@@ -173,7 +279,7 @@ class _StudentMaterialsViewerScreenState
                     ),
                     const Spacer(),
                     Text(
-                      '${_viewableMaterials.length} مادة',
+                      '$_totalViewableCount مادة',
                       style: AppTextStyles.label.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -183,92 +289,215 @@ class _StudentMaterialsViewerScreenState
               ),
               const SizedBox(height: 4),
               Expanded(
-                child: ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
-                  itemCount: _viewableMaterials.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 8),
-                  itemBuilder: (context, index) {
-                    final material = _viewableMaterials[index];
-                    final isSelected =
-                        material.materialId == _selectedMaterial.materialId;
-                    return Semantics(
-                      button: true,
-                      selected: isSelected,
-                      label: 'Open ${material.title}',
-                      child: Material(
-                        color: isSelected
-                            ? AppColors.primary50
-                            : AppColors.surface,
-                        borderRadius: BorderRadius.circular(14),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(14),
-                          onTap: () => _selectMaterial(material),
-                          child: Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: isSelected
-                                    ? AppColors.primary
-                                    : AppColors.border,
-                                width: isSelected ? 1.5 : 1,
-                              ),
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        (material.isVideo
-                                                ? AppColors.ai700
-                                                : AppColors.error)
-                                            .withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Icon(
-                                    material.isVideo
-                                        ? Icons.play_circle_fill_rounded
-                                        : Icons.picture_as_pdf_rounded,
-                                    color: material.isVideo
-                                        ? AppColors.ai700
-                                        : AppColors.error,
-                                    size: 20,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Text(
-                                    material.title,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AppTextStyles.body.copyWith(
-                                      color: isSelected
-                                          ? AppColors.primary700
-                                          : AppColors.textPrimary,
-                                      fontWeight: isSelected
-                                          ? FontWeight.w700
-                                          : FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                                if (isSelected)
-                                  const Icon(
-                                    Icons.check_circle_rounded,
-                                    color: AppColors.primary,
-                                    size: 20,
-                                  ),
-                              ],
+                child: widget.sections.isNotEmpty
+                    ? _buildSectionsList()
+                    : _buildFlatMaterialsList(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionsList() {
+    return ListView.builder(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+      itemCount: widget.sections.length,
+      itemBuilder: (context, index) {
+        final section = widget.sections[index];
+        final viewableDocs = section.documents.where((d) => d.isPdf).toList();
+        final viewableVideos = section.videos;
+        final totalSectionViewable = viewableDocs.length + viewableVideos.length;
+
+        if (totalSectionViewable == 0) return const SizedBox.shrink();
+
+        final isExpanded = _expandedSections[section.id] ?? true;
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.border),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _expandedSections[section.id] = !isExpanded;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.folder_special_outlined,
+                          color: AppColors.primary,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            section.title,
+                            style: AppTextStyles.label.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textPrimary,
+                              fontSize: 13,
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary50,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            '$totalSectionViewable',
+                            style: AppTextStyles.label.copyWith(
+                              color: AppColors.primary,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Icon(
+                          isExpanded
+                              ? Icons.keyboard_arrow_up_rounded
+                              : Icons.keyboard_arrow_down_rounded,
+                          color: AppColors.foregroundMuted,
+                          size: 20,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
+                if (isExpanded) ...[
+                  const Divider(color: AppColors.border, height: 1),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        ...viewableDocs.map((doc) {
+                          final item = ViewerMaterialItem.fromSectionDocument(
+                            doc,
+                            sectionTitle: section.title,
+                          );
+                          return _buildItemRow(item);
+                        }),
+                        ...viewableVideos.map((vid) {
+                          final item = ViewerMaterialItem.fromSectionVideo(
+                            vid,
+                            sectionTitle: section.title,
+                          );
+                          return _buildItemRow(item);
+                        }),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildFlatMaterialsList() {
+    final viewableMaterials = widget.materials
+        .where(
+          (m) => m.currentVersion.isReady && (m.isVideo || m.isPdf),
+        )
+        .toList();
+
+    return ListView.separated(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+      itemCount: viewableMaterials.length,
+      separatorBuilder: (_, _) => const SizedBox(height: 8),
+      itemBuilder: (context, index) {
+        final material = viewableMaterials[index];
+        final item = ViewerMaterialItem.fromStudentMaterial(material);
+        return _buildItemRow(item);
+      },
+    );
+  }
+
+  Widget _buildItemRow(ViewerMaterialItem item) {
+    final isSelected = item.id == _selectedItem.id;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Material(
+        color: isSelected ? AppColors.primary50 : AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => _selectItem(item),
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: isSelected ? AppColors.primary : AppColors.border,
+                width: isSelected ? 1.5 : 1,
               ),
-            ],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: (item.isVideo ? AppColors.ai700 : AppColors.error)
+                        .withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    item.isVideo
+                        ? Icons.play_circle_fill_rounded
+                        : Icons.picture_as_pdf_rounded,
+                    color: item.isVideo ? AppColors.ai700 : AppColors.error,
+                    size: 18,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    item.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.body.copyWith(
+                      color: isSelected
+                          ? AppColors.primary700
+                          : AppColors.textPrimary,
+                      fontWeight:
+                          isSelected ? FontWeight.w700 : FontWeight.w500,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+                if (isSelected)
+                  const Icon(
+                    Icons.check_circle_rounded,
+                    color: AppColors.primary,
+                    size: 18,
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -313,7 +542,7 @@ class _StudentMaterialsViewerScreenState
         ),
       );
     }
-    if (!_selectedMaterial.isVideo && _isLoadingAccessToken) {
+    if (!_selectedItem.isVideo && _isLoadingAccessToken) {
       return const ColoredBox(
         color: AppColors.backgroundSecondary,
         child: Center(
@@ -321,7 +550,7 @@ class _StudentMaterialsViewerScreenState
         ),
       );
     }
-    if (!_selectedMaterial.isVideo &&
+    if (!_selectedItem.isVideo &&
         (_accessToken == null || _accessToken!.isEmpty)) {
       return ColoredBox(
         color: AppColors.backgroundSecondary,
@@ -341,7 +570,7 @@ class _StudentMaterialsViewerScreenState
     }
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 200),
-      child: _selectedMaterial.isVideo
+      child: _selectedItem.isVideo
           ? _VideoPlayer(
               key: ValueKey(_selectedUrl),
               streamUrl: _selectedUrl,

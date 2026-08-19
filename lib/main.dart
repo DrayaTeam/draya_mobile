@@ -17,6 +17,7 @@ import 'package:draya_mobile/features/student/profile/presentation/cubit/student
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/enroll_classroom_use_case.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/get_student_enrolled_classrooms_use_case.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_cubit.dart';
+import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart';
 import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_enrolled_materials_use_case.dart';
 import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_material_stream_use_case.dart';
 import 'package:draya_mobile/features/student/student_materials/presentation/cubit/student_materials_cubit.dart';
@@ -140,6 +141,7 @@ Future<void> main() async {
           create: (context) => StudentMaterialsCubit(
             getIt<GetEnrolledMaterialsUseCase>(),
             getIt<GetMaterialStreamUseCase>(),
+            getIt<GetClassroomSectionsUseCase>(),
           ),
         ),
         BlocProvider<TeacherProfileCubit>(
