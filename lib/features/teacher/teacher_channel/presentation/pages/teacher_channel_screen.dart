@@ -1,15 +1,18 @@
 import 'package:draya_mobile/core/di/dependency_injection.dart';
 import 'package:draya_mobile/core/enums/cubit_status.dart';
+import 'package:draya_mobile/core/theme/app_colors.dart';
+import 'package:draya_mobile/core/theme/app_text_styles.dart';
 import 'package:draya_mobile/core/view_models/drawer_model.dart';
 import 'package:draya_mobile/core/widgets/app_drawer.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
+import 'package:draya_mobile/core/widgets/fade_in_up_animation.dart';
 import 'package:draya_mobile/features/teacher/teacher_channel/presentation/cubit/teacher_channel_cubit.dart';
 import 'package:draya_mobile/features/teacher/teacher_channel/presentation/cubit/teacher_channel_state.dart';
+import 'package:draya_mobile/features/teacher/teacher_channel/presentation/pages/question_details_screen.dart';
 import 'package:draya_mobile/features/teacher/teacher_channel/presentation/widgets/add_question_bottom_sheet.dart';
 import 'package:draya_mobile/features/teacher/teacher_channel/presentation/widgets/empty_questions_widget.dart';
 import 'package:draya_mobile/features/teacher/teacher_channel/presentation/widgets/question_card_widget.dart';
 import 'package:draya_mobile/features/teacher/teacher_channel/presentation/widgets/question_filter_widget.dart';
-import 'package:draya_mobile/features/teacher/teacher_channel/presentation/pages/question_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,13 +43,9 @@ class _TeacherChannelContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: const CustomAppBar(title: "القناة الرئيسية"),
       drawer: AppDrawer(drawerItemsList: getTeacherDrawerItemsList()),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddQuestionSheet(context),
-        tooltip: 'اسأل سؤال جديد',
-        child: const Icon(Icons.add),
-      ),
       body: BlocBuilder<TeacherChannelCubit, TeacherChannelState>(
         builder: (context, state) {
           return Column(
@@ -70,17 +69,55 @@ class _TeacherChannelContent extends StatelessWidget {
                 },
               ),
               if (state.hasPendingNewQuestions)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextButton.icon(
-                    onPressed: () =>
-                        context.read<TeacherChannelCubit>().getQuestions(
-                          classroomId: classroomId,
-                          sortBy: state.sortBy,
-                          filterBy: state.filterBy,
+                Container(
+                  margin: const EdgeInsets.fromLTRB(16, 10, 16, 4),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () =>
+                          context.read<TeacherChannelCubit>().getQuestions(
+                            classroomId: classroomId,
+                            sortBy: state.sortBy,
+                            filterBy: state.filterBy,
+                          ),
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
                         ),
-                    icon: const Icon(Icons.refresh_rounded),
-                    label: const Text('هناك أسئلة جديدة — تحديث'),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary50,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: AppColors.primary300),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.08),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.refresh_rounded,
+                              size: 18,
+                              color: AppColors.primary,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'هناك أسئلة جديدة — اضغط للتحديث',
+                              style: AppTextStyles.label.copyWith(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
 
@@ -97,29 +134,73 @@ class _TeacherChannelContent extends StatelessWidget {
   Widget _buildContent(BuildContext context, TeacherChannelState state) {
     if (state.questionsStatus == CubitStatus.loading) {
       return const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
 
     if (state.questionsStatus == CubitStatus.error) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'حدث خطأ: ${state.apiErrorModel?.error?.message ?? "خطأ غير معروف"}',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                context.read<TeacherChannelCubit>().getQuestions(
-                  classroomId: classroomId,
-                );
-              },
-              child: const Text('حاول مرة أخرى'),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: AppColors.error.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.error_outline_rounded,
+                  size: 36,
+                  color: AppColors.error,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'تعذر تحميل الأسئلة',
+                style: AppTextStyles.h4.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                state.apiErrorModel?.error?.message ?? "حدث خطأ غير متوقع",
+                style: AppTextStyles.body.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: () {
+                  context.read<TeacherChannelCubit>().getQuestions(
+                    classroomId: classroomId,
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                icon: const Icon(Icons.refresh_rounded, size: 18),
+                label: Text(
+                  'حاول مرة أخرى',
+                  style: AppTextStyles.button.copyWith(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -131,17 +212,21 @@ class _TeacherChannelContent extends StatelessWidget {
             classroomId: classroomId,
           );
         },
+        onAction: () => _showAddQuestionSheet(context),
+        actionLabel: 'اسأل سؤالاً جديداً',
       );
     }
 
     return RefreshIndicator(
+      color: AppColors.primary,
+      backgroundColor: AppColors.surface,
       onRefresh: () => context.read<TeacherChannelCubit>().getQuestions(
         classroomId: classroomId,
         sortBy: state.sortBy,
         filterBy: state.filterBy,
       ),
       child: ListView.builder(
-        padding: const EdgeInsets.only(bottom: 96),
+        padding: const EdgeInsets.only(top: 8, bottom: 96),
         itemCount:
             state.questions.length +
             (state.currentPage < state.totalPages ? 1 : 0),
@@ -149,28 +234,52 @@ class _TeacherChannelContent extends StatelessWidget {
           if (index == state.questions.length) {
             return Padding(
               padding: const EdgeInsets.all(16),
-              child: OutlinedButton.icon(
-                onPressed: state.isLoadingMore
-                    ? null
-                    : () => context.read<TeacherChannelCubit>().getQuestions(
-                        classroomId: classroomId,
-                        page: state.currentPage + 1,
-                        sortBy: state.sortBy,
-                        filterBy: state.filterBy,
+              child: Center(
+                child: SizedBox(
+                  width: 200,
+                  child: OutlinedButton.icon(
+                    onPressed: state.isLoadingMore
+                        ? null
+                        : () => context.read<TeacherChannelCubit>().getQuestions(
+                            classroomId: classroomId,
+                            page: state.currentPage + 1,
+                            sortBy: state.sortBy,
+                            filterBy: state.filterBy,
+                          ),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      side: const BorderSide(color: AppColors.primary300),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
                       ),
-                icon: state.isLoadingMore
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.keyboard_arrow_down_rounded),
-                label: const Text('تحميل المزيد'),
+                    ),
+                    icon: state.isLoadingMore
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColors.primary,
+                              ),
+                            ),
+                          )
+                        : const Icon(Icons.expand_more_rounded, size: 20),
+                    label: Text(
+                      'تحميل المزيد',
+                      style: AppTextStyles.label.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             );
           }
           final question = state.questions[index];
-          return QuestionCardWidget(
+          final card = QuestionCardWidget(
             question: question,
             isVoting:
                 state.votingQuestionId == question.id &&
@@ -202,6 +311,14 @@ class _TeacherChannelContent extends StatelessWidget {
               }
             },
           );
+
+          if (index < 5) {
+            return FadeInUp(
+              delay: index * 60,
+              child: card,
+            );
+          }
+          return card;
         },
       ),
     );
@@ -212,6 +329,7 @@ class _TeacherChannelContent extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (sheetContext) {
         return BlocProvider.value(
           value: cubit,
@@ -220,15 +338,22 @@ class _TeacherChannelContent extends StatelessWidget {
               if (state.createQuestionStatus == CubitStatus.success) {
                 Navigator.of(sheetContext).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('تم نشر السؤال بنجاح')),
+                  SnackBar(
+                    content: Text(
+                      'تم نشر السؤال بنجاح',
+                      style: AppTextStyles.body.copyWith(color: Colors.white),
+                    ),
+                    backgroundColor: AppColors.primary,
+                  ),
                 );
               } else if (state.createQuestionStatus == CubitStatus.error) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
                       state.apiErrorModel?.error?.message ?? 'حدث خطأ',
+                      style: AppTextStyles.body.copyWith(color: Colors.white),
                     ),
-                    backgroundColor: Colors.red,
+                    backgroundColor: AppColors.error,
                   ),
                 );
               }
@@ -252,3 +377,4 @@ class _TeacherChannelContent extends StatelessWidget {
     );
   }
 }
+

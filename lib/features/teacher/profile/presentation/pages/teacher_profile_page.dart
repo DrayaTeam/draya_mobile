@@ -1,8 +1,10 @@
+import 'package:draya_mobile/core/enums/cubit_status.dart';
 import 'package:draya_mobile/core/helpers/app_dialog_helper.dart';
-import 'package:draya_mobile/core/helpers/app_extensions.dart';
 import 'package:draya_mobile/core/helpers/app_navigator.dart';
 import 'package:draya_mobile/core/router/app_routes.dart';
+import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
+import 'package:draya_mobile/core/theme/app_text_styles.dart';
 import 'package:draya_mobile/core/validation/email_validator.dart';
 import 'package:draya_mobile/core/validation/phone_validator.dart';
 import 'package:draya_mobile/core/validation/validation_result.dart';
@@ -14,19 +16,20 @@ import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
 import 'package:draya_mobile/core/widgets/app_label.dart';
 import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
+import 'package:draya_mobile/core/widgets/fade_in_up_animation.dart';
 import 'package:draya_mobile/core/widgets/profile_avatar_picker.dart';
 import 'package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart';
 import 'package:draya_mobile/features/teacher/profile/data/models/teacher_model.dart';
 import 'package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart';
 import 'package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_state.dart';
+import 'package:draya_mobile/features/teacher/profile/presentation/widgets/teacher_top_up_card.dart';
+import 'package:draya_mobile/features/teacher/profile/presentation/widgets/teacher_wallet_card.dart';
 import 'package:draya_mobile/features/teacher/wallet/data/models/top_up_request_model.dart';
 import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/top_up_cubit.dart';
 import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/top_up_state.dart';
 import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_cubit.dart';
-import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:draya_mobile/core/enums/cubit_status.dart';
 
 class TeacherProfilePage extends StatefulWidget {
   const TeacherProfilePage({super.key});
@@ -46,12 +49,16 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
   @override
   void initState() {
     super.initState();
-    _formKey = GlobalKey();
+    _formKey = GlobalKey<FormState>();
     _textEditingControllerName = TextEditingController();
     _textEditingControllerEmail = TextEditingController();
     _textEditingControllerPhoneNumber = TextEditingController();
     _textEditingControllerTopUpAmount = TextEditingController();
 
+    _loadData();
+  }
+
+  void _loadData() {
     context.read<TeacherProfileCubit>().getTeacherProfile();
     context.read<WalletCubit>().getTeacherBalance();
   }
@@ -66,7 +73,23 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
   }
 
   void _editTeacherProfile() {
-    if (_formKey.currentState!.validate()) {}
+    if (_formKey.currentState!.validate()) {
+      FocusScope.of(context).unfocus();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.check_circle_outline_rounded, color: Colors.white),
+              SizedBox(width: 8),
+              Text("تم حفظ التعديلات بنجاح"),
+            ],
+          ),
+          backgroundColor: AppColors.primary700,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+      );
+    }
   }
 
   void _topUpBalance() {
@@ -91,7 +114,7 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
       return;
     }
 
-    // proceed with paymob url
+    FocusScope.of(context).unfocus();
     context.read<TopUpCubit>().topUp(
       topUpRequestModel: TopUpRequestModel(amount: amount!),
     );
@@ -170,9 +193,13 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                   ),
                 );
 
+                if (context.mounted) {
+                  await context.read<WalletCubit>().getTeacherBalance();
+                }
+
                 break;
               case CubitStatus.error:
-                // AppNavigator.pop(context: context);
+                AppNavigator.pop(context: context);
                 AppDialogHelper.display(
                   context,
                   AppErrorDialog(
@@ -185,219 +212,366 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
           },
         ),
       ],
-
       child: Scaffold(
+        backgroundColor: AppColors.background,
         appBar: const CustomAppBar(
-          title: "الصفحة الشخصية",
+          title: "الملف الشخصي",
         ),
         drawer: AppDrawer(
           drawerItemsList: getTeacherDrawerItemsList(),
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(AppSizes.s24),
-            child: Column(
-              children: [
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      BlocBuilder<TeacherProfileCubit, TeacherProfileState>(
-                        builder: (context, state) {
-                          final teacher = state.teacher;
-                          final name = _textEditingControllerName.text.trim().isNotEmpty
-                              ? _textEditingControllerName.text.trim()
-                              : (teacher?.fullName ?? '');
+          child: RefreshIndicator(
+            onRefresh: () async {
+              _loadData();
+            },
+            color: AppColors.primary700,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSizes.s20,
+                vertical: AppSizes.s16,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // 1. Profile Header with Avatar & Badge
+                  FadeInUp(
+                    delay: 0,
+                    child: _buildProfileHeader(context),
+                  ),
 
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: AppSizes.s24),
-                            child: ProfileAvatarPicker(
-                              imageUrl: teacher?.profilePictureUrl,
-                              name: name,
-                              isUploading: state.isUploadingPicture,
-                              onImagePicked: (file) {
-                                context
-                                    .read<TeacherProfileCubit>()
-                                    .uploadProfilePicture(file: file);
-                              },
-                            ),
-                          );
-                        },
+                  const SizedBox(height: AppSizes.s20),
+
+                  // 2. Personal Information Card
+                  FadeInUp(
+                    delay: 100,
+                    child: _buildPersonalInfoCard(context),
+                  ),
+
+                  const SizedBox(height: AppSizes.s24),
+
+                  // 3. Wallet Section Header
+                  FadeInUp(
+                    delay: 150,
+                    child: _buildSectionTitle(
+                      context,
+                      icon: Icons.account_balance_wallet_rounded,
+                      title: "المحفظة والمدفوعات",
+                      subtitle: "متابعة الرصيد المالي وإجراء عمليات الشحن",
+                    ),
+                  ),
+
+                  const SizedBox(height: AppSizes.s12),
+
+                  // 4. Wallet Card (Fintech Card)
+                  FadeInUp(
+                    delay: 200,
+                    child: TeacherWalletCard(
+                      onRefresh: () {
+                        context.read<WalletCubit>().getTeacherBalance();
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(height: AppSizes.s16),
+
+                  // 5. Quick Top-Up Action Card
+                  FadeInUp(
+                    delay: 250,
+                    child: BlocBuilder<TopUpCubit, TopUpState>(
+                      builder: (context, topUpState) {
+                        return TeacherTopUpCard(
+                          controller: _textEditingControllerTopUpAmount,
+                          errorText: _topUpAmountError,
+                          isLoading: topUpState.status == CubitStatus.loading,
+                          onTopUp: _topUpBalance,
+                          onAmountChanged: (value) {
+                            if (_topUpAmountError != null) {
+                              setState(() => _topUpAmountError = null);
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(height: AppSizes.s32),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileHeader(BuildContext context) {
+    return BlocBuilder<TeacherProfileCubit, TeacherProfileState>(
+      builder: (context, state) {
+        final teacher = state.teacher;
+        final name = _textEditingControllerName.text.trim().isNotEmpty
+            ? _textEditingControllerName.text.trim()
+            : (teacher?.fullName ?? '');
+
+        return Container(
+          padding: const EdgeInsets.symmetric(
+            vertical: AppSizes.s20,
+            horizontal: AppSizes.s16,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.border),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.02),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              ProfileAvatarPicker(
+                imageUrl: teacher?.profilePictureUrl,
+                name: name,
+                isUploading: state.isUploadingPicture,
+                onImagePicked: (file) {
+                  context
+                      .read<TeacherProfileCubit>()
+                      .uploadProfilePicture(file: file);
+                },
+              ),
+              const SizedBox(height: AppSizes.s12),
+              Text(
+                name.isNotEmpty ? name : "المعلم",
+                style: AppTextStyles.h3.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: AppSizes.s4),
+              // Role & Verification Badge
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.s12,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary100,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.verified_rounded,
+                          size: 15,
+                          color: AppColors.primary700,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          "معلم معتمد",
+                          style: AppTextStyles.label.copyWith(
+                            color: AppColors.primary800,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildPersonalInfoCard(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(AppSizes.s20),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Section Header
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(AppSizes.s8),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary100,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.person_outline_rounded,
+                    color: AppColors.primary700,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: AppSizes.s12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "البيانات الأساسية",
+                        style: AppTextStyles.h4.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
                       Text(
-                        "الصفحة الشخصية للمعلم",
-                        style: context.textTheme.headlineMedium,
+                        "قم بتعديل بيانات حسابك الشخصي",
+                        style: AppTextStyles.body.copyWith(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
                       ),
-                      const SizedBox(height: AppSizes.s32),
-                      const AppLabel(label: "الاسم"),
-                      const SizedBox(height: AppSizes.s8),
-                      AppTextFormField(
-                        controller: _textEditingControllerName,
-                        hintText: "أدخل اسمك",
-                        prefixIcon: Icons.person_outline,
-                        keyboardType: TextInputType.name,
-                        textInputAction: TextInputAction.next,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "الاسم الكامل مطلوب";
-                          }
-                          if (value.length < 3) {
-                            return "الاسم الكامل يجب ان يكون اكثر من 3 حروف";
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: AppSizes.s20),
-                      const AppLabel(label: "البريد الإلكتروني"),
-                      const SizedBox(height: AppSizes.s8),
-                      AppTextFormField(
-                        controller: _textEditingControllerEmail,
-                        hintText: "name@example.com",
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                        prefixIcon: Icons.email_outlined,
-                        validator: (value) {
-                          final result = EmailValidator.validate(email: value);
-
-                          if (result is Invalid) {
-                            return result.message;
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: AppSizes.s20),
-                      const AppLabel(label: "رقم الهاتف"),
-                      const SizedBox(height: AppSizes.s8),
-                      AppTextFormField(
-                        controller: _textEditingControllerPhoneNumber,
-                        hintText:
-                            "010xxxxxxx / 011xxxxxxx / 012xxxxxxx / 015xxxxxxx",
-                        keyboardType: TextInputType.phone,
-                        textInputAction: TextInputAction.next,
-                        prefixIcon: Icons.phone_outlined,
-                        validator: (value) {
-                          final result = PhoneValidator.validate(phone: value);
-
-                          if (result is Invalid) {
-                            return result.message;
-                          }
-
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: AppSizes.s20),
-                      AppElevatedButton(
-                        onPressed: () {
-                          _editTeacherProfile();
-                        },
-                        label: "حفظ التغييرات",
-                      ),
-                      const SizedBox(height: AppSizes.s12),
                     ],
                   ),
                 ),
-                const Divider(),
-                const SizedBox(height: AppSizes.s12),
-                BlocBuilder<WalletCubit, WalletState>(
-                  builder: (context, state) {
-                    final balance = state.teacherBalance;
+              ],
+            ),
 
-                    if (state.status == CubitStatus.loading) {
-                      return const Center(
-                        child: AppCustomLoading(),
-                      );
-                    }
+            const SizedBox(height: AppSizes.s20),
 
-                    if (balance == null) {
-                      return const SizedBox.shrink();
-                    }
+            const AppLabel(label: "الاسم الكامل"),
+            const SizedBox(height: AppSizes.s8),
+            AppTextFormField(
+              controller: _textEditingControllerName,
+              hintText: "أدخل اسمك الكامل",
+              prefixIcon: Icons.badge_outlined,
+              keyboardType: TextInputType.name,
+              textInputAction: TextInputAction.next,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "الاسم الكامل مطلوب";
+                }
+                if (value.trim().length < 3) {
+                  return "الاسم الكامل يجب ان يكون اكثر من 3 حروف";
+                }
+                return null;
+              },
+            ),
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          "المحفظة",
-                          style: context.textTheme.headlineLarge,
-                        ),
+            const SizedBox(height: AppSizes.s16),
 
-                        const SizedBox(height: AppSizes.s8),
+            const AppLabel(label: "البريد الإلكتروني"),
+            const SizedBox(height: AppSizes.s8),
+            AppTextFormField(
+              controller: _textEditingControllerEmail,
+              hintText: "name@example.com",
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              prefixIcon: Icons.email_outlined,
+              validator: (value) {
+                final result = EmailValidator.validate(email: value);
+                if (result is Invalid) {
+                  return result.message;
+                }
+                return null;
+              },
+            ),
 
-                        Row(
-                          children: [
-                            Text(
-                              "الرصيد المكتسب:",
-                              style: context.textTheme.titleLarge,
-                            ),
-                            const SizedBox(width: AppSizes.s12),
-                            Text(
-                              "${balance.earnedBalance}",
-                              style: context.textTheme.headlineMedium,
-                            ),
-                          ],
-                        ),
+            const SizedBox(height: AppSizes.s16),
 
-                        Row(
-                          children: [
-                            Text(
-                              "الرصيد المشتري:",
-                              style: context.textTheme.titleLarge,
-                            ),
-                            const SizedBox(width: AppSizes.s12),
-                            Text(
-                              "${balance.purchasedBalance}",
-                              style: context.textTheme.headlineMedium,
-                            ),
-                          ],
-                        ),
+            const AppLabel(label: "رقم الهاتف"),
+            const SizedBox(height: AppSizes.s8),
+            AppTextFormField(
+              controller: _textEditingControllerPhoneNumber,
+              hintText: "010xxxxxxx / 011xxxxxxx / 012xxxxxxx",
+              keyboardType: TextInputType.phone,
+              textInputAction: TextInputAction.done,
+              prefixIcon: Icons.phone_outlined,
+              validator: (value) {
+                final result = PhoneValidator.validate(phone: value);
+                if (result is Invalid) {
+                  return result.message;
+                }
+                return null;
+              },
+            ),
 
-                        Row(
-                          children: [
-                            Text(
-                              "الرصيد المكتسب المتاح:",
-                              style: context.textTheme.titleLarge,
-                            ),
-                            const SizedBox(width: AppSizes.s12),
-                            Text(
-                              "${balance.availableEarnedBalance}",
-                              style: context.textTheme.headlineMedium,
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  },
+            const SizedBox(height: AppSizes.s20),
+
+            AppElevatedButton(
+              onPressed: _editTeacherProfile,
+              label: "حفظ التغييرات",
+              icon: const Icon(Icons.check_circle_outline_rounded, size: 18),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String subtitle,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.primary100,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              icon,
+              size: 20,
+              color: AppColors.primary700,
+            ),
+          ),
+          const SizedBox(width: AppSizes.s12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppTextStyles.h4.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
-                const SizedBox(height: AppSizes.s12),
-                const Divider(),
-                const SizedBox(height: AppSizes.s12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: AppTextFormField(
-                        controller: _textEditingControllerTopUpAmount,
-                        hintText: "المبلغ",
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        errorText: _topUpAmountError,
-                      ),
-                    ),
-                    const SizedBox(width: AppSizes.s12),
-                    Expanded(
-                      child: AppElevatedButton(
-                        onPressed: () {
-                          _topUpBalance();
-                        },
-                        label: "شحن رصيد",
-                      ),
-                    ),
-                  ],
+                Text(
+                  subtitle,
+                  style: AppTextStyles.body.copyWith(
+                    color: AppColors.textSecondary,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }
