@@ -1,8 +1,8 @@
-import 'package:draya_mobile/core/networking/api_error_handler.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/teacher/profile/data/models/teacher_model.dart';
-import 'package:draya_mobile/features/teacher/profile/data/source/teacher_profile_api_service.dart';
-import 'package:draya_mobile/features/teacher/profile/domain/repos/teacher_profile_repo.dart';
+import "package:draya_mobile/core/networking/api_error_handler.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/teacher/profile/data/models/teacher_model.dart";
+import "package:draya_mobile/features/teacher/profile/data/source/teacher_profile_api_service.dart";
+import "package:draya_mobile/features/teacher/profile/domain/repos/teacher_profile_repo.dart";
 
 class TeacherProfileRepoImpl implements TeacherProfileRepo {
   final TeacherProfileApiService _teacherProfileApiService;

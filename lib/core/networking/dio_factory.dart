@@ -1,53 +1,60 @@
-import 'package:dio/dio.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import "package:dio/dio.dart";
+import "package:draya_mobile/core/networking/interceptors/auth_interceptor.dart";
+import "package:draya_mobile/features/auth/data/source/auth_api_service.dart";
+import "package:pretty_dio_logger/pretty_dio_logger.dart";
 
-import '../constants/app_shared_pref_keys.dart';
-import '../helpers/app_shared_pref_helper.dart';
-
-class DioFactory {
-  DioFactory._();
-
+abstract final class DioFactory {
   static Dio? dio;
 
   static Future<Dio> getDio() async {
     Duration timeOut = const Duration(seconds: 60);
 
-    if (dio == null) {
-      dio = Dio();
-      dio!
-        ..options.connectTimeout = timeOut
-        ..options.receiveTimeout = timeOut;
-      await addDioHeaders();
-      addDioInterceptor();
-      return dio!;
-    } else {
+    if (dio != null) {
       return dio!;
     }
-  }
 
-  static Future<void> addDioHeaders() async {
-    String? token = await AppSharedPrefHelper.getSecuredString(
-      AppSharedPrefKeys.userToken,
+    final mainDio = Dio(
+      BaseOptions(
+        connectTimeout: timeOut,
+        receiveTimeout: timeOut,
+        sendTimeout: timeOut,
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+      ),
     );
-    dio?.options.headers = {
-      'Accept': 'application/json',
-      'Authorization': token == '' ? '' : 'Bearer $token',
-    };
-  }
 
-  static void setTokenIntoHeader(String token) {
-    dio?.options.headers = {
-      'Authorization': token == '' ? '' : 'Bearer $token',
-    };
-  }
+    final refreshDio = Dio(
+      BaseOptions(
+        connectTimeout: timeOut,
+        receiveTimeout: timeOut,
+        sendTimeout: timeOut,
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+      ),
+    );
 
-  static void addDioInterceptor() {
-    dio?.interceptors.add(
+    final refreshAuthApiService = AuthApiService(refreshDio);
+
+    mainDio.interceptors.add(
+      AuthInterceptor(
+        dio: mainDio,
+        refreshAuthApiService: refreshAuthApiService,
+      ),
+    );
+
+    mainDio.interceptors.add(
       PrettyDioLogger(
         requestBody: true,
         requestHeader: true,
         responseHeader: true,
       ),
     );
+
+    dio = mainDio;
+    return dio!;
   }
 }
