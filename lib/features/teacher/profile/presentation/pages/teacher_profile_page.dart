@@ -1,32 +1,32 @@
-import 'package:draya_mobile/core/helpers/app_dialog_helper.dart';
-import 'package:draya_mobile/core/helpers/app_extensions.dart';
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/validation/email_validator.dart';
-import 'package:draya_mobile/core/validation/phone_validator.dart';
-import 'package:draya_mobile/core/validation/validation_result.dart';
-import 'package:draya_mobile/core/view_models/drawer_model.dart';
-import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
-import 'package:draya_mobile/core/widgets/app_drawer.dart';
-import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
-import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
-import 'package:draya_mobile/core/widgets/app_label.dart';
-import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
-import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
-import 'package:draya_mobile/core/widgets/profile_avatar_picker.dart';
-import 'package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart';
-import 'package:draya_mobile/features/teacher/profile/data/models/teacher_model.dart';
-import 'package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart';
-import 'package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_state.dart';
-import 'package:draya_mobile/features/teacher/wallet/data/models/top_up_request_model.dart';
-import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/top_up_cubit.dart';
-import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/top_up_state.dart';
-import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_cubit.dart';
-import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:draya_mobile/core/enums/cubit_status.dart';
+import "package:draya_mobile/core/helpers/app_dialog_helper.dart";
+import "package:draya_mobile/core/helpers/app_extensions.dart";
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/validation/email_validator.dart";
+import "package:draya_mobile/core/validation/phone_validator.dart";
+import "package:draya_mobile/core/validation/validation_result.dart";
+import "package:draya_mobile/core/view_models/drawer_model.dart";
+import "package:draya_mobile/core/widgets/app_custom_loading.dart";
+import "package:draya_mobile/core/widgets/app_drawer.dart";
+import "package:draya_mobile/core/widgets/app_elevated_button.dart";
+import "package:draya_mobile/core/widgets/app_error_dialog.dart";
+import "package:draya_mobile/core/widgets/app_label.dart";
+import "package:draya_mobile/core/widgets/app_text_form_field.dart";
+import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/core/widgets/profile_avatar_picker.dart";
+import "package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart";
+import "package:draya_mobile/features/teacher/profile/data/models/teacher_model.dart";
+import "package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart";
+import "package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_state.dart";
+import "package:draya_mobile/features/teacher/wallet/data/models/top_up_request_model.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/top_up_cubit.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/top_up_state.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_cubit.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_state.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:draya_mobile/core/enums/cubit_status.dart";
 
 class TeacherProfilePage extends StatefulWidget {
   const TeacherProfilePage({super.key});
@@ -91,7 +91,6 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
       return;
     }
 
-    // proceed with paymob url
     context.read<TopUpCubit>().topUp(
       topUpRequestModel: TopUpRequestModel(amount: amount!),
     );
@@ -132,8 +131,9 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                     context,
                     AppErrorDialog(
                       apiErrorModel: state.apiErrorModel!,
-                      onRetry: () =>
-                          context.read<TeacherProfileCubit>().getTeacherProfile(),
+                      onRetry: () => context
+                          .read<TeacherProfileCubit>()
+                          .getTeacherProfile(),
                     ),
                   );
                 }
@@ -206,12 +206,15 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                       BlocBuilder<TeacherProfileCubit, TeacherProfileState>(
                         builder: (context, state) {
                           final teacher = state.teacher;
-                          final name = _textEditingControllerName.text.trim().isNotEmpty
+                          final name =
+                              _textEditingControllerName.text.trim().isNotEmpty
                               ? _textEditingControllerName.text.trim()
-                              : (teacher?.fullName ?? '');
+                              : (teacher?.fullName ?? "");
 
                           return Padding(
-                            padding: const EdgeInsets.only(bottom: AppSizes.s24),
+                            padding: const EdgeInsets.only(
+                              bottom: AppSizes.s24,
+                            ),
                             child: ProfileAvatarPicker(
                               imageUrl: teacher?.profilePictureUrl,
                               name: name,

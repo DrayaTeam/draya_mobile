@@ -21,20 +21,20 @@ enum MaterialTypeEnum {
 
   static MaterialTypeEnum fromExtension({required String extension}) {
     switch (extension.toLowerCase()) {
-      case 'mp4':
-      case 'mov':
-      case 'mkv':
+      case "mp4":
+      case "mov":
+      case "mkv":
         return MaterialTypeEnum.video;
-      case 'pdf':
+      case "pdf":
         return MaterialTypeEnum.pdf;
-      case 'docx':
+      case "docx":
         return MaterialTypeEnum.docx;
-      case 'pptx':
+      case "pptx":
         return MaterialTypeEnum.pptx;
-      case 'jpg':
-      case 'jpeg':
-      case 'png':
-      case 'webp':
+      case "jpg":
+      case "jpeg":
+      case "png":
+      case "webp":
         return MaterialTypeEnum.image;
       default:
         throw ArgumentError("نوع الملف غير مدعوم");
