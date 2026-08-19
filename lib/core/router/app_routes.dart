@@ -29,6 +29,7 @@ abstract final class AppRoutes {
   static const String teacherProfilePage = "/teacher/profile";
   static const String studentProfilePage = "/student/profile";
   static const String paymentWebViewPage = "/payment/pay";
+  static const String paymentResultPage = "/payment/result";
   static const String materialsPage = "/teacher/classrooms/materials";
   static const String studentClassroomsMaterialsPage =
       "/student/classrooms/materials";
@@ -39,3 +40,4 @@ abstract final class AppRoutes {
   static const String studentEnrolledClassroomsPage =
       "/student/enrolled_classrooms";
 }
+

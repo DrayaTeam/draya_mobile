@@ -10,6 +10,7 @@ abstract class TeacherProfileState with _$TeacherProfileState {
   const factory TeacherProfileState({
     @Default(CubitStatus.initial) CubitStatus status,
     @Default(null) TeacherModel? teacher,
+    @Default(false) bool isUploadingPicture,
     ApiErrorModel? apiErrorModel,
   }) = _TeacherProfileState;
 }

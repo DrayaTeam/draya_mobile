@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:draya_mobile/core/networking/api_error_handler.dart';
 import 'package:draya_mobile/core/networking/api_result.dart';
 import 'package:draya_mobile/features/auth/data/models/user_profile_model.dart';
@@ -30,6 +33,23 @@ class StudentProfileRepoImpl implements StudentProfileRepo {
     try {
       final response = await _studentProfileApiService.updateStudentProfile(
         request,
+      );
+      return ApiResult.success(response);
+    } catch (e) {
+      return ApiResult.failure(ErrorHandler.handle(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<dynamic>> uploadProfilePicture(File file) async {
+    try {
+      final fileName = file.path.split('/').last.split('\\').last;
+      final multipartFile = await MultipartFile.fromFile(
+        file.path,
+        filename: fileName,
+      );
+      final response = await _studentProfileApiService.uploadProfilePicture(
+        multipartFile,
       );
       return ApiResult.success(response);
     } catch (e) {

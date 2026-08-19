@@ -15,6 +15,7 @@ StudentProfileModel _$StudentProfileModelFromJson(Map<String, dynamic> json) =>
       dateOfBirth: json['dateOfBirth'] == null
           ? null
           : DateTime.parse(json['dateOfBirth'] as String),
+      profilePictureUrl: json['profilePictureUrl'] as String?,
     );
 
 Map<String, dynamic> _$StudentProfileModelToJson(
@@ -25,4 +26,5 @@ Map<String, dynamic> _$StudentProfileModelToJson(
   'fullName': ?instance.fullName,
   'parentGuardianEmail': ?instance.parentGuardianEmail,
   'dateOfBirth': ?instance.dateOfBirth?.toIso8601String(),
+  'profilePictureUrl': ?instance.profilePictureUrl,
 };

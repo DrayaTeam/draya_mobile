@@ -11,6 +11,7 @@ TeacherModel _$TeacherModelFromJson(Map<String, dynamic> json) => TeacherModel(
   email: json['email'] as String,
   fullName: json['fullName'] as String,
   phone: json['phone'] as String,
+  profilePictureUrl: json['profilePictureUrl'] as String?,
 );
 
 Map<String, dynamic> _$TeacherModelToJson(TeacherModel instance) =>
@@ -19,4 +20,5 @@ Map<String, dynamic> _$TeacherModelToJson(TeacherModel instance) =>
       'email': instance.email,
       'fullName': instance.fullName,
       'phone': instance.phone,
+      'profilePictureUrl': instance.profilePictureUrl,
     };

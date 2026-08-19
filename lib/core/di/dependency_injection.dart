@@ -18,6 +18,7 @@ import "package:draya_mobile/features/student/profile/presentation/cubit/student
 import "package:draya_mobile/features/student/student_channel/data/repos/student_channel_repo_impl.dart";
 import "package:draya_mobile/features/student/student_channel/data/source/student_channel_remote_data_source.dart";
 import "package:draya_mobile/features/student/student_channel/domain/repos/student_channel_repo.dart";
+import "package:draya_mobile/features/student/profile/domain/usecases/upload_student_profile_picture_use_case.dart";
 import "package:draya_mobile/features/student/student_channel/domain/usecases/create_question_use_case.dart"
     as student;
 import "package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart";
@@ -103,6 +104,11 @@ import "package:draya_mobile/features/teacher/wallet/domain/usecases/get_teacher
 import "package:draya_mobile/features/teacher/wallet/domain/usecases/top_up_use_case.dart";
 import "package:draya_mobile/features/teacher/wallet/presentation/cubit/confirm_payment_cubit.dart";
 import "package:get_it/get_it.dart";
+import "package:draya_mobile/core/services/deep_link_service.dart";
+import "package:draya_mobile/features/student/teachers/domain/usecases/get_payment_status_use_case.dart";
+import "package:draya_mobile/features/student/teachers/presentation/cubit/payment_verification_cubit.dart";
+
+import "package:draya_mobile/features/teacher/profile/domain/usecases/upload_teacher_profile_picture_use_case.dart";
 
 final getIt = GetIt.instance;
 
@@ -156,10 +162,15 @@ Future<void> setupGetIt() async {
     () => UpdateStudentProfileUseCase(getIt<StudentProfileRepo>()),
   );
 
+  getIt.registerLazySingleton<UploadStudentProfilePictureUseCase>(
+    () => UploadStudentProfilePictureUseCase(getIt<StudentProfileRepo>()),
+  );
+
   getIt.registerFactory<StudentProfileCubit>(
     () => StudentProfileCubit(
       getIt<GetStudentProfileUseCase>(),
       getIt<UpdateStudentProfileUseCase>(),
+      getIt<UploadStudentProfilePictureUseCase>(),
     ),
   );
 
@@ -238,6 +249,10 @@ Future<void> setupGetIt() async {
     () => GetTeacherProfileUseCase(getIt<TeacherProfileRepo>()),
   );
 
+  getIt.registerLazySingleton<UploadTeacherProfilePictureUseCase>(
+    () => UploadTeacherProfilePictureUseCase(getIt<TeacherProfileRepo>()),
+  );
+
   // wallet
   getIt.registerLazySingleton<WalletApiService>(
     () => WalletApiService(getIt<Dio>()),
@@ -306,6 +321,14 @@ Future<void> setupGetIt() async {
     () => CheckoutClassroomUseCase(getIt<TeacherRepo>()),
   );
 
+  getIt.registerLazySingleton<GetPaymentStatusUseCase>(
+    () => GetPaymentStatusUseCase(getIt<TeacherRepo>()),
+  );
+
+  getIt.registerLazySingleton<DeepLinkService>(
+    () => DeepLinkService(),
+  );
+
   getIt.registerFactory<TeacherClassroomsCubit>(
     () => TeacherClassroomsCubit(getIt<GetTeacherClassroomsUseCase>()),
   );
@@ -319,6 +342,10 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactory<StudentCheckoutCubit>(
     () => StudentCheckoutCubit(getIt<CheckoutClassroomUseCase>()),
+  );
+
+  getIt.registerFactory<PaymentVerificationCubit>(
+    () => PaymentVerificationCubit(getIt<GetPaymentStatusUseCase>()),
   );
 
   // student materials

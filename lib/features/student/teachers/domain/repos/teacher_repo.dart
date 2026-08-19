@@ -3,6 +3,8 @@ import 'package:draya_mobile/features/student/teachers/data/models/teacher_class
 import 'package:draya_mobile/features/student/teachers/data/models/teacher_model.dart';
 
 import 'package:draya_mobile/features/student/teachers/data/models/classroom_checkout_response_model.dart';
+import 'package:draya_mobile/features/student/teachers/data/models/classroom_checkout_request_model.dart';
+import 'package:draya_mobile/features/student/teachers/data/models/payment_status_model.dart';
 
 abstract class TeacherRepo {
   Future<ApiResult<List<TeacherModel>>> getTeachers();
@@ -15,5 +17,10 @@ abstract class TeacherRepo {
 
   Future<ApiResult<ClassroomCheckoutResponseModel>> checkoutClassroom(
     String classroomId,
+    ClassroomCheckoutRequestModel request,
+  );
+
+  Future<ApiResult<PaymentStatusModel>> getPaymentStatus(
+    String transactionId,
   );
 }

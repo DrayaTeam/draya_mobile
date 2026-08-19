@@ -10,6 +10,7 @@ abstract class StudentProfileState with _$StudentProfileState {
   const factory StudentProfileState({
     @Default(CubitStatus.initial) CubitStatus status,
     @Default(null) StudentProfileModel? studentProfile,
+    @Default(false) bool isUploadingPicture,
     ApiErrorModel? apiErrorModel,
   }) = _StudentProfileState;
 }

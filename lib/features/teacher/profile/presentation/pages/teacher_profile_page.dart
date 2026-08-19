@@ -14,6 +14,7 @@ import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
 import 'package:draya_mobile/core/widgets/app_label.dart';
 import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
+import 'package:draya_mobile/core/widgets/profile_avatar_picker.dart';
 import 'package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart';
 import 'package:draya_mobile/features/teacher/profile/data/models/teacher_model.dart';
 import 'package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart';
@@ -102,7 +103,9 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
       listeners: [
         BlocListener<TeacherProfileCubit, TeacherProfileState>(
           listenWhen: (previous, current) {
-            return previous.status != current.status;
+            return previous.status != current.status ||
+                (previous.apiErrorModel != current.apiErrorModel &&
+                    current.apiErrorModel != null);
           },
           listener: (BuildContext context, TeacherProfileState state) {
             switch (state.status) {
@@ -123,13 +126,17 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                 AppNavigator.pop(context: context);
                 break;
               case CubitStatus.error:
-                // AppNavigator.pop(context: context);
-                AppDialogHelper.display(
-                  context,
-                  AppErrorDialog(
-                    apiErrorModel: state.apiErrorModel!,
-                  ),
-                );
+                AppNavigator.pop(context: context);
+                if (state.apiErrorModel != null) {
+                  AppDialogHelper.display(
+                    context,
+                    AppErrorDialog(
+                      apiErrorModel: state.apiErrorModel!,
+                      onRetry: () =>
+                          context.read<TeacherProfileCubit>().getTeacherProfile(),
+                    ),
+                  );
+                }
                 break;
             }
           },
@@ -196,6 +203,28 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      BlocBuilder<TeacherProfileCubit, TeacherProfileState>(
+                        builder: (context, state) {
+                          final teacher = state.teacher;
+                          final name = _textEditingControllerName.text.trim().isNotEmpty
+                              ? _textEditingControllerName.text.trim()
+                              : (teacher?.fullName ?? '');
+
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: AppSizes.s24),
+                            child: ProfileAvatarPicker(
+                              imageUrl: teacher?.profilePictureUrl,
+                              name: name,
+                              isUploading: state.isUploadingPicture,
+                              onImagePicked: (file) {
+                                context
+                                    .read<TeacherProfileCubit>()
+                                    .uploadProfilePicture(file: file);
+                              },
+                            ),
+                          );
+                        },
+                      ),
                       Text(
                         "الصفحة الشخصية للمعلم",
                         style: context.textTheme.headlineMedium,

@@ -2,6 +2,7 @@ import 'package:draya_mobile/core/di/dependency_injection.dart';
 import 'package:draya_mobile/core/helpers/app_shared_pref_helper.dart';
 import 'package:draya_mobile/core/helpers/app_token_helper.dart';
 import 'package:draya_mobile/core/localization/locale_cubit.dart';
+import 'package:draya_mobile/core/services/deep_link_service.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/login_use_case.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/student_register_use_case.dart';
 import 'package:draya_mobile/features/auth/domain/usecases/teacher_register_use_case.dart';
@@ -11,6 +12,7 @@ import 'package:draya_mobile/features/auth/presentation/teacher_signup/cubit/tea
 import 'package:draya_mobile/features/auth/presentation/signup_choice/cubit/signup_choice_cubit.dart';
 import 'package:draya_mobile/features/student/profile/domain/usecases/get_student_profile_use_case.dart';
 import 'package:draya_mobile/features/student/profile/domain/usecases/update_student_profile_use_case.dart';
+import 'package:draya_mobile/features/student/profile/domain/usecases/upload_student_profile_picture_use_case.dart';
 import 'package:draya_mobile/features/student/profile/presentation/cubit/student_profile_cubit.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/enroll_classroom_use_case.dart';
 import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/get_student_enrolled_classrooms_use_case.dart';
@@ -19,8 +21,10 @@ import 'package:draya_mobile/features/student/student_materials/domain/usecases/
 import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_material_stream_use_case.dart';
 import 'package:draya_mobile/features/student/student_materials/presentation/cubit/student_materials_cubit.dart';
 import 'package:draya_mobile/features/student/teachers/domain/usecases/checkout_classroom_use_case.dart';
+import 'package:draya_mobile/features/student/teachers/domain/usecases/get_payment_status_use_case.dart';
 import 'package:draya_mobile/features/student/teachers/domain/usecases/get_teacher_classrooms_use_case.dart';
 import 'package:draya_mobile/features/student/teachers/domain/usecases/get_teachers_use_case.dart';
+import 'package:draya_mobile/features/student/teachers/presentation/cubit/payment_verification_cubit.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/cubit/student_checkout_cubit.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_cubit.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_cubit.dart';
@@ -32,6 +36,7 @@ import 'package:draya_mobile/features/teacher/materials/domain/usecases/get_mate
 import 'package:draya_mobile/features/teacher/materials/domain/usecases/upload_materials_use_case.dart';
 import 'package:draya_mobile/features/teacher/materials/presentation/cubit/materials_cubit.dart';
 import 'package:draya_mobile/features/teacher/profile/domain/usecases/get_teacher_profile_use_case.dart';
+import 'package:draya_mobile/features/teacher/profile/domain/usecases/upload_teacher_profile_picture_use_case.dart';
 import 'package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart';
 import 'package:draya_mobile/features/teacher/subjects/domain/usecases/add_subject_use_case.dart';
 import 'package:draya_mobile/features/teacher/subjects/domain/usecases/get_subjects_use_case.dart';
@@ -66,6 +71,7 @@ Future<void> main() async {
     ),
   );
   await setupGetIt();
+  getIt<DeepLinkService>().init();
   await AppTokenHelper.clearSessionIfNotRemembered();
   runApp(
     MultiBlocProvider(
@@ -126,6 +132,10 @@ Future<void> main() async {
           create: (context) =>
               StudentCheckoutCubit(getIt<CheckoutClassroomUseCase>()),
         ),
+        BlocProvider<PaymentVerificationCubit>(
+          create: (context) =>
+              PaymentVerificationCubit(getIt<GetPaymentStatusUseCase>()),
+        ),
         BlocProvider<StudentMaterialsCubit>(
           create: (context) => StudentMaterialsCubit(
             getIt<GetEnrolledMaterialsUseCase>(),
@@ -133,13 +143,16 @@ Future<void> main() async {
           ),
         ),
         BlocProvider<TeacherProfileCubit>(
-          create: (context) =>
-              TeacherProfileCubit(getIt<GetTeacherProfileUseCase>()),
+          create: (context) => TeacherProfileCubit(
+            getIt<GetTeacherProfileUseCase>(),
+            getIt<UploadTeacherProfilePictureUseCase>(),
+          ),
         ),
         BlocProvider<StudentProfileCubit>(
           create: (context) => StudentProfileCubit(
             getIt<GetStudentProfileUseCase>(),
             getIt<UpdateStudentProfileUseCase>(),
+            getIt<UploadStudentProfilePictureUseCase>(),
           ),
         ),
         BlocProvider<WalletCubit>(

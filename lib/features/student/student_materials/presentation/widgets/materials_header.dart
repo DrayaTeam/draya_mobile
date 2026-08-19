@@ -1,5 +1,4 @@
 import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -11,45 +10,57 @@ class MaterialsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppSizes.s20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.primary700, AppColors.primary500],
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
+          colors: [AppColors.primary800, AppColors.primary600],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(AppSizes.s20),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary700.withValues(alpha: 0.25),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Row(
         children: [
           Container(
-            width: AppSizes.s56,
-            height: AppSizes.s56,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.14),
-              borderRadius: BorderRadius.circular(AppSizes.s16),
+              color: Colors.white.withValues(alpha: 0.18),
+              borderRadius: BorderRadius.circular(14),
             ),
-            child: const Icon(Icons.folder_copy_outlined, color: Colors.white),
+            child: const Icon(
+              Icons.folder_copy_rounded,
+              color: Colors.white,
+              size: 24,
+            ),
           ),
-          const SizedBox(width: AppSizes.s16),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'مواد الفصول المسجّل بها',
-                  style: AppTextStyles.textTheme.titleMedium?.copyWith(
+                  'المواد الدراسية',
+                  style: AppTextStyles.h4.copyWith(
                     color: Colors.white,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: AppSizes.s4),
+                const SizedBox(height: 2),
                 Text(
                   materialCount == 0
                       ? 'ستظهر مواد معلّميك هنا'
-                      : '$materialCount مادة متاحة لك',
-                  style: AppTextStyles.textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.9),
+                      : '$materialCount مادة تعليمية متاحة للتصفح والتحميل',
+                  style: AppTextStyles.body.copyWith(
+                    color: Colors.white.withValues(alpha: 0.85),
+                    fontSize: 13,
                   ),
                 ),
               ],

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:draya_mobile/core/networking/api_constants.dart';
 import 'package:draya_mobile/features/student/teachers/data/models/classroom_checkout_response_model.dart';
+import 'package:draya_mobile/features/student/teachers/data/models/classroom_checkout_request_model.dart';
+import 'package:draya_mobile/features/student/teachers/data/models/payment_status_model.dart';
 import 'package:draya_mobile/features/student/teachers/data/models/teacher_classroom_paged_result_model.dart';
 import 'package:draya_mobile/features/student/teachers/data/models/teacher_model.dart';
 import 'package:draya_mobile/features/student/teachers/data/source/teacher_api_constants.dart';
@@ -25,5 +27,11 @@ abstract class TeacherApiService {
   @POST("/classrooms/{classroomId}/checkout")
   Future<ClassroomCheckoutResponseModel> checkoutClassroom(
     @Path('classroomId') String classroomId,
+    @Body() ClassroomCheckoutRequestModel request,
+  );
+
+  @GET(TeacherApiConstants.paymentStatus)
+  Future<PaymentStatusModel> getPaymentStatus(
+    @Path('transactionId') String transactionId,
   );
 }

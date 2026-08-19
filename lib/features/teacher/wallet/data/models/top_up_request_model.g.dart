@@ -7,7 +7,15 @@ part of 'top_up_request_model.dart';
 // **************************************************************************
 
 TopUpRequestModel _$TopUpRequestModelFromJson(Map<String, dynamic> json) =>
-    TopUpRequestModel(amount: (json['amount'] as num).toDouble());
+    TopUpRequestModel(
+      amount: (json['amount'] as num).toDouble(),
+      redirectionUrl:
+          json['redirectionUrl'] as String? ??
+          'https://draya.com/payment/result',
+    );
 
 Map<String, dynamic> _$TopUpRequestModelToJson(TopUpRequestModel instance) =>
-    <String, dynamic>{'amount': instance.amount};
+    <String, dynamic>{
+      'amount': instance.amount,
+      'redirectionUrl': instance.redirectionUrl,
+    };

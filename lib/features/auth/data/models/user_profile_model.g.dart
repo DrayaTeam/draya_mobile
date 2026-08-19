@@ -16,6 +16,7 @@ UserProfileModel _$UserProfileModelFromJson(Map<String, dynamic> json) =>
       dateOfBirth: json['dateOfBirth'] == null
           ? null
           : DateTime.parse(json['dateOfBirth'] as String),
+      profilePictureUrl: json['profilePictureUrl'] as String?,
     );
 
 Map<String, dynamic> _$UserProfileModelToJson(UserProfileModel instance) =>
@@ -26,4 +27,5 @@ Map<String, dynamic> _$UserProfileModelToJson(UserProfileModel instance) =>
       'role': ?instance.role,
       'parentGuardianEmail': ?instance.parentGuardianEmail,
       'dateOfBirth': ?instance.dateOfBirth?.toIso8601String(),
+      'profilePictureUrl': ?instance.profilePictureUrl,
     };

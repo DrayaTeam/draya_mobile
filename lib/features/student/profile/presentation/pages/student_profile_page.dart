@@ -11,6 +11,7 @@ import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
 import 'package:draya_mobile/core/widgets/app_label.dart';
 import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
+import 'package:draya_mobile/core/widgets/profile_avatar_picker.dart';
 import 'package:draya_mobile/features/student/profile/data/models/update_student_profile_request_model.dart';
 import 'package:draya_mobile/features/student/profile/presentation/cubit/student_profile_cubit.dart';
 import 'package:draya_mobile/features/student/profile/presentation/cubit/student_profile_state.dart';
@@ -92,7 +93,10 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<StudentProfileCubit, StudentProfileState>(
-      listenWhen: (previous, current) => previous.status != current.status,
+      listenWhen: (previous, current) =>
+          previous.status != current.status ||
+          (previous.apiErrorModel != current.apiErrorModel &&
+              current.apiErrorModel != null),
       listener: (context, state) {
         switch (state.status) {
           case CubitStatus.loading:
@@ -114,13 +118,16 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
             break;
           case CubitStatus.error:
             _dismissLoadingDialogIfVisible(context);
-            AppDialogHelper.display(
-              context,
-              AppErrorDialog(
-                apiErrorModel: state.apiErrorModel!,
-                onRetry: () => context.read<StudentProfileCubit>().getStudentProfile(),
-              ),
-            );
+            if (state.apiErrorModel != null) {
+              AppDialogHelper.display(
+                context,
+                AppErrorDialog(
+                  apiErrorModel: state.apiErrorModel!,
+                  onRetry: () =>
+                      context.read<StudentProfileCubit>().getStudentProfile(),
+                ),
+              );
+            }
             break;
           case CubitStatus.initial:
             break;
@@ -137,6 +144,28 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  BlocBuilder<StudentProfileCubit, StudentProfileState>(
+                    builder: (context, state) {
+                      final studentProfile = state.studentProfile;
+                      final name = _fullNameController.text.trim().isNotEmpty
+                          ? _fullNameController.text.trim()
+                          : (studentProfile?.fullName ?? '');
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: AppSizes.s24),
+                        child: ProfileAvatarPicker(
+                          imageUrl: studentProfile?.profilePictureUrl,
+                          name: name,
+                          isUploading: state.isUploadingPicture,
+                          onImagePicked: (file) {
+                            context
+                                .read<StudentProfileCubit>()
+                                .uploadProfilePicture(file: file);
+                          },
+                        ),
+                      );
+                    },
+                  ),
                   Text(
                     "معلومات الطالب",
                     style: Theme.of(context).textTheme.headlineMedium,

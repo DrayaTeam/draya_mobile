@@ -106,10 +106,10 @@ List<DrawerModel> getStudentDrawerItemsList() {
           title: "تفاصيل المحاضرات",
           route: AppRoutes.studentClassroomsMaterialsPage,
         ),
-        DrawerItemViewModel(
-          icon: Icons.book_outlined,
-          title: "الكتب",
-        ),
+        // DrawerItemViewModel(
+        //   icon: Icons.book_outlined,
+        //   title: "الكتب",
+        // ),
       ],
     ),
     DrawerModel(
@@ -129,10 +129,10 @@ List<DrawerModel> getStudentDrawerItemsList() {
     DrawerModel(
       title: "التواصل",
       items: [
-        DrawerItemViewModel(
-          icon: Icons.tv_outlined,
-          title: "القناة الرئيسية",
-        ),
+        // DrawerItemViewModel(
+        //   icon: Icons.tv_outlined,
+        //   title: "القناة الرئيسية",
+        // ),
          DrawerItemViewModel(
           title: "عن حسابى",
           icon: Icons.person_outline,
