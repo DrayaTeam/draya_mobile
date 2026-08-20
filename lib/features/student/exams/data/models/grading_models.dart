@@ -1,7 +1,7 @@
-import 'package:draya_mobile/features/student/exams/domain/entity/student_exam.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:draya_mobile/features/student/exams/domain/entity/student_exam.dart";
+import "package:json_annotation/json_annotation.dart";
 
-part 'grading_models.g.dart';
+part "grading_models.g.dart";
 
 @JsonSerializable()
 class GradingJobModel {

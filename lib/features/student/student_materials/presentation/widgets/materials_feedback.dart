@@ -1,7 +1,7 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
 
 class MaterialsEmptyState extends StatelessWidget {
   final VoidCallback onRefresh;
@@ -10,9 +10,9 @@ class MaterialsEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) => _FeedbackContent(
         icon: Icons.folder_open_rounded,
-        title: 'لا توجد مواد متاحة بعد',
-        message: 'عندما يضيف معلّموك مواداً إلى الفصول المسجّل بها، ستظهر هنا.',
-        actionLabel: 'تحديث القائمة',
+        title: "لا توجد مواد متاحة بعد",
+        message: "عندما يضيف معلّموك مواداً إلى الفصول المسجّل بها، ستظهر هنا.",
+        actionLabel: "تحديث القائمة",
         onAction: onRefresh,
       );
 }
@@ -30,9 +30,9 @@ class MaterialsErrorState extends StatelessWidget {
   Widget build(BuildContext context) => _FeedbackContent(
         icon: Icons.error_outline_rounded,
         iconColor: AppColors.error,
-        title: 'تعذّر تحميل المواد',
+        title: "تعذّر تحميل المواد",
         message: message,
-        actionLabel: 'إعادة المحاولة',
+        actionLabel: "إعادة المحاولة",
         onAction: onRetry,
       );
 }

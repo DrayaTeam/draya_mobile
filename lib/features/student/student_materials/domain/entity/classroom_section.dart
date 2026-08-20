@@ -13,7 +13,7 @@ class SectionDocument {
     this.fileUrl,
   });
 
-  bool get isPdf => materialType.toLowerCase() == 'pdf';
+  bool get isPdf => materialType.toLowerCase() == "pdf";
   bool get hasFileUrl => fileUrl != null && fileUrl!.trim().isNotEmpty;
 }
 

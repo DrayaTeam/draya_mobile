@@ -1,6 +1,3 @@
-import "package:draya_mobile/core/constants/app_shared_pref_keys.dart";
-import "package:draya_mobile/core/helpers/app_shared_pref_helper.dart";
-import "package:draya_mobile/core/helpers/app_token_helper.dart";
 import "package:draya_mobile/core/networking/api_result.dart";
 import "package:draya_mobile/features/auth/data/models/auth_response_model.dart";
 import "package:draya_mobile/features/auth/data/models/register_student_request_model.dart";
@@ -22,20 +19,6 @@ class StudentSignupCubit extends Cubit<StudentSignupState> {
     );
     result.when(
       success: (authResponse) async {
-        await AppTokenHelper.saveTokens(
-          accessToken: authResponse.accessToken,
-          refreshToken: authResponse.refreshToken,
-        );
-
-        final role = authResponse.user?.role;
-
-        if (role != null && role.isNotEmpty) {
-          await AppSharedPrefHelper.setData(
-            AppSharedPrefKeys.userRole,
-            role,
-          );
-        }
-
         emit(
           StudentSignupState.success(
             authEntity: authResponse.toEntity(),

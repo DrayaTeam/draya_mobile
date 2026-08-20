@@ -1,4 +1,4 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
 
 part "classroom_type_model.g.dart";
 

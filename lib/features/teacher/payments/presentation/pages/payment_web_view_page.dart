@@ -1,14 +1,14 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart';
-import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/confirm_payment_cubit.dart';
-import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_cubit.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/confirm_payment_cubit.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_cubit.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:webview_flutter/webview_flutter.dart";
 
 class PaymentWebViewPage extends StatefulWidget {
   final PaymentWebviewModel _paymentWebviewModel;
@@ -30,15 +30,15 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
 
     final uri = Uri.tryParse(url);
     String? transactionId =
-        uri?.queryParameters['transactionId'] ??
-        uri?.queryParameters['merchant_order_id'] ??
-        uri?.queryParameters['id'] ??
-        uri?.queryParameters['paymentTransactionId'] ??
-        uri?.queryParameters['order'] ??
+        uri?.queryParameters["transactionId"] ??
+        uri?.queryParameters["merchant_order_id"] ??
+        uri?.queryParameters["id"] ??
+        uri?.queryParameters["paymentTransactionId"] ??
+        uri?.queryParameters["order"] ??
         widget._paymentWebviewModel.transactionId;
 
     if (transactionId == null || transactionId.isEmpty) {
-      transactionId = widget._paymentWebviewModel.transactionId ?? '';
+      transactionId = widget._paymentWebviewModel.transactionId ?? "";
     }
     try {
       await context.read<ConfirmPaymentCubit>().confirmPayment(
@@ -110,13 +110,13 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
             final url = request.url;
 
             // 1. Intercept ANY custom draya:// redirect
-            if (url.startsWith('draya://') || url.startsWith('draya:')) {
+            if (url.startsWith("draya://") || url.startsWith("draya:")) {
               _handlePaymentRedirect(url);
               return NavigationDecision.prevent;
             }
 
             // 2. Prevent arbitrary non-web schemes from crashing the webview
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
               return NavigationDecision.prevent;
             }
 
@@ -124,8 +124,8 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
             final isLocalRedirect = RegExp(
               r"^http:\/\/localhost:",
             ).hasMatch(url);
-            final isSuccessRedirect = url.toLowerCase().contains('success');
-            final isCancelRedirect = url.toLowerCase().contains('cancel');
+            final isSuccessRedirect = url.toLowerCase().contains("success");
+            final isCancelRedirect = url.toLowerCase().contains("cancel");
 
             if (widget._paymentWebviewModel.transactionId != null &&
                 (isSuccessRedirect || isLocalRedirect)) {
@@ -146,8 +146,8 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
           onWebResourceError: (WebResourceError error) {
             final failingUrl = error.url;
             if (failingUrl != null &&
-                (failingUrl.startsWith('draya://') ||
-                    failingUrl.startsWith('draya:'))) {
+                (failingUrl.startsWith("draya://") ||
+                    failingUrl.startsWith("draya:"))) {
               _handlePaymentRedirect(failingUrl);
             }
           },

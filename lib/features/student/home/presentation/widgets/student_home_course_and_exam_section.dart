@@ -1,7 +1,7 @@
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
+import "package:font_awesome_flutter/font_awesome_flutter.dart";
 
 class StudentHomeCourseAndExamSection extends StatelessWidget {
   const StudentHomeCourseAndExamSection({super.key});
@@ -13,8 +13,8 @@ class StudentHomeCourseAndExamSection extends StatelessWidget {
       child: Column(
         children: [
           _CoursePerformanceCard(
-            title: 'الباقات المشترك بها',
-            value: '3 باقات',
+            title: "الباقات المشترك بها",
+            value: "3 باقات",
             accentGradient: LinearGradient(
               colors: [Color(0xFFF0FDFA), Color(0xFFF0FDFA)],
             ),
@@ -23,7 +23,7 @@ class StudentHomeCourseAndExamSection extends StatelessWidget {
             valueColor: Color(0xFF0F172B),
             badgeBorderColor: Color(0xFF009689),
             badgeIconColor: Color(0xFF009689),
-            badgeLabel: 'سارية حتى نهاية الترم',
+            badgeLabel: "سارية حتى نهاية الترم",
             badgeLabelColor: Color(0xFF009689),
             backgroundColor: Color(0xFFFFFFFF),
             borderColor: Color(0xFFF1F5F9),
@@ -32,8 +32,8 @@ class StudentHomeCourseAndExamSection extends StatelessWidget {
           ),
           SizedBox(height: AppSizes.s24),
           _CoursePerformanceCard(
-            title: 'أداء المواد المتوسط',
-            value: '87%',
+            title: "أداء المواد المتوسط",
+            value: "87%",
             accentGradient: LinearGradient(
               colors: [Color(0xFFF0F9FF), Color(0xFFF0F9FF)],
             ),
@@ -42,7 +42,7 @@ class StudentHomeCourseAndExamSection extends StatelessWidget {
             valueColor: Color(0xFF0F172B),
             badgeBorderColor: Color(0xFF0084D1),
             badgeIconColor: Color(0xFF0084D1),
-            badgeLabel: '+4% هذا الشهر',
+            badgeLabel: "+4% هذا الشهر",
             badgeLabelColor: Color(0xFF007A55),
             backgroundColor: Color(0xFFFFFFFF),
             borderColor: Color(0xFFF1F5F9),

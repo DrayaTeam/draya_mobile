@@ -1,7 +1,7 @@
-import 'package:draya_mobile/features/teacher/teacher_channel/domain/entity/reply_entity.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:draya_mobile/features/teacher/teacher_channel/domain/entity/reply_entity.dart";
+import "package:json_annotation/json_annotation.dart";
 
-part 'reply_model.g.dart';
+part "reply_model.g.dart";
 
 @JsonSerializable()
 class ReplyModel {

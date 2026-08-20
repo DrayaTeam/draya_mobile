@@ -1,5 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
-part 'register_student_request_model.g.dart';
+import "package:json_annotation/json_annotation.dart";
+part "register_student_request_model.g.dart";
 
 @JsonSerializable(includeIfNull: false)
 class RegisterStudentRequestModel {

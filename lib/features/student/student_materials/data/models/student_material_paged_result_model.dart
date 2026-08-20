@@ -1,8 +1,8 @@
-import 'package:draya_mobile/features/student/student_materials/data/models/student_material_model.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:draya_mobile/features/student/student_materials/data/models/student_material_model.dart";
+import "package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart";
+import "package:json_annotation/json_annotation.dart";
 
-part 'student_material_paged_result_model.g.dart';
+part "student_material_paged_result_model.g.dart";
 
 @JsonSerializable()
 class StudentMaterialPagedResultModel {

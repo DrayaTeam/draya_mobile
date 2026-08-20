@@ -1,9 +1,9 @@
-import 'package:draya_mobile/core/helpers/app_extensions.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
-import 'package:draya_mobile/core/widgets/app_logo_and_name.dart';
-import 'package:draya_mobile/core/widgets/app_text_field.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/helpers/app_extensions.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/widgets/app_elevated_button.dart";
+import "package:draya_mobile/core/widgets/app_logo_and_name.dart";
+import "package:draya_mobile/core/widgets/app_text_field.dart";
+import "package:flutter/material.dart";
 
 class VerificationCodePage extends StatefulWidget {
   const VerificationCodePage({super.key});

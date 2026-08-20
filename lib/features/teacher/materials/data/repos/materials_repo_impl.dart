@@ -1,25 +1,30 @@
-import 'package:dio/dio.dart';
-import 'package:draya_mobile/core/networking/api_error_handler.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/teacher/materials/data/models/materials_request_model.dart';
-import 'package:draya_mobile/features/teacher/materials/data/models/teacher_material_paged_result_model.dart';
-import 'package:draya_mobile/features/teacher/materials/data/source/materials_api_service.dart';
-import 'package:draya_mobile/features/teacher/materials/domain/repos/materials_repo.dart';
-import 'package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart';
+import "package:dio/dio.dart";
+import "package:draya_mobile/core/networking/api_error_handler.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/teacher/materials/data/models/materials_request_model.dart";
+import "package:draya_mobile/features/teacher/materials/data/source/materials_api_service.dart";
+import "package:draya_mobile/features/teacher/materials/domain/repos/materials_repo.dart";
+import "package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart";
+import "package:draya_mobile/features/teacher/sections/data/models/section_model.dart";
+import "package:draya_mobile/features/teacher/sections/data/sources/section_api_service.dart";
 
 class MaterialsRepoImpl implements MaterialsRepo {
   final MaterialsApiService _materialsApiService;
+  final SectionApiService _sectionApiService;
 
-  MaterialsRepoImpl(this._materialsApiService);
+  MaterialsRepoImpl(
+    this._materialsApiService,
+    this._sectionApiService,
+  );
 
   @override
   Future<ApiResult<void>> uploadMaterials({
-    required String classroomId,
+    required String sectionId,
     required MaterialsRequestModel materialsRequestModel,
   }) async {
     try {
       final response = await _materialsApiService.uploadMaterials(
-        classroomId,
+        sectionId,
         materialsRequestModel.title,
         materialsRequestModel.materialType.name,
         await MultipartFile.fromFile(
@@ -35,17 +40,21 @@ class MaterialsRepoImpl implements MaterialsRepo {
   }
 
   @override
-  Future<ApiResult<TeacherMaterialPagedResultModel>> getMaterials({
+  Future<ApiResult<SectionModel>> getMaterials({
     required GetMaterialsParams getMaterialsParams,
   }) async {
     try {
-      final response = await _materialsApiService.getMaterials(
+      final response = await _sectionApiService.getSections(
         getMaterialsParams.classroomId,
-        getMaterialsParams.page,
-        getMaterialsParams.pageSize,
       );
 
-      return ApiResult.success(response);
+      final section = response.firstWhere(
+        (section) {
+          return section.id == getMaterialsParams.sectionId;
+        },
+      );
+
+      return ApiResult.success(section);
     } catch (e) {
       return ApiResult.failure(ErrorHandler.handle(e));
     }

@@ -1,10 +1,10 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:flutter/material.dart";
+import "package:google_fonts/google_fonts.dart";
 
 /// Arabic-first typography tokens from the Draya design system.
 abstract final class AppTextStyles {
-  static const String fontFamily = 'Cairo';
+  static const String fontFamily = "Cairo";
 
   static TextStyle get h1 => _style(
     fontSize: 32,

@@ -1,8 +1,8 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/teachers/domain/usecases/get_teachers_use_case.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/teachers/domain/usecases/get_teachers_use_case.dart";
+import "package:draya_mobile/features/student/teachers/presentation/cubit/teacher_state.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class TeacherCubit extends Cubit<TeacherState> {
   final GetTeachersUseCase _getTeachersUseCase;

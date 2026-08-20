@@ -1,8 +1,8 @@
-import 'package:draya_mobile/core/helpers/app_extensions.dart';
-import 'package:draya_mobile/core/networking/api_error_model.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/helpers/app_extensions.dart";
+import "package:draya_mobile/core/networking/api_error_model.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:flutter/material.dart";
 
 class AppErrorDialog extends StatelessWidget {
   final ApiErrorModel apiErrorModel;
@@ -66,6 +66,6 @@ class AppErrorDialog extends StatelessWidget {
       return message.trim();
     }
 
-    return 'حصل خطأ ما، يرجى المحاولة لاحقًا';
+    return "حصل خطأ ما، يرجى المحاولة لاحقًا";
   }
 }

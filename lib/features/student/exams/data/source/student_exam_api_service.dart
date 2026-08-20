@@ -1,12 +1,12 @@
-import 'package:dio/dio.dart';
-import 'package:draya_mobile/core/networking/api_constants.dart';
-import 'package:draya_mobile/features/student/exams/data/models/attempt_models.dart';
-import 'package:draya_mobile/features/student/exams/data/models/grading_models.dart';
-import 'package:draya_mobile/features/student/exams/data/models/student_exam_models.dart';
-import 'package:draya_mobile/features/student/exams/data/source/student_exam_api_constants.dart';
-import 'package:retrofit/retrofit.dart';
+import "package:dio/dio.dart";
+import "package:draya_mobile/core/networking/api_constants.dart";
+import "package:draya_mobile/features/student/exams/data/models/attempt_models.dart";
+import "package:draya_mobile/features/student/exams/data/models/grading_models.dart";
+import "package:draya_mobile/features/student/exams/data/models/student_exam_models.dart";
+import "package:draya_mobile/features/student/exams/data/source/student_exam_api_constants.dart";
+import "package:retrofit/retrofit.dart";
 
-part 'student_exam_api_service.g.dart';
+part "student_exam_api_service.g.dart";
 
 @RestApi(baseUrl: ApiConstants.baseUrl)
 abstract class StudentExamApiService {

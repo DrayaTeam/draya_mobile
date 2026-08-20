@@ -1,7 +1,7 @@
-import 'package:draya_mobile/features/teacher/classrooms/domain/entity/classroom_pricing.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:draya_mobile/features/teacher/classrooms/domain/entity/classroom_pricing.dart";
+import "package:json_annotation/json_annotation.dart";
 
-part 'classroom_pricing_model.g.dart';
+part "classroom_pricing_model.g.dart";
 
 @JsonSerializable()
 class ClassroomPricingModel {

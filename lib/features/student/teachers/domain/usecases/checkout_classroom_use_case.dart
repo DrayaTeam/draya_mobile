@@ -1,8 +1,8 @@
-import 'package:draya_mobile/core/helpers/app_use_case.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/teachers/data/models/classroom_checkout_response_model.dart';
-import 'package:draya_mobile/features/student/teachers/data/models/classroom_checkout_request_model.dart';
-import 'package:draya_mobile/features/student/teachers/domain/repos/teacher_repo.dart';
+import "package:draya_mobile/core/helpers/app_use_case.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/teachers/data/models/classroom_checkout_response_model.dart";
+import "package:draya_mobile/features/student/teachers/data/models/classroom_checkout_request_model.dart";
+import "package:draya_mobile/features/student/teachers/domain/repos/teacher_repo.dart";
 
 class CheckoutClassroomUseCase
     implements
@@ -33,6 +33,6 @@ class CheckoutClassroomParams {
   });
 
   const CheckoutClassroomParams.empty()
-      : classroomId = '',
-        redirectionUrl = '';
+      : classroomId = "",
+        redirectionUrl = "";
 }

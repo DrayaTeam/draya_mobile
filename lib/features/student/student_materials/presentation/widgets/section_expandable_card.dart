@@ -1,8 +1,8 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart";
+import "package:flutter/material.dart";
+import "package:intl/intl.dart";
 
 class SectionExpandableCard extends StatefulWidget {
   final ClassroomSection section;
@@ -135,25 +135,25 @@ class _SectionExpandableCardState extends State<SectionExpandableCard>
                               if (section.documents.isNotEmpty)
                                 _BadgePill(
                                   icon: Icons.description_outlined,
-                                  text: '${section.documents.length} مستند',
+                                  text: "${section.documents.length} مستند",
                                   color: AppColors.error,
                                 ),
                               if (section.videos.isNotEmpty)
                                 _BadgePill(
                                   icon: Icons.play_circle_outline_rounded,
-                                  text: '${section.videos.length} فيديو',
+                                  text: "${section.videos.length} فيديو",
                                   color: AppColors.ai700,
                                 ),
                               if (section.exams.isNotEmpty)
                                 _BadgePill(
                                   icon: Icons.quiz_outlined,
-                                  text: '${section.exams.length} اختبار',
+                                  text: "${section.exams.length} اختبار",
                                   color: AppColors.amber,
                                 ),
                               if (totalCount == 0)
                                 const _BadgePill(
                                   icon: Icons.info_outline_rounded,
-                                  text: 'لا توجد مواد',
+                                  text: "لا توجد مواد",
                                   color: AppColors.foregroundMuted,
                                 ),
                             ],
@@ -199,7 +199,7 @@ class _SectionExpandableCardState extends State<SectionExpandableCard>
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         child: Center(
                           child: Text(
-                            'لا توجد مواد تعليمية مضافة في هذا القسم حالياً.',
+                            "لا توجد مواد تعليمية مضافة في هذا القسم حالياً.",
                             style: AppTextStyles.body.copyWith(
                               color: AppColors.textSecondary,
                               fontSize: 12,
@@ -211,7 +211,7 @@ class _SectionExpandableCardState extends State<SectionExpandableCard>
                       // Documents
                       if (section.documents.isNotEmpty) ...[
                         const _SectionSubHeader(
-                          title: 'المستندات والملفات',
+                          title: "المستندات والملفات",
                           icon: Icons.picture_as_pdf_rounded,
                           color: AppColors.error,
                         ),
@@ -235,7 +235,7 @@ class _SectionExpandableCardState extends State<SectionExpandableCard>
                       // Videos
                       if (section.videos.isNotEmpty) ...[
                         const _SectionSubHeader(
-                          title: 'الفيديوهات والمحاضرات',
+                          title: "الفيديوهات والمحاضرات",
                           icon: Icons.play_circle_filled_rounded,
                           color: AppColors.ai700,
                         ),
@@ -257,7 +257,7 @@ class _SectionExpandableCardState extends State<SectionExpandableCard>
                       // Exams
                       if (section.exams.isNotEmpty) ...[
                         const _SectionSubHeader(
-                          title: 'الاختبارات والتقييمات',
+                          title: "الاختبارات والتقييمات",
                           icon: Icons.quiz_rounded,
                           color: AppColors.amber,
                         ),
@@ -375,7 +375,7 @@ class _DocumentTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('d MMM yyyy', 'ar');
+    final dateFormat = DateFormat("d MMM yyyy", "ar");
     final dateStr = dateFormat.format(document.createdAt);
 
     return Container(
@@ -417,7 +417,7 @@ class _DocumentTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '${document.materialType} • $dateStr',
+                  "${document.materialType} • $dateStr",
                   style: AppTextStyles.label.copyWith(
                     color: AppColors.textSecondary,
                     fontSize: 11,
@@ -444,7 +444,7 @@ class _DocumentTile extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    'مغلق',
+                    "مغلق",
                     style: AppTextStyles.label.copyWith(
                       color: AppColors.foregroundMuted,
                       fontSize: 10.5,
@@ -465,7 +465,7 @@ class _DocumentTile extends StatelessWidget {
                     minWidth: 32,
                     minHeight: 32,
                   ),
-                  tooltip: 'تحميل',
+                  tooltip: "تحميل",
                   icon: const Icon(
                     Icons.download_rounded,
                     color: AppColors.primary,
@@ -496,7 +496,7 @@ class _DocumentTile extends StatelessWidget {
                         ),
                       )
                     : Text(
-                        'عرض',
+                        "عرض",
                         style: AppTextStyles.button.copyWith(
                           color: Colors.white,
                           fontSize: 12,
@@ -526,7 +526,7 @@ class _VideoTile extends StatelessWidget {
   });
 
   String _formatDuration(int? seconds) {
-    if (seconds == null || seconds <= 0) return '';
+    if (seconds == null || seconds <= 0) return "";
     final minutes = seconds ~/ 60;
     final remainingSecs = seconds % 60;
     return '${minutes.toString().padLeft(2, '0')}:${remainingSecs.toString().padLeft(2, '0')} دقيقة';
@@ -534,7 +534,7 @@ class _VideoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('d MMM yyyy', 'ar');
+    final dateFormat = DateFormat("d MMM yyyy", "ar");
     final dateStr = dateFormat.format(video.createdAt);
     final durationStr = _formatDuration(video.videoDurationInSeconds);
 
@@ -578,8 +578,8 @@ class _VideoTile extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   durationStr.isNotEmpty
-                      ? '$durationStr • $dateStr'
-                      : 'فيديو • $dateStr',
+                      ? "$durationStr • $dateStr"
+                      : "فيديو • $dateStr",
                   style: AppTextStyles.label.copyWith(
                     color: AppColors.textSecondary,
                     fontSize: 11,
@@ -606,7 +606,7 @@ class _VideoTile extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    'مغلق',
+                    "مغلق",
                     style: AppTextStyles.label.copyWith(
                       color: AppColors.foregroundMuted,
                       fontSize: 10.5,
@@ -641,7 +641,7 @@ class _VideoTile extends StatelessWidget {
                       )
                     : const Icon(Icons.play_arrow_rounded, size: 16),
                 label: Text(
-                  'مشاهدة',
+                  "مشاهدة",
                   style: AppTextStyles.button.copyWith(
                     color: Colors.white,
                     fontSize: 12,
@@ -670,7 +670,7 @@ class _ExamTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('d MMM yyyy', 'ar');
+    final dateFormat = DateFormat("d MMM yyyy", "ar");
     final dateStr = dateFormat.format(exam.createdAt);
 
     return Container(
@@ -712,7 +712,7 @@ class _ExamTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '${exam.questionsCount} سؤال • $dateStr',
+                  "${exam.questionsCount} سؤال • $dateStr",
                   style: AppTextStyles.label.copyWith(
                     color: AppColors.textSecondary,
                     fontSize: 11,
@@ -739,7 +739,7 @@ class _ExamTile extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    'مغلق',
+                    "مغلق",
                     style: AppTextStyles.label.copyWith(
                       color: AppColors.foregroundMuted,
                       fontSize: 10.5,
@@ -765,7 +765,7 @@ class _ExamTile extends StatelessWidget {
                 ),
                 icon: const Icon(Icons.play_arrow_rounded, size: 16),
                 label: Text(
-                  'بدء',
+                  "بدء",
                   style: AppTextStyles.button.copyWith(
                     color: Colors.white,
                     fontSize: 12,

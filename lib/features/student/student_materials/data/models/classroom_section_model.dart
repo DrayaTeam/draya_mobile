@@ -1,7 +1,7 @@
-import 'package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart";
+import "package:json_annotation/json_annotation.dart";
 
-part 'classroom_section_model.g.dart';
+part "classroom_section_model.g.dart";
 
 @JsonSerializable()
 class SectionDocumentModel {

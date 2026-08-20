@@ -1,11 +1,11 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/teacher/profile/domain/usecases/get_teacher_profile_use_case.dart';
-import 'package:draya_mobile/features/teacher/profile/domain/usecases/upload_teacher_profile_picture_use_case.dart';
-import 'package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/teacher/profile/domain/usecases/get_teacher_profile_use_case.dart";
+import "package:draya_mobile/features/teacher/profile/domain/usecases/upload_teacher_profile_picture_use_case.dart";
+import "package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_state.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class TeacherProfileCubit extends Cubit<TeacherProfileState> {
   final GetTeacherProfileUseCase _getTeacherProfileUseCase;

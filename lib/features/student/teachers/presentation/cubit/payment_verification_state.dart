@@ -1,5 +1,5 @@
-import 'package:draya_mobile/core/networking/api_error_model.dart';
-import 'package:draya_mobile/features/student/teachers/data/models/payment_status_model.dart';
+import "package:draya_mobile/core/networking/api_error_model.dart";
+import "package:draya_mobile/features/student/teachers/data/models/payment_status_model.dart";
 
 enum PaymentVerificationStatus {
   initial,

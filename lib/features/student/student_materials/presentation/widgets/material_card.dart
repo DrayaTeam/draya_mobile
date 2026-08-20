@@ -1,8 +1,8 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart";
+import "package:flutter/material.dart";
+import "package:intl/intl.dart";
 
 class MaterialCard extends StatelessWidget {
   final StudentMaterial material;
@@ -21,7 +21,7 @@ class MaterialCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final status = material.currentVersion;
-    final date = DateFormat('d MMM yyyy', 'ar').format(material.createdAt);
+    final date = DateFormat("d MMM yyyy", "ar").format(material.createdAt);
     final color = _typeColor(material.materialType);
     final hasDownload =
         status.isReady &&
@@ -152,7 +152,7 @@ class MaterialCard extends StatelessWidget {
                             size: 18,
                           ),
                     label: Text(
-                      material.isVideo ? 'مشاهدة الفيديو' : 'عرض الملف',
+                      material.isVideo ? "مشاهدة الفيديو" : "عرض الملف",
                       style: AppTextStyles.button.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
@@ -173,7 +173,7 @@ class MaterialCard extends StatelessWidget {
                     ),
                     child: IconButton(
                       onPressed: onDownload,
-                      tooltip: 'تحميل الملف',
+                      tooltip: "تحميل الملف",
                       padding: EdgeInsets.zero,
                       icon: const Icon(
                         Icons.download_rounded,
@@ -193,32 +193,32 @@ class MaterialCard extends StatelessWidget {
 
   String _typeLabel(String type) {
     switch (type.toLowerCase()) {
-      case 'video':
-        return 'فيديو';
-      case 'pdf':
-        return 'مستند PDF';
-      case 'docx':
-        return 'مستند Word';
-      case 'pptx':
-        return 'عرض تقديمي';
-      case 'image':
-        return 'صورة';
+      case "video":
+        return "فيديو";
+      case "pdf":
+        return "مستند PDF";
+      case "docx":
+        return "مستند Word";
+      case "pptx":
+        return "عرض تقديمي";
+      case "image":
+        return "صورة";
       default:
-        return 'ملف';
+        return "ملف";
     }
   }
 
   IconData _typeIcon(String type) {
     switch (type.toLowerCase()) {
-      case 'video':
+      case "video":
         return Icons.play_circle_fill_rounded;
-      case 'pdf':
+      case "pdf":
         return Icons.picture_as_pdf_rounded;
-      case 'docx':
+      case "docx":
         return Icons.article_rounded;
-      case 'pptx':
+      case "pptx":
         return Icons.slideshow_rounded;
-      case 'image':
+      case "image":
         return Icons.image_rounded;
       default:
         return Icons.insert_drive_file_rounded;
@@ -227,15 +227,15 @@ class MaterialCard extends StatelessWidget {
 
   Color _typeColor(String type) {
     switch (type.toLowerCase()) {
-      case 'video':
+      case "video":
         return AppColors.ai700;
-      case 'pdf':
+      case "pdf":
         return AppColors.error;
-      case 'docx':
+      case "docx":
         return AppColors.mathPhysics;
-      case 'pptx':
+      case "pptx":
         return AppColors.amber;
-      case 'image':
+      case "image":
         return AppColors.chemistryBiology;
       default:
         return AppColors.primary700;

@@ -1,8 +1,8 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
-import 'package:draya_mobile/features/teacher/teacher_channel/domain/entity/reply_entity.dart';
-import 'package:intl/intl.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
+import "package:draya_mobile/features/teacher/teacher_channel/domain/entity/reply_entity.dart";
+import "package:intl/intl.dart";
 
 class ReplyCardWidget extends StatelessWidget {
   final ReplyEntity reply;
@@ -14,7 +14,7 @@ class ReplyCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('d MMMM، HH:mm', 'ar');
+    final dateFormat = DateFormat("d MMMM، HH:mm", "ar");
     final isTeacher = reply.isTeacherAnswer;
 
     return Container(
@@ -83,8 +83,8 @@ class ReplyCardWidget extends StatelessWidget {
                           children: [
                             Text(
                               isTeacher
-                                  ? 'المدرس'
-                                  : (reply.isAuthor ? 'أنت' : 'طالب'),
+                                  ? "المدرس"
+                                  : (reply.isAuthor ? "أنت" : "طالب"),
                               style: AppTextStyles.label.copyWith(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
@@ -95,7 +95,7 @@ class ReplyCardWidget extends StatelessWidget {
                             ),
                             const SizedBox(width: 6),
                             Text(
-                              '•  ${dateFormat.format(reply.createdAt)}',
+                              "•  ${dateFormat.format(reply.createdAt)}",
                               style: AppTextStyles.label.copyWith(
                                 fontSize: 11,
                                 color: AppColors.textSecondary,
@@ -128,7 +128,7 @@ class ReplyCardWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          'إجابة معتمدة',
+                          "إجابة معتمدة",
                           style: AppTextStyles.label.copyWith(
                             fontSize: 10,
                             color: Colors.white,

@@ -1,7 +1,7 @@
-import 'package:draya_mobile/features/student/student_materials/domain/entity/material_stream.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:draya_mobile/features/student/student_materials/domain/entity/material_stream.dart";
+import "package:json_annotation/json_annotation.dart";
 
-part 'material_stream_model.g.dart';
+part "material_stream_model.g.dart";
 
 @JsonSerializable()
 class MaterialStreamModel {

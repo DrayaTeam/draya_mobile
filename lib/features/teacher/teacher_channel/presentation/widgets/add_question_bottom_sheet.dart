@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class AddQuestionBottomSheet extends StatefulWidget {
   final ValueChanged<String> onSubmit;
@@ -53,7 +53,7 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'اسأل سؤال جديد',
+                  "اسأل سؤال جديد",
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -72,7 +72,7 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
               minLines: 3,
               enabled: !widget.isLoading,
               decoration: InputDecoration(
-                hintText: 'اكتب سؤالك هنا...',
+                hintText: "اكتب سؤالك هنا...",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -105,7 +105,7 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
                       )
                     : const Icon(Icons.send),
                 label: Text(
-                  widget.isLoading ? 'جاري الإرسال...' : 'نشر السؤال',
+                  widget.isLoading ? "جاري الإرسال..." : "نشر السؤال",
                 ),
               ),
             ),

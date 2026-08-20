@@ -1,6 +1,6 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
 
 class MaterialsHeader extends StatelessWidget {
   final int materialCount;
@@ -47,7 +47,7 @@ class MaterialsHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'المواد الدراسية',
+                  "المواد الدراسية",
                   style: AppTextStyles.h4.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w800,
@@ -56,8 +56,8 @@ class MaterialsHeader extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   materialCount == 0
-                      ? 'ستظهر مواد معلّميك هنا'
-                      : '$materialCount مادة تعليمية متاحة للتصفح والتحميل',
+                      ? "ستظهر مواد معلّميك هنا"
+                      : "$materialCount مادة تعليمية متاحة للتصفح والتحميل",
                   style: AppTextStyles.body.copyWith(
                     color: Colors.white.withValues(alpha: 0.85),
                     fontSize: 13,

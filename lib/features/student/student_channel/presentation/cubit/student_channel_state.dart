@@ -1,7 +1,7 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/networking/api_error_model.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/entity/question_details_entity.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/entity/question_entity.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/networking/api_error_model.dart";
+import "package:draya_mobile/features/student/student_channel/domain/entity/question_details_entity.dart";
+import "package:draya_mobile/features/student/student_channel/domain/entity/question_entity.dart";
 
 class StudentChannelState {
   final CubitStatus questionsStatus;
@@ -36,8 +36,8 @@ class StudentChannelState {
     this.pageSize = 20,
     this.totalCount = 0,
     this.totalPages = 0,
-    this.sortBy = 'recent',
-    this.filterBy = 'all',
+    this.sortBy = "recent",
+    this.filterBy = "all",
     this.isLoadingMore = false,
     this.hasPendingNewQuestions = false,
     this.questionDetailsStatus = CubitStatus.initial,

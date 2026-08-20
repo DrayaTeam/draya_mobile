@@ -1,9 +1,9 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/features/student/exams/domain/entity/student_exam.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/features/student/exams/domain/entity/student_exam.dart";
+import "package:flutter/material.dart";
+import "package:intl/intl.dart";
 
 class ExamResultsScreen extends StatelessWidget {
   final StudentExam? exam;
@@ -22,8 +22,8 @@ class ExamResultsScreen extends StatelessWidget {
     final percentage = result.scorePercentage;
     final isPassed = percentage >= 50;
     final dateStr = result.submittedAt != null
-        ? DateFormat('d MMM yyyy, h:mm a', 'ar').format(result.submittedAt!)
-        : 'اليوم';
+        ? DateFormat("d MMM yyyy, h:mm a", "ar").format(result.submittedAt!)
+        : "اليوم";
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -33,7 +33,7 @@ class ExamResultsScreen extends StatelessWidget {
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: Text(
-          'نتيجة الامتحان',
+          "نتيجة الامتحان",
           style: AppTextStyles.h4.copyWith(
             fontWeight: FontWeight.w800,
             color: AppColors.textPrimary,
@@ -64,7 +64,7 @@ class ExamResultsScreen extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'تفاصيل إجابات الأسئلة (${result.answers.length} سؤال):',
+                  "تفاصيل إجابات الأسئلة (${result.answers.length} سؤال):",
                   style: AppTextStyles.h5.copyWith(
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -82,9 +82,9 @@ class ExamResultsScreen extends StatelessWidget {
                 (q) => q.id == answer.examQuestionId,
                 orElse: () => ExamQuestion(
                   id: answer.examQuestionId,
-                  text: 'السؤال ${index + 1}',
+                  text: "السؤال ${index + 1}",
                   type: QuestionType.multipleChoice,
-                  difficulty: 'easy',
+                  difficulty: "easy",
                 ),
               );
 
@@ -116,7 +116,7 @@ class ExamResultsScreen extends StatelessWidget {
                 ),
                 icon: const Icon(Icons.arrow_forward_rounded, size: 20),
                 label: Text(
-                  'إنهاء والعودة',
+                  "إنهاء والعودة",
                   style: AppTextStyles.button.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w800,
@@ -169,7 +169,7 @@ class ExamResultsScreen extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    '${percentage.toStringAsFixed(0)}%',
+                    "${percentage.toStringAsFixed(0)}%",
                     style: AppTextStyles.h3.copyWith(
                       color: scoreColor,
                       fontWeight: FontWeight.w900,
@@ -183,7 +183,7 @@ class ExamResultsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      exam?.title ?? 'الامتحان',
+                      exam?.title ?? "الامتحان",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.h5.copyWith(
@@ -193,7 +193,7 @@ class ExamResultsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'الدرجة الكلية: ${result.finalScore.toStringAsFixed(1)} من ${result.maxPossibleScore.toStringAsFixed(1)}',
+                      "الدرجة الكلية: ${result.finalScore.toStringAsFixed(1)} من ${result.maxPossibleScore.toStringAsFixed(1)}",
                       style: AppTextStyles.body.copyWith(
                         color: scoreColor,
                         fontWeight: FontWeight.w700,
@@ -202,7 +202,7 @@ class ExamResultsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'وقت التسليم: $dateStr',
+                      "وقت التسليم: $dateStr",
                       style: AppTextStyles.label.copyWith(
                         color: AppColors.textSecondary,
                         fontSize: 11,
@@ -240,7 +240,7 @@ class ExamResultsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'قيد مراجعة المعلم',
+                  "قيد مراجعة المعلم",
                   style: AppTextStyles.label.copyWith(
                     fontWeight: FontWeight.w800,
                     color: AppColors.amber,
@@ -249,7 +249,7 @@ class ExamResultsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'بعض الإجابات المقالية تتطلب مراجعة وتأكيد من قبل معلمك. قد تتغير الدرجة النهائية بعد المراجعة.',
+                  "بعض الإجابات المقالية تتطلب مراجعة وتأكيد من قبل معلمك. قد تتغير الدرجة النهائية بعد المراجعة.",
                   style: AppTextStyles.body.copyWith(
                     color: AppColors.textPrimary,
                     fontSize: 12,
@@ -308,7 +308,7 @@ class ExamResultsScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'السؤال ${index + 1} (${question.type.toDisplayString()})',
+                "السؤال ${index + 1} (${question.type.toDisplayString()})",
                 style: AppTextStyles.label.copyWith(
                   color: AppColors.textSecondary,
                   fontWeight: FontWeight.w700,
@@ -322,7 +322,7 @@ class ExamResultsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  '${score.toStringAsFixed(1)} / ${maxScore.toStringAsFixed(1)}',
+                  "${score.toStringAsFixed(1)} / ${maxScore.toStringAsFixed(1)}",
                   style: AppTextStyles.label.copyWith(
                     color: statusColor,
                     fontWeight: FontWeight.w900,
@@ -359,7 +359,7 @@ class ExamResultsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'إجابتك:',
+                  "إجابتك:",
                   style: AppTextStyles.label.copyWith(
                     color: AppColors.textSecondary,
                     fontSize: 11,
@@ -371,7 +371,7 @@ class ExamResultsScreen extends StatelessWidget {
                       (answer.answerText != null &&
                               answer.answerText!.trim().isNotEmpty
                           ? answer.answerText!
-                          : 'لم تتم الإجابة'),
+                          : "لم تتم الإجابة"),
                   style: AppTextStyles.body.copyWith(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w600,
@@ -410,7 +410,7 @@ class ExamResultsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'تقييم وملاحظات الذكاء الاصطناعي:',
+                          "تقييم وملاحظات الذكاء الاصطناعي:",
                           style: AppTextStyles.label.copyWith(
                             color: AppColors.ai700,
                             fontWeight: FontWeight.w700,

@@ -1,6 +1,6 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
 
 class EmptyQuestionsWidget extends StatelessWidget {
   final String title;
@@ -12,8 +12,8 @@ class EmptyQuestionsWidget extends StatelessWidget {
 
   const EmptyQuestionsWidget({
     super.key,
-    this.title = 'لا توجد أسئلة',
-    this.subtitle = '',
+    this.title = "لا توجد أسئلة",
+    this.subtitle = "",
     this.icon = Icons.question_answer_outlined,
     this.onRefresh,
     this.onAction,
@@ -113,7 +113,7 @@ class EmptyQuestionsWidget extends StatelessWidget {
                 ),
                 icon: const Icon(Icons.refresh_rounded, size: 18),
                 label: Text(
-                  'إعادة المحاولة',
+                  "إعادة المحاولة",
                   style: AppTextStyles.label.copyWith(color: AppColors.primary),
                 ),
               ),

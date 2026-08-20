@@ -1,6 +1,6 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
 
 class ExamSubmitDialog extends StatelessWidget {
   final int totalQuestions;
@@ -52,7 +52,7 @@ class ExamSubmitDialog extends StatelessWidget {
 
             // Title
             Text(
-              'تسليم الامتحان',
+              "تسليم الامتحان",
               textAlign: TextAlign.center,
               style: AppTextStyles.h4.copyWith(
                 fontWeight: FontWeight.w800,
@@ -64,8 +64,8 @@ class ExamSubmitDialog extends StatelessWidget {
             // Description
             Text(
               hasUnanswered
-                  ? 'لديك $unanswered أسئلة لم تقم بالإجابة عليها بعد. هل أنت متأكد من رغبتك في إنهاء الامتحان وتسليمه الآن؟'
-                  : 'لقد قمت بالإجابة على جميع الأسئلة ($answeredQuestions من $totalQuestions). هل ترغب في تسليم الامتحان لبدء التصحيح؟',
+                  ? "لديك $unanswered أسئلة لم تقم بالإجابة عليها بعد. هل أنت متأكد من رغبتك في إنهاء الامتحان وتسليمه الآن؟"
+                  : "لقد قمت بالإجابة على جميع الأسئلة ($answeredQuestions من $totalQuestions). هل ترغب في تسليم الامتحان لبدء التصحيح؟",
               textAlign: TextAlign.center,
               style: AppTextStyles.body.copyWith(
                 color: AppColors.textSecondary,
@@ -86,8 +86,8 @@ class ExamSubmitDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _buildStat(
-                    'تمت الإجابة',
-                    '$answeredQuestions',
+                    "تمت الإجابة",
+                    "$answeredQuestions",
                     AppColors.success,
                   ),
                   Container(
@@ -96,8 +96,8 @@ class ExamSubmitDialog extends StatelessWidget {
                     color: AppColors.border,
                   ),
                   _buildStat(
-                    'متبقي',
-                    '$unanswered',
+                    "متبقي",
+                    "$unanswered",
                     hasUnanswered ? AppColors.error : AppColors.foregroundMuted,
                   ),
                 ],
@@ -120,7 +120,7 @@ class ExamSubmitDialog extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      'متابعة الحل',
+                      "متابعة الحل",
                       style: AppTextStyles.button.copyWith(
                         color: AppColors.textSecondary,
                         fontWeight: FontWeight.w700,
@@ -145,7 +145,7 @@ class ExamSubmitDialog extends StatelessWidget {
                       elevation: 0,
                     ),
                     child: Text(
-                      'تأكيد وتسليم',
+                      "تأكيد وتسليم",
                       style: AppTextStyles.button.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w700,

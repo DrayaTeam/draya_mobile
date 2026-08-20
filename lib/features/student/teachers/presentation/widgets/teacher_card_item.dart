@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
 
 class TeacherCardItem extends StatelessWidget {
   final String fullName;
@@ -27,7 +27,7 @@ class TeacherCardItem extends StatelessWidget {
     final initials = _buildInitials(fullName);
 
     return Semantics(
-      label: 'بطاقة المعلم $fullName، تخصص $specialization',
+      label: "بطاقة المعلم $fullName، تخصص $specialization",
       child: Container(
         margin: const EdgeInsets.only(bottom: AppSizes.s16),
         decoration: BoxDecoration(
@@ -114,7 +114,7 @@ class TeacherCardItem extends StatelessWidget {
                   children: [
                     _buildInfoRow(
                       icon: Icons.email_outlined,
-                      label: email.isEmpty ? 'غير متوفر' : email,
+                      label: email.isEmpty ? "غير متوفر" : email,
                     ),
                     if (phone.isNotEmpty) ...[
                       const Padding(
@@ -145,7 +145,7 @@ class TeacherCardItem extends StatelessWidget {
                   ),
                   icon: const Icon(Icons.school_rounded, size: 20),
                   label: Text(
-                    'عرض الفصول الدراسية',
+                    "عرض الفصول الدراسية",
                     style: AppTextStyles.button.copyWith(color: Colors.white),
                   ),
                 ),
@@ -237,11 +237,11 @@ class TeacherCardItem extends StatelessWidget {
   }
 
   String _buildInitials(String value) {
-    final parts = value.trim().split(RegExp(r'\s+'));
+    final parts = value.trim().split(RegExp(r"\s+"));
     if (parts.length == 1) {
       return parts.first.substring(0, 1).toUpperCase();
     }
-    return '${parts.first.substring(0, 1)}${parts.last.substring(0, 1)}'
+    return "${parts.first.substring(0, 1)}${parts.last.substring(0, 1)}"
         .toUpperCase();
   }
 

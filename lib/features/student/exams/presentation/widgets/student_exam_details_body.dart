@@ -1,22 +1,22 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
-import 'package:draya_mobile/core/widgets/app_outlined_button.dart';
-import 'package:draya_mobile/features/student/exams/domain/entity/student_exam.dart';
-import 'package:draya_mobile/features/student/exams/presentation/cubit/student_exam_cubit.dart';
-import 'package:draya_mobile/features/student/exams/presentation/cubit/student_exam_state.dart';
-import 'package:draya_mobile/features/student/exams/presentation/pages/exam_grading_screen.dart';
-import 'package:draya_mobile/features/student/exams/presentation/pages/exam_results_screen.dart';
-import 'package:draya_mobile/features/student/exams/presentation/widgets/exam_question_card.dart';
-import 'package:draya_mobile/features/student/exams/presentation/widgets/exam_question_navigator.dart';
-import 'package:draya_mobile/features/student/exams/presentation/widgets/exam_submit_dialog.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/core/widgets/app_elevated_button.dart";
+import "package:draya_mobile/core/widgets/app_outlined_button.dart";
+import "package:draya_mobile/features/student/exams/domain/entity/student_exam.dart";
+import "package:draya_mobile/features/student/exams/presentation/cubit/student_exam_cubit.dart";
+import "package:draya_mobile/features/student/exams/presentation/cubit/student_exam_state.dart";
+import "package:draya_mobile/features/student/exams/presentation/pages/exam_grading_screen.dart";
+import "package:draya_mobile/features/student/exams/presentation/pages/exam_results_screen.dart";
+import "package:draya_mobile/features/student/exams/presentation/widgets/exam_question_card.dart";
+import "package:draya_mobile/features/student/exams/presentation/widgets/exam_question_navigator.dart";
+import "package:draya_mobile/features/student/exams/presentation/widgets/exam_submit_dialog.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class StudentExamDetailsBody extends StatefulWidget {
   final String examId;
@@ -183,7 +183,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
             appBar: AppBar(
               backgroundColor: AppColors.surface,
               elevation: 0,
-              title: const Text('تفاصيل الامتحان'),
+              title: const Text("تفاصيل الامتحان"),
             ),
             body: Center(
               child: Padding(
@@ -199,7 +199,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                     const SizedBox(height: 12),
                     Text(
                       state.apiErrorModel?.error?.message ??
-                          'تعذر تحميل بيانات الامتحان.',
+                          "تعذر تحميل بيانات الامتحان.",
                       textAlign: TextAlign.center,
                       style: AppTextStyles.body.copyWith(
                         color: AppColors.textPrimary,
@@ -211,7 +211,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                       onPressed: () => context
                           .read<StudentExamCubit>()
                           .loadExamDetails(widget.examId),
-                      child: const Text('إعادة المحاولة'),
+                      child: const Text("إعادة المحاولة"),
                     ),
                   ],
                 ),
@@ -253,7 +253,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
               elevation: 0,
               centerTitle: true,
               title: Text(
-                'تفاصيل الامتحان',
+                "تفاصيل الامتحان",
                 style: AppTextStyles.h4.copyWith(
                   fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,
@@ -390,7 +390,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  widget.classroomName ?? 'الفصل الدراسي',
+                  widget.classroomName ?? "الفصل الدراسي",
                   style: AppTextStyles.label.copyWith(
                     color: Colors.white,
                     fontSize: 11,
@@ -411,12 +411,12 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                 children: [
                   _buildWhitePill(
                     icon: Icons.quiz_outlined,
-                    text: '${exam.questions.length} أسئلة',
+                    text: "${exam.questions.length} أسئلة",
                   ),
                   const SizedBox(width: 8),
                   _buildWhitePill(
                     icon: Icons.timer_outlined,
-                    text: '${(exam.questions.length * 2).clamp(10, 120)} دقيقة',
+                    text: "${(exam.questions.length * 2).clamp(10, 120)} دقيقة",
                   ),
                 ],
               ),
@@ -445,7 +445,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'تعليمات وإرشادات الاختبار:',
+                    "تعليمات وإرشادات الاختبار:",
                     style: AppTextStyles.h5.copyWith(
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -455,20 +455,20 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
               ),
               const SizedBox(height: 14),
               _buildInstructionRow(
-                '1',
-                'يتم تسجيل وقت بدء الاختبار تلقائياً بمجرد الضغط على زر البدء.',
+                "1",
+                "يتم تسجيل وقت بدء الاختبار تلقائياً بمجرد الضغط على زر البدء.",
               ),
               _buildInstructionRow(
-                '2',
-                'يمنع الخروج من التطبيق أو التبديل بين النوافذ أثناء سير الاختبار، حيث يتم رصد عدد مرات مغادرة الشاشة.',
+                "2",
+                "يمنع الخروج من التطبيق أو التبديل بين النوافذ أثناء سير الاختبار، حيث يتم رصد عدد مرات مغادرة الشاشة.",
               ),
               _buildInstructionRow(
-                '3',
-                'في حال مغادرة التطبيق 3 مرات سيتم إنهاء وتسليم الاختبار تلقائياً.',
+                "3",
+                "في حال مغادرة التطبيق 3 مرات سيتم إنهاء وتسليم الاختبار تلقائياً.",
               ),
               _buildInstructionRow(
-                '4',
-                'تأكد من استقرار اتصالك بالإنترنت قبل الضغط على بدء الاختبار.',
+                "4",
+                "تأكد من استقرار اتصالك بالإنترنت قبل الضغط على بدء الاختبار.",
               ),
             ],
           ),
@@ -503,8 +503,8 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                 : const Icon(Icons.play_arrow_rounded, size: 22),
             label: Text(
               state.attemptStatus == CubitStatus.loading
-                  ? 'جاري بدء الاختبار...'
-                  : 'بدء الاختبار الآن',
+                  ? "جاري بدء الاختبار..."
+                  : "بدء الاختبار الآن",
               style: AppTextStyles.button.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w800,
@@ -518,9 +518,9 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
   }
 
   Widget _buildActiveExamHeader(StudentExamState state, StudentExam exam) {
-    final minutes = _remainingDuration.inMinutes.toString().padLeft(2, '0');
+    final minutes = _remainingDuration.inMinutes.toString().padLeft(2, "0");
     final seconds =
-        (_remainingDuration.inSeconds % 60).toString().padLeft(2, '0');
+        (_remainingDuration.inSeconds % 60).toString().padLeft(2, "0");
     final isUrgent = _remainingDuration.inMinutes < 5;
 
     return Container(
@@ -557,7 +557,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  '$minutes:$seconds',
+                  "$minutes:$seconds",
                   style: AppTextStyles.label.copyWith(
                     color: isUrgent ? AppColors.error : AppColors.primary,
                     fontWeight: FontWeight.w900,
@@ -570,7 +570,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
 
           // Question progress
           Text(
-            'السؤال ${_currentQuestionIndex + 1} من ${exam.questions.length}',
+            "السؤال ${_currentQuestionIndex + 1} من ${exam.questions.length}",
             style: AppTextStyles.label.copyWith(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w800,
@@ -586,7 +586,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
-              '${state.answeredQuestionsCount}/${exam.questions.length} مُجاب',
+              "${state.answeredQuestionsCount}/${exam.questions.length} مُجاب",
               style: AppTextStyles.label.copyWith(
                 color: AppColors.foregroundMuted,
                 fontSize: 11,
@@ -618,7 +618,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              'تنبيه: تم رصد مغادرة شاشة الاختبار ($tabAwayCount/3 مرات).',
+              "تنبيه: تم رصد مغادرة شاشة الاختبار ($tabAwayCount/3 مرات).",
               style: AppTextStyles.label.copyWith(
                 color: AppColors.error,
                 fontWeight: FontWeight.w700,
@@ -650,7 +650,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
           Expanded(
             child: AppOutlinedButton(
               onPressed: () => _goToQuestion(_currentQuestionIndex - 1),
-              label: 'السؤال السابق',
+              label: "السؤال السابق",
               borderColor: AppColors.borderStrong,
               foregroundColor: AppColors.textPrimary,
               textStyle: AppTextStyles.button.copyWith(
@@ -669,7 +669,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                 : isLast
                     ? _showSubmitConfirmationDialog
                     : () => _goToQuestion(_currentQuestionIndex + 1),
-            label: isLast ? 'تسليم الامتحان' : 'السؤال التالي',
+            label: isLast ? "تسليم الامتحان" : "السؤال التالي",
             backgroundColor:
                 isLast ? AppColors.success : AppColors.primary,
             icon: isLast

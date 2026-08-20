@@ -1,6 +1,6 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
 
 class StudentHomeFocusSection extends StatelessWidget {
   const StudentHomeFocusSection({super.key});
@@ -13,7 +13,7 @@ class StudentHomeFocusSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'متابعة دروسك اليومية',
+            "متابعة دروسك اليومية",
             style: AppTextStyles.h3.copyWith(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w700,
@@ -21,7 +21,7 @@ class StudentHomeFocusSection extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'عرض كل المواد',
+            "عرض كل المواد",
             style: AppTextStyles.label.copyWith(
               color: AppColors.primary600,
               fontWeight: FontWeight.w700,
@@ -29,32 +29,32 @@ class StudentHomeFocusSection extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           const _FocusCard(
-            title: 'الجبر وحساب المثلثات',
-            progressLabel: '68%',
-            progressText: 'إنجاز الكورس',
-            actionLabel: 'استئناف المشاهدة',
+            title: "الجبر وحساب المثلثات",
+            progressLabel: "68%",
+            progressText: "إنجاز الكورس",
+            actionLabel: "استئناف المشاهدة",
             progressColor: Color(0xFF00A6F4),
-            tagLabel: 'الرياضيات',
+            tagLabel: "الرياضيات",
             tagBackground: Color.fromRGBO(0, 0, 0, 0.4),
           ),
           const SizedBox(height: 16),
           const _FocusCard(
-            title: 'الفيزياء الكهربية والحديثة',
-            progressLabel: '40%',
-            progressText: 'إنجاز الكورس',
-            actionLabel: 'استئناف المشاهدة',
+            title: "الفيزياء الكهربية والحديثة",
+            progressLabel: "40%",
+            progressText: "إنجاز الكورس",
+            actionLabel: "استئناف المشاهدة",
             progressColor: Color(0xFFAD46FF),
-            tagLabel: 'الفيزياء',
+            tagLabel: "الفيزياء",
             tagBackground: Color.fromRGBO(0, 0, 0, 0.4),
           ),
           const SizedBox(height: 16),
           const _FocusCard(
-            title: 'الكيمياء العضوية المتقدمة',
-            progressLabel: '85%',
-            progressText: 'إنجاز الكورس',
-            actionLabel: 'استئناف المشاهدة',
+            title: "الكيمياء العضوية المتقدمة",
+            progressLabel: "85%",
+            progressText: "إنجاز الكورس",
+            actionLabel: "استئناف المشاهدة",
             progressColor: Color(0xFF00BC7D),
-            tagLabel: 'الكيمياء',
+            tagLabel: "الكيمياء",
             tagBackground: Color.fromRGBO(0, 0, 0, 0.4),
           ),
         ],
@@ -112,7 +112,7 @@ class _FocusCard extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
                 image: DecorationImage(
-                  image: const AssetImage('assets/images/course_card_bg.png'),
+                  image: const AssetImage("assets/images/course_card_bg.png"),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
                     Colors.black.withValues(alpha: 0.08),

@@ -1,5 +1,5 @@
-import 'package:draya_mobile/features/student/student_channel/domain/entity/question_entity.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/entity/reply_entity.dart';
+import "package:draya_mobile/features/student/student_channel/domain/entity/question_entity.dart";
+import "package:draya_mobile/features/student/student_channel/domain/entity/reply_entity.dart";
 
 class QuestionDetailsEntity {
   final QuestionEntity question;

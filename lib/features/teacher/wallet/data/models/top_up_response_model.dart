@@ -1,4 +1,4 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
 
 part "top_up_response_model.g.dart";
 

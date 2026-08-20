@@ -1,23 +1,23 @@
-import 'package:draya_mobile/core/helpers/app_extensions.dart';
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/view_models/drawer_model.dart';
-import 'package:draya_mobile/core/widgets/app_drawer.dart';
-import 'package:draya_mobile/core/widgets/app_drop_down_form_field.dart';
-import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
-import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
-import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
-import 'package:draya_mobile/features/teacher/classrooms/data/models/create_classroom_request_model.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_types_cubit.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_types_state.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/grade_levels_cubit.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/grade_levels_state.dart';
-import 'package:draya_mobile/features/teacher/subjects/presentation/cubit/subject_cubit.dart';
-import 'package:draya_mobile/features/teacher/subjects/presentation/cubit/subject_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import "package:draya_mobile/core/helpers/app_extensions.dart";
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/view_models/drawer_model.dart";
+import "package:draya_mobile/core/widgets/app_drawer.dart";
+import "package:draya_mobile/core/widgets/app_drop_down_form_field.dart";
+import "package:draya_mobile/core/widgets/app_elevated_button.dart";
+import "package:draya_mobile/core/widgets/app_text_form_field.dart";
+import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/features/teacher/classrooms/data/models/create_classroom_request_model.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_types_cubit.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_types_state.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/grade_levels_cubit.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/grade_levels_state.dart";
+import "package:draya_mobile/features/teacher/subjects/presentation/cubit/subject_cubit.dart";
+import "package:draya_mobile/features/teacher/subjects/presentation/cubit/subject_state.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:intl/intl.dart";
 
 class CreateClassroomPage extends StatefulWidget {
   const CreateClassroomPage({super.key});
@@ -123,7 +123,7 @@ class _CreateClassroomPageState extends State<CreateClassroomPage> {
                       textInputAction: TextInputAction.next,
                       validator: (value) =>
                           value == null || value.trim().isEmpty
-                          ? 'أدخل اسم الفصل'
+                          ? "أدخل اسم الفصل"
                           : null,
                     ),
                     const SizedBox(height: AppSizes.s20),
@@ -148,7 +148,7 @@ class _CreateClassroomPageState extends State<CreateClassroomPage> {
                       isReadOnly: true,
                       validator: (value) {
                         if (_startDate == null) {
-                          return 'يرجى اختيار تاريخ البداية';
+                          return "يرجى اختيار تاريخ البداية";
                         }
 
                         return null;
@@ -184,12 +184,12 @@ class _CreateClassroomPageState extends State<CreateClassroomPage> {
                       isReadOnly: true,
                       validator: (value) {
                         if (_endDate == null) {
-                          return 'يرجى اختيار تاريخ النهاية';
+                          return "يرجى اختيار تاريخ النهاية";
                         }
 
                         if (_startDate != null &&
                             !_endDate!.isAfter(_startDate!)) {
-                          return 'يجب أن يكون تاريخ النهاية بعد تاريخ البداية';
+                          return "يجب أن يكون تاريخ النهاية بعد تاريخ البداية";
                         }
 
                         return null;
@@ -220,17 +220,17 @@ class _CreateClassroomPageState extends State<CreateClassroomPage> {
                       textInputAction: TextInputAction.next,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'يرجى إدخال رقم';
+                          return "يرجى إدخال رقم";
                         }
 
                         final number = double.tryParse(value.trim());
 
                         if (number == null) {
-                          return 'يرجى إدخال رقم صحيح';
+                          return "يرجى إدخال رقم صحيح";
                         }
 
                         if (number <= 0) {
-                          return 'يجب أن يكون الرقم أكبر من صفر';
+                          return "يجب أن يكون الرقم أكبر من صفر";
                         }
 
                         return null;
@@ -266,7 +266,7 @@ class _CreateClassroomPageState extends State<CreateClassroomPage> {
             const SizedBox(height: AppSizes.s8),
 
             AppDropDownFormField(
-              hint: 'اختر المادة الدراسية',
+              hint: "اختر المادة الدراسية",
               value: _selectedSubjectId,
               dropDownItems: state.subjects
                   .map(

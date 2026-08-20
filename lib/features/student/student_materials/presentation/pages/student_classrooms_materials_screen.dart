@@ -1,24 +1,24 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/helpers/app_url_helper.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/core/view_models/drawer_model.dart';
-import 'package:draya_mobile/core/widgets/app_drawer.dart';
-import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
-import 'package:draya_mobile/core/widgets/fade_in_up_animation.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart';
-import 'package:draya_mobile/features/student/student_materials/presentation/cubit/student_materials_cubit.dart';
-import 'package:draya_mobile/features/student/student_materials/presentation/cubit/student_materials_state.dart';
-import 'package:draya_mobile/features/student/student_materials/presentation/pages/material_viewer_screen.dart';
-import 'package:draya_mobile/features/student/student_materials/presentation/widgets/material_card.dart';
-import 'package:draya_mobile/features/student/student_materials/presentation/widgets/materials_feedback.dart';
-import 'package:draya_mobile/features/student/student_materials/presentation/widgets/materials_header.dart';
-import 'package:draya_mobile/features/student/student_materials/presentation/widgets/section_expandable_card.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/helpers/app_url_helper.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/core/view_models/drawer_model.dart";
+import "package:draya_mobile/core/widgets/app_drawer.dart";
+import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/core/widgets/fade_in_up_animation.dart";
+import "package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart";
+import "package:draya_mobile/features/student/student_materials/presentation/cubit/student_materials_cubit.dart";
+import "package:draya_mobile/features/student/student_materials/presentation/cubit/student_materials_state.dart";
+import "package:draya_mobile/features/student/student_materials/presentation/pages/material_viewer_screen.dart";
+import "package:draya_mobile/features/student/student_materials/presentation/widgets/material_card.dart";
+import "package:draya_mobile/features/student/student_materials/presentation/widgets/materials_feedback.dart";
+import "package:draya_mobile/features/student/student_materials/presentation/widgets/materials_header.dart";
+import "package:draya_mobile/features/student/student_materials/presentation/widgets/section_expandable_card.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class StudentClassroomsMaterialsScreen extends StatefulWidget {
   final String? classroomId;
@@ -60,7 +60,7 @@ class _StudentClassroomsMaterialsScreenState
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'رابط التحميل غير متوفر لهذا الملف',
+            "رابط التحميل غير متوفر لهذا الملف",
             style: AppTextStyles.body.copyWith(color: Colors.white),
           ),
           backgroundColor: AppColors.error,
@@ -85,8 +85,8 @@ class _StudentClassroomsMaterialsScreenState
                   return await cubit.resolveSectionVideoUrl(
                     SectionVideo(
                       id: id,
-                      title: '',
-                      materialType: 'Video',
+                      title: "",
+                      materialType: "Video",
                       createdAt: DateTime.now(),
                     ),
                   );
@@ -103,7 +103,7 @@ class _StudentClassroomsMaterialsScreenState
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'الملف غير متوفر حالياً للعرض',
+            "الملف غير متوفر حالياً للعرض",
             style: AppTextStyles.body.copyWith(color: Colors.white),
           ),
           backgroundColor: AppColors.error,
@@ -126,8 +126,8 @@ class _StudentClassroomsMaterialsScreenState
                 return await cubit.resolveSectionVideoUrl(
                   SectionVideo(
                     id: id,
-                    title: '',
-                    materialType: 'Video',
+                    title: "",
+                    materialType: "Video",
                     createdAt: DateTime.now(),
                   ),
                 );
@@ -150,8 +150,8 @@ class _StudentClassroomsMaterialsScreenState
     return Scaffold(
       appBar: CustomAppBar(
         title: widget.classroomName == null
-            ? 'المواد الدراسية'
-            : 'مواد ${widget.classroomName}',
+            ? "المواد الدراسية"
+            : "مواد ${widget.classroomName}",
       ),
       drawer: AppDrawer(drawerItemsList: getStudentDrawerItemsList()),
       backgroundColor: AppColors.background,
@@ -201,8 +201,8 @@ class _StudentClassroomsMaterialsScreenState
                         return await cubit.resolveSectionVideoUrl(
                           SectionVideo(
                             id: id,
-                            title: '',
-                            materialType: 'Video',
+                            title: "",
+                            materialType: "Video",
                             createdAt: DateTime.now(),
                           ),
                         );
@@ -270,7 +270,7 @@ class _StudentClassroomsMaterialsScreenState
     if (state.sectionsStatus == CubitStatus.error && state.sections.isEmpty) {
       return MaterialsErrorState(
         message: state.apiErrorModel?.error?.message ??
-            'حدث خطأ أثناء تحميل أقسام الفصل الدراسي.',
+            "حدث خطأ أثناء تحميل أقسام الفصل الدراسي.",
         onRetry: _loadData,
       );
     }
@@ -319,8 +319,8 @@ class _StudentClassroomsMaterialsScreenState
                     context: context,
                     path: AppRoutes.studentExamDetailsPage,
                     extra: {
-                      'examId': exam.id,
-                      'classroomName': widget.classroomName,
+                      "examId": exam.id,
+                      "classroomName": widget.classroomName,
                     },
                   );
                 },
@@ -352,7 +352,7 @@ class _StudentClassroomsMaterialsScreenState
     if (state.materialsStatus == CubitStatus.error && state.materials.isEmpty) {
       return MaterialsErrorState(
         message: state.apiErrorModel?.error?.message ??
-            'حدث خطأ أثناء تحميل المواد.',
+            "حدث خطأ أثناء تحميل المواد.",
         onRetry: _loadData,
       );
     }
@@ -432,7 +432,7 @@ class _StudentClassroomsMaterialsScreenState
                       size: 20,
                     ),
                     label: Text(
-                      'تحميل المزيد',
+                      "تحميل المزيد",
                       style: AppTextStyles.label.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w700,

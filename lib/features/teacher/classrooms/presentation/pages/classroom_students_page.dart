@@ -1,23 +1,23 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/helpers/app_extensions.dart';
-import 'package:draya_mobile/core/helpers/app_loading.dart';
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
-import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
-import 'package:draya_mobile/core/widgets/app_outlined_button.dart';
-import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
-import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
-import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
-import 'package:draya_mobile/features/teacher/classrooms/data/models/student_roster_item_model.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/helpers/app_extensions.dart";
+import "package:draya_mobile/core/helpers/app_loading.dart";
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/widgets/app_elevated_button.dart";
+import "package:draya_mobile/core/widgets/app_error_dialog.dart";
+import "package:draya_mobile/core/widgets/app_outlined_button.dart";
+import "package:draya_mobile/core/widgets/app_text_form_field.dart";
+import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart";
+import "package:draya_mobile/features/teacher/classrooms/data/models/student_roster_item_model.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_state.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:intl/intl.dart";
 
 class ClassroomStudentsPage extends StatefulWidget {
   final ClassroomModel classroom;
@@ -31,7 +31,7 @@ class ClassroomStudentsPage extends StatefulWidget {
 class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
   late final TextEditingController _searchController;
 
-  String _query = '';
+  String _query = "";
 
   String get _normalizedQuery => _query.trim().toLowerCase();
 
@@ -124,7 +124,7 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
         final students = _filterStudents(students: state.students);
 
         return Scaffold(
-          appBar: const CustomAppBar(title: 'قائمة الطلاب'),
+          appBar: const CustomAppBar(title: "قائمة الطلاب"),
           body: SafeArea(
             child: RefreshIndicator(
               onRefresh: _refreshStudents,
@@ -138,7 +138,7 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
                 ),
                 children: [
                   Text(
-                    'تفاصيل الفصل الدراسي',
+                    "تفاصيل الفصل الدراسي",
                     textAlign: TextAlign.right,
                     style: context.textTheme.headlineMedium,
                   ),
@@ -158,7 +158,7 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
                   Row(
                     children: [
                       Text(
-                        'قائمة طلاب الفصل',
+                        "قائمة طلاب الفصل",
                         style: context.textTheme.headlineSmall,
                       ),
                       const SizedBox(width: AppSizes.s12),
@@ -167,7 +167,7 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
                   ),
                   const SizedBox(height: AppSizes.s8),
                   Text(
-                    'يمكنك عرض الطلاب المسجلين في هذا الفصل والبحث عنهم.',
+                    "يمكنك عرض الطلاب المسجلين في هذا الفصل والبحث عنهم.",
                     textAlign: TextAlign.right,
                     style: context.textTheme.bodyMedium?.copyWith(
                       color: AppColors.foregroundMuted,
@@ -176,7 +176,7 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
                   const SizedBox(height: AppSizes.s16),
                   AppTextFormField(
                     controller: _searchController,
-                    hintText: 'بحث باسم الطالب...',
+                    hintText: "بحث باسم الطالب...",
                     prefixIcon: Icons.search,
                     onChanged: _onSearchChanged,
                   ),
@@ -224,7 +224,7 @@ class _ClassroomSummary extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'البيانات الأساسية للفصل',
+          "البيانات الأساسية للفصل",
           textAlign: TextAlign.right,
           style: context.textTheme.labelMedium?.copyWith(
             color: AppColors.foregroundMuted,
@@ -239,16 +239,16 @@ class _ClassroomSummary extends StatelessWidget {
         const SizedBox(height: AppSizes.s16),
         _SummaryRow(
           icon: Icons.groups_outlined,
-          label: 'عدد الطلبة المقيدين',
-          value: '$numberOfStudents طالب',
+          label: "عدد الطلبة المقيدين",
+          value: "$numberOfStudents طالب",
         ),
         const SizedBox(height: AppSizes.s12),
         _SummaryRow(
           icon: classroom.isActive
               ? Icons.check_circle_outline
               : Icons.pause_circle_outline,
-          label: 'حالة الفصل',
-          value: classroom.isActive ? 'نشط' : 'غير نشط',
+          label: "حالة الفصل",
+          value: classroom.isActive ? "نشط" : "غير نشط",
         ),
         const SizedBox(height: AppSizes.s12),
         _SummaryRow(
@@ -275,11 +275,11 @@ class _ClassroomSummary extends StatelessWidget {
           onPressed: () {
             AppNavigator.push(
               context: context,
-              path: AppRoutes.materialsPage,
+              path: AppRoutes.sectionsPage,
               extra: classroom,
             );
           },
-          label: "ادارة المواد الدراسية",
+          label: "ادارة الاقسام",
         ),
         const SizedBox(height: AppSizes.s12),
         AppOutlinedButton(
@@ -372,7 +372,7 @@ class _StudentCard extends StatelessWidget {
         CircleAvatar(
           backgroundColor: AppColors.primary100,
           foregroundColor: AppColors.primary700,
-          child: Text(student.fullName.isEmpty ? '?' : student.fullName[0]),
+          child: Text(student.fullName.isEmpty ? "?" : student.fullName[0]),
         ),
         const SizedBox(width: AppSizes.s12),
         Expanded(
@@ -381,7 +381,7 @@ class _StudentCard extends StatelessWidget {
             children: [
               Text(student.fullName, style: context.textTheme.titleSmall),
               Text(
-                'انضم في ${_dateFormat.format(student.enrolledAt)}',
+                "انضم في ${_dateFormat.format(student.enrolledAt)}",
                 style: context.textTheme.bodyMedium?.copyWith(
                   color: AppColors.foregroundMuted,
                 ),
@@ -434,7 +434,7 @@ class _CountChip extends StatelessWidget {
       borderRadius: BorderRadius.circular(999),
     ),
     child: Text(
-      '$count طلاب',
+      "$count طلاب",
       style: context.textTheme.labelMedium?.copyWith(
         color: AppColors.mathPhysics,
       ),

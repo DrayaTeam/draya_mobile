@@ -1,20 +1,20 @@
-import 'package:draya_mobile/core/di/dependency_injection.dart';
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/core/view_models/drawer_model.dart';
-import 'package:draya_mobile/core/widgets/app_drawer.dart';
-import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
-import 'package:draya_mobile/core/widgets/fade_in_up_animation.dart';
-import 'package:draya_mobile/features/teacher/teacher_channel/presentation/cubit/teacher_channel_cubit.dart';
-import 'package:draya_mobile/features/teacher/teacher_channel/presentation/cubit/teacher_channel_state.dart';
-import 'package:draya_mobile/features/teacher/teacher_channel/presentation/pages/question_details_screen.dart';
-import 'package:draya_mobile/features/teacher/teacher_channel/presentation/widgets/add_question_bottom_sheet.dart';
-import 'package:draya_mobile/features/teacher/teacher_channel/presentation/widgets/empty_questions_widget.dart';
-import 'package:draya_mobile/features/teacher/teacher_channel/presentation/widgets/question_card_widget.dart';
-import 'package:draya_mobile/features/teacher/teacher_channel/presentation/widgets/question_filter_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/di/dependency_injection.dart";
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/core/view_models/drawer_model.dart";
+import "package:draya_mobile/core/widgets/app_drawer.dart";
+import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/core/widgets/fade_in_up_animation.dart";
+import "package:draya_mobile/features/teacher/teacher_channel/presentation/cubit/teacher_channel_cubit.dart";
+import "package:draya_mobile/features/teacher/teacher_channel/presentation/cubit/teacher_channel_state.dart";
+import "package:draya_mobile/features/teacher/teacher_channel/presentation/pages/question_details_screen.dart";
+import "package:draya_mobile/features/teacher/teacher_channel/presentation/widgets/add_question_bottom_sheet.dart";
+import "package:draya_mobile/features/teacher/teacher_channel/presentation/widgets/empty_questions_widget.dart";
+import "package:draya_mobile/features/teacher/teacher_channel/presentation/widgets/question_card_widget.dart";
+import "package:draya_mobile/features/teacher/teacher_channel/presentation/widgets/question_filter_widget.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class TeacherChannelScreen extends StatelessWidget {
   final String classroomId;
@@ -108,7 +108,7 @@ class _TeacherChannelContent extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'هناك أسئلة جديدة — اضغط للتحديث',
+                              "هناك أسئلة جديدة — اضغط للتحديث",
                               style: AppTextStyles.label.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w700,
@@ -160,7 +160,7 @@ class _TeacherChannelContent extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'تعذر تحميل الأسئلة',
+                "تعذر تحميل الأسئلة",
                 style: AppTextStyles.h4.copyWith(
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,
@@ -195,7 +195,7 @@ class _TeacherChannelContent extends StatelessWidget {
                 ),
                 icon: const Icon(Icons.refresh_rounded, size: 18),
                 label: Text(
-                  'حاول مرة أخرى',
+                  "حاول مرة أخرى",
                   style: AppTextStyles.button.copyWith(color: Colors.white),
                 ),
               ),
@@ -213,7 +213,7 @@ class _TeacherChannelContent extends StatelessWidget {
           );
         },
         onAction: () => _showAddQuestionSheet(context),
-        actionLabel: 'اسأل سؤالاً جديداً',
+        actionLabel: "اسأل سؤالاً جديداً",
       );
     }
 
@@ -267,7 +267,7 @@ class _TeacherChannelContent extends StatelessWidget {
                           )
                         : const Icon(Icons.expand_more_rounded, size: 20),
                     label: Text(
-                      'تحميل المزيد',
+                      "تحميل المزيد",
                       style: AppTextStyles.label.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w700,
@@ -340,7 +340,7 @@ class _TeacherChannelContent extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'تم نشر السؤال بنجاح',
+                      "تم نشر السؤال بنجاح",
                       style: AppTextStyles.body.copyWith(color: Colors.white),
                     ),
                     backgroundColor: AppColors.primary,
@@ -350,7 +350,7 @@ class _TeacherChannelContent extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      state.apiErrorModel?.error?.message ?? 'حدث خطأ',
+                      state.apiErrorModel?.error?.message ?? "حدث خطأ",
                       style: AppTextStyles.body.copyWith(color: Colors.white),
                     ),
                     backgroundColor: AppColors.error,

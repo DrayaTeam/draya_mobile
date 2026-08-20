@@ -1,6 +1,6 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/networking/api_error_model.dart';
-import 'package:draya_mobile/features/student/teachers/data/models/teacher_classroom_model.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/networking/api_error_model.dart";
+import "package:draya_mobile/features/student/teachers/data/models/teacher_classroom_model.dart";
 
 class TeacherClassroomsState {
   final CubitStatus status;

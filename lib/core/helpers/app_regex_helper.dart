@@ -5,16 +5,16 @@ abstract final class AppRegexHelper {
   );
 
   /// Regex for validating if the string contains only numbers.
-  static final RegExp numberValidatorRegExp = RegExp(r'^[0-9]+$');
+  static final RegExp numberValidatorRegExp = RegExp(r"^[0-9]+$");
 
   /// Regex for password validation.
   /// Requires at least 8 characters, one uppercase letter, one lowercase letter,
   /// one number, and one special character.
   static final RegExp passwordValidatorRegExp = RegExp(
-    r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!+%*?&-])[A-Za-z\d@$!+%*?&-]{8,}$',
+    r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!+%*?&-])[A-Za-z\d@$!+%*?&-]{8,}$",
   );
   //010xxxxxxx / 011xxxxxxx / 012xxxxxxx / 015xxxxxxx
   static final RegExp phoneValidatorRegExp = RegExp(
-    r'^01[0125][0-9]{8}$',
+    r"^01[0125][0-9]{8}$",
   );
 }

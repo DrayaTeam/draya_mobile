@@ -1,5 +1,5 @@
-import 'package:draya_mobile/l10n/app_localizations.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/l10n/app_localizations.dart";
+import "package:flutter/material.dart";
 
 extension StringExtension on String? {
   bool isNullOrEmpty() => this == null || this == "";

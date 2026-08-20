@@ -1,6 +1,6 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
 
 class ExamQuestionNavigator extends StatelessWidget {
   final int totalQuestions;
@@ -63,7 +63,7 @@ class ExamQuestionNavigator extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  '${index + 1}',
+                  "${index + 1}",
                   style: AppTextStyles.label.copyWith(
                     color: textColor,
                     fontWeight: isCurrent ? FontWeight.w900 : FontWeight.w700,

@@ -1,10 +1,10 @@
-import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import "dart:io";
+import "package:cached_network_image/cached_network_image.dart";
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:flutter/material.dart";
+import "package:image_picker/image_picker.dart";
 
 class ProfileAvatarPicker extends StatelessWidget {
   final String? imageUrl;
@@ -26,20 +26,20 @@ class ProfileAvatarPicker extends StatelessWidget {
 
   static String getInitials(String? name) {
     if (name == null || name.trim().isEmpty) {
-      return '';
+      return "";
     }
 
     final words = name
         .trim()
-        .split(RegExp(r'\s+'))
+        .split(RegExp(r"\s+"))
         .where((w) => w.isNotEmpty)
         .toList();
-    if (words.isEmpty) return '';
+    if (words.isEmpty) return "";
 
     if (words.length >= 2) {
       final firstLetter = words[0].characters.first;
       final secondLetter = words[1].characters.first;
-      return '$firstLetter$secondLetter'.toUpperCase();
+      return "$firstLetter$secondLetter".toUpperCase();
     } else {
       final singleWord = words[0];
       if (singleWord.characters.length >= 2) {

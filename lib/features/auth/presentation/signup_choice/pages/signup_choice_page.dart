@@ -1,12 +1,12 @@
-import 'package:draya_mobile/core/helpers/app_extensions.dart';
-import 'package:draya_mobile/core/localization/locale_cubit.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/enums/user_role.dart';
-import 'package:draya_mobile/core/widgets/app_logo_and_name.dart';
-import 'package:draya_mobile/features/auth/presentation/signup_choice/cubit/signup_choice_cubit.dart';
-import 'package:draya_mobile/features/auth/presentation/signup_choice/cubit/signup_choice_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/helpers/app_extensions.dart";
+import "package:draya_mobile/core/localization/locale_cubit.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/enums/user_role.dart";
+import "package:draya_mobile/core/widgets/app_logo_and_name.dart";
+import "package:draya_mobile/features/auth/presentation/signup_choice/cubit/signup_choice_cubit.dart";
+import "package:draya_mobile/features/auth/presentation/signup_choice/cubit/signup_choice_state.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class SignupChoicePage extends StatelessWidget {
   const SignupChoicePage({super.key});

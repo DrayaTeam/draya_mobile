@@ -11,7 +11,7 @@ TopUpRequestModel _$TopUpRequestModelFromJson(Map<String, dynamic> json) =>
       amount: (json['amount'] as num).toDouble(),
       redirectionUrl:
           json['redirectionUrl'] as String? ??
-          'https://draya.com/payment/result',
+          "https://draya.com/payment/result",
     );
 
 Map<String, dynamic> _$TopUpRequestModelToJson(TopUpRequestModel instance) =>

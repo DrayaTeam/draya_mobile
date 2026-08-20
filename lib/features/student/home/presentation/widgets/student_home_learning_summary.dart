@@ -1,8 +1,8 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
+import "package:font_awesome_flutter/font_awesome_flutter.dart"
     show FaIcon, FontAwesomeIcons;
 
 class StudentHomeLearningSummary extends StatelessWidget {
@@ -33,7 +33,7 @@ class StudentHomeLearningSummary extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'حافز التعلم اليومي',
+                  "حافز التعلم اليومي",
                   style: AppTextStyles.label.copyWith(
                     color: AppColors.textSecondary,
                     fontWeight: FontWeight.w800,
@@ -53,7 +53,7 @@ class StudentHomeLearningSummary extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'نشط الآن 🔥',
+                      "نشط الآن 🔥",
                       style: AppTextStyles.label.copyWith(
                         fontSize: 11,
                         fontWeight: FontWeight.w800,
@@ -116,7 +116,7 @@ class StudentHomeLearningSummary extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        '5 أيام متتالية',
+                        "5 أيام متتالية",
                         style: AppTextStyles.h2.copyWith(
                           color: AppColors.surface,
                           fontWeight: FontWeight.w900,
@@ -124,7 +124,7 @@ class StudentHomeLearningSummary extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'سلسلة المذاكرة الحالية 🚀',
+                        "سلسلة المذاكرة الحالية 🚀",
                         style: AppTextStyles.label.copyWith(
                           color: const Color(0xFFFEF3C6),
                           fontWeight: FontWeight.w500,
@@ -141,8 +141,8 @@ class StudentHomeLearningSummary extends StatelessWidget {
               children: [
                 Expanded(
                   child: _SummaryCard(
-                    label: 'المتوسط التراكمي',
-                    value: '87%',
+                    label: "المتوسط التراكمي",
+                    value: "87%",
                     valueColor: Color(0xFF024A70),
                     borderColor: Color(0xFFDFF2FE),
                     backgroundColor: Color(0xFFF0F9FF),
@@ -151,8 +151,8 @@ class StudentHomeLearningSummary extends StatelessWidget {
                 SizedBox(width: 16),
                 Expanded(
                   child: _SummaryCard(
-                    label: 'المحاضرات المكتملة',
-                    value: '37 درس',
+                    label: "المحاضرات المكتملة",
+                    value: "37 درس",
                     valueColor: Color(0xFF59168B),
                     borderColor: Color(0xFFF3E8FF),
                     backgroundColor: Color(0xFFF6F2FF),

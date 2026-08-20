@@ -1,21 +1,21 @@
-import 'package:draya_mobile/core/di/dependency_injection.dart';
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/core/widgets/fade_in_up_animation.dart';
-import 'package:draya_mobile/features/student/exams/presentation/widgets/exam_card_item.dart';
-import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/entity/student_enrolled_classroom.dart';
-import 'package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_cubit.dart';
-import 'package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_state.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import "package:draya_mobile/core/di/dependency_injection.dart";
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/core/widgets/fade_in_up_animation.dart";
+import "package:draya_mobile/features/student/exams/presentation/widgets/exam_card_item.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/domain/entity/student_enrolled_classroom.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_cubit.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_state.dart";
+import "package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart";
+import "package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:font_awesome_flutter/font_awesome_flutter.dart";
 
 class _ClassroomExamItem {
   final SectionExam exam;
@@ -94,8 +94,8 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
       context: context,
       path: AppRoutes.studentExamDetailsPage,
       extra: {
-        'examId': item.exam.id,
-        'classroomName': item.classroomName,
+        "examId": item.exam.id,
+        "classroomName": item.classroomName,
       },
     );
   }
@@ -164,7 +164,7 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
                           ),
                           const SizedBox(width: AppSizes.s4),
                           Text(
-                            'مركز التقويم والاختبارات التفاعلية',
+                            "مركز التقويم والاختبارات التفاعلية",
                             style: AppTextStyles.label.copyWith(
                               color: AppColors.primary700,
                               fontWeight: FontWeight.w900,
@@ -176,7 +176,7 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
                     ),
                     const SizedBox(height: AppSizes.s12),
                     Text(
-                      'الامتحانات والاختبارات المتاحة',
+                      "الامتحانات والاختبارات المتاحة",
                       style: AppTextStyles.h4.copyWith(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w800,
@@ -184,7 +184,7 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
                     ),
                     const SizedBox(height: AppSizes.s4),
                     Text(
-                      'استعرض الاختبارات المتاحة في فصولك الدراسية مع تصحيح فوري وتحليل بالذكاء الاصطناعي.',
+                      "استعرض الاختبارات المتاحة في فصولك الدراسية مع تصحيح فوري وتحليل بالذكاء الاصطناعي.",
                       style: AppTextStyles.body.copyWith(
                         color: AppColors.textSecondary,
                         fontSize: 12.5,
@@ -207,7 +207,7 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
                         padding: const EdgeInsets.only(left: 8),
                         child: ChoiceChip(
                           label: Text(
-                            'جميع الفصول (${_allExams.length})',
+                            "جميع الفصول (${_allExams.length})",
                             style: AppTextStyles.label.copyWith(
                               color: _selectedClassroomId == null
                                   ? Colors.white
@@ -242,7 +242,7 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
                           padding: const EdgeInsets.only(left: 8),
                           child: ChoiceChip(
                             label: Text(
-                              '${c.name} ($count)',
+                              "${c.name} ($count)",
                               style: AppTextStyles.label.copyWith(
                                 color: isSelected
                                     ? Colors.white
@@ -334,7 +334,7 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
             ),
             const SizedBox(height: 16),
             Text(
-              'لا توجد امتحانات متاحة حالياً',
+              "لا توجد امتحانات متاحة حالياً",
               style: AppTextStyles.h5.copyWith(
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
@@ -342,7 +342,7 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
             ),
             const SizedBox(height: 6),
             Text(
-              'ستظهر هنا الامتحانات التي يضيفها معلموك في أقسام الفصول الدراسية.',
+              "ستظهر هنا الامتحانات التي يضيفها معلموك في أقسام الفصول الدراسية.",
               textAlign: TextAlign.center,
               style: AppTextStyles.body.copyWith(
                 color: AppColors.textSecondary,

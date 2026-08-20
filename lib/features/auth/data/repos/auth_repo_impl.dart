@@ -1,3 +1,6 @@
+import "package:draya_mobile/core/constants/app_shared_pref_keys.dart";
+import "package:draya_mobile/core/helpers/app_shared_pref_helper.dart";
+import "package:draya_mobile/core/helpers/app_token_helper.dart";
 import "package:draya_mobile/core/networking/api_error_handler.dart";
 import "package:draya_mobile/core/networking/api_result.dart";
 import "package:draya_mobile/features/auth/data/models/auth_response_model.dart";
@@ -11,6 +14,7 @@ import "package:draya_mobile/features/auth/domain/repos/auth_repo.dart";
 
 class AuthRepositoryImpl implements AuthRepo {
   final AuthApiService _authApiService;
+
   AuthRepositoryImpl(this._authApiService);
 
   @override
@@ -19,6 +23,8 @@ class AuthRepositoryImpl implements AuthRepo {
   ) async {
     try {
       final response = await _authApiService.login(loginRequestModel);
+
+      await _saveAuthTokens(authResponseModel: response);
 
       return ApiResult.success(response);
     } catch (e) {
@@ -35,6 +41,8 @@ class AuthRepositoryImpl implements AuthRepo {
         refreshTokenRequestModel,
       );
 
+      await _saveAuthTokens(authResponseModel: response);
+
       return ApiResult.success(response);
     } catch (e) {
       return ApiResult.failure(ErrorHandler.handle(e));
@@ -49,6 +57,9 @@ class AuthRepositoryImpl implements AuthRepo {
       final response = await _authApiService.registerStudent(
         registerStudentRequestModel,
       );
+
+      await _saveAuthTokens(authResponseModel: response);
+
       return ApiResult.success(response);
     } catch (e) {
       return ApiResult.failure(ErrorHandler.handle(e));
@@ -63,6 +74,9 @@ class AuthRepositoryImpl implements AuthRepo {
       final response = await _authApiService.registerTeacher(
         registerTeacherRequestModel,
       );
+
+      await _saveAuthTokens(authResponseModel: response);
+
       return ApiResult.success(response);
     } catch (e) {
       return ApiResult.failure(ErrorHandler.handle(e));
@@ -73,9 +87,28 @@ class AuthRepositoryImpl implements AuthRepo {
   Future<ApiResult<UserProfileModel>> getCurrentUserProfile() async {
     try {
       final response = await _authApiService.getCurrentUserProfile();
+
       return ApiResult.success(response);
     } catch (e) {
       return ApiResult.failure(ErrorHandler.handle(e));
+    }
+  }
+
+  Future<void> _saveAuthTokens({
+    required AuthResponseModel authResponseModel,
+  }) async {
+    await AppTokenHelper.saveTokens(
+      accessToken: authResponseModel.accessToken,
+      refreshToken: authResponseModel.refreshToken,
+    );
+
+    final role = authResponseModel.user?.role;
+
+    if (role != null && role.isNotEmpty) {
+      await AppSharedPrefHelper.setData(
+        AppSharedPrefKeys.userRole,
+        role,
+      );
     }
   }
 }

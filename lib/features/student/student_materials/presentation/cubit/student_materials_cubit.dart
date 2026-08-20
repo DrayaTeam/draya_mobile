@@ -1,12 +1,12 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_enrolled_materials_use_case.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_material_stream_use_case.dart';
-import 'package:draya_mobile/features/student/student_materials/presentation/cubit/student_materials_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart";
+import "package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart";
+import "package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart";
+import "package:draya_mobile/features/student/student_materials/domain/usecases/get_enrolled_materials_use_case.dart";
+import "package:draya_mobile/features/student/student_materials/domain/usecases/get_material_stream_use_case.dart";
+import "package:draya_mobile/features/student/student_materials/presentation/cubit/student_materials_state.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class StudentMaterialsCubit extends Cubit<StudentMaterialsState> {
   final GetEnrolledMaterialsUseCase _getEnrolledMaterialsUseCase;

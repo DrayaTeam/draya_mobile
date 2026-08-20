@@ -1,7 +1,7 @@
-import 'package:draya_mobile/core/helpers/app_use_case.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/repos/student_materials_repo.dart';
+import "package:draya_mobile/core/helpers/app_use_case.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart";
+import "package:draya_mobile/features/student/student_materials/domain/repos/student_materials_repo.dart";
 
 class GetEnrolledMaterialsParams {
   final int page;

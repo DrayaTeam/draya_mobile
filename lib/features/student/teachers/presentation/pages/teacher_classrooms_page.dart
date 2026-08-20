@@ -1,29 +1,29 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
-import 'package:draya_mobile/core/widgets/fade_in_up_animation.dart';
-import 'package:draya_mobile/core/di/dependency_injection.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart';
-import 'package:draya_mobile/features/student/student_materials/presentation/widgets/section_expandable_card.dart';
-import 'package:draya_mobile/features/student/teachers/data/models/teacher_classroom_model.dart';
-import 'package:draya_mobile/features/student/teachers/data/models/teacher_model.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/cubit/student_checkout_cubit.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/cubit/student_checkout_state.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_cubit.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_state.dart';
-import 'package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/core/widgets/fade_in_up_animation.dart";
+import "package:draya_mobile/core/di/dependency_injection.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart";
+import "package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart";
+import "package:draya_mobile/features/student/student_materials/presentation/widgets/section_expandable_card.dart";
+import "package:draya_mobile/features/student/teachers/data/models/teacher_classroom_model.dart";
+import "package:draya_mobile/features/student/teachers/data/models/teacher_model.dart";
+import "package:draya_mobile/features/student/teachers/presentation/cubit/student_checkout_cubit.dart";
+import "package:draya_mobile/features/student/teachers/presentation/cubit/student_checkout_state.dart";
+import "package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_cubit.dart";
+import "package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_state.dart";
+import "package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:intl/intl.dart";
 
 class TeacherClassroomsPage extends StatefulWidget {
   final String teacherId;
@@ -62,7 +62,7 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
                 SnackBar(
                   content: Text(
                     state.apiErrorModel?.error?.message ??
-                        'تعذر تحميل الفصول الدراسية',
+                        "تعذر تحميل الفصول الدراسية",
                     style: AppTextStyles.body.copyWith(color: Colors.white),
                   ),
                   backgroundColor: AppColors.error,
@@ -96,7 +96,7 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'تعذر إنشاء رابط الدفع.',
+                        "تعذر إنشاء رابط الدفع.",
                         style: AppTextStyles.body.copyWith(color: Colors.white),
                       ),
                       backgroundColor: AppColors.error,
@@ -109,7 +109,7 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
                   context: context,
                   path: AppRoutes.paymentWebViewPage,
                   extra: PaymentWebviewModel(
-                    appBarTitle: 'الدفع الإلكتروني',
+                    appBarTitle: "الدفع الإلكتروني",
                     url: checkoutUrl,
                   ),
                 );
@@ -122,7 +122,7 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
                   SnackBar(
                     content: Text(
                       state.apiErrorModel?.error?.message ??
-                          'تعذر إتمام تسجيل الفصل',
+                          "تعذر إتمام تسجيل الفصل",
                       style: AppTextStyles.body.copyWith(color: Colors.white),
                     ),
                     backgroundColor: AppColors.error,
@@ -141,7 +141,7 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
           return Scaffold(
             backgroundColor: AppColors.background,
             appBar: CustomAppBar(
-              title: widget.teacher?.fullName ?? 'الفصول الدراسية',
+              title: widget.teacher?.fullName ?? "الفصول الدراسية",
             ),
             body: SafeArea(
               child: state.status == CubitStatus.loading && classrooms.isEmpty
@@ -162,16 +162,16 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
                         ),
                         children: [
                           _HeaderCard(
-                            teacherName: widget.teacher?.fullName ?? 'المعلم',
+                            teacherName: widget.teacher?.fullName ?? "المعلم",
                             specialization:
-                                widget.teacher?.specialization ?? 'عام',
+                                widget.teacher?.specialization ?? "عام",
                             classroomCount: classrooms.length,
                             imageUrl: widget.teacher?.profilePictureUrl,
                           ),
                           const SizedBox(height: 18),
                           if (classrooms.isEmpty)
                             _EmptyClassroomsState(
-                              teacherName: widget.teacher?.fullName ?? 'المعلم',
+                              teacherName: widget.teacher?.fullName ?? "المعلم",
                             )
                           else
                             ...classrooms.asMap().entries.map(
@@ -236,7 +236,7 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    'تسجيل في الفصل',
+                    "تسجيل في الفصل",
                     style: AppTextStyles.h4.copyWith(
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
@@ -267,7 +267,7 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
                         ),
                       ),
                       child: Text(
-                        'إلغاء',
+                        "إلغاء",
                         style: AppTextStyles.button.copyWith(
                           color: AppColors.foregroundMuted,
                           fontWeight: FontWeight.w600,
@@ -289,7 +289,7 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
                         elevation: 0,
                       ),
                       child: Text(
-                        'متابعة الدفع',
+                        "متابعة الدفع",
                         style: AppTextStyles.button.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
@@ -410,7 +410,7 @@ class _HeaderCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'المعلم المشرف',
+                      "المعلم المشرف",
                       style: AppTextStyles.label.copyWith(
                         color: Colors.white.withValues(alpha: 0.8),
                         fontSize: 12,
@@ -458,7 +458,7 @@ class _HeaderCard extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  '$classroomCount فصل متاح',
+                  "$classroomCount فصل متاح",
                   style: AppTextStyles.label.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
@@ -512,14 +512,14 @@ class _ClassroomCardState extends State<_ClassroomCard> {
           });
         case Failure(apiErrorModel: final error):
           setState(() {
-            _sectionsError = error.error?.message ?? 'تعذر تحميل أقسام الفصل';
+            _sectionsError = error.error?.message ?? "تعذر تحميل أقسام الفصل";
             _isLoadingSections = false;
           });
       }
     } catch (_) {
       if (mounted) {
         setState(() {
-          _sectionsError = 'تعذر تحميل أقسام الفصل الدراسي';
+          _sectionsError = "تعذر تحميل أقسام الفصل الدراسي";
           _isLoadingSections = false;
         });
       }
@@ -539,11 +539,11 @@ class _ClassroomCardState extends State<_ClassroomCard> {
   Widget build(BuildContext context) {
     final classroom = widget.classroom;
     final startText = classroom.startDate != null
-        ? DateFormat('dd/MM/yyyy', 'ar').format(classroom.startDate!)
-        : 'بدء غير محدد';
+        ? DateFormat("dd/MM/yyyy", "ar").format(classroom.startDate!)
+        : "بدء غير محدد";
     final endText = classroom.endDate != null
-        ? DateFormat('dd/MM/yyyy', 'ar').format(classroom.endDate!)
-        : 'انتهاء غير محدد';
+        ? DateFormat("dd/MM/yyyy", "ar").format(classroom.endDate!)
+        : "انتهاء غير محدد";
 
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
@@ -606,7 +606,7 @@ class _ClassroomCardState extends State<_ClassroomCard> {
                     ),
                   ),
                   child: Text(
-                    classroom.isActive ? 'مفتوح للتسجيل' : 'غير نشط',
+                    classroom.isActive ? "مفتوح للتسجيل" : "غير نشط",
                     style: AppTextStyles.label.copyWith(
                       color: classroom.isActive
                           ? AppColors.success
@@ -630,20 +630,20 @@ class _ClassroomCardState extends State<_ClassroomCard> {
                 children: [
                   _InfoRow(
                     icon: Icons.category_outlined,
-                    label: 'نوع الفصل',
+                    label: "نوع الفصل",
                     value: classroom.classroomTypeName,
                   ),
                   const Divider(color: AppColors.border, height: 12),
                   _InfoRow(
                     icon: Icons.grade_outlined,
-                    label: 'المرحلة',
+                    label: "المرحلة",
                     value: classroom.gradeLevelName,
                   ),
                   const Divider(color: AppColors.border, height: 12),
                   _InfoRow(
                     icon: Icons.calendar_today_outlined,
-                    label: 'المدة',
-                    value: '$startText - $endText',
+                    label: "المدة",
+                    value: "$startText - $endText",
                   ),
                 ],
               ),
@@ -679,7 +679,7 @@ class _ClassroomCardState extends State<_ClassroomCard> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'عرض محتوى الفصل والأقسام',
+                        "عرض محتوى الفصل والأقسام",
                         style: AppTextStyles.label.copyWith(
                           color: _isSectionsExpanded
                               ? AppColors.primary
@@ -755,7 +755,7 @@ class _ClassroomCardState extends State<_ClassroomCard> {
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                         child: Text(
-                          'إعادة المحاولة',
+                          "إعادة المحاولة",
                           style: AppTextStyles.label.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w700,
@@ -775,7 +775,7 @@ class _ClassroomCardState extends State<_ClassroomCard> {
                   ),
                   child: Center(
                     child: Text(
-                      'لم يتم إضافة أقسام دراسية في هذا الفصل حتى الآن.',
+                      "لم يتم إضافة أقسام دراسية في هذا الفصل حتى الآن.",
                       style: AppTextStyles.body.copyWith(
                         color: AppColors.textSecondary,
                         fontSize: 12,
@@ -804,7 +804,7 @@ class _ClassroomCardState extends State<_ClassroomCard> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'محتوى الفصل متاح للاطلاع على العناوين فقط قبل التسجيل.',
+                          "محتوى الفصل متاح للاطلاع على العناوين فقط قبل التسجيل.",
                           style: AppTextStyles.label.copyWith(
                             color: AppColors.textSecondary,
                             fontSize: 11,
@@ -831,14 +831,14 @@ class _ClassroomCardState extends State<_ClassroomCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'سعر الاشتراك',
+                      "سعر الاشتراك",
                       style: AppTextStyles.label.copyWith(
                         fontSize: 11,
                         color: AppColors.textSecondary,
                       ),
                     ),
                     Text(
-                      '${classroom.price.toStringAsFixed(0)} جنيه',
+                      "${classroom.price.toStringAsFixed(0)} جنيه",
                       style: AppTextStyles.h4.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w800,
@@ -865,7 +865,7 @@ class _ClassroomCardState extends State<_ClassroomCard> {
                   ),
                   icon: const Icon(Icons.credit_card_rounded, size: 18),
                   label: Text(
-                    'تسجيل الآن',
+                    "تسجيل الآن",
                     style: AppTextStyles.button.copyWith(color: Colors.white),
                   ),
                 ),
@@ -896,7 +896,7 @@ class _InfoRow extends StatelessWidget {
         Icon(icon, size: 15, color: AppColors.foregroundMuted),
         const SizedBox(width: 8),
         Text(
-          '$label: ',
+          "$label: ",
           style: AppTextStyles.label.copyWith(
             color: AppColors.textSecondary,
             fontSize: 12,
@@ -951,7 +951,7 @@ class _EmptyClassroomsState extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'لا توجد فصول متاحة حالياً',
+            "لا توجد فصول متاحة حالياً",
             style: AppTextStyles.h5.copyWith(
               fontWeight: FontWeight.w700,
               color: AppColors.textPrimary,
@@ -959,7 +959,7 @@ class _EmptyClassroomsState extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'لم يقم $teacherName بإنشاء أي فصول دراسية حتى الآن.',
+            "لم يقم $teacherName بإنشاء أي فصول دراسية حتى الآن.",
             style: AppTextStyles.body.copyWith(
               color: AppColors.textSecondary,
               fontSize: 13,

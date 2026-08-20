@@ -1,16 +1,16 @@
-import 'dart:async';
-import 'dart:math';
+import "dart:async";
+import "dart:math";
 
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/exams/domain/entity/student_exam.dart';
-import 'package:draya_mobile/features/student/exams/domain/usecases/get_attempt_results_use_case.dart';
-import 'package:draya_mobile/features/student/exams/domain/usecases/get_exam_details_use_case.dart';
-import 'package:draya_mobile/features/student/exams/domain/usecases/get_grading_job_status_use_case.dart';
-import 'package:draya_mobile/features/student/exams/domain/usecases/start_exam_attempt_use_case.dart';
-import 'package:draya_mobile/features/student/exams/domain/usecases/submit_exam_attempt_use_case.dart';
-import 'package:draya_mobile/features/student/exams/presentation/cubit/student_exam_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/exams/domain/entity/student_exam.dart";
+import "package:draya_mobile/features/student/exams/domain/usecases/get_attempt_results_use_case.dart";
+import "package:draya_mobile/features/student/exams/domain/usecases/get_exam_details_use_case.dart";
+import "package:draya_mobile/features/student/exams/domain/usecases/get_grading_job_status_use_case.dart";
+import "package:draya_mobile/features/student/exams/domain/usecases/start_exam_attempt_use_case.dart";
+import "package:draya_mobile/features/student/exams/domain/usecases/submit_exam_attempt_use_case.dart";
+import "package:draya_mobile/features/student/exams/presentation/cubit/student_exam_state.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class StudentExamCubit extends Cubit<StudentExamState> {
   final GetExamDetailsUseCase _getExamDetailsUseCase;
@@ -52,7 +52,7 @@ class StudentExamCubit extends Cubit<StudentExamState> {
         for (final q in exam.questions) {
           initialAnswers[q.id] = GradedAnswer(
             examQuestionId: q.id,
-            answerText: '',
+            answerText: "",
             selectedOptionId: null,
           );
         }
@@ -110,7 +110,7 @@ class StudentExamCubit extends Cubit<StudentExamState> {
     updatedAnswers[questionId] = GradedAnswer(
       answerId: currentAnswer?.answerId,
       examQuestionId: questionId,
-      answerText: '',
+      answerText: "",
       selectedOptionId: optionId,
     );
 
@@ -269,6 +269,6 @@ class StudentExamCubit extends Cubit<StudentExamState> {
     final random = Random();
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final randomValue = random.nextInt(1000000);
-    return 'submission-$timestamp-$randomValue';
+    return "submission-$timestamp-$randomValue";
   }
 }

@@ -1,7 +1,7 @@
-import 'package:draya_mobile/features/student/teachers/data/models/teacher_classroom_model.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:draya_mobile/features/student/teachers/data/models/teacher_classroom_model.dart";
+import "package:json_annotation/json_annotation.dart";
 
-part 'teacher_classroom_paged_result_model.g.dart';
+part "teacher_classroom_paged_result_model.g.dart";
 
 @JsonSerializable()
 class TeacherClassroomPagedResultModel {

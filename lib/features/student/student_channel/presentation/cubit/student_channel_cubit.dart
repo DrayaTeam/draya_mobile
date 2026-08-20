@@ -1,23 +1,23 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/helpers/app_token_helper.dart';
-import 'package:draya_mobile/core/networking/api_constants.dart';
-import 'package:draya_mobile/core/networking/api_error_model.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/core/signalr/signalr_events.dart';
-import 'package:draya_mobile/core/signalr/signalr_service.dart';
-import 'package:draya_mobile/features/student/student_channel/data/models/question_model.dart';
-import 'package:draya_mobile/features/student/student_channel/data/models/reply_model.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/entity/question_details_entity.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/entity/question_entity.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/entity/reply_entity.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/usecases/create_question_use_case.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/usecases/create_reply_use_case.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/usecases/get_question_details_use_case.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/usecases/get_questions_use_case.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/usecases/unvote_question_use_case.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/usecases/vote_question_use_case.dart';
-import 'package:draya_mobile/features/student/student_channel/presentation/cubit/student_channel_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/helpers/app_token_helper.dart";
+import "package:draya_mobile/core/networking/api_constants.dart";
+import "package:draya_mobile/core/networking/api_error_model.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/core/signalr/signalr_events.dart";
+import "package:draya_mobile/core/signalr/signalr_service.dart";
+import "package:draya_mobile/features/student/student_channel/data/models/question_model.dart";
+import "package:draya_mobile/features/student/student_channel/data/models/reply_model.dart";
+import "package:draya_mobile/features/student/student_channel/domain/entity/question_details_entity.dart";
+import "package:draya_mobile/features/student/student_channel/domain/entity/question_entity.dart";
+import "package:draya_mobile/features/student/student_channel/domain/entity/reply_entity.dart";
+import "package:draya_mobile/features/student/student_channel/domain/usecases/create_question_use_case.dart";
+import "package:draya_mobile/features/student/student_channel/domain/usecases/create_reply_use_case.dart";
+import "package:draya_mobile/features/student/student_channel/domain/usecases/get_question_details_use_case.dart";
+import "package:draya_mobile/features/student/student_channel/domain/usecases/get_questions_use_case.dart";
+import "package:draya_mobile/features/student/student_channel/domain/usecases/unvote_question_use_case.dart";
+import "package:draya_mobile/features/student/student_channel/domain/usecases/vote_question_use_case.dart";
+import "package:draya_mobile/features/student/student_channel/presentation/cubit/student_channel_state.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class StudentChannelCubit extends Cubit<StudentChannelState> {
   StudentChannelCubit(
@@ -37,7 +37,7 @@ class StudentChannelCubit extends Cubit<StudentChannelState> {
   final VoteQuestionUseCase _vote;
   final UnvoteQuestionUseCase _unvote;
   final SignalRService _signalR;
-  String _classroomId = '';
+  String _classroomId = "";
   bool _listening = false;
 
   Future<void> initializeChannel({required String classroomId}) async {
@@ -53,7 +53,7 @@ class StudentChannelCubit extends Cubit<StudentChannelState> {
     try {
       final apiUri = Uri.parse(ApiConstants.baseUrl);
       await _signalR.connect(
-        hubUrl: apiUri.replace(path: '/hubs/qa', query: null).toString(),
+        hubUrl: apiUri.replace(path: "/hubs/qa", query: null).toString(),
         token: token,
       );
       await _signalR.joinClassroom(_classroomId);
@@ -146,7 +146,7 @@ class StudentChannelCubit extends Cubit<StudentChannelState> {
       success: (model) {
         final question = model.toEntity();
         final addToList =
-            state.sortBy == 'recent' && !state.questions.contains(question);
+            state.sortBy == "recent" && !state.questions.contains(question);
         emit(
           state.copyWith(
             createQuestionStatus: CubitStatus.success,
@@ -246,8 +246,8 @@ class StudentChannelCubit extends Cubit<StudentChannelState> {
         retry: false,
         error: ErrorModel(
           message: isQuestion
-              ? 'يرجى إدخال محتوى السؤال'
-              : 'يرجى إدخال محتوى الرد',
+              ? "يرجى إدخال محتوى السؤال"
+              : "يرجى إدخال محتوى الرد",
         ),
       ),
     ),
@@ -378,7 +378,7 @@ class StudentChannelCubit extends Cubit<StudentChannelState> {
 
   void _onQuestionCreated(QuestionCreatedEvent event) {
     if (isClosed || event.classroomId != _classroomId) return;
-    if (state.sortBy != 'recent') {
+    if (state.sortBy != "recent") {
       emit(state.copyWith(hasPendingNewQuestions: true));
       return;
     }
@@ -442,9 +442,9 @@ class StudentChannelCubit extends Cubit<StudentChannelState> {
 
   @override
   Future<void> close() async {
-    _signalR.offEvent('QuestionCreated');
-    _signalR.offEvent('QuestionReplied');
-    _signalR.offEvent('QuestionVoteUpdated');
+    _signalR.offEvent("QuestionCreated");
+    _signalR.offEvent("QuestionReplied");
+    _signalR.offEvent("QuestionVoteUpdated");
     if (_classroomId.isNotEmpty) await _signalR.leaveClassroom(_classroomId);
     await _signalR.disconnect();
     return super.close();

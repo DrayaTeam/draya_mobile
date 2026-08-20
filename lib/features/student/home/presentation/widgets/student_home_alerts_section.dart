@@ -1,7 +1,7 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
 
 class StudentHomeAlertsSection extends StatelessWidget {
   const StudentHomeAlertsSection({super.key});
@@ -38,7 +38,7 @@ class StudentHomeAlertsSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'تنبيهات ومواعيد عاجلة',
+                  "تنبيهات ومواعيد عاجلة",
                   style: AppTextStyles.label.copyWith(
                     color: AppColors.error,
                     fontWeight: FontWeight.w800,
@@ -53,7 +53,7 @@ class StudentHomeAlertsSection extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'تنبيهان جديدان',
+                      "تنبيهان جديدان",
                       style: AppTextStyles.label.copyWith(
                         fontSize: 12,
                         fontWeight: FontWeight.w800,
@@ -68,9 +68,9 @@ class StudentHomeAlertsSection extends StatelessWidget {
             const _AlertItem(
               accentColor: Color(0xFFEC003F),
               iconColor: Color(0xFFEC003F),
-              title: 'امتحان الباب الثالث (جبر)',
-              subtitle: 'غداً 10:00 ص',
-              badgeText: 'هام',
+              title: "امتحان الباب الثالث (جبر)",
+              subtitle: "غداً 10:00 ص",
+              badgeText: "هام",
               badgeColor: Color(0xFFFFFFFF),
               badgeBorderColor: Color(0xFFE2E8F0),
             ),
@@ -78,9 +78,9 @@ class StudentHomeAlertsSection extends StatelessWidget {
             const _AlertItem(
               accentColor: Color(0xFFFE9A00),
               iconColor: Color(0xFFFE9A00),
-              title: 'مراجعة قانون كيرشوف (فيزياء)',
-              subtitle: 'الخميس 11:00 ص',
-              badgeText: 'مراجعة',
+              title: "مراجعة قانون كيرشوف (فيزياء)",
+              subtitle: "الخميس 11:00 ص",
+              badgeText: "مراجعة",
               badgeColor: Color(0xFFFFFFFF),
               badgeBorderColor: Color(0xFFE2E8F0),
             ),

@@ -1,14 +1,14 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
-import 'package:draya_mobile/features/student/student_channel/presentation/cubit/student_channel_cubit.dart';
-import 'package:draya_mobile/features/student/student_channel/presentation/cubit/student_channel_state.dart';
-import 'package:draya_mobile/features/student/student_channel/presentation/widgets/add_reply_dialog.dart';
-import 'package:draya_mobile/features/student/student_channel/presentation/widgets/reply_card_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/features/student/student_channel/presentation/cubit/student_channel_cubit.dart";
+import "package:draya_mobile/features/student/student_channel/presentation/cubit/student_channel_state.dart";
+import "package:draya_mobile/features/student/student_channel/presentation/widgets/add_reply_dialog.dart";
+import "package:draya_mobile/features/student/student_channel/presentation/widgets/reply_card_widget.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:intl/intl.dart";
 
 class QuestionDetailsScreen extends StatelessWidget {
   final String classroomId;
@@ -65,7 +65,7 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
         elevation: 4,
         icon: const Icon(Icons.reply_rounded),
         label: Text(
-          'أضف رد',
+          "أضف رد",
           style: AppTextStyles.button.copyWith(color: Colors.white),
         ),
       ),
@@ -99,7 +99,7 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'حدث خطأ في تحميل تفاصيل السؤال',
+                      "حدث خطأ في تحميل تفاصيل السؤال",
                       style: AppTextStyles.h4.copyWith(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w700,
@@ -135,7 +135,7 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                       ),
                       icon: const Icon(Icons.refresh_rounded, size: 18),
                       label: Text(
-                        'إعادة المحاولة',
+                        "إعادة المحاولة",
                         style: AppTextStyles.button.copyWith(color: Colors.white),
                       ),
                     ),
@@ -149,13 +149,13 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
           if (questionDetails == null) {
             return Center(
               child: Text(
-                'لم يتم العثور على السؤال',
+                "لم يتم العثور على السؤال",
                 style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
               ),
             );
           }
 
-          final dateFormat = DateFormat('d MMMM yyyy، HH:mm', 'ar');
+          final dateFormat = DateFormat("d MMMM yyyy، HH:mm", "ar");
           final isVoting = state.votingQuestionId == widget.questionId &&
               state.voteStatus == CubitStatus.loading;
 
@@ -224,7 +224,7 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                                         Row(
                                           children: [
                                             Text(
-                                              questionDetails.question.isAuthor ? 'سؤالك' : 'سؤال طالب',
+                                              questionDetails.question.isAuthor ? "سؤالك" : "سؤال طالب",
                                               style: AppTextStyles.label.copyWith(
                                                 fontSize: 13,
                                                 fontWeight: FontWeight.w700,
@@ -266,7 +266,7 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                                         ),
                                         const SizedBox(width: 4),
                                         Text(
-                                          'إجابة المدرس',
+                                          "إجابة المدرس",
                                           style: AppTextStyles.label.copyWith(
                                             fontSize: 11,
                                             color: AppColors.primary,
@@ -360,7 +360,7 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                                             ),
                                           const SizedBox(width: 8),
                                           Text(
-                                            '${questionDetails.question.voteCount} تصويت',
+                                            "${questionDetails.question.voteCount} تصويت",
                                             style: AppTextStyles.label.copyWith(
                                               fontSize: 13,
                                               fontWeight: questionDetails.question.hasVoted
@@ -396,7 +396,7 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                                       ),
                                       const SizedBox(width: 6),
                                       Text(
-                                        '${questionDetails.replies.length} ردود',
+                                        "${questionDetails.replies.length} ردود",
                                         style: AppTextStyles.label.copyWith(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w600,
@@ -415,7 +415,7 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                       Row(
                         children: [
                           Text(
-                            'الردود',
+                            "الردود",
                             style: AppTextStyles.h4.copyWith(
                               fontWeight: FontWeight.w700,
                               color: AppColors.textPrimary,
@@ -432,7 +432,7 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
-                              '${questionDetails.replies.length}',
+                              "${questionDetails.replies.length}",
                               style: AppTextStyles.label.copyWith(
                                 fontSize: 12,
                                 color: AppColors.primary700,
@@ -470,7 +470,7 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                           ),
                           const SizedBox(height: 14),
                           Text(
-                            'لا توجد ردود بعد',
+                            "لا توجد ردود بعد",
                             style: AppTextStyles.h5.copyWith(
                               fontWeight: FontWeight.w700,
                               color: AppColors.textPrimary,
@@ -478,7 +478,7 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'كن أول من يضيف رداً أو يقدم حلاً لهذا السؤال!',
+                            "كن أول من يضيف رداً أو يقدم حلاً لهذا السؤال!",
                             style: AppTextStyles.body.copyWith(
                               color: AppColors.textSecondary,
                               fontSize: 13,
@@ -524,7 +524,7 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'تم نشر الرد بنجاح',
+                      "تم نشر الرد بنجاح",
                       style: AppTextStyles.body.copyWith(color: Colors.white),
                     ),
                     backgroundColor: AppColors.primary,
@@ -534,7 +534,7 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      state.apiErrorModel?.error?.message ?? 'حدث خطأ',
+                      state.apiErrorModel?.error?.message ?? "حدث خطأ",
                       style: AppTextStyles.body.copyWith(color: Colors.white),
                     ),
                     backgroundColor: AppColors.error,

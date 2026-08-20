@@ -1,7 +1,7 @@
-import 'package:draya_mobile/core/helpers/app_extensions.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/helpers/app_extensions.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:flutter/material.dart";
 
 class AppListTileInfo extends StatelessWidget {
   final String title;

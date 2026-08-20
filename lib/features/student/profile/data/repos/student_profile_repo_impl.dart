@@ -1,14 +1,14 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:dio/dio.dart';
-import 'package:draya_mobile/core/networking/api_error_handler.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/auth/data/models/user_profile_model.dart';
-import 'package:draya_mobile/features/auth/data/source/auth_api_service.dart';
-import 'package:draya_mobile/features/student/profile/data/models/student_profile_model.dart';
-import 'package:draya_mobile/features/student/profile/data/models/update_student_profile_request_model.dart';
-import 'package:draya_mobile/features/student/profile/data/source/student_profile_api_service.dart';
-import 'package:draya_mobile/features/student/profile/domain/repos/student_profile_repo.dart';
+import "package:dio/dio.dart";
+import "package:draya_mobile/core/networking/api_error_handler.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/auth/data/models/user_profile_model.dart";
+import "package:draya_mobile/features/auth/data/source/auth_api_service.dart";
+import "package:draya_mobile/features/student/profile/data/models/student_profile_model.dart";
+import "package:draya_mobile/features/student/profile/data/models/update_student_profile_request_model.dart";
+import "package:draya_mobile/features/student/profile/data/source/student_profile_api_service.dart";
+import "package:draya_mobile/features/student/profile/domain/repos/student_profile_repo.dart";
 
 class StudentProfileRepoImpl implements StudentProfileRepo {
   final StudentProfileApiService _studentProfileApiService;
@@ -43,7 +43,7 @@ class StudentProfileRepoImpl implements StudentProfileRepo {
   @override
   Future<ApiResult<dynamic>> uploadProfilePicture(File file) async {
     try {
-      final fileName = file.path.split('/').last.split('\\').last;
+      final fileName = file.path.split("/").last.split("\\").last;
       final multipartFile = await MultipartFile.fromFile(
         file.path,
         filename: fileName,

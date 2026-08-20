@@ -1,7 +1,7 @@
-import 'package:draya_mobile/features/teacher/classrooms/domain/entity/student_roster_item.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:draya_mobile/features/teacher/classrooms/domain/entity/student_roster_item.dart";
+import "package:json_annotation/json_annotation.dart";
 
-part 'student_roster_item_model.g.dart';
+part "student_roster_item_model.g.dart";
 
 @JsonSerializable()
 class StudentRosterItemModel {
