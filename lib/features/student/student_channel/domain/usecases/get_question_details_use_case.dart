@@ -1,6 +1,6 @@
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/student_channel/data/models/question_details_model.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/repos/student_channel_repo.dart';
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/student_channel/data/models/question_details_model.dart";
+import "package:draya_mobile/features/student/student_channel/domain/repos/student_channel_repo.dart";
 
 class GetQuestionDetailsParams {
   final String classroomId;

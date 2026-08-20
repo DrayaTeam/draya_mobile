@@ -1,9 +1,9 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/teachers/domain/usecases/get_payment_status_use_case.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/cubit/payment_verification_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/teachers/domain/usecases/get_payment_status_use_case.dart";
+import "package:draya_mobile/features/student/teachers/presentation/cubit/payment_verification_state.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class PaymentVerificationCubit extends Cubit<PaymentVerificationState> {
   final GetPaymentStatusUseCase _getPaymentStatusUseCase;

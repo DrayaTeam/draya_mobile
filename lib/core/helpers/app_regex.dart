@@ -1,4 +1,4 @@
-import 'package:draya_mobile/core/helpers/app_regex_helper.dart';
+import "package:draya_mobile/core/helpers/app_regex_helper.dart";
 
 abstract final class AppRegex {
   static bool isEmailValid(String email) {
@@ -10,6 +10,6 @@ abstract final class AppRegex {
   }
 
   static bool hasMinLength(String password) {
-    return RegExp(r'^(?=.{8,})').hasMatch(password);
+    return RegExp(r"^(?=.{8,})").hasMatch(password);
   }
 }

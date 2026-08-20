@@ -1,8 +1,8 @@
-import 'package:draya_mobile/core/helpers/assets_helper.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/helpers/assets_helper.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
 
 class StudentHomeWelcomeCard extends StatelessWidget {
   const StudentHomeWelcomeCard({super.key});
@@ -66,7 +66,7 @@ class StudentHomeWelcomeCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
-                  'الأحد، 20 يوليو 2026',
+                  "الأحد، 20 يوليو 2026",
                   style: AppTextStyles.label.copyWith(
                     color: Colors.white.withValues(alpha: 0.9),
                     fontSize: 12,
@@ -79,7 +79,7 @@ class StudentHomeWelcomeCard extends StatelessWidget {
               right: 26,
               left: 94,
               child: Text(
-                'أهلاً بعودتك، أحمد! 👋',
+                "أهلاً بعودتك، أحمد! 👋",
                 textAlign: TextAlign.right,
                 style: AppTextStyles.h2.copyWith(
                   color: AppColors.surface,
@@ -92,7 +92,7 @@ class StudentHomeWelcomeCard extends StatelessWidget {
               right: 40,
               left: 32,
               child: Text(
-                'لديك اختبـاران مجدولان قريباً هذا الأسبوع. واصل الدراسة يومياً وحافظ على لهيب حماسك!',
+                "لديك اختبـاران مجدولان قريباً هذا الأسبوع. واصل الدراسة يومياً وحافظ على لهيب حماسك!",
                 textAlign: TextAlign.right,
                 style: AppTextStyles.body.copyWith(
                   color: AppColors.surface.withValues(alpha: 0.85),
@@ -131,7 +131,7 @@ class StudentHomeWelcomeCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'تابع من حيث توقفت',
+                      "تابع من حيث توقفت",
                       style: AppTextStyles.button.copyWith(
                         color: AppColors.primary900,
                         fontSize: 14,
@@ -166,7 +166,7 @@ class StudentHomeWelcomeCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'تصفح المواد الجديدة',
+                      "تصفح المواد الجديدة",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,

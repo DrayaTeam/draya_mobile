@@ -7,16 +7,16 @@ enum QuestionType {
 
   static QuestionType fromString(String type) {
     switch (type.toLowerCase().trim()) {
-      case 'multiplechoice':
-      case 'mcq':
+      case "multiplechoice":
+      case "mcq":
         return QuestionType.multipleChoice;
-      case 'essay':
+      case "essay":
         return QuestionType.essay;
-      case 'truefalse':
+      case "truefalse":
         return QuestionType.trueFalse;
-      case 'fillintheblank':
+      case "fillintheblank":
         return QuestionType.fillInTheBlank;
-      case 'shortanswer':
+      case "shortanswer":
         return QuestionType.shortAnswer;
       default:
         return QuestionType.multipleChoice;
@@ -26,15 +26,15 @@ enum QuestionType {
   String toDisplayString() {
     switch (this) {
       case QuestionType.multipleChoice:
-        return 'اختيار من متعدد';
+        return "اختيار من متعدد";
       case QuestionType.essay:
-        return 'سؤال مقالي';
+        return "سؤال مقالي";
       case QuestionType.trueFalse:
-        return 'صح أم خطأ';
+        return "صح أم خطأ";
       case QuestionType.fillInTheBlank:
-        return 'أكمل الفراغ';
+        return "أكمل الفراغ";
       case QuestionType.shortAnswer:
-        return 'إجابة قصيرة';
+        return "إجابة قصيرة";
     }
   }
 }
@@ -164,15 +164,15 @@ enum GradingJobState {
 
   static GradingJobState fromString(String? status) {
     switch (status?.toLowerCase().trim()) {
-      case 'pending':
+      case "pending":
         return GradingJobState.pending;
-      case 'grading':
+      case "grading":
         return GradingJobState.grading;
-      case 'completed':
+      case "completed":
         return GradingJobState.completed;
-      case 'completedwithwarning':
+      case "completedwithwarning":
         return GradingJobState.completedWithWarning;
-      case 'failed':
+      case "failed":
         return GradingJobState.failed;
       default:
         return GradingJobState.unknown;

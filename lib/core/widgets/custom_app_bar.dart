@@ -1,5 +1,5 @@
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:flutter/material.dart";
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;

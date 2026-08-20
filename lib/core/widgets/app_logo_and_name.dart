@@ -1,6 +1,6 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/widgets/app_logo.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/widgets/app_logo.dart";
+import "package:flutter/material.dart";
 
 class AppLogoAndName extends StatelessWidget {
   final String? subtitle;

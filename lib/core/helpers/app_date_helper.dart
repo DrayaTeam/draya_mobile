@@ -1,4 +1,4 @@
-import 'package:intl/intl.dart';
+import "package:intl/intl.dart";
 
 class AppDateHelper {
   static String getFormattedDate(String dateString) {
@@ -20,7 +20,7 @@ class AppDateHelper {
   }
 
   static DateTime? getDateTime(String? dateString) {
-    DateTime? dateTime = DateTime.tryParse(dateString?? '');
+    DateTime? dateTime = DateTime.tryParse(dateString?? "");
     return dateTime;
   }
 }

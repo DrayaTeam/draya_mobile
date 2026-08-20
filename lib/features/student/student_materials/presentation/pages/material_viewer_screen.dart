@@ -1,13 +1,13 @@
-import 'package:chewie/chewie.dart';
-import 'package:draya_mobile/core/helpers/app_token_helper.dart';
-import 'package:draya_mobile/core/helpers/app_url_helper.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart';
-import 'package:flutter/material.dart';
-import 'package:pdfrx/pdfrx.dart';
-import 'package:video_player/video_player.dart';
+import "package:chewie/chewie.dart";
+import "package:draya_mobile/core/helpers/app_token_helper.dart";
+import "package:draya_mobile/core/helpers/app_url_helper.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart";
+import "package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart";
+import "package:flutter/material.dart";
+import "package:pdfrx/pdfrx.dart";
+import "package:video_player/video_player.dart";
 
 class ViewerMaterialItem {
   final String id;
@@ -112,8 +112,8 @@ class _StudentMaterialsViewerScreenState
           ViewerMaterialItem.fromStudentMaterial(widget.initialMaterial!);
     } else {
       _selectedItem = const ViewerMaterialItem(
-        id: '',
-        title: 'المادة التعليمية',
+        id: "",
+        title: "المادة التعليمية",
         isVideo: false,
         isPdf: true,
       );
@@ -235,7 +235,7 @@ class _StudentMaterialsViewerScreenState
                   size: 20,
                 ),
               ),
-              tooltip: 'تحميل المادة',
+              tooltip: "تحميل المادة",
               onPressed: _downloadCurrentMaterial,
             ),
           const SizedBox(width: 8),
@@ -271,7 +271,7 @@ class _StudentMaterialsViewerScreenState
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      'محتوى الفصل الدراسي:',
+                      "محتوى الفصل الدراسي:",
                       style: AppTextStyles.h5.copyWith(
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
@@ -279,7 +279,7 @@ class _StudentMaterialsViewerScreenState
                     ),
                     const Spacer(),
                     Text(
-                      '$_totalViewableCount مادة',
+                      "$_totalViewableCount مادة",
                       style: AppTextStyles.label.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -365,7 +365,7 @@ class _StudentMaterialsViewerScreenState
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
-                            '$totalSectionViewable',
+                            "$totalSectionViewable",
                             style: AppTextStyles.label.copyWith(
                               color: AppColors.primary,
                               fontSize: 11,
@@ -529,7 +529,7 @@ class _StudentMaterialsViewerScreenState
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'تعذر فتح هذه المادة حالياً.',
+                  "تعذر فتح هذه المادة حالياً.",
                   textAlign: TextAlign.center,
                   style: AppTextStyles.body.copyWith(
                     color: AppColors.textPrimary,
@@ -558,7 +558,7 @@ class _StudentMaterialsViewerScreenState
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Text(
-              'انتهت جلستك. يرجى تسجيل الدخول مجدداً.',
+              "انتهت جلستك. يرجى تسجيل الدخول مجدداً.",
               textAlign: TextAlign.center,
               style: AppTextStyles.body.copyWith(
                 color: AppColors.textPrimary,
@@ -578,7 +578,7 @@ class _StudentMaterialsViewerScreenState
           : PdfViewer.uri(
               Uri.parse(_selectedUrl),
               key: ValueKey(_selectedUrl),
-              headers: {'Authorization': 'Bearer $_accessToken'},
+              headers: {"Authorization": "Bearer $_accessToken"},
               params: const PdfViewerParams(
                 backgroundColor: AppColors.backgroundSecondary,
               ),
@@ -648,7 +648,7 @@ class _VideoPlayerState extends State<_VideoPlayer> {
         color: Colors.black,
         child: Center(
           child: Text(
-            'Unable to play this video.',
+            "Unable to play this video.",
             style: TextStyle(color: Colors.white),
           ),
         ),

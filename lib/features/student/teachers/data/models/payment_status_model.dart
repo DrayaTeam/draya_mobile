@@ -1,6 +1,6 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
 
-part 'payment_status_model.g.dart';
+part "payment_status_model.g.dart";
 
 @JsonSerializable()
 class PaymentStatusModel {
@@ -25,7 +25,7 @@ class PaymentStatusModel {
 
   Map<String, dynamic> toJson() => _$PaymentStatusModelToJson(this);
 
-  bool get isCompleted => status == 'Completed' && isEnrolled;
-  bool get isPending => status == 'Pending';
-  bool get isFailed => status == 'Failed';
+  bool get isCompleted => status == "Completed" && isEnrolled;
+  bool get isPending => status == "Pending";
+  bool get isFailed => status == "Failed";
 }

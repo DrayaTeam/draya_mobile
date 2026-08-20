@@ -1,7 +1,7 @@
-import 'package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:draya_mobile/features/student/student_materials/domain/entity/student_material.dart";
+import "package:json_annotation/json_annotation.dart";
 
-part 'student_material_version_model.g.dart';
+part "student_material_version_model.g.dart";
 
 @JsonSerializable()
 class StudentMaterialVersionModel {

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
+import "package:flutter/material.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
 
 class AddReplyDialog extends StatefulWidget {
   final String questionId;
@@ -72,7 +72,7 @@ class _AddReplyDialogState extends State<AddReplyDialog> {
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  'إضافة رد',
+                  "إضافة رد",
                   style: AppTextStyles.h4.copyWith(
                     fontWeight: FontWeight.w700,
                     color: AppColors.textPrimary,
@@ -99,7 +99,7 @@ class _AddReplyDialogState extends State<AddReplyDialog> {
                   color: AppColors.textPrimary,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'اكتب ردك أو إجابتك هنا...',
+                  hintText: "اكتب ردك أو إجابتك هنا...",
                   hintStyle: AppTextStyles.body.copyWith(
                     color: AppColors.textDisabled,
                     fontSize: 14,
@@ -126,7 +126,7 @@ class _AddReplyDialogState extends State<AddReplyDialog> {
                       ),
                     ),
                     child: Text(
-                      'إلغاء',
+                      "إلغاء",
                       style: AppTextStyles.button.copyWith(
                         color: AppColors.foregroundMuted,
                         fontWeight: FontWeight.w600,
@@ -161,7 +161,7 @@ class _AddReplyDialogState extends State<AddReplyDialog> {
                             ),
                           )
                         : Text(
-                            'نشر الرد',
+                            "نشر الرد",
                             style: AppTextStyles.button.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,

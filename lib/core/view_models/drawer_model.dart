@@ -1,6 +1,6 @@
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/core/view_models/drawer_item_view_model.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/core/view_models/drawer_item_view_model.dart";
+import "package:flutter/material.dart";
 
 class DrawerModel {
   final String title;

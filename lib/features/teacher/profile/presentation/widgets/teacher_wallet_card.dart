@@ -1,13 +1,13 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
-import 'package:draya_mobile/features/teacher/wallet/data/models/balance_model.dart';
-import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_cubit.dart';
-import 'package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/core/widgets/app_custom_loading.dart";
+import "package:draya_mobile/features/teacher/wallet/data/models/balance_model.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_cubit.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_state.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class TeacherWalletCard extends StatelessWidget {
   final VoidCallback? onRefresh;

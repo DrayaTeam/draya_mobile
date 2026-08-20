@@ -1,4 +1,4 @@
-import 'package:draya_mobile/core/signalr/signalr_events.dart';
+import "package:draya_mobile/core/signalr/signalr_events.dart";
 
 abstract class SignalRService {
   Future<void> connect({required String hubUrl, required String token});

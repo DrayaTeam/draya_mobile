@@ -1,8 +1,8 @@
-import 'package:draya_mobile/core/helpers/assets_helper.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import "package:draya_mobile/core/helpers/assets_helper.dart";
+import "package:flutter/material.dart";
+import "package:flutter_svg/svg.dart";
 
-import '../theme/app_colors.dart';
+import "../theme/app_colors.dart";
 
 class AppLogo extends StatelessWidget {
   const AppLogo({super.key});

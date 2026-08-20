@@ -1,19 +1,19 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
-import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
-import 'package:draya_mobile/core/widgets/fade_in_up_animation.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/features/student/teachers/data/models/teacher_model.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_cubit.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/cubit/teacher_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/core/widgets/app_error_dialog.dart";
+import "package:draya_mobile/core/widgets/app_text_form_field.dart";
+import "package:draya_mobile/core/widgets/fade_in_up_animation.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/features/student/teachers/data/models/teacher_model.dart";
+import "package:draya_mobile/features/student/teachers/presentation/cubit/teacher_cubit.dart";
+import "package:draya_mobile/features/student/teachers/presentation/cubit/teacher_state.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:go_router/go_router.dart";
 
-import 'teacher_card_item.dart';
+import "teacher_card_item.dart";
 
 class BrowseTeachersBody extends StatefulWidget {
   const BrowseTeachersBody({super.key});
@@ -24,7 +24,7 @@ class BrowseTeachersBody extends StatefulWidget {
 
 class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
   final TextEditingController _searchController = TextEditingController();
-  String _selectedSpecialization = 'كل التخصصات';
+  String _selectedSpecialization = "كل التخصصات";
 
   @override
   void initState() {
@@ -68,7 +68,7 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
       builder: (context, state) {
         final teachers = state.teachers;
         final specializations = [
-          'كل التخصصات',
+          "كل التخصصات",
           ...teachers
               .where((teacher) => teacher.specialization != null)
               .map((teacher) => teacher.specialization!)
@@ -90,7 +90,7 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'المعلمون المتاحون',
+                      "المعلمون المتاحون",
                       style: AppTextStyles.h3.copyWith(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w800,
@@ -110,7 +110,7 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                         ),
                       ),
                       child: Text(
-                        '${teachers.length} معلم',
+                        "${teachers.length} معلم",
                         style: AppTextStyles.label.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w700,
@@ -121,7 +121,7 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'تصفح المعلمين المتاحين واكتشف فصولهم الدراسية للتسجيل بها.',
+                  "تصفح المعلمين المتاحين واكتشف فصولهم الدراسية للتسجيل بها.",
                   style: AppTextStyles.body.copyWith(
                     color: AppColors.textSecondary,
                     fontSize: 13,
@@ -148,7 +148,7 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                     children: [
                       AppTextFormField(
                         controller: _searchController,
-                        hintText: 'ابحث باسم المعلم أو التخصص...',
+                        hintText: "ابحث باسم المعلم أو التخصص...",
                         prefixIcon: Icons.search_rounded,
                         onChanged: _onSearchChanged,
                       ),
@@ -250,7 +250,7 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                                 ),
                                 const SizedBox(height: 14),
                                 Text(
-                                  'تعذر تحميل قائمة المعلمين',
+                                  "تعذر تحميل قائمة المعلمين",
                                   style: AppTextStyles.h5.copyWith(
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.textPrimary,
@@ -258,7 +258,7 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
-                                  'يرجى التحقق من اتصالك والمحاولة مرة أخرى.',
+                                  "يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
                                   style: AppTextStyles.body.copyWith(
                                     color: AppColors.textSecondary,
                                   ),
@@ -278,7 +278,7 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                                   ),
                                   icon: const Icon(Icons.refresh_rounded, size: 18),
                                   label: Text(
-                                    'إعادة المحاولة',
+                                    "إعادة المحاولة",
                                     style: AppTextStyles.button.copyWith(color: Colors.white),
                                   ),
                                 ),
@@ -308,7 +308,7 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                                 ),
                                 const SizedBox(height: 14),
                                 Text(
-                                  'لا يوجد معلمون مطابقون للبحث',
+                                  "لا يوجد معلمون مطابقون للبحث",
                                   style: AppTextStyles.h5.copyWith(
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.textPrimary,
@@ -316,7 +316,7 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
-                                  'جرب البحث باسم آخر أو تغيير فلتر التخصص.',
+                                  "جرب البحث باسم آخر أو تغيير فلتر التخصص.",
                                   style: AppTextStyles.body.copyWith(
                                     color: AppColors.textSecondary,
                                   ),
@@ -337,11 +337,11 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
                             itemBuilder: (context, index) {
                               final teacher = filteredTeachers[index];
                               final card = TeacherCardItem(
-                                fullName: teacher.fullName ?? 'غير معروف',
-                                email: teacher.email ?? '',
-                                phone: teacher.phone ?? '',
+                                fullName: teacher.fullName ?? "غير معروف",
+                                email: teacher.email ?? "",
+                                phone: teacher.phone ?? "",
                                 specialization:
-                                    teacher.specialization ?? 'عام',
+                                    teacher.specialization ?? "عام",
                                 imageUrl: teacher.profilePictureUrl,
                                 onViewClassrooms: () {
                                   final teacherId = teacher.userId;
@@ -381,12 +381,12 @@ class _BrowseTeachersBodyState extends State<BrowseTeachersBody> {
   List<TeacherModel> _filterTeachers(List<TeacherModel> teachers) {
     final query = _searchController.text.trim().toLowerCase();
     return teachers.where((teacher) {
-      final name = (teacher.fullName ?? '').toLowerCase();
-      final spec = (teacher.specialization ?? '').toLowerCase();
+      final name = (teacher.fullName ?? "").toLowerCase();
+      final spec = (teacher.specialization ?? "").toLowerCase();
       final matchesQuery =
           query.isEmpty || name.contains(query) || spec.contains(query);
       final matchesSpecialization =
-          _selectedSpecialization == 'كل التخصصات' ||
+          _selectedSpecialization == "كل التخصصات" ||
           teacher.specialization == _selectedSpecialization;
       return matchesQuery && matchesSpecialization;
     }).toList();

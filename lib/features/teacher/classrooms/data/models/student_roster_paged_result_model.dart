@@ -1,7 +1,7 @@
-import 'package:draya_mobile/features/teacher/classrooms/data/models/student_roster_item_model.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:draya_mobile/features/teacher/classrooms/data/models/student_roster_item_model.dart";
+import "package:json_annotation/json_annotation.dart";
 
-part 'student_roster_paged_result_model.g.dart';
+part "student_roster_paged_result_model.g.dart";
 
 @JsonSerializable()
 class StudentRosterPagedResultModel {

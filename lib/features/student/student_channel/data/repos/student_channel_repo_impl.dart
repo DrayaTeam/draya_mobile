@@ -1,13 +1,13 @@
-import 'package:draya_mobile/core/networking/api_error_handler.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/student_channel/data/models/create_question_request_model.dart';
-import 'package:draya_mobile/features/student/student_channel/data/models/create_reply_request_model.dart';
-import 'package:draya_mobile/features/student/student_channel/data/models/question_details_model.dart';
-import 'package:draya_mobile/features/student/student_channel/data/models/question_model.dart';
-import 'package:draya_mobile/features/student/student_channel/data/models/question_paged_result_model.dart';
-import 'package:draya_mobile/features/student/student_channel/data/models/reply_model.dart';
-import 'package:draya_mobile/features/student/student_channel/data/source/student_channel_remote_data_source.dart';
-import 'package:draya_mobile/features/student/student_channel/domain/repos/student_channel_repo.dart';
+import "package:draya_mobile/core/networking/api_error_handler.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/student_channel/data/models/create_question_request_model.dart";
+import "package:draya_mobile/features/student/student_channel/data/models/create_reply_request_model.dart";
+import "package:draya_mobile/features/student/student_channel/data/models/question_details_model.dart";
+import "package:draya_mobile/features/student/student_channel/data/models/question_model.dart";
+import "package:draya_mobile/features/student/student_channel/data/models/question_paged_result_model.dart";
+import "package:draya_mobile/features/student/student_channel/data/models/reply_model.dart";
+import "package:draya_mobile/features/student/student_channel/data/source/student_channel_remote_data_source.dart";
+import "package:draya_mobile/features/student/student_channel/domain/repos/student_channel_repo.dart";
 
 class StudentChannelRepoImpl implements StudentChannelRepo {
   final StudentChannelRemoteDataSource _remoteDataSource;
@@ -19,8 +19,8 @@ class StudentChannelRepoImpl implements StudentChannelRepo {
     String classroomId, {
     int page = 1,
     int pageSize = 20,
-    String sortBy = 'recent',
-    String filterBy = 'all',
+    String sortBy = "recent",
+    String filterBy = "all",
   }) =>
       _guard(() => _remoteDataSource.getQuestions(
             classroomId,

@@ -1,6 +1,6 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
 
-part 'attempt_models.g.dart';
+part "attempt_models.g.dart";
 
 @JsonSerializable()
 class StartAttemptRequestModel {

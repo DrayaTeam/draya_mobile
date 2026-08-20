@@ -1,37 +1,37 @@
-import 'package:draya_mobile/core/helpers/app_token_helper.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/features/auth/presentation/signin/pages/signin_page.dart';
-import 'package:draya_mobile/features/auth/presentation/signup/pages/signup_page.dart';
-import 'package:draya_mobile/features/auth/presentation/signup_choice/pages/signup_choice_page.dart';
-import 'package:draya_mobile/features/auth/presentation/verification_code_page/pages/verification_code_page.dart';
-import 'package:draya_mobile/features/student/exams/presentation/pages/student_exam_details_screen.dart';
-import 'package:draya_mobile/features/student/exams/presentation/pages/student_exams_screen.dart';
-import 'package:draya_mobile/features/student/home/presentation/pages/student_home_screen.dart';
-import 'package:draya_mobile/features/student/profile/presentation/pages/student_profile_page.dart';
-import 'package:draya_mobile/features/student/student_channel/presentation/pages/student_channel_screen.dart';
-import 'package:draya_mobile/features/student/student_enrolled_classrooms/presentation/pages/student_enrolled_classrooms_screen.dart';
-import 'package:draya_mobile/features/student/student_materials/presentation/pages/student_classrooms_materials_screen.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/create_classroom_page.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/pages/browse_teachers_screen.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/pages/teacher_classrooms_page.dart';
-import 'package:draya_mobile/features/teacher/dashboard/presentation/pages/teacher_dashboard_screen.dart';
-import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_1.dart';
-import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_2.dart';
-import 'package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_3.dart';
-import 'package:draya_mobile/features/teacher/materials/presentation/pages/materials_page.dart';
-import 'package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart';
-import 'package:draya_mobile/features/teacher/payments/presentation/pages/payment_web_view_page.dart';
-import 'package:draya_mobile/features/teacher/profile/presentation/pages/teacher_profile_page.dart';
-import 'package:draya_mobile/features/teacher/students_list/presentation/pages/students_list_screen.dart';
-import 'package:draya_mobile/features/teacher/subjects/presentation/pages/create_subject_page.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/classrooms_page.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/pages/classroom_students_page.dart';
-import 'package:draya_mobile/features/student/teachers/data/models/teacher_model.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/pages/payment_result_page.dart';
-import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
-import 'package:draya_mobile/features/teacher/teacher_channel/presentation/pages/teacher_channel_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import "package:draya_mobile/core/helpers/app_token_helper.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/features/auth/presentation/signin/pages/signin_page.dart";
+import "package:draya_mobile/features/auth/presentation/signup/pages/signup_page.dart";
+import "package:draya_mobile/features/auth/presentation/signup_choice/pages/signup_choice_page.dart";
+import "package:draya_mobile/features/auth/presentation/verification_code_page/pages/verification_code_page.dart";
+import "package:draya_mobile/features/student/exams/presentation/pages/student_exam_details_screen.dart";
+import "package:draya_mobile/features/student/exams/presentation/pages/student_exams_screen.dart";
+import "package:draya_mobile/features/student/home/presentation/pages/student_home_screen.dart";
+import "package:draya_mobile/features/student/profile/presentation/pages/student_profile_page.dart";
+import "package:draya_mobile/features/student/student_channel/presentation/pages/student_channel_screen.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/presentation/pages/student_enrolled_classrooms_screen.dart";
+import "package:draya_mobile/features/student/student_materials/presentation/pages/student_classrooms_materials_screen.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/pages/create_classroom_page.dart";
+import "package:draya_mobile/features/student/teachers/presentation/pages/browse_teachers_screen.dart";
+import "package:draya_mobile/features/student/teachers/presentation/pages/teacher_classrooms_page.dart";
+import "package:draya_mobile/features/teacher/dashboard/presentation/pages/teacher_dashboard_screen.dart";
+import "package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_1.dart";
+import "package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_2.dart";
+import "package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_3.dart";
+import "package:draya_mobile/features/teacher/materials/presentation/pages/materials_page.dart";
+import "package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart";
+import "package:draya_mobile/features/teacher/payments/presentation/pages/payment_web_view_page.dart";
+import "package:draya_mobile/features/teacher/profile/presentation/pages/teacher_profile_page.dart";
+import "package:draya_mobile/features/teacher/students_list/presentation/pages/students_list_screen.dart";
+import "package:draya_mobile/features/teacher/subjects/presentation/pages/create_subject_page.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/pages/classrooms_page.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/pages/classroom_students_page.dart";
+import "package:draya_mobile/features/student/teachers/data/models/teacher_model.dart";
+import "package:draya_mobile/features/student/teachers/presentation/pages/payment_result_page.dart";
+import "package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart";
+import "package:draya_mobile/features/teacher/teacher_channel/presentation/pages/teacher_channel_screen.dart";
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 
 
 const authRoutes = {
@@ -55,7 +55,7 @@ abstract final class AppRouter {
 
       if (isSignedIn && goingToSignin) {
         final role = await AppTokenHelper.getUserRole();
-        return role == 'Teacher'
+        return role == "Teacher"
             ? AppRoutes.teacherDashboardPage
             : AppRoutes.studentHomePage;
       }
@@ -158,9 +158,9 @@ abstract final class AppRouter {
         },
       ),
       GoRoute(
-        path: AppRoutes.teacherClassroomsPage(':teacherId'),
+        path: AppRoutes.teacherClassroomsPage(":teacherId"),
         builder: (context, state) {
-          final teacherId = state.pathParameters['teacherId'] ?? '';
+          final teacherId = state.pathParameters["teacherId"] ?? "";
           final teacher = state.extra as TeacherModel?;
           return TeacherClassroomsPage(
             teacherId: teacherId,
@@ -171,12 +171,12 @@ abstract final class AppRouter {
       GoRoute(
         path: AppRoutes.studentExamDetailsPage,
         builder: (context, state) {
-          String examId = '';
+          String examId = "";
           String? classroomName;
           if (state.extra is Map) {
             final map = state.extra as Map;
-            examId = map['examId']?.toString() ?? '';
-            classroomName = map['classroomName']?.toString();
+            examId = map["examId"]?.toString() ?? "";
+            classroomName = map["classroomName"]?.toString();
           } else if (state.extra is String) {
             examId = state.extra as String;
           }
@@ -187,7 +187,7 @@ abstract final class AppRouter {
         },
       ),
       GoRoute(
-        path: '/teacher/classrooms/:classroomId/students',
+        path: "/teacher/classrooms/:classroomId/students",
         builder: (context, state) {
           return ClassroomStudentsPage(
             classroom: state.extra! as ClassroomModel,
@@ -210,7 +210,7 @@ abstract final class AppRouter {
         path: AppRoutes.studentChannelRoute,
         builder: (context, state) {
           return StudentChannelScreen(
-            classroomId: state.pathParameters['classroomId']!,
+            classroomId: state.pathParameters["classroomId"]!,
           );
         },
       ),
@@ -218,7 +218,7 @@ abstract final class AppRouter {
         path: AppRoutes.teacherChannelRoute,
         builder: (context, state) {
           return TeacherChannelScreen(
-            classroomId: state.pathParameters['classroomId']!,
+            classroomId: state.pathParameters["classroomId"]!,
           );
         },
       ),
@@ -239,8 +239,8 @@ abstract final class AppRouter {
         path: AppRoutes.paymentResultPage,
         builder: (context, state) {
           final transactionId = state.extra as String? ??
-              state.uri.queryParameters['transactionId'] ??
-              '';
+              state.uri.queryParameters["transactionId"] ??
+              "";
           return PaymentResultPage(transactionId: transactionId);
         },
       ),
@@ -262,7 +262,7 @@ abstract final class AppRouter {
         path: AppRoutes.studentClassroomMaterialsRoute,
         builder: (context, state) {
           return StudentClassroomsMaterialsScreen(
-            classroomId: state.pathParameters['classroomId'],
+            classroomId: state.pathParameters["classroomId"],
             classroomName: state.extra as String?,
           );
         },

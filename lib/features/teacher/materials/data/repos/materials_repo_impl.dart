@@ -1,11 +1,11 @@
-import 'package:dio/dio.dart';
-import 'package:draya_mobile/core/networking/api_error_handler.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/teacher/materials/data/models/materials_request_model.dart';
-import 'package:draya_mobile/features/teacher/materials/data/models/teacher_material_paged_result_model.dart';
-import 'package:draya_mobile/features/teacher/materials/data/source/materials_api_service.dart';
-import 'package:draya_mobile/features/teacher/materials/domain/repos/materials_repo.dart';
-import 'package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart';
+import "package:dio/dio.dart";
+import "package:draya_mobile/core/networking/api_error_handler.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/teacher/materials/data/models/materials_request_model.dart";
+import "package:draya_mobile/features/teacher/materials/data/models/teacher_material_paged_result_model.dart";
+import "package:draya_mobile/features/teacher/materials/data/source/materials_api_service.dart";
+import "package:draya_mobile/features/teacher/materials/domain/repos/materials_repo.dart";
+import "package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart";
 
 class MaterialsRepoImpl implements MaterialsRepo {
   final MaterialsApiService _materialsApiService;

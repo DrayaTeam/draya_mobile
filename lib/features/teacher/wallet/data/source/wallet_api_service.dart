@@ -1,10 +1,10 @@
-import 'package:dio/dio.dart';
-import 'package:draya_mobile/core/networking/api_constants.dart';
-import 'package:draya_mobile/features/teacher/wallet/data/models/balance_model.dart';
-import 'package:draya_mobile/features/teacher/wallet/data/models/top_up_request_model.dart';
-import 'package:draya_mobile/features/teacher/wallet/data/models/top_up_response_model.dart';
-import 'package:draya_mobile/features/teacher/wallet/data/source/wallet_api_constants.dart';
-import 'package:retrofit/retrofit.dart';
+import "package:dio/dio.dart";
+import "package:draya_mobile/core/networking/api_constants.dart";
+import "package:draya_mobile/features/teacher/wallet/data/models/balance_model.dart";
+import "package:draya_mobile/features/teacher/wallet/data/models/top_up_request_model.dart";
+import "package:draya_mobile/features/teacher/wallet/data/models/top_up_response_model.dart";
+import "package:draya_mobile/features/teacher/wallet/data/source/wallet_api_constants.dart";
+import "package:retrofit/retrofit.dart";
 
 part "wallet_api_service.g.dart";
 
@@ -20,7 +20,7 @@ abstract class WalletApiService {
 
   @POST("${WalletApiConstants.confirmPayment}/{id}")
   Future<void> confirmPayment(
-    @Path('id') String id,
-    @Query('isSuccess') bool isSuccess,
+    @Path("id") String id,
+    @Query("isSuccess") bool isSuccess,
   );
 }

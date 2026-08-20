@@ -1,6 +1,6 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
 
-part 'student_profile_model.g.dart';
+part "student_profile_model.g.dart";
 
 @JsonSerializable(includeIfNull: false)
 class StudentProfileModel {

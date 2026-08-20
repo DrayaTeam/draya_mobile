@@ -1,7 +1,7 @@
-import 'package:draya_mobile/core/helpers/app_use_case.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/student_enrolled_classrooms/data/models/student_enrolled_classroom_paged_result_model.dart';
-import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/repos/student_enrolled_classrooms_repo.dart';
+import "package:draya_mobile/core/helpers/app_use_case.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/data/models/student_enrolled_classroom_paged_result_model.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/domain/repos/student_enrolled_classrooms_repo.dart";
 
 class StudentEnrolledClassroomsParams {
   final int page;

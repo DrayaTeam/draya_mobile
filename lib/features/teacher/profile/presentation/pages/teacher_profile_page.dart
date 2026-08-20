@@ -28,8 +28,8 @@ import "package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_c
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:draya_mobile/core/enums/cubit_status.dart";
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
 
 class TeacherProfilePage extends StatefulWidget {
   const TeacherProfilePage({super.key});
@@ -313,7 +313,7 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
         final teacher = state.teacher;
         final name = _textEditingControllerName.text.trim().isNotEmpty
             ? _textEditingControllerName.text.trim()
-            : (teacher?.fullName ?? '');
+            : (teacher?.fullName ?? "");
 
         return Container(
           padding: const EdgeInsets.symmetric(

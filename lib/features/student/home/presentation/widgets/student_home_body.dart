@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'student_home_alerts_section.dart';
-import 'student_home_course_and_exam_section.dart';
-import 'student_home_learning_summary.dart';
-import 'student_home_welcome_card.dart';
+import "package:flutter/material.dart";
+import "student_home_alerts_section.dart";
+import "student_home_course_and_exam_section.dart";
+import "student_home_learning_summary.dart";
+import "student_home_welcome_card.dart";
 
 class StudentHomeBody extends StatelessWidget {
   const StudentHomeBody({super.key});

@@ -1,8 +1,8 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:draya_mobile/features/student/student_channel/data/models/question_model.dart';
-import 'package:draya_mobile/features/student/student_channel/data/models/reply_model.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:draya_mobile/features/student/student_channel/data/models/question_model.dart";
+import "package:draya_mobile/features/student/student_channel/data/models/reply_model.dart";
 
-part 'question_details_model.g.dart';
+part "question_details_model.g.dart";
 
 @JsonSerializable()
 class QuestionDetailsModel {

@@ -1,4 +1,4 @@
-import 'package:draya_mobile/core/validation/validation_result.dart';
+import "package:draya_mobile/core/validation/validation_result.dart";
 
 abstract class EmailValidator {
   static ValidationResult validate({required String? email}) {

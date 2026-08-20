@@ -1,7 +1,7 @@
-import 'package:draya_mobile/features/teacher/materials/data/models/teacher_material_version_model.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:draya_mobile/features/teacher/materials/data/models/teacher_material_version_model.dart";
+import "package:json_annotation/json_annotation.dart";
 
-part 'teacher_material_model.g.dart';
+part "teacher_material_model.g.dart";
 
 @JsonSerializable()
 class TeacherMaterialModel {

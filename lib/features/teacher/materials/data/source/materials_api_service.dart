@@ -1,8 +1,8 @@
-import 'package:dio/dio.dart';
-import 'package:draya_mobile/core/networking/api_constants.dart';
-import 'package:draya_mobile/features/teacher/materials/data/models/teacher_material_paged_result_model.dart';
-import 'package:draya_mobile/features/teacher/materials/data/source/materials_api_constants.dart';
-import 'package:retrofit/retrofit.dart';
+import "package:dio/dio.dart";
+import "package:draya_mobile/core/networking/api_constants.dart";
+import "package:draya_mobile/features/teacher/materials/data/models/teacher_material_paged_result_model.dart";
+import "package:draya_mobile/features/teacher/materials/data/source/materials_api_constants.dart";
+import "package:retrofit/retrofit.dart";
 
 part "materials_api_service.g.dart";
 

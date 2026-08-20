@@ -1,8 +1,8 @@
-import 'dart:async';
-import 'package:app_links/app_links.dart';
-import 'package:draya_mobile/core/router/app_router.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:flutter/foundation.dart';
+import "dart:async";
+import "package:app_links/app_links.dart";
+import "package:draya_mobile/core/router/app_router.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:flutter/foundation.dart";
 
 class DeepLinkService {
   final AppLinks _appLinks;
@@ -17,7 +17,7 @@ class DeepLinkService {
         _handleDeepLink(uri);
       },
       onError: (err) {
-        debugPrint('DeepLinkService error: $err');
+        debugPrint("DeepLinkService error: $err");
       },
     );
 
@@ -32,16 +32,16 @@ class DeepLinkService {
         _handleDeepLink(initialUri);
       }
     } catch (e) {
-      debugPrint('DeepLinkService initial uri error: $e');
+      debugPrint("DeepLinkService initial uri error: $e");
     }
   }
 
   void _handleDeepLink(Uri uri) {
-    debugPrint('Received Deep Link: $uri');
+    debugPrint("Received Deep Link: $uri");
 
     // Expected scheme: draya://payment-result?transactionId=...&status=...
-    if (uri.scheme == 'draya' && uri.host == 'payment-result') {
-      final transactionId = uri.queryParameters['transactionId'];
+    if (uri.scheme == "draya" && uri.host == "payment-result") {
+      final transactionId = uri.queryParameters["transactionId"];
       if (transactionId != null && transactionId.isNotEmpty) {
         AppRouter.router.push(
           AppRoutes.paymentResultPage,

@@ -1,6 +1,6 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
 
 class QuestionFilterWidget extends StatelessWidget {
   final String currentSort;
@@ -31,7 +31,7 @@ class QuestionFilterWidget extends StatelessWidget {
         child: Row(
           children: [
             Semantics(
-              label: 'ترتيب الأسئلة',
+              label: "ترتيب الأسئلة",
               button: true,
               child: _SortButton(
                 label: _getSortLabel(currentSort),
@@ -47,31 +47,31 @@ class QuestionFilterWidget extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             _FilterChip(
-              label: 'الكل',
+              label: "الكل",
               icon: Icons.all_inclusive_rounded,
-              isSelected: currentFilter == 'all',
-              onTap: () => onFilterChanged('all'),
+              isSelected: currentFilter == "all",
+              onTap: () => onFilterChanged("all"),
             ),
             const SizedBox(width: 8),
             _FilterChip(
-              label: 'بدون إجابة',
+              label: "بدون إجابة",
               icon: Icons.help_outline_rounded,
-              isSelected: currentFilter == 'unanswered',
-              onTap: () => onFilterChanged('unanswered'),
+              isSelected: currentFilter == "unanswered",
+              onTap: () => onFilterChanged("unanswered"),
             ),
             const SizedBox(width: 8),
             _FilterChip(
-              label: 'تمت الإجابة',
+              label: "تمت الإجابة",
               icon: Icons.check_circle_outline_rounded,
-              isSelected: currentFilter == 'answered',
-              onTap: () => onFilterChanged('answered'),
+              isSelected: currentFilter == "answered",
+              onTap: () => onFilterChanged("answered"),
             ),
             const SizedBox(width: 8),
             _FilterChip(
-              label: 'أسئلتي',
+              label: "أسئلتي",
               icon: Icons.person_outline_rounded,
-              isSelected: currentFilter == 'myposts',
-              onTap: () => onFilterChanged('myposts'),
+              isSelected: currentFilter == "myposts",
+              onTap: () => onFilterChanged("myposts"),
             ),
           ],
         ),
@@ -81,16 +81,16 @@ class QuestionFilterWidget extends StatelessWidget {
 
   String _getSortLabel(String sort) {
     switch (sort) {
-      case 'recent':
-        return 'الأحدث';
-      case 'mostvoted':
-        return 'الأكثر تصويتاً';
-      case 'mostdiscussed':
-        return 'الأكثر تفاعلاً';
-      case 'trending':
-        return 'الشائع';
+      case "recent":
+        return "الأحدث";
+      case "mostvoted":
+        return "الأكثر تصويتاً";
+      case "mostdiscussed":
+        return "الأكثر تفاعلاً";
+      case "trending":
+        return "الشائع";
       default:
-        return 'ترتيب';
+        return "ترتيب";
     }
   }
 
@@ -137,7 +137,7 @@ class QuestionFilterWidget extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    'ترتيب حسب',
+                    "ترتيب حسب",
                     style: AppTextStyles.h4.copyWith(
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
@@ -150,14 +150,14 @@ class QuestionFilterWidget extends StatelessWidget {
             const Divider(color: AppColors.border, height: 1),
             const SizedBox(height: 8),
             ...[
-              ('recent', 'الأحدث', Icons.access_time_rounded),
-              ('mostvoted', 'الأكثر تصويتاً', Icons.thumb_up_alt_outlined),
+              ("recent", "الأحدث", Icons.access_time_rounded),
+              ("mostvoted", "الأكثر تصويتاً", Icons.thumb_up_alt_outlined),
               (
-                'mostdiscussed',
-                'الأكثر تفاعلاً',
+                "mostdiscussed",
+                "الأكثر تفاعلاً",
                 Icons.chat_bubble_outline_rounded,
               ),
-              ('trending', 'الشائع', Icons.local_fire_department_outlined),
+              ("trending", "الشائع", Icons.local_fire_department_outlined),
             ].map((item) {
               final isSelected = currentSort == item.$1;
               return Material(

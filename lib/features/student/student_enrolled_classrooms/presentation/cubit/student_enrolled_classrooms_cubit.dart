@@ -1,11 +1,11 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/networking/api_error_model.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/student_enrolled_classrooms/data/models/student_enrolled_classroom_model.dart';
-import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/enroll_classroom_use_case.dart';
-import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/get_student_enrolled_classrooms_use_case.dart';
-import 'package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/networking/api_error_model.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/data/models/student_enrolled_classroom_model.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/enroll_classroom_use_case.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/get_student_enrolled_classrooms_use_case.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_state.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class StudentEnrolledClassroomsCubit
     extends Cubit<StudentEnrolledClassroomsState> {
@@ -77,7 +77,7 @@ class StudentEnrolledClassroomsCubit
           status: CubitStatus.error,
           apiErrorModel: const ApiErrorModel(
             retry: false,
-            error: ErrorModel(message: 'يرجى إدخال رمز الفصل'),
+            error: ErrorModel(message: "يرجى إدخال رمز الفصل"),
           ),
         ),
       );

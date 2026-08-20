@@ -1,4 +1,4 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
 
 part "top_up_request_model.g.dart";
 
@@ -9,7 +9,7 @@ class TopUpRequestModel {
 
   const TopUpRequestModel({
     required this.amount,
-    this.redirectionUrl = 'https://draya.com/payment/result',
+    this.redirectionUrl = "https://draya.com/payment/result",
   });
 
   factory TopUpRequestModel.fromJson(Map<String, dynamic> json) =>

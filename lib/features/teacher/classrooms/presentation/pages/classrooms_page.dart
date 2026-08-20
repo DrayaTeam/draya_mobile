@@ -1,22 +1,22 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/helpers/app_extensions.dart';
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/widgets/app_drawer.dart';
-import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
-import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
-import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
-import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
-import 'package:draya_mobile/core/view_models/drawer_model.dart';
-import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_state.dart';
-import 'package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/helpers/app_extensions.dart";
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/widgets/app_drawer.dart";
+import "package:draya_mobile/core/widgets/app_elevated_button.dart";
+import "package:draya_mobile/core/widgets/app_error_dialog.dart";
+import "package:draya_mobile/core/widgets/app_text_form_field.dart";
+import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/core/view_models/drawer_model.dart";
+import "package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_state.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:go_router/go_router.dart";
 
 class ClassroomsPage extends StatefulWidget {
   const ClassroomsPage({super.key});
@@ -27,7 +27,7 @@ class ClassroomsPage extends StatefulWidget {
 
 class _ClassroomsPageState extends State<ClassroomsPage> {
   late final TextEditingController _searchController;
-  String _query = '';
+  String _query = "";
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
   List<ClassroomModel> _filteredClassrooms(List<ClassroomModel> classrooms) {
     if (_query.isEmpty) return classrooms;
     return classrooms.where((classroom) {
-      final searchableText = '${classroom.name} ${classroom.subjectName}'
+      final searchableText = "${classroom.name} ${classroom.subjectName}"
           .toLowerCase();
       return searchableText.contains(_query.toLowerCase());
     }).toList();
@@ -76,7 +76,7 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
       builder: (context, state) {
         final classrooms = _filteredClassrooms(state.classrooms);
         return Scaffold(
-          appBar: const CustomAppBar(title: 'الفصول الدراسية'),
+          appBar: const CustomAppBar(title: "الفصول الدراسية"),
           drawer: AppDrawer(drawerItemsList: getTeacherDrawerItemsList()),
           body: SafeArea(
             child: RefreshIndicator(
@@ -98,13 +98,13 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
                       ),
                       children: [
                         Text(
-                          'الفصول الدراسية',
+                          "الفصول الدراسية",
                           textAlign: TextAlign.right,
                           style: context.textTheme.headlineSmall,
                         ),
                         const SizedBox(height: AppSizes.s8),
                         Text(
-                          'إدارة الفصول الدراسية ومتابعة أعداد الطلبة المنضمين لكل فصل.',
+                          "إدارة الفصول الدراسية ومتابعة أعداد الطلبة المنضمين لكل فصل.",
                           textAlign: TextAlign.right,
                           style: context.textTheme.bodyLarge?.copyWith(
                             color: AppColors.foregroundMuted,
@@ -113,7 +113,7 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
                         const SizedBox(height: AppSizes.s16),
                         AppElevatedButton(
                           onPressed: _createClassroom,
-                          label: 'إنشاء فصل دراسي جديد',
+                          label: "إنشاء فصل دراسي جديد",
                           icon: const Icon(Icons.add, size: 18),
                           size: const Size(double.infinity, 40),
                         ),
@@ -177,7 +177,7 @@ class _SearchSummary extends StatelessWidget {
         Expanded(
           child: AppTextFormField(
             controller: controller,
-            hintText: 'بحث باسم الفصل الدراسي...',
+            hintText: "بحث باسم الفصل الدراسي...",
             prefixIcon: Icons.search,
             onChanged: onChanged,
           ),
@@ -186,8 +186,8 @@ class _SearchSummary extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text('إجمالي الفصول:', style: context.textTheme.labelMedium),
-            Text('$total', style: context.textTheme.titleMedium),
+            Text("إجمالي الفصول:", style: context.textTheme.labelMedium),
+            Text("$total", style: context.textTheme.titleMedium),
           ],
         ),
       ],
@@ -243,7 +243,7 @@ class _ClassroomCardState extends State<_ClassroomCard> {
         ),
         const SizedBox(height: AppSizes.s4),
         Text(
-          widget.classroom.isActive ? 'فصل نشط' : 'فصل غير نشط',
+          widget.classroom.isActive ? "فصل نشط" : "فصل غير نشط",
           textAlign: TextAlign.right,
           style: context.textTheme.bodyMedium?.copyWith(
             color: AppColors.foregroundMuted,
@@ -261,10 +261,10 @@ class _ClassroomCardState extends State<_ClassroomCard> {
             children: [
               const Icon(Icons.groups_outlined, color: AppColors.primary700),
               const SizedBox(width: AppSizes.s8),
-              Text('إجمالي الطلبة', style: context.textTheme.labelMedium),
+              Text("إجمالي الطلبة", style: context.textTheme.labelMedium),
               const Spacer(),
               Text(
-                '${context.watch<ClassroomStudentsCubit>().state.students.length} طالب',
+                "${context.watch<ClassroomStudentsCubit>().state.students.length} طالب",
                 style: context.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w800,
                 ),
@@ -275,7 +275,7 @@ class _ClassroomCardState extends State<_ClassroomCard> {
         const SizedBox(height: AppSizes.s20),
         AppElevatedButton(
           onPressed: widget.onView,
-          label: 'عرض الفصل',
+          label: "عرض الفصل",
           icon: const Icon(Icons.arrow_back, size: 17),
           radius: 8,
           size: const Size(double.infinity, 36),
@@ -325,7 +325,7 @@ class _EmptyClassrooms extends StatelessWidget {
         ),
         const SizedBox(height: AppSizes.s12),
         Text(
-          hasQuery ? 'لا توجد فصول مطابقة للبحث' : 'لا توجد فصول دراسية بعد',
+          hasQuery ? "لا توجد فصول مطابقة للبحث" : "لا توجد فصول دراسية بعد",
           style: context.textTheme.titleSmall,
         ),
       ],

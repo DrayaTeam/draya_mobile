@@ -1,6 +1,6 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
 
-part 'create_question_request_model.g.dart';
+part "create_question_request_model.g.dart";
 
 @JsonSerializable()
 class CreateQuestionRequestModel {

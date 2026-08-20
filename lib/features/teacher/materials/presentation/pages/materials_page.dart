@@ -1,23 +1,23 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/enums/material_type_enum.dart';
-import 'package:draya_mobile/core/helpers/app_dialog_helper.dart';
-import 'package:draya_mobile/core/helpers/app_extensions.dart';
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/widgets/app_card_container_empty.dart';
-import 'package:draya_mobile/core/widgets/app_card_container_info.dart';
-import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
-import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
-import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
-import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
-import 'package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart';
-import 'package:draya_mobile/features/teacher/materials/data/models/materials_request_model.dart';
-import 'package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart';
-import 'package:draya_mobile/features/teacher/materials/presentation/cubit/materials_cubit.dart';
-import 'package:draya_mobile/features/teacher/materials/presentation/cubit/materials_state.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/enums/material_type_enum.dart";
+import "package:draya_mobile/core/helpers/app_dialog_helper.dart";
+import "package:draya_mobile/core/helpers/app_extensions.dart";
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/widgets/app_card_container_empty.dart";
+import "package:draya_mobile/core/widgets/app_card_container_info.dart";
+import "package:draya_mobile/core/widgets/app_custom_loading.dart";
+import "package:draya_mobile/core/widgets/app_elevated_button.dart";
+import "package:draya_mobile/core/widgets/app_error_dialog.dart";
+import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart";
+import "package:draya_mobile/features/teacher/materials/data/models/materials_request_model.dart";
+import "package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart";
+import "package:draya_mobile/features/teacher/materials/presentation/cubit/materials_cubit.dart";
+import "package:draya_mobile/features/teacher/materials/presentation/cubit/materials_state.dart";
+import "package:file_picker/file_picker.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class MaterialsPage extends StatefulWidget {
   final ClassroomModel _classroomModel;
@@ -143,7 +143,7 @@ class _MaterialsPageState extends State<MaterialsPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'اسم الفصل الدراسي:',
+                  "اسم الفصل الدراسي:",
                   style: context.textTheme.headlineMedium,
                 ),
                 const SizedBox(height: AppSizes.s8),

@@ -1,10 +1,10 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:draya_mobile/core/signalr/signalr_events.dart';
-import 'package:draya_mobile/core/signalr/signalr_service.dart';
-import 'package:signalr_netcore/hub_connection.dart';
-import 'package:signalr_netcore/hub_connection_builder.dart';
-import 'package:signalr_netcore/http_connection_options.dart';
+import "package:draya_mobile/core/signalr/signalr_events.dart";
+import "package:draya_mobile/core/signalr/signalr_service.dart";
+import "package:signalr_netcore/hub_connection.dart";
+import "package:signalr_netcore/hub_connection_builder.dart";
+import "package:signalr_netcore/http_connection_options.dart";
 
 
 class SignalRClientService implements SignalRService {
@@ -44,11 +44,11 @@ class SignalRClientService implements SignalRService {
 
   @override
   Future<void> joinClassroom(String classroomId) =>
-      _invoke('JoinClassroom', classroomId);
+      _invoke("JoinClassroom", classroomId);
 
   @override
   Future<void> leaveClassroom(String classroomId) =>
-      _invoke('LeaveClassroom', classroomId);
+      _invoke("LeaveClassroom", classroomId);
 
   Future<void> _invoke(String method, String classroomId) async {
     if (!isConnected) return;
@@ -57,17 +57,17 @@ class SignalRClientService implements SignalRService {
 
   @override
   void onQuestionCreated(void Function(QuestionCreatedEvent) callback) {
-    _addListener('QuestionCreated', callback);
+    _addListener("QuestionCreated", callback);
   }
 
   @override
   void onQuestionReplied(void Function(QuestionRepliedEvent) callback) {
-    _addListener('QuestionReplied', callback);
+    _addListener("QuestionReplied", callback);
   }
 
   @override
   void onQuestionVoteUpdated(void Function(QuestionVoteUpdatedEvent) callback) {
-    _addListener('QuestionVoteUpdated', callback);
+    _addListener("QuestionVoteUpdated", callback);
   }
 
   void _addListener(String eventName, Function callback) {
@@ -92,9 +92,9 @@ class SignalRClientService implements SignalRService {
       }
       final payload = Map<String, dynamic>.from(arguments.first as Map);
       final event = switch (eventName) {
-        'QuestionCreated' => QuestionCreatedEvent.fromJson(payload),
-        'QuestionReplied' => QuestionRepliedEvent.fromJson(payload),
-        'QuestionVoteUpdated' => QuestionVoteUpdatedEvent.fromJson(payload),
+        "QuestionCreated" => QuestionCreatedEvent.fromJson(payload),
+        "QuestionReplied" => QuestionRepliedEvent.fromJson(payload),
+        "QuestionVoteUpdated" => QuestionVoteUpdatedEvent.fromJson(payload),
         _ => null,
       };
       if (event == null) return;

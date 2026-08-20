@@ -1,7 +1,7 @@
-import 'package:draya_mobile/core/helpers/app_use_case.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/teacher/materials/data/models/teacher_material_paged_result_model.dart';
-import 'package:draya_mobile/features/teacher/materials/domain/repos/materials_repo.dart';
+import "package:draya_mobile/core/helpers/app_use_case.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/teacher/materials/data/models/teacher_material_paged_result_model.dart";
+import "package:draya_mobile/features/teacher/materials/domain/repos/materials_repo.dart";
 
 class GetMaterialsParams {
   final String classroomId;

@@ -1,6 +1,6 @@
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/teacher/teacher_channel/data/models/question_paged_result_model.dart';
-import 'package:draya_mobile/features/teacher/teacher_channel/domain/repos/teacher_channel_repo.dart';
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/teacher/teacher_channel/data/models/question_paged_result_model.dart";
+import "package:draya_mobile/features/teacher/teacher_channel/domain/repos/teacher_channel_repo.dart";
 
 class GetQuestionsParams {
   final String classroomId;
@@ -13,8 +13,8 @@ class GetQuestionsParams {
     required this.classroomId,
     this.page = 1,
     this.pageSize = 20,
-    this.sortBy = 'recent',
-    this.filterBy = 'all',
+    this.sortBy = "recent",
+    this.filterBy = "all",
   });
 }
 

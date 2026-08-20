@@ -1,14 +1,14 @@
-import 'package:draya_mobile/core/helpers/app_navigator.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
-import 'package:draya_mobile/features/student/teachers/data/models/payment_status_model.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/cubit/payment_verification_cubit.dart';
-import 'package:draya_mobile/features/student/teachers/presentation/cubit/payment_verification_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/features/student/teachers/data/models/payment_status_model.dart";
+import "package:draya_mobile/features/student/teachers/presentation/cubit/payment_verification_cubit.dart";
+import "package:draya_mobile/features/student/teachers/presentation/cubit/payment_verification_state.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class PaymentResultPage extends StatefulWidget {
   final String transactionId;
@@ -55,7 +55,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const CustomAppBar(title: 'نتيجة الدفع'),
+      appBar: const CustomAppBar(title: "نتيجة الدفع"),
       body: SafeArea(
         child: BlocConsumer<PaymentVerificationCubit, PaymentVerificationState>(
           listener: (context, state) {
@@ -135,7 +135,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
         ),
         const SizedBox(height: AppSizes.s32),
         Text(
-          'جاري تأكيد عملية الدفع...',
+          "جاري تأكيد عملية الدفع...",
           style: AppTextStyles.h3.copyWith(
             fontWeight: FontWeight.w800,
             color: AppColors.textPrimary,
@@ -144,7 +144,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
         ),
         const SizedBox(height: AppSizes.s12),
         Text(
-          'يرجى الانتظار قليلاً بينما نتحقق من حالة الدفع مع البنك.',
+          "يرجى الانتظار قليلاً بينما نتحقق من حالة الدفع مع البنك.",
           style: AppTextStyles.body.copyWith(
             color: AppColors.textSecondary,
           ),
@@ -202,7 +202,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
           ),
           const SizedBox(height: AppSizes.s24),
           Text(
-            'تم الدفع بنجاح!',
+            "تم الدفع بنجاح!",
             style: AppTextStyles.h2.copyWith(
               color: AppColors.success,
               fontWeight: FontWeight.w800,
@@ -211,7 +211,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
           ),
           const SizedBox(height: AppSizes.s8),
           Text(
-            'تم تسجيلك في الفصل الدراسي بنجاح.',
+            "تم تسجيلك في الفصل الدراسي بنجاح.",
             style: AppTextStyles.body.copyWith(
               color: AppColors.textSecondary,
             ),
@@ -233,7 +233,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
               ),
               icon: const Icon(Icons.arrow_forward_rounded, size: 20),
               label: Text(
-                'الانتقال إلى الفصل',
+                "الانتقال إلى الفصل",
                 style: AppTextStyles.button.copyWith(color: Colors.white),
               ),
             ),
@@ -271,7 +271,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
           ),
           const SizedBox(height: AppSizes.s24),
           Text(
-            'فشلت عملية الدفع',
+            "فشلت عملية الدفع",
             style: AppTextStyles.h2.copyWith(
               color: AppColors.error,
               fontWeight: FontWeight.w800,
@@ -280,7 +280,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
           ),
           const SizedBox(height: AppSizes.s8),
           Text(
-            'لم تكتمل عملية الدفع أو تم إلغاؤها. يرجى المحاولة مرة أخرى.',
+            "لم تكتمل عملية الدفع أو تم إلغاؤها. يرجى المحاولة مرة أخرى.",
             style: AppTextStyles.body.copyWith(
               color: AppColors.textSecondary,
             ),
@@ -302,7 +302,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
               ),
               icon: const Icon(Icons.refresh_rounded, size: 20),
               label: Text(
-                'العودة للفصول',
+                "العودة للفصول",
                 style: AppTextStyles.button.copyWith(color: Colors.white),
               ),
             ),
@@ -337,7 +337,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
           ),
           const SizedBox(height: AppSizes.s24),
           Text(
-            'العملية قيد المعالجة',
+            "العملية قيد المعالجة",
             style: AppTextStyles.h2.copyWith(
               color: AppColors.amber,
               fontWeight: FontWeight.w800,
@@ -346,7 +346,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
           ),
           const SizedBox(height: AppSizes.s8),
           Text(
-            'قد تستغرق المعالجة بضع دقائق إضافية. سيتم تحديث حالة اشتراكك تلقائياً بمجرد التأكيد.',
+            "قد تستغرق المعالجة بضع دقائق إضافية. سيتم تحديث حالة اشتراكك تلقائياً بمجرد التأكيد.",
             style: AppTextStyles.body.copyWith(
               color: AppColors.textSecondary,
             ),
@@ -368,7 +368,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
                       borderRadius: BorderRadius.circular(AppSizes.s12),
                     ),
                   ),
-                  child: const Text('إعادة الفحص'),
+                  child: const Text("إعادة الفحص"),
                 ),
               ),
               const SizedBox(width: AppSizes.s12),
@@ -387,7 +387,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
                       borderRadius: BorderRadius.circular(AppSizes.s12),
                     ),
                   ),
-                  child: const Text('الصفحة الرئيسية'),
+                  child: const Text("الصفحة الرئيسية"),
                 ),
               ),
             ],
@@ -403,7 +403,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
   ) {
     final errorMessage =
         state.apiErrorModel?.error?.message ??
-        'حدث خطأ أثناء التحقق من حالة الدفع.';
+        "حدث خطأ أثناء التحقق من حالة الدفع.";
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -423,7 +423,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
         ),
         const SizedBox(height: AppSizes.s20),
         Text(
-          'تعذر التحقق من الدفع',
+          "تعذر التحقق من الدفع",
           style: AppTextStyles.h4.copyWith(
             fontWeight: FontWeight.w700,
           ),
@@ -450,7 +450,7 @@ class _PaymentResultPageState extends State<PaymentResultPage>
             ),
           ),
           icon: const Icon(Icons.refresh_rounded),
-          label: const Text('إعادة المحاولة'),
+          label: const Text("إعادة المحاولة"),
         ),
       ],
     );
@@ -474,13 +474,13 @@ class _PaymentResultPageState extends State<PaymentResultPage>
       ),
       child: Column(
         children: [
-          _buildRow('رقم المعاملة', status.paymentTransactionId),
+          _buildRow("رقم المعاملة", status.paymentTransactionId),
           const Divider(height: AppSizes.s16),
-          _buildRow('المبلغ', '${status.grossAmount.toStringAsFixed(0)} جنيه'),
+          _buildRow("المبلغ", "${status.grossAmount.toStringAsFixed(0)} جنيه"),
           const Divider(height: AppSizes.s16),
           _buildRow(
-            'حالة الاشتراك',
-            status.isEnrolled ? 'تم الاشتراك' : 'غير مكتمل',
+            "حالة الاشتراك",
+            status.isEnrolled ? "تم الاشتراك" : "غير مكتمل",
             valueColor: status.isEnrolled ? AppColors.success : AppColors.error,
           ),
         ],

@@ -1,8 +1,8 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
 
-import 'package:draya_mobile/features/student/profile/data/models/student_profile_model.dart';
+import "package:draya_mobile/features/student/profile/data/models/student_profile_model.dart";
 
-part 'user_profile_model.g.dart';
+part "user_profile_model.g.dart";
 
 @JsonSerializable(includeIfNull: false)
 class UserProfileModel {
@@ -35,8 +35,8 @@ extension UserProfileModelX on UserProfileModel {
     return StudentProfileModel(
       userId: userId,
       email: email,
-      fullName: fullName ?? '',
-      parentGuardianEmail: parentGuardianEmail ?? '',
+      fullName: fullName ?? "",
+      parentGuardianEmail: parentGuardianEmail ?? "",
       dateOfBirth: dateOfBirth,
       profilePictureUrl: profilePictureUrl,
     );

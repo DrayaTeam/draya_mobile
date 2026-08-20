@@ -1,6 +1,6 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
 
-part 'set_classroom_pricing_request_model.g.dart';
+part "set_classroom_pricing_request_model.g.dart";
 
 @JsonSerializable()
 class SetClassroomPricingRequestModel {

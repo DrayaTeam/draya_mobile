@@ -1,5 +1,5 @@
-import 'package:draya_mobile/core/helpers/app_regex_helper.dart';
-import 'package:draya_mobile/core/validation/validation_result.dart';
+import "package:draya_mobile/core/helpers/app_regex_helper.dart";
+import "package:draya_mobile/core/validation/validation_result.dart";
 
 abstract class PhoneValidator {
   static ValidationResult validate({required String? phone}) {

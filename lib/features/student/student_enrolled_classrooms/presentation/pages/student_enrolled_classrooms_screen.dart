@@ -1,19 +1,19 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/router/app_routes.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/core/view_models/drawer_model.dart';
-import 'package:draya_mobile/core/widgets/app_drawer.dart';
-import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
-import 'package:draya_mobile/core/widgets/fade_in_up_animation.dart';
-import 'package:draya_mobile/features/student/student_enrolled_classrooms/domain/entity/student_enrolled_classroom.dart';
-import 'package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_cubit.dart';
-import 'package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:go_router/go_router.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/core/view_models/drawer_model.dart";
+import "package:draya_mobile/core/widgets/app_drawer.dart";
+import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/core/widgets/fade_in_up_animation.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/domain/entity/student_enrolled_classroom.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_cubit.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_state.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:intl/intl.dart";
+import "package:go_router/go_router.dart";
 
 class StudentEnrolledClassroomsScreen extends StatefulWidget {
   const StudentEnrolledClassroomsScreen({super.key});
@@ -44,7 +44,7 @@ class _StudentEnrolledClassroomsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'فصولي المسجلة'),
+      appBar: const CustomAppBar(title: "فصولي المسجلة"),
       drawer: AppDrawer(drawerItemsList: getStudentDrawerItemsList()),
       backgroundColor: AppColors.background,
       body:
@@ -83,7 +83,7 @@ class _StudentEnrolledClassroomsScreenState
                 return _ErrorState(
                   message:
                       state.apiErrorModel?.error?.message ??
-                      'تعذر تحميل الفصول الدراسية.',
+                      "تعذر تحميل الفصول الدراسية.",
                   onRetry: () => context
                       .read<StudentEnrolledClassroomsCubit>()
                       .getStudentEnrolledClassrooms(),
@@ -115,7 +115,7 @@ class _StudentEnrolledClassroomsScreenState
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                'يرجى إدخال رمز الفصل',
+                                "يرجى إدخال رمز الفصل",
                                 style: AppTextStyles.body.copyWith(
                                   color: Colors.white,
                                 ),
@@ -188,7 +188,7 @@ class _StudentEnrolledClassroomsScreenState
                                 size: 20,
                               ),
                               label: Text(
-                                'تحميل المزيد',
+                                "تحميل المزيد",
                                 style: AppTextStyles.label.copyWith(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.w700,
@@ -265,7 +265,7 @@ class _TopSummaryCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'فصولي الدراسية',
+                      "فصولي الدراسية",
                       style: AppTextStyles.h4.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w800,
@@ -273,7 +273,7 @@ class _TopSummaryCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '$totalClassrooms من إجمالي $totalCount فصلاً مسجلاً',
+                      "$totalClassrooms من إجمالي $totalCount فصلاً مسجلاً",
                       style: AppTextStyles.body.copyWith(
                         color: Colors.white.withValues(alpha: 0.85),
                         fontSize: 13,
@@ -305,7 +305,7 @@ class _TopSummaryCard extends StatelessWidget {
                       fontSize: 13,
                     ),
                     decoration: InputDecoration(
-                      hintText: 'أدخل رمز الانضمام للفصل...',
+                      hintText: "أدخل رمز الانضمام للفصل...",
                       fillColor: Colors.white.withValues(alpha: 0.1),
                       hintStyle: AppTextStyles.body.copyWith(
                         color: Colors.white.withValues(alpha: 0.7),
@@ -352,7 +352,7 @@ class _TopSummaryCard extends StatelessWidget {
                         )
                       : const Icon(Icons.add_rounded, size: 18),
                   label: Text(
-                    isLoading ? 'جارِ...' : 'انضمام',
+                    isLoading ? "جارِ..." : "انضمام",
                     style: AppTextStyles.button.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w700,
@@ -376,13 +376,13 @@ class _ClassroomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('d MMM yyyy', 'ar');
+    final dateFormat = DateFormat("d MMM yyyy", "ar");
     final startDate = classroom.startDate != null
         ? dateFormat.format(classroom.startDate!)
-        : 'غير محدد';
+        : "غير محدد";
     final endDate = classroom.endDate != null
         ? dateFormat.format(classroom.endDate!)
-        : 'مستمر';
+        : "مستمر";
 
     return Container(
       decoration: BoxDecoration(
@@ -459,7 +459,7 @@ class _ClassroomCard extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    classroom.isActive ? 'نشط' : 'مكتمل',
+                    classroom.isActive ? "نشط" : "مكتمل",
                     style: AppTextStyles.label.copyWith(
                       color: classroom.isActive
                           ? AppColors.success
@@ -496,7 +496,7 @@ class _ClassroomCard extends StatelessWidget {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    '$startDate - $endDate',
+                    "$startDate - $endDate",
                     style: AppTextStyles.body.copyWith(
                       color: AppColors.textSecondary,
                       fontSize: 12,
@@ -525,7 +525,7 @@ class _ClassroomCard extends StatelessWidget {
                     ),
                     icon: const Icon(Icons.forum_outlined, size: 18),
                     label: Text(
-                      'قناة الأسئلة',
+                      "قناة الأسئلة",
                       style: AppTextStyles.label.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w700,
@@ -553,7 +553,7 @@ class _ClassroomCard extends StatelessWidget {
                     ),
                     icon: const Icon(Icons.folder_copy_outlined, size: 18),
                     label: Text(
-                      'المواد الدراسية',
+                      "المواد الدراسية",
                       style: AppTextStyles.button.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
@@ -634,7 +634,7 @@ class _ErrorState extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'حدث خطأ في تحميل الفصول',
+              "حدث خطأ في تحميل الفصول",
               style: AppTextStyles.h5.copyWith(
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,
@@ -660,7 +660,7 @@ class _ErrorState extends StatelessWidget {
               ),
               icon: const Icon(Icons.refresh_rounded, size: 18),
               label: Text(
-                'إعادة المحاولة',
+                "إعادة المحاولة",
                 style: AppTextStyles.button.copyWith(color: Colors.white),
               ),
             ),
@@ -700,7 +700,7 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'لا توجد فصول مسجلة بعد',
+              "لا توجد فصول مسجلة بعد",
               style: AppTextStyles.h4.copyWith(
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,
@@ -708,7 +708,7 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'ستظهر الفصول التي تنضم إليها برمز أو تشترك بها هنا.',
+              "ستظهر الفصول التي تنضم إليها برمز أو تشترك بها هنا.",
               textAlign: TextAlign.center,
               style: AppTextStyles.body.copyWith(
                 color: AppColors.textSecondary,
@@ -730,7 +730,7 @@ class _EmptyState extends StatelessWidget {
               ),
               icon: const Icon(Icons.refresh_rounded, size: 18),
               label: Text(
-                'تحديث القائمة',
+                "تحديث القائمة",
                 style: AppTextStyles.label.copyWith(color: AppColors.primary),
               ),
             ),

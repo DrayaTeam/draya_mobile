@@ -1,6 +1,6 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
 
-part 'add_subject_request_model.g.dart';
+part "add_subject_request_model.g.dart";
 
 @JsonSerializable()
 class AddSubjectRequestModel {

@@ -19,11 +19,11 @@ class QuestionCreatedEvent extends SignalREvent {
 
   factory QuestionCreatedEvent.fromJson(Map<String, dynamic> json) {
     return QuestionCreatedEvent(
-      classroomId: json['classroomId'] as String,
-      questionId: json['questionId'] as String,
-      authorId: json['authorId'] as String,
-      content: json['content'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      classroomId: json["classroomId"] as String,
+      questionId: json["questionId"] as String,
+      authorId: json["authorId"] as String,
+      content: json["content"] as String,
+      createdAt: DateTime.parse(json["createdAt"] as String),
     );
   }
 }
@@ -49,13 +49,13 @@ class QuestionRepliedEvent extends SignalREvent {
 
   factory QuestionRepliedEvent.fromJson(Map<String, dynamic> json) {
     return QuestionRepliedEvent(
-      classroomId: json['classroomId'] as String,
-      questionId: json['questionId'] as String,
-      replyId: json['replyId'] as String,
-      authorId: json['authorId'] as String,
-      content: json['content'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      isTeacherAnswer: json['isTeacherAnswer'] as bool? ?? false,
+      classroomId: json["classroomId"] as String,
+      questionId: json["questionId"] as String,
+      replyId: json["replyId"] as String,
+      authorId: json["authorId"] as String,
+      content: json["content"] as String,
+      createdAt: DateTime.parse(json["createdAt"] as String),
+      isTeacherAnswer: json["isTeacherAnswer"] as bool? ?? false,
     );
   }
 }
@@ -73,9 +73,9 @@ class QuestionVoteUpdatedEvent extends SignalREvent {
 
   factory QuestionVoteUpdatedEvent.fromJson(Map<String, dynamic> json) {
     return QuestionVoteUpdatedEvent(
-      classroomId: json['classroomId'] as String,
-      questionId: json['questionId'] as String,
-      voteCount: json['voteCount'] as int? ?? 0,
+      classroomId: json["classroomId"] as String,
+      questionId: json["questionId"] as String,
+      voteCount: json["voteCount"] as int? ?? 0,
     );
   }
 }

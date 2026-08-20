@@ -15,8 +15,8 @@ class StudentMaterialVersion {
     required this.errorMessage,
   });
 
-  bool get isReady => parseStatus.toLowerCase() == 'parsed';
-  bool get hasFailed => parseStatus.toLowerCase() == 'failed';
+  bool get isReady => parseStatus.toLowerCase() == "parsed";
+  bool get hasFailed => parseStatus.toLowerCase() == "failed";
 }
 
 class StudentMaterial {
@@ -34,8 +34,8 @@ class StudentMaterial {
     required this.currentVersion,
   });
 
-  bool get isVideo => materialType.toLowerCase() == 'video';
-  bool get isPdf => materialType.toLowerCase() == 'pdf';
+  bool get isVideo => materialType.toLowerCase() == "video";
+  bool get isPdf => materialType.toLowerCase() == "pdf";
 }
 
 class StudentMaterialsPage {

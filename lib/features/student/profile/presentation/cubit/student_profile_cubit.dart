@@ -1,13 +1,13 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/profile/data/models/update_student_profile_request_model.dart';
-import 'package:draya_mobile/features/student/profile/domain/usecases/get_student_profile_use_case.dart';
-import 'package:draya_mobile/features/student/profile/domain/usecases/update_student_profile_use_case.dart';
-import 'package:draya_mobile/features/student/profile/domain/usecases/upload_student_profile_picture_use_case.dart';
-import 'package:draya_mobile/features/student/profile/presentation/cubit/student_profile_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/profile/data/models/update_student_profile_request_model.dart";
+import "package:draya_mobile/features/student/profile/domain/usecases/get_student_profile_use_case.dart";
+import "package:draya_mobile/features/student/profile/domain/usecases/update_student_profile_use_case.dart";
+import "package:draya_mobile/features/student/profile/domain/usecases/upload_student_profile_picture_use_case.dart";
+import "package:draya_mobile/features/student/profile/presentation/cubit/student_profile_state.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class StudentProfileCubit extends Cubit<StudentProfileState> {
   final GetStudentProfileUseCase _getStudentProfileUseCase;

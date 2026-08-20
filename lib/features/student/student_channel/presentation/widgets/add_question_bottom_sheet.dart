@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
+import "package:flutter/material.dart";
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
 
 class AddQuestionBottomSheet extends StatefulWidget {
   final ValueChanged<String> onSubmit;
@@ -89,7 +89,7 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'طرح سؤال جديد',
+                      "طرح سؤال جديد",
                       style: AppTextStyles.h4.copyWith(
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
@@ -97,7 +97,7 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'اطرح سؤالك بوضوح ليتمكن المعلم والزملاء من إجابتك',
+                      "اطرح سؤالك بوضوح ليتمكن المعلم والزملاء من إجابتك",
                       style: AppTextStyles.label.copyWith(
                         fontSize: 12,
                         color: AppColors.textSecondary,
@@ -132,7 +132,7 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
                 color: AppColors.textPrimary,
               ),
               decoration: InputDecoration(
-                hintText: 'اكتب سؤالك بالتفصيل هنا...',
+                hintText: "اكتب سؤالك بالتفصيل هنا...",
                 hintStyle: AppTextStyles.body.copyWith(
                   color: AppColors.textDisabled,
                   fontSize: 14,
@@ -173,7 +173,7 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
                     )
                   : const Icon(Icons.send_rounded, size: 20),
               label: Text(
-                widget.isLoading ? 'جاري النشر...' : 'نشر السؤال',
+                widget.isLoading ? "جاري النشر..." : "نشر السؤال",
                 style: AppTextStyles.button.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,

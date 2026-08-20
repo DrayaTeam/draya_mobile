@@ -1,9 +1,9 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart";
+import "package:flutter/material.dart";
+import "package:intl/intl.dart";
 
 class ExamCardItem extends StatelessWidget {
   final SectionExam exam;
@@ -21,7 +21,7 @@ class ExamCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('d MMM yyyy', 'ar');
+    final dateFormat = DateFormat("d MMM yyyy", "ar");
     final dateStr = dateFormat.format(exam.createdAt);
 
     return Container(
@@ -79,7 +79,7 @@ class ExamCardItem extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    '${exam.questionsCount} أسئلة',
+                    "${exam.questionsCount} أسئلة",
                     style: AppTextStyles.label.copyWith(
                       color: AppColors.amber,
                       fontWeight: FontWeight.w800,
@@ -104,7 +104,7 @@ class ExamCardItem extends StatelessWidget {
 
             // Section subtitle
             Text(
-              'القسم: $sectionTitle • $dateStr',
+              "القسم: $sectionTitle • $dateStr",
               textAlign: TextAlign.right,
               style: AppTextStyles.body.copyWith(
                 color: AppColors.textSecondary,
@@ -129,7 +129,7 @@ class ExamCardItem extends StatelessWidget {
                 ),
                 icon: const Icon(Icons.arrow_forward_rounded, size: 18),
                 label: Text(
-                  'بدء الامتحان الآن',
+                  "بدء الامتحان الآن",
                   style: AppTextStyles.label.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w800,

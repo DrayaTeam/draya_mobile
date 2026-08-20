@@ -1,8 +1,8 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:flutter/material.dart';
-import 'package:draya_mobile/features/teacher/teacher_channel/domain/entity/question_entity.dart';
-import 'package:intl/intl.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:flutter/material.dart";
+import "package:draya_mobile/features/teacher/teacher_channel/domain/entity/question_entity.dart";
+import "package:intl/intl.dart";
 
 class QuestionCardWidget extends StatelessWidget {
   final QuestionEntity question;
@@ -20,7 +20,7 @@ class QuestionCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('d MMMM، HH:mm', 'ar');
+    final dateFormat = DateFormat("d MMMM، HH:mm", "ar");
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -119,7 +119,7 @@ class QuestionCardWidget extends StatelessWidget {
                                       ),
                                     ),
                                     child: Text(
-                                      'سؤالي',
+                                      "سؤالي",
                                       style: AppTextStyles.label.copyWith(
                                         fontSize: 10,
                                         color: AppColors.primary,
@@ -155,7 +155,7 @@ class QuestionCardWidget extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              'إجابة المدرس',
+                              "إجابة المدرس",
                               style: AppTextStyles.label.copyWith(
                                 fontSize: 11,
                                 color: AppColors.primary,

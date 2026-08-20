@@ -1,7 +1,7 @@
-import 'package:draya_mobile/core/helpers/app_use_case.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/teachers/data/models/teacher_classroom_paged_result_model.dart';
-import 'package:draya_mobile/features/student/teachers/domain/repos/teacher_repo.dart';
+import "package:draya_mobile/core/helpers/app_use_case.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/teachers/data/models/teacher_classroom_paged_result_model.dart";
+import "package:draya_mobile/features/student/teachers/domain/repos/teacher_repo.dart";
 
 class TeacherClassroomsParams {
   final String teacherId;
@@ -31,7 +31,7 @@ class GetTeacherClassroomsUseCase
   }) async {
     final request = params ??
         const TeacherClassroomsParams(
-          teacherId: '',
+          teacherId: "",
           page: 1,
           pageSize: 20,
         );

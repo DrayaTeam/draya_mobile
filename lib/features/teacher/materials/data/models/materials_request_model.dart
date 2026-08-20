@@ -1,5 +1,5 @@
-import 'package:draya_mobile/core/enums/material_type_enum.dart';
-import 'package:file_picker/file_picker.dart';
+import "package:draya_mobile/core/enums/material_type_enum.dart";
+import "package:file_picker/file_picker.dart";
 
 class MaterialsRequestModel {
   final String title;

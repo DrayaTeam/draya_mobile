@@ -1,23 +1,23 @@
-import 'package:draya_mobile/core/enums/cubit_status.dart';
-import 'package:draya_mobile/core/helpers/app_dialog_helper.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/validation/email_validator.dart';
-import 'package:draya_mobile/core/validation/validation_result.dart';
-import 'package:draya_mobile/core/view_models/drawer_model.dart';
-import 'package:draya_mobile/core/widgets/app_custom_loading.dart';
-import 'package:draya_mobile/core/widgets/app_drawer.dart';
-import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
-import 'package:draya_mobile/core/widgets/app_error_dialog.dart';
-import 'package:draya_mobile/core/widgets/app_label.dart';
-import 'package:draya_mobile/core/widgets/app_text_form_field.dart';
-import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
-import 'package:draya_mobile/core/widgets/profile_avatar_picker.dart';
-import 'package:draya_mobile/features/student/profile/data/models/update_student_profile_request_model.dart';
-import 'package:draya_mobile/features/student/profile/presentation/cubit/student_profile_cubit.dart';
-import 'package:draya_mobile/features/student/profile/presentation/cubit/student_profile_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/helpers/app_dialog_helper.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/validation/email_validator.dart";
+import "package:draya_mobile/core/validation/validation_result.dart";
+import "package:draya_mobile/core/view_models/drawer_model.dart";
+import "package:draya_mobile/core/widgets/app_custom_loading.dart";
+import "package:draya_mobile/core/widgets/app_drawer.dart";
+import "package:draya_mobile/core/widgets/app_elevated_button.dart";
+import "package:draya_mobile/core/widgets/app_error_dialog.dart";
+import "package:draya_mobile/core/widgets/app_label.dart";
+import "package:draya_mobile/core/widgets/app_text_form_field.dart";
+import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/core/widgets/profile_avatar_picker.dart";
+import "package:draya_mobile/features/student/profile/data/models/update_student_profile_request_model.dart";
+import "package:draya_mobile/features/student/profile/presentation/cubit/student_profile_cubit.dart";
+import "package:draya_mobile/features/student/profile/presentation/cubit/student_profile_state.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:intl/intl.dart";
 
 class StudentProfilePage extends StatefulWidget {
   const StudentProfilePage({super.key});
@@ -65,7 +65,7 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
 
     setState(() {
       _dateOfBirth = pickedDate;
-      _dateOfBirthController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+      _dateOfBirthController.text = DateFormat("yyyy-MM-dd").format(pickedDate);
     });
   }
 
@@ -106,13 +106,13 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
             _dismissLoadingDialogIfVisible(context);
             final studentProfile = state.studentProfile;
             if (studentProfile == null) return;
-            _fullNameController.text = studentProfile.fullName ?? '';
+            _fullNameController.text = studentProfile.fullName ?? "";
             _parentGuardianEmailController.text =
-                studentProfile.parentGuardianEmail ?? '';
+                studentProfile.parentGuardianEmail ?? "";
             if (studentProfile.dateOfBirth != null) {
               _dateOfBirth = studentProfile.dateOfBirth;
               _dateOfBirthController.text = DateFormat(
-                'yyyy-MM-dd',
+                "yyyy-MM-dd",
               ).format(studentProfile.dateOfBirth!);
             }
             break;
@@ -149,7 +149,7 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
                       final studentProfile = state.studentProfile;
                       final name = _fullNameController.text.trim().isNotEmpty
                           ? _fullNameController.text.trim()
-                          : (studentProfile?.fullName ?? '');
+                          : (studentProfile?.fullName ?? "");
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom: AppSizes.s24),

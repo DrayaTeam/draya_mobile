@@ -1,8 +1,8 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/features/student/exams/domain/entity/student_exam.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/features/student/exams/domain/entity/student_exam.dart";
+import "package:flutter/material.dart";
 
 class ExamGradingScreen extends StatelessWidget {
   final GradingJobStatus? jobStatus;
@@ -70,7 +70,7 @@ class ExamGradingScreen extends StatelessWidget {
 
               // Title
               Text(
-                'جاري تصحيح الامتحان...',
+                "جاري تصحيح الامتحان...",
                 textAlign: TextAlign.center,
                 style: AppTextStyles.h3.copyWith(
                   fontWeight: FontWeight.w900,
@@ -81,7 +81,7 @@ class ExamGradingScreen extends StatelessWidget {
 
               // Subtitle
               Text(
-                'يتم الآن تصحيح إجاباتك وتحليل الأسئلة المقالية بواسطة الذكاء الاصطناعي.',
+                "يتم الآن تصحيح إجاباتك وتحليل الأسئلة المقالية بواسطة الذكاء الاصطناعي.",
                 textAlign: TextAlign.center,
                 style: AppTextStyles.body.copyWith(
                   color: AppColors.textSecondary,
@@ -93,13 +93,13 @@ class ExamGradingScreen extends StatelessWidget {
               // Steps indicators
               _buildStepRow(
                 icon: Icons.check_circle_rounded,
-                text: 'استلام الإجابات وتسجيل وقت التسليم',
+                text: "استلام الإجابات وتسجيل وقت التسليم",
                 isDone: true,
               ),
               const SizedBox(height: 10),
               _buildStepRow(
                 icon: Icons.auto_awesome_rounded,
-                text: 'تصحيح الأسئلة الموضوعية والمقالية',
+                text: "تصحيح الأسئلة الموضوعية والمقالية",
                 isDone: jobStatus?.status == GradingJobState.grading ||
                     jobStatus?.status == GradingJobState.completed,
                 isActive: jobStatus?.status == GradingJobState.grading,
@@ -107,7 +107,7 @@ class ExamGradingScreen extends StatelessWidget {
               const SizedBox(height: 10),
               _buildStepRow(
                 icon: Icons.analytics_outlined,
-                text: 'تجهيز تقرير الدرجات والملاحظات',
+                text: "تجهيز تقرير الدرجات والملاحظات",
                 isDone: jobStatus?.status == GradingJobState.completed,
                 isActive: jobStatus?.status == GradingJobState.grading,
               ),

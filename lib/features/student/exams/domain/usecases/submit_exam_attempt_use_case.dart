@@ -1,7 +1,7 @@
-import 'package:draya_mobile/core/helpers/app_use_case.dart';
-import 'package:draya_mobile/core/networking/api_result.dart';
-import 'package:draya_mobile/features/student/exams/domain/entity/student_exam.dart';
-import 'package:draya_mobile/features/student/exams/domain/repos/student_exam_repo.dart';
+import "package:draya_mobile/core/helpers/app_use_case.dart";
+import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/student/exams/domain/entity/student_exam.dart";
+import "package:draya_mobile/features/student/exams/domain/repos/student_exam_repo.dart";
 
 class SubmitExamAttemptParams {
   final String attemptId;
@@ -24,7 +24,7 @@ class SubmitExamAttemptUseCase
   @override
   Future<ApiResult<String>> call({SubmitExamAttemptParams? params}) {
     if (params == null) {
-      throw ArgumentError('SubmitExamAttemptParams cannot be null');
+      throw ArgumentError("SubmitExamAttemptParams cannot be null");
     }
     return _repo.submitAttempt(
       attemptId: params.attemptId,

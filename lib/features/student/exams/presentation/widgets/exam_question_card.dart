@@ -1,8 +1,8 @@
-import 'package:draya_mobile/core/theme/app_colors.dart';
-import 'package:draya_mobile/core/theme/app_sizes.dart';
-import 'package:draya_mobile/core/theme/app_text_styles.dart';
-import 'package:draya_mobile/features/student/exams/domain/entity/student_exam.dart';
-import 'package:flutter/material.dart';
+import "package:draya_mobile/core/theme/app_colors.dart";
+import "package:draya_mobile/core/theme/app_sizes.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/features/student/exams/domain/entity/student_exam.dart";
+import "package:flutter/material.dart";
 
 class ExamQuestionCard extends StatelessWidget {
   final ExamQuestion question;
@@ -126,17 +126,17 @@ class ExamQuestionCard extends StatelessWidget {
     Color color;
     String label;
     switch (difficulty.toLowerCase().trim()) {
-      case 'easy':
+      case "easy":
         color = AppColors.success;
-        label = 'سهل';
+        label = "سهل";
         break;
-      case 'medium':
+      case "medium":
         color = AppColors.amber;
-        label = 'متوسط';
+        label = "متوسط";
         break;
-      case 'hard':
+      case "hard":
         color = AppColors.error;
-        label = 'صعب';
+        label = "صعب";
         break;
       default:
         color = AppColors.foregroundMuted;
@@ -244,7 +244,7 @@ class ExamQuestionCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'اكتب إجابتك بالتفصيل أدناه:',
+          "اكتب إجابتك بالتفصيل أدناه:",
           style: AppTextStyles.label.copyWith(
             color: AppColors.textSecondary,
             fontSize: 12,
@@ -262,7 +262,7 @@ class ExamQuestionCard extends StatelessWidget {
             fontSize: 14,
           ),
           decoration: InputDecoration(
-            hintText: 'اكتب إجابتك هنا...',
+            hintText: "اكتب إجابتك هنا...",
             hintStyle: AppTextStyles.body.copyWith(
               color: AppColors.textDisabled,
               fontSize: 13,
@@ -295,7 +295,7 @@ class ExamQuestionCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'اكتب إجابتك الموجزة:',
+          "اكتب إجابتك الموجزة:",
           style: AppTextStyles.label.copyWith(
             color: AppColors.textSecondary,
             fontSize: 12,
@@ -312,7 +312,7 @@ class ExamQuestionCard extends StatelessWidget {
             fontSize: 14,
           ),
           decoration: InputDecoration(
-            hintText: 'اكتب الإجابة هنا...',
+            hintText: "اكتب الإجابة هنا...",
             hintStyle: AppTextStyles.body.copyWith(
               color: AppColors.textDisabled,
               fontSize: 13,
