@@ -16,14 +16,14 @@ class MaterialsCubit extends Cubit<MaterialsState> {
   ) : super(const MaterialsState());
 
   Future<void> uploadMaterials({
-    required String classroomId,
+    required String sectionId,
     required MaterialsRequestModel materialsRequestModel,
   }) async {
     emit(state.copyWith(uploadMaterialsStatus: CubitStatus.loading));
 
     final result = await _uploadMaterialsUseCase.call(
       params: UploadMaterialsParams(
-        classroomId: classroomId,
+        sectionId: sectionId,
         materialsRequestModel: materialsRequestModel,
       ),
     );
@@ -33,6 +33,7 @@ class MaterialsCubit extends Cubit<MaterialsState> {
         emit(
           state.copyWith(
             uploadMaterialsStatus: CubitStatus.success,
+            getMaterialsStatus: CubitStatus.initial,
           ),
         );
       },
@@ -55,11 +56,12 @@ class MaterialsCubit extends Cubit<MaterialsState> {
     final result = await _getMaterialsUseCase.call(params: getMaterialsParams);
 
     result.when(
-      success: (teacherMaterialPagedResultModel) {
+      success: (sectionModel) {
         emit(
           state.copyWith(
             getMaterialsStatus: CubitStatus.success,
-            teacherMaterialPagedResultModel: teacherMaterialPagedResultModel,
+            uploadMaterialsStatus: CubitStatus.initial,
+            sectionModel: sectionModel,
           ),
         );
       },

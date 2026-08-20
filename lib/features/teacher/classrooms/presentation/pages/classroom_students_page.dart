@@ -275,11 +275,11 @@ class _ClassroomSummary extends StatelessWidget {
           onPressed: () {
             AppNavigator.push(
               context: context,
-              path: AppRoutes.materialsPage,
+              path: AppRoutes.sectionsPage,
               extra: classroom,
             );
           },
-          label: "ادارة المواد الدراسية",
+          label: "ادارة الاقسام",
         ),
         const SizedBox(height: AppSizes.s12),
         AppOutlinedButton(

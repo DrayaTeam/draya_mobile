@@ -39,6 +39,10 @@ import "package:draya_mobile/features/teacher/materials/presentation/cubit/mater
 import "package:draya_mobile/features/teacher/profile/domain/usecases/get_teacher_profile_use_case.dart";
 import "package:draya_mobile/features/teacher/profile/domain/usecases/upload_teacher_profile_picture_use_case.dart";
 import "package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart";
+import "package:draya_mobile/features/teacher/sections/domain/usecases/create_section_use_case.dart";
+import "package:draya_mobile/features/teacher/sections/domain/usecases/delete_section_use_case.dart";
+import "package:draya_mobile/features/teacher/sections/domain/usecases/get_sections_use_case.dart";
+import "package:draya_mobile/features/teacher/sections/presentation/cubit/section_cubit.dart";
 import "package:draya_mobile/features/teacher/subjects/domain/usecases/add_subject_use_case.dart";
 import "package:draya_mobile/features/teacher/subjects/domain/usecases/get_subjects_use_case.dart";
 import "package:draya_mobile/features/teacher/subjects/presentation/cubit/subject_cubit.dart";
@@ -171,6 +175,13 @@ Future<void> main() async {
           create: (context) => MaterialsCubit(
             getIt<UploadMaterialsUseCase>(),
             getIt<GetMaterialsUseCase>(),
+          ),
+        ),
+        BlocProvider<SectionCubit>(
+          create: (context) => SectionCubit(
+            getIt<GetSectionsUseCase>(),
+            getIt<CreateSectionUseCase>(),
+            getIt<DeleteSectionUseCase>(),
           ),
         ),
       ],

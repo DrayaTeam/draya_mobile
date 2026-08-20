@@ -22,6 +22,8 @@ import "package:draya_mobile/features/teacher/materials/presentation/pages/mater
 import "package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart";
 import "package:draya_mobile/features/teacher/payments/presentation/pages/payment_web_view_page.dart";
 import "package:draya_mobile/features/teacher/profile/presentation/pages/teacher_profile_page.dart";
+import "package:draya_mobile/features/teacher/sections/data/models/section_model.dart";
+import "package:draya_mobile/features/teacher/sections/presentation/pages/sections_page.dart";
 import "package:draya_mobile/features/teacher/students_list/presentation/pages/students_list_screen.dart";
 import "package:draya_mobile/features/teacher/subjects/presentation/pages/create_subject_page.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/pages/classrooms_page.dart";
@@ -32,7 +34,6 @@ import "package:draya_mobile/features/teacher/classrooms/data/models/classroom_m
 import "package:draya_mobile/features/teacher/teacher_channel/presentation/pages/teacher_channel_screen.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
-
 
 const authRoutes = {
   AppRoutes.signinPage,
@@ -238,7 +239,8 @@ abstract final class AppRouter {
       GoRoute(
         path: AppRoutes.paymentResultPage,
         builder: (context, state) {
-          final transactionId = state.extra as String? ??
+          final transactionId =
+              state.extra as String? ??
               state.uri.queryParameters["transactionId"] ??
               "";
           return PaymentResultPage(transactionId: transactionId);
@@ -248,7 +250,8 @@ abstract final class AppRouter {
         path: AppRoutes.materialsPage,
         builder: (context, state) {
           return MaterialsPage(
-            state.extra as ClassroomModel,
+            state.pathParameters["classroomId"] as String,
+            state.extra as SectionModel,
           );
         },
       ),
@@ -271,6 +274,14 @@ abstract final class AppRouter {
         path: AppRoutes.studentEnrolledClassroomsPage,
         builder: (context, state) {
           return const StudentEnrolledClassroomsScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.sectionsPage,
+        builder: (context, state) {
+          final ClassroomModel classroomModel = state.extra as ClassroomModel;
+
+          return SectionsPage(classroomModel);
         },
       ),
     ],

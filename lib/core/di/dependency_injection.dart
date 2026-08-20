@@ -33,6 +33,12 @@ import "package:draya_mobile/features/student/exams/presentation/cubit/student_e
 import "package:draya_mobile/features/student/student_materials/data/source/student_classrooms_sections_api_service.dart";
 import "package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart";
 import "package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart";
+import "package:draya_mobile/features/teacher/sections/data/repos/section_repo_impl.dart";
+import "package:draya_mobile/features/teacher/sections/data/sources/section_api_service.dart";
+import "package:draya_mobile/features/teacher/sections/domain/repos/section_repo.dart";
+import "package:draya_mobile/features/teacher/sections/domain/usecases/create_section_use_case.dart";
+import "package:draya_mobile/features/teacher/sections/domain/usecases/delete_section_use_case.dart";
+import "package:draya_mobile/features/teacher/sections/domain/usecases/get_sections_use_case.dart";
 import "package:draya_mobile/features/teacher/teacher_channel/domain/usecases/create_question_use_case.dart"
     as teacher;
 import "package:draya_mobile/features/student/student_channel/domain/usecases/create_reply_use_case.dart"
@@ -496,7 +502,10 @@ Future<void> setupGetIt() async {
   );
 
   getIt.registerLazySingleton<MaterialsRepo>(
-    () => MaterialsRepoImpl(getIt<MaterialsApiService>()),
+    () => MaterialsRepoImpl(
+      getIt<MaterialsApiService>(),
+      getIt<SectionApiService>(),
+    ),
   );
 
   getIt.registerLazySingleton<UploadMaterialsUseCase>(
@@ -544,5 +553,26 @@ Future<void> setupGetIt() async {
       getIt<GetGradingJobStatusUseCase>(),
       getIt<GetAttemptResultsUseCase>(),
     ),
+  );
+
+  // sections
+  getIt.registerLazySingleton<SectionApiService>(
+    () => SectionApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<SectionRepo>(
+    () => SectionRepoImpl(getIt<SectionApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetSectionsUseCase>(
+    () => GetSectionsUseCase(getIt<SectionRepo>()),
+  );
+
+  getIt.registerLazySingleton<CreateSectionUseCase>(
+    () => CreateSectionUseCase(getIt<SectionRepo>()),
+  );
+
+  getIt.registerLazySingleton<DeleteSectionUseCase>(
+    () => DeleteSectionUseCase(getIt<SectionRepo>()),
   );
 }

@@ -27,11 +27,9 @@ abstract final class AppLoading {
           text: text,
         );
       },
-    ).whenComplete(
-      () {
-        _isVisible = false;
-      },
-    );
+    ).whenComplete(() {
+      _isVisible = false;
+    });
   }
 
   static void hide() {
