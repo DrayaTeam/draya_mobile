@@ -1,75 +1,115 @@
 import 'dart:async';
 
+import 'package:draya_mobile/core/enums/cubit_status.dart';
 import 'package:draya_mobile/core/theme/app_colors.dart';
 import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/theme/app_text_styles.dart';
 import 'package:draya_mobile/core/widgets/app_elevated_button.dart';
 import 'package:draya_mobile/core/widgets/app_outlined_button.dart';
-import 'package:draya_mobile/features/student/exams/presentation/models/exam_item.dart';
+import 'package:draya_mobile/features/student/exams/domain/entity/student_exam.dart';
+import 'package:draya_mobile/features/student/exams/presentation/cubit/student_exam_cubit.dart';
+import 'package:draya_mobile/features/student/exams/presentation/cubit/student_exam_state.dart';
+import 'package:draya_mobile/features/student/exams/presentation/pages/exam_grading_screen.dart';
+import 'package:draya_mobile/features/student/exams/presentation/pages/exam_results_screen.dart';
 import 'package:draya_mobile/features/student/exams/presentation/widgets/exam_question_card.dart';
+import 'package:draya_mobile/features/student/exams/presentation/widgets/exam_question_navigator.dart';
+import 'package:draya_mobile/features/student/exams/presentation/widgets/exam_submit_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StudentExamDetailsBody extends StatefulWidget {
-  final ExamItem exam;
+  final String examId;
+  final String? classroomName;
 
-  const StudentExamDetailsBody({super.key, required this.exam});
+  const StudentExamDetailsBody({
+    super.key,
+    required this.examId,
+    this.classroomName,
+  });
 
   @override
   State<StudentExamDetailsBody> createState() => _StudentExamDetailsBodyState();
 }
 
-class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody> {
+class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
+    with WidgetsBindingObserver {
   final PageController _pageController = PageController();
-  late final List<_ExamQuestion> _questions;
-  late final List<int?> _selectedAnswers;
-  late Duration _remaining;
-  Timer? _timer;
-  int _currentQuestion = 0;
+  int _currentQuestionIndex = 0;
+  Timer? _examCountdownTimer;
+  Duration _remainingDuration = const Duration(minutes: 30);
+  bool _isExamStarted = false;
 
   @override
   void initState() {
     super.initState();
-    _questions = _buildMockQuestions();
-    _selectedAnswers = List<int?>.filled(_questions.length, null);
-    _remaining =
-        _parseDuration(widget.exam.duration) ?? const Duration(minutes: 5);
-    _startTimer();
+    WidgetsBinding.instance.addObserver(this);
+    context.read<StudentExamCubit>().loadExamDetails(widget.examId);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (_isExamStarted &&
+        (state == AppLifecycleState.paused ||
+            state == AppLifecycleState.inactive)) {
+      // Anti-cheat: Student navigated away or switched app
+      final cubit = context.read<StudentExamCubit>();
+      cubit.recordTabAway();
+
+      if (cubit.state.tabAwayCount >= 3) {
+        // Auto-submit after 3 violations
+        cubit.submitExam();
+      }
+    }
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    _examCountdownTimer?.cancel();
     _pageController.dispose();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.dispose();
   }
 
-  void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (!mounted) return;
+  void _startTimer(int totalQuestions) {
+    // 2 minutes per question or default 30 min
+    final totalMinutes = (totalQuestions * 2).clamp(10, 120);
+    _remainingDuration = Duration(minutes: totalMinutes);
 
+    _examCountdownTimer?.cancel();
+    _examCountdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
       setState(() {
-        if (_remaining.inSeconds > 0) {
-          _remaining = _remaining - const Duration(seconds: 1);
+        if (_remainingDuration.inSeconds > 0) {
+          _remainingDuration =
+              _remainingDuration - const Duration(seconds: 1);
         } else {
-          _timer?.cancel();
-          Navigator.of(context).pop();
+          _examCountdownTimer?.cancel();
+          // Auto submit on time expiry
+          context.read<StudentExamCubit>().submitExam();
         }
       });
     });
   }
 
-  Duration? _parseDuration(String value) {
-    final regex = RegExp(r"(\d+)\s*دقيقة");
-    final match = regex.firstMatch(value);
-    if (match == null) return null;
-    final minutes = int.tryParse(match.group(1) ?? '0');
-    return minutes != null ? Duration(minutes: minutes) : null;
+  void _handleStartAttempt(StudentExam exam) async {
+    final success =
+        await context.read<StudentExamCubit>().startAttempt(exam.id);
+    if (success && mounted) {
+      setState(() {
+        _isExamStarted = true;
+      });
+      _startTimer(exam.questions.length);
+      // Enter immersive sticky mode during exam
+      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    }
   }
 
+
   void _goToQuestion(int index) {
-    if (index < 0 || index >= _questions.length) return;
     setState(() {
-      _currentQuestion = index;
+      _currentQuestionIndex = index;
     });
     _pageController.animateToPage(
       index,
@@ -78,277 +118,398 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody> {
     );
   }
 
-  void _goToPrevious() {
-    if (_currentQuestion == 0) return;
-    _goToQuestion(_currentQuestion - 1);
-  }
-
-  void _goToNext() {
-    if (_currentQuestion >= _questions.length - 1) {
-      _finishExam();
-      return;
-    }
-    _goToQuestion(_currentQuestion + 1);
-  }
-
-  void _finishExam() {
-    _timer?.cancel();
-    Navigator.of(context).pop();
-  }
-
-  void _selectChoice(int index) {
-    setState(() {
-      _selectedAnswers[_currentQuestion] = index;
-    });
+  void _showSubmitConfirmationDialog() {
+    final state = context.read<StudentExamCubit>().state;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => ExamSubmitDialog(
+        totalQuestions: state.totalQuestionsCount,
+        answeredQuestions: state.answeredQuestionsCount,
+        onConfirm: () {
+          _examCountdownTimer?.cancel();
+          context.read<StudentExamCubit>().submitExam();
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSizes.s20,
-          vertical: AppSizes.s16,
-        ),
-        child: Column(
-          children: [
-            _buildExamHeader(context),
-            const SizedBox(height: AppSizes.s20),
-            Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: _buildQuestionCard(),
+    return BlocConsumer<StudentExamCubit, StudentExamState>(
+      listener: (context, state) {
+        if (state.examDetailStatus == CubitStatus.error &&
+            state.apiErrorModel?.error?.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                state.apiErrorModel!.error!.message!,
+                style: AppTextStyles.body.copyWith(color: Colors.white),
               ),
+              backgroundColor: AppColors.error,
             ),
-            const SizedBox(height: AppSizes.s16),
-            _buildNavigationButtons(),
-          ],
-        ),
-      ),
-    );
-  }
+          );
+        }
+        if (state.submissionStatus == CubitStatus.error &&
+            state.apiErrorModel?.error?.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                state.apiErrorModel!.error!.message!,
+                style: AppTextStyles.body.copyWith(color: Colors.white),
+              ),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        // 1. Loading exam details
+        if (state.examDetailStatus == CubitStatus.loading &&
+            state.currentExam == null) {
+          return const Scaffold(
+            backgroundColor: AppColors.background,
+            body: Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            ),
+          );
+        }
 
-  Widget _buildExamHeader(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppSizes.s20),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.border, width: 1),
-        boxShadow: const [
-          BoxShadow(
-            color: Color.fromRGBO(17, 24, 39, 0.05),
-            blurRadius: 20,
-            offset: Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              _buildIconBadge(),
-              const SizedBox(width: AppSizes.s16),
-              Expanded(
+        // Error loading exam details
+        if (state.examDetailStatus == CubitStatus.error &&
+            state.currentExam == null) {
+          return Scaffold(
+            backgroundColor: AppColors.background,
+            appBar: AppBar(
+              backgroundColor: AppColors.surface,
+              elevation: 0,
+              title: const Text('تفاصيل الامتحان'),
+            ),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      widget.exam.title,
-                      textAlign: TextAlign.right,
-                      style: AppTextStyles.h4.copyWith(
-                        fontWeight: FontWeight.w900,
-                      ),
+                    const Icon(
+                      Icons.error_outline_rounded,
+                      color: AppColors.error,
+                      size: 48,
                     ),
-                    const SizedBox(height: AppSizes.s4),
+                    const SizedBox(height: 12),
                     Text(
-                      'المعلم: ${widget.exam.teacher}',
-                      textAlign: TextAlign.right,
+                      state.apiErrorModel?.error?.message ??
+                          'تعذر تحميل بيانات الامتحان.',
+                      textAlign: TextAlign.center,
                       style: AppTextStyles.body.copyWith(
-                        color: AppColors.textSecondary,
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => context
+                          .read<StudentExamCubit>()
+                          .loadExamDetails(widget.examId),
+                      child: const Text('إعادة المحاولة'),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: AppSizes.s20),
-          _buildTimerSection(),
-        ],
-      ),
-    );
-  }
+            ),
+          );
+        }
 
-  Widget _buildIconBadge() {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSizes.s16,
-        vertical: AppSizes.s8,
-      ),
-      decoration: BoxDecoration(
-        color: widget.exam.subjectAccentColor,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: const Icon(
-        Icons.security_outlined,
-        color: AppColors.primary,
-      ),
-    );
-  }
+        final exam = state.currentExam;
 
-  Widget _buildTimerSection() {
-    return Container(
-      padding: const EdgeInsets.all(AppSizes.s12),
-      decoration: BoxDecoration(
-        color: AppColors.primary100,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.primary200),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'الوقت المتبقي',
-                style: AppTextStyles.body.copyWith(
-                  color: AppColors.primary900,
-                  fontWeight: FontWeight.w700,
-                ),
-                textAlign: TextAlign.right,
-              ),
-              const SizedBox(height: AppSizes.s4),
-              Text(
-                _formatDuration(_remaining),
+        // 2. Results Screen
+        if (state.resultsStatus == CubitStatus.success &&
+            state.attemptResult != null) {
+          return ExamResultsScreen(
+            exam: exam,
+            result: state.attemptResult!,
+            onFinish: () => Navigator.of(context).pop(),
+          );
+        }
+
+        // 3. Grading in Progress Screen
+        if (state.gradingStatus == CubitStatus.loading ||
+            (state.submissionStatus == CubitStatus.success &&
+                state.resultsStatus != CubitStatus.success)) {
+          return Scaffold(
+            backgroundColor: AppColors.background,
+            body: ExamGradingScreen(
+              jobStatus: state.gradingJobStatus,
+            ),
+          );
+        }
+
+        // 4. Pre-exam Instructions / Start Screen
+        if (state.attemptId == null) {
+          return Scaffold(
+            backgroundColor: AppColors.background,
+            appBar: AppBar(
+              backgroundColor: AppColors.surface,
+              elevation: 0,
+              centerTitle: true,
+              title: Text(
+                'تفاصيل الامتحان',
                 style: AppTextStyles.h4.copyWith(
-                  color: AppColors.primary900,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
                 ),
-                textAlign: TextAlign.right,
               ),
-            ],
-          ),
-          Container(
-            padding: const EdgeInsets.all(AppSizes.s12),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(
-              Icons.timer_outlined,
-              color: AppColors.primary700,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+            body: exam != null
+                ? _buildPreExamView(context, exam, state)
+                : const SizedBox.shrink(),
+          );
+        }
 
-  Widget _buildQuestionCard() {
-    return Container(
-      padding: const EdgeInsets.all(AppSizes.s20),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.border, width: 1),
-        boxShadow: const [
-          BoxShadow(
-            color: Color.fromRGBO(17, 24, 39, 0.05),
-            blurRadius: 20,
-            offset: Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'السؤال ${_currentQuestion + 1} من ${_questions.length}',
-                style: AppTextStyles.label.copyWith(
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              Container(
+        // 5. Active Exam Mode (with Anti-Cheating & PopScope lock)
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, _) {
+            if (didPop) return;
+            _showSubmitConfirmationDialog();
+          },
+          child: Scaffold(
+            backgroundColor: AppColors.background,
+            body: SafeArea(
+              child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSizes.s16,
-                  vertical: AppSizes.s8,
+                  vertical: AppSizes.s12,
                 ),
+                child: Column(
+                  children: [
+                    // Exam Header with anti-cheat & timer
+                    _buildActiveExamHeader(state, exam!),
+                    const SizedBox(height: AppSizes.s12),
+
+                    // Question numbers navigator
+                    ExamQuestionNavigator(
+                      totalQuestions: exam.questions.length,
+                      currentIndex: _currentQuestionIndex,
+                      isAnswered: (i) =>
+                          state.isQuestionAnswered(exam.questions[i].id),
+                      onQuestionTap: _goToQuestion,
+                    ),
+                    const SizedBox(height: AppSizes.s12),
+
+                    // Anti-cheat warning banner if user switched apps
+                    if (state.isAntiCheatWarningVisible)
+                      _buildAntiCheatWarning(state.tabAwayCount),
+
+                    // PageView with Question Cards
+                    Expanded(
+                      child: PageView.builder(
+                        controller: _pageController,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: exam.questions.length,
+                        onPageChanged: (index) {
+                          setState(() {
+                            _currentQuestionIndex = index;
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          final question = exam.questions[index];
+                          final currentAnswer = state.answers[question.id];
+
+                          return SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            child: ExamQuestionCard(
+                              question: question,
+                              questionIndex: index,
+                              totalQuestions: exam.questions.length,
+                              selectedOptionId:
+                                  currentAnswer?.selectedOptionId,
+                              answerText: currentAnswer?.answerText,
+                              onOptionSelected: (optId) => context
+                                  .read<StudentExamCubit>()
+                                  .selectOption(question.id, optId),
+                              onTextChanged: (text) => context
+                                  .read<StudentExamCubit>()
+                                  .setAnswerText(question.id, text),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: AppSizes.s12),
+
+                    // Bottom Navigation Bar
+                    _buildBottomNavigationButtons(
+                      exam.questions.length,
+                      state.submissionStatus == CubitStatus.loading,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildPreExamView(
+    BuildContext context,
+    StudentExam exam,
+    StudentExamState state,
+  ) {
+    return ListView(
+      padding: const EdgeInsets.all(AppSizes.s20),
+      children: [
+        // Exam Info Card
+        Container(
+          padding: const EdgeInsets.all(AppSizes.s20),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [AppColors.primary800, AppColors.primary600],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primary700.withValues(alpha: 0.25),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.primary100,
-                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  widget.exam.subject,
+                  widget.classroomName ?? 'الفصل الدراسي',
                   style: AppTextStyles.label.copyWith(
-                    color: AppColors.primary900,
-                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
+              const SizedBox(height: 12),
+              Text(
+                exam.title,
+                style: AppTextStyles.h3.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              const SizedBox(height: 18),
+              Row(
+                children: [
+                  _buildWhitePill(
+                    icon: Icons.quiz_outlined,
+                    text: '${exam.questions.length} أسئلة',
+                  ),
+                  const SizedBox(width: 8),
+                  _buildWhitePill(
+                    icon: Icons.timer_outlined,
+                    text: '${(exam.questions.length * 2).clamp(10, 120)} دقيقة',
+                  ),
+                ],
+              ),
             ],
           ),
-          const SizedBox(height: AppSizes.s20),
-          SizedBox(
-            height: 400,
-            child: PageView.builder(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (index) {
-                setState(() {
-                  _currentQuestion = index;
-                });
-              },
-              itemCount: _questions.length,
-              itemBuilder: (context, index) {
-                final question = _questions[index];
-                return ExamQuestionCard(
-                  question: question.title,
-                  choices: question.choices,
-                  selectedChoiceIndex: _selectedAnswers[index],
-                  onChoiceSelected: (choiceIndex) {
-                    if (_currentQuestion != index) return;
-                    _selectChoice(choiceIndex);
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+        const SizedBox(height: AppSizes.s20),
 
-  Widget _buildNavigationButtons() {
-    final isLast = _currentQuestion >= _questions.length - 1;
-    return Row(
-      children: [
-        Expanded(
-          child: AppOutlinedButton(
-            onPressed: _currentQuestion > 0 ? _goToPrevious : null,
-            label: 'السؤال السابق',
-            borderColor: AppColors.primary700,
-            foregroundColor: AppColors.primary700,
-            textStyle: AppTextStyles.button.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
+        // Rules and Anti-Cheat Instructions Card
+        Container(
+          padding: const EdgeInsets.all(AppSizes.s20),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.border),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.security_rounded,
+                    color: AppColors.primary,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'تعليمات وإرشادات الاختبار:',
+                    style: AppTextStyles.h5.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              _buildInstructionRow(
+                '1',
+                'يتم تسجيل وقت بدء الاختبار تلقائياً بمجرد الضغط على زر البدء.',
+              ),
+              _buildInstructionRow(
+                '2',
+                'يمنع الخروج من التطبيق أو التبديل بين النوافذ أثناء سير الاختبار، حيث يتم رصد عدد مرات مغادرة الشاشة.',
+              ),
+              _buildInstructionRow(
+                '3',
+                'في حال مغادرة التطبيق 3 مرات سيتم إنهاء وتسليم الاختبار تلقائياً.',
+              ),
+              _buildInstructionRow(
+                '4',
+                'تأكد من استقرار اتصالك بالإنترنت قبل الضغط على بدء الاختبار.',
+              ),
+            ],
           ),
         ),
-        const SizedBox(width: AppSizes.s16),
-        Expanded(
-          child: AppElevatedButton(
-            onPressed: _goToNext,
-            label: isLast ? 'إنهاء الامتحان' : 'السؤال التالي',
-            backgroundColor: AppColors.primary700,
-            textStyle: AppTextStyles.button.copyWith(
-              color: AppColors.surface,
-              fontWeight: FontWeight.w700,
+        const SizedBox(height: AppSizes.s24),
+
+        // Start Button
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: state.attemptStatus == CubitStatus.loading
+                ? null
+                : () => _handleStartAttempt(exam),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              elevation: 0,
+            ),
+            icon: state.attemptStatus == CubitStatus.loading
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  )
+                : const Icon(Icons.play_arrow_rounded, size: 22),
+            label: Text(
+              state.attemptStatus == CubitStatus.loading
+                  ? 'جاري بدء الاختبار...'
+                  : 'بدء الاختبار الآن',
+              style: AppTextStyles.button.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+                fontSize: 15,
+              ),
             ),
           ),
         ),
@@ -356,49 +517,239 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody> {
     );
   }
 
-  String _formatDuration(Duration duration) {
-    final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return '$minutes:$seconds';
+  Widget _buildActiveExamHeader(StudentExamState state, StudentExam exam) {
+    final minutes = _remainingDuration.inMinutes.toString().padLeft(2, '0');
+    final seconds =
+        (_remainingDuration.inSeconds % 60).toString().padLeft(2, '0');
+    final isUrgent = _remainingDuration.inMinutes < 5;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Timer
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: isUrgent
+                  ? AppColors.error.withValues(alpha: 0.1)
+                  : AppColors.primary50,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: isUrgent
+                    ? AppColors.error.withValues(alpha: 0.3)
+                    : AppColors.primary200,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.timer_outlined,
+                  size: 16,
+                  color: isUrgent ? AppColors.error : AppColors.primary,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  '$minutes:$seconds',
+                  style: AppTextStyles.label.copyWith(
+                    color: isUrgent ? AppColors.error : AppColors.primary,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Question progress
+          Text(
+            'السؤال ${_currentQuestionIndex + 1} من ${exam.questions.length}',
+            style: AppTextStyles.label.copyWith(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w800,
+              fontSize: 13,
+            ),
+          ),
+
+          // Answered badge
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppColors.backgroundSecondary,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              '${state.answeredQuestionsCount}/${exam.questions.length} مُجاب',
+              style: AppTextStyles.label.copyWith(
+                color: AppColors.foregroundMuted,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
-  List<_ExamQuestion> _buildMockQuestions() {
-    return const [
-      _ExamQuestion(
-        title:
-            'إذا كان ن ل ر = 120 ، فما هي قيم ن ، ر الممكنة لحل هذه المعادلة التباديلية؟',
-        choices: [
-          'ن = 5 ، ر = 3',
-          'ن = 4 ، ر = 2',
-          'ن = 6 ، ر = 2',
-          'ن = 5 ، ر = 4',
+  Widget _buildAntiCheatWarning(int tabAwayCount) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.error.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.warning_amber_rounded,
+            color: AppColors.error,
+            size: 18,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'تنبيه: تم رصد مغادرة شاشة الاختبار ($tabAwayCount/3 مرات).',
+              style: AppTextStyles.label.copyWith(
+                color: AppColors.error,
+                fontWeight: FontWeight.w700,
+                fontSize: 11.5,
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close_rounded, size: 16, color: AppColors.error),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            onPressed: () =>
+                context.read<StudentExamCubit>().dismissAntiCheatWarning(),
+          ),
         ],
       ),
-      _ExamQuestion(
-        title: 'أي من العبارات التالية تعبر عن التباديل بدون تكرار؟',
-        choices: [
-          'P(n, r) = n! / (n - r)!',
-          'C(n, r) = n! / (r! (n - r)!)',
-          'n^r',
-          'r! * C(n, r)',
-        ],
-      ),
-      _ExamQuestion(
-        title: 'كم عدد التوافيق الممكنة لاختيار 3 عناصر من 7 عناصر؟',
-        choices: [
-          '35',
-          '42',
-          '210',
-          '120',
-        ],
-      ),
-    ];
+    );
   }
-}
 
-class _ExamQuestion {
-  final String title;
-  final List<String> choices;
+  Widget _buildBottomNavigationButtons(
+    int totalQuestions,
+    bool isSubmitting,
+  ) {
+    final isLast = _currentQuestionIndex >= totalQuestions - 1;
 
-  const _ExamQuestion({required this.title, required this.choices});
+    return Row(
+      children: [
+        if (_currentQuestionIndex > 0) ...[
+          Expanded(
+            child: AppOutlinedButton(
+              onPressed: () => _goToQuestion(_currentQuestionIndex - 1),
+              label: 'السؤال السابق',
+              borderColor: AppColors.borderStrong,
+              foregroundColor: AppColors.textPrimary,
+              textStyle: AppTextStyles.button.copyWith(
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+        ],
+        Expanded(
+          flex: isLast ? 2 : 1,
+          child: AppElevatedButton(
+            onPressed: isSubmitting
+                ? null
+                : isLast
+                    ? _showSubmitConfirmationDialog
+                    : () => _goToQuestion(_currentQuestionIndex + 1),
+            label: isLast ? 'تسليم الامتحان' : 'السؤال التالي',
+            backgroundColor:
+                isLast ? AppColors.success : AppColors.primary,
+            icon: isLast
+                ? const Icon(Icons.task_alt_rounded, size: 18, color: Colors.white)
+                : const Icon(Icons.arrow_forward_rounded,
+                    size: 18, color: Colors.white),
+            textStyle: AppTextStyles.button.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w800,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildWhitePill({required IconData icon, required String text}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: Colors.white),
+          const SizedBox(width: 4),
+          Text(
+            text,
+            style: AppTextStyles.label.copyWith(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInstructionRow(String number, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 22,
+            height: 22,
+            decoration: BoxDecoration(
+              color: AppColors.primary50,
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.primary200),
+            ),
+            child: Center(
+              child: Text(
+                number,
+                style: AppTextStyles.label.copyWith(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 11,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              text,
+              style: AppTextStyles.body.copyWith(
+                color: AppColors.textPrimary,
+                fontSize: 12.5,
+                height: 1.4,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

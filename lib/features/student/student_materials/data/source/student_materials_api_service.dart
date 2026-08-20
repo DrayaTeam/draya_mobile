@@ -24,6 +24,11 @@ abstract class StudentMaterialsApiService {
     @Query('pageSize') int pageSize = 20,
   });
 
+  // @GET(StudentMaterialsApiConstants.classroomSections)
+  // Future<List<ClassroomSectionModel>> getClassroomSections(
+  //   @Path(StudentMaterialsApiConstants.classroomId) String classroomId,
+  // );
+
   @GET(StudentMaterialsApiConstants.materialStream)
   Future<MaterialStreamModel> getMaterialStream(
     @Path(StudentMaterialsApiConstants.materialId) String materialId,

@@ -16,11 +16,18 @@ class AddQuestionBottomSheet extends StatefulWidget {
 
 class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
   late final TextEditingController _controller;
+  bool _hasText = false;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    _controller.addListener(() {
+      final hasText = _controller.text.trim().isNotEmpty;
+      if (hasText != _hasText) {
+        setState(() => _hasText = hasText);
+      }
+    });
   }
 
   @override
@@ -48,8 +55,8 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
                 Text(
                   'اسأل سؤال جديد',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
@@ -58,7 +65,7 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
               ],
             ),
             const SizedBox(height: 16),
-            
+
             TextField(
               controller: _controller,
               maxLines: 5,
@@ -73,7 +80,7 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
               ),
             ),
             const SizedBox(height: 16),
-            
+
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -97,7 +104,9 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
                         ),
                       )
                     : const Icon(Icons.send),
-                label: Text(widget.isLoading ? 'جاري الإرسال...' : 'نشر السؤال'),
+                label: Text(
+                  widget.isLoading ? 'جاري الإرسال...' : 'نشر السؤال',
+                ),
               ),
             ),
           ],

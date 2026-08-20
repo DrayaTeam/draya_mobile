@@ -9,6 +9,11 @@ import 'package:draya_mobile/core/theme/app_sizes.dart';
 import 'package:draya_mobile/core/theme/app_text_styles.dart';
 import 'package:draya_mobile/core/widgets/custom_app_bar.dart';
 import 'package:draya_mobile/core/widgets/fade_in_up_animation.dart';
+import 'package:draya_mobile/core/di/dependency_injection.dart';
+import 'package:draya_mobile/core/networking/api_result.dart';
+import 'package:draya_mobile/features/student/student_materials/domain/entity/classroom_section.dart';
+import 'package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart';
+import 'package:draya_mobile/features/student/student_materials/presentation/widgets/section_expandable_card.dart';
 import 'package:draya_mobile/features/student/teachers/data/models/teacher_classroom_model.dart';
 import 'package:draya_mobile/features/student/teachers/data/models/teacher_model.dart';
 import 'package:draya_mobile/features/student/teachers/presentation/cubit/student_checkout_cubit.dart';
@@ -468,7 +473,7 @@ class _HeaderCard extends StatelessWidget {
   }
 }
 
-class _ClassroomCard extends StatelessWidget {
+class _ClassroomCard extends StatefulWidget {
   final TeacherClassroomModel classroom;
   final VoidCallback onEnroll;
 
@@ -478,7 +483,61 @@ class _ClassroomCard extends StatelessWidget {
   });
 
   @override
+  State<_ClassroomCard> createState() => _ClassroomCardState();
+}
+
+class _ClassroomCardState extends State<_ClassroomCard> {
+  bool _isSectionsExpanded = false;
+  bool _isLoadingSections = false;
+  List<ClassroomSection>? _sections;
+  String? _sectionsError;
+
+  Future<void> _fetchSections() async {
+    if (_isLoadingSections) return;
+    setState(() {
+      _isLoadingSections = true;
+      _sectionsError = null;
+    });
+
+    try {
+      final result = await getIt<GetClassroomSectionsUseCase>().call(
+        params: widget.classroom.classroomId,
+      );
+      if (!mounted) return;
+      switch (result) {
+        case Success(data: final sections):
+          setState(() {
+            _sections = sections;
+            _isLoadingSections = false;
+          });
+        case Failure(apiErrorModel: final error):
+          setState(() {
+            _sectionsError = error.error?.message ?? 'تعذر تحميل أقسام الفصل';
+            _isLoadingSections = false;
+          });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _sectionsError = 'تعذر تحميل أقسام الفصل الدراسي';
+          _isLoadingSections = false;
+        });
+      }
+    }
+  }
+
+  void _toggleSections() {
+    setState(() {
+      _isSectionsExpanded = !_isSectionsExpanded;
+    });
+    if (_isSectionsExpanded && _sections == null) {
+      _fetchSections();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final classroom = widget.classroom;
     final startText = classroom.startDate != null
         ? DateFormat('dd/MM/yyyy', 'ar').format(classroom.startDate!)
         : 'بدء غير محدد';
@@ -589,6 +648,182 @@ class _ClassroomCard extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 12),
+
+            // Button to toggle classroom sections preview
+            InkWell(
+              onTap: _toggleSections,
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                decoration: BoxDecoration(
+                  color: _isSectionsExpanded
+                      ? AppColors.primary50
+                      : AppColors.backgroundSecondary,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: _isSectionsExpanded
+                        ? AppColors.primary300
+                        : AppColors.border,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.menu_book_outlined,
+                      size: 18,
+                      color: _isSectionsExpanded
+                          ? AppColors.primary
+                          : AppColors.foregroundMuted,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'عرض محتوى الفصل والأقسام',
+                        style: AppTextStyles.label.copyWith(
+                          color: _isSectionsExpanded
+                              ? AppColors.primary
+                              : AppColors.textPrimary,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12.5,
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      _isSectionsExpanded
+                          ? Icons.keyboard_arrow_up_rounded
+                          : Icons.keyboard_arrow_down_rounded,
+                      color: _isSectionsExpanded
+                          ? AppColors.primary
+                          : AppColors.foregroundMuted,
+                      size: 20,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Expandable Sections Content (Read-Only Preview)
+            if (_isSectionsExpanded) ...[
+              const SizedBox(height: 12),
+              if (_isLoadingSections)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                )
+              else if (_sectionsError != null)
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.error.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: AppColors.error.withValues(alpha: 0.25),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.error_outline_rounded,
+                        color: AppColors.error,
+                        size: 18,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          _sectionsError!,
+                          style: AppTextStyles.body.copyWith(
+                            color: AppColors.error,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: _fetchSections,
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: Text(
+                          'إعادة المحاولة',
+                          style: AppTextStyles.label.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 11.5,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else if (_sections == null || _sections!.isEmpty)
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: AppColors.backgroundSecondary,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'لم يتم إضافة أقسام دراسية في هذا الفصل حتى الآن.',
+                      style: AppTextStyles.body.copyWith(
+                        color: AppColors.textSecondary,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                )
+              else ...[
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: AppColors.amber.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: AppColors.amber.withValues(alpha: 0.25),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.info_outline_rounded,
+                        color: AppColors.amber,
+                        size: 16,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'محتوى الفصل متاح للاطلاع على العناوين فقط قبل التسجيل.',
+                          style: AppTextStyles.label.copyWith(
+                            color: AppColors.textSecondary,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ..._sections!.map((section) {
+                  return SectionExpandableCard(
+                    section: section,
+                    initialExpanded: false,
+                    isReadOnly: true,
+                  );
+                }),
+              ],
+            ],
+
             const SizedBox(height: 16),
             Row(
               children: [
@@ -613,7 +848,7 @@ class _ClassroomCard extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton.icon(
-                  onPressed: classroom.isActive ? onEnroll : null,
+                  onPressed: classroom.isActive ? widget.onEnroll : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,

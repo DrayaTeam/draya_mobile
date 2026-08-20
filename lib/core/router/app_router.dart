@@ -4,7 +4,6 @@ import 'package:draya_mobile/features/auth/presentation/signin/pages/signin_page
 import 'package:draya_mobile/features/auth/presentation/signup/pages/signup_page.dart';
 import 'package:draya_mobile/features/auth/presentation/signup_choice/pages/signup_choice_page.dart';
 import 'package:draya_mobile/features/auth/presentation/verification_code_page/pages/verification_code_page.dart';
-import 'package:draya_mobile/features/student/exams/presentation/models/exam_item.dart';
 import 'package:draya_mobile/features/student/exams/presentation/pages/student_exam_details_screen.dart';
 import 'package:draya_mobile/features/student/exams/presentation/pages/student_exams_screen.dart';
 import 'package:draya_mobile/features/student/home/presentation/pages/student_home_screen.dart';
@@ -172,8 +171,19 @@ abstract final class AppRouter {
       GoRoute(
         path: AppRoutes.studentExamDetailsPage,
         builder: (context, state) {
-          final exam = state.extra as ExamItem? ?? const ExamItem.empty();
-          return StudentExamDetailsScreen(exam: exam);
+          String examId = '';
+          String? classroomName;
+          if (state.extra is Map) {
+            final map = state.extra as Map;
+            examId = map['examId']?.toString() ?? '';
+            classroomName = map['classroomName']?.toString();
+          } else if (state.extra is String) {
+            examId = state.extra as String;
+          }
+          return StudentExamDetailsScreen(
+            examId: examId,
+            classroomName: classroomName,
+          );
         },
       ),
       GoRoute(

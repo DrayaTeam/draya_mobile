@@ -1,6 +1,6 @@
-import 'package:draya_mobile/features/auth/domain/entity/auth_entity.dart';
-import 'package:json_annotation/json_annotation.dart';
-part 'user_role_model.g.dart';
+import "package:draya_mobile/features/auth/domain/entity/auth_entity.dart";
+import "package:json_annotation/json_annotation.dart";
+part "user_role_model.g.dart";
 
 @JsonSerializable()
 class UserRoleModel {
@@ -23,8 +23,8 @@ class UserRoleModel {
 extension UserRoleModelX on UserRoleModel {
   UserRoleEntity toEntity() {
     return UserRoleEntity(
-      fullName: fullName ?? '',
-      role: role ?? '',
+      fullName: fullName ?? "",
+      role: role ?? "",
     );
   }
 }
