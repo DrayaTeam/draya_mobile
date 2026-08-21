@@ -13,6 +13,8 @@ RegisterStudentRequestModel _$RegisterStudentRequestModelFromJson(
   password: json['password'] as String,
   confirmPassword: json['confirmPassword'] as String,
   fullName: json['fullName'] as String,
+  parentGuardianName: json['parentGuardianName'] as String,
+  parentGuardianPhone: json['parentGuardianPhone'] as String,
   parentGuardianEmail: json['parentGuardianEmail'] as String,
   dateOfBirth: DateTime.parse(json['dateOfBirth'] as String),
 );
@@ -24,6 +26,8 @@ Map<String, dynamic> _$RegisterStudentRequestModelToJson(
   'password': instance.password,
   'confirmPassword': instance.confirmPassword,
   'fullName': instance.fullName,
+  'parentGuardianName': instance.parentGuardianName,
+  'parentGuardianPhone': instance.parentGuardianPhone,
   'parentGuardianEmail': instance.parentGuardianEmail,
   'dateOfBirth': instance.dateOfBirth.toIso8601String(),
 };

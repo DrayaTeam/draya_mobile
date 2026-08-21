@@ -8,6 +8,8 @@ class RegisterTeacherRequestModel {
   final String confirmPassword;
   final String fullName;
   final String? phone;
+  final String? specialization;
+  final String? description;
 
   const RegisterTeacherRequestModel({
     required this.email,
@@ -15,6 +17,8 @@ class RegisterTeacherRequestModel {
     required this.confirmPassword,
     required this.fullName,
     this.phone,
+    this.specialization,
+    this.description,
   });
 
   factory RegisterTeacherRequestModel.fromJson(Map<String, dynamic> json) =>

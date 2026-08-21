@@ -14,30 +14,63 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TeacherSignupState {
 
-
+ CubitStatus get status; AuthEntity? get authEntity; ApiErrorModel? get apiErrorModel;
+/// Create a copy of TeacherSignupState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$TeacherSignupStateCopyWith<TeacherSignupState> get copyWith => _$TeacherSignupStateCopyWithImpl<TeacherSignupState>(this as TeacherSignupState, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeacherSignupState);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeacherSignupState&&(identical(other.status, status) || other.status == status)&&(identical(other.authEntity, authEntity) || other.authEntity == authEntity)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => runtimeType.hashCode;
+int get hashCode => Object.hash(runtimeType,status,authEntity,apiErrorModel);
 
 @override
 String toString() {
-  return 'TeacherSignupState()';
+  return 'TeacherSignupState(status: $status, authEntity: $authEntity, apiErrorModel: $apiErrorModel)';
 }
 
 
 }
 
 /// @nodoc
-class $TeacherSignupStateCopyWith<$Res>  {
-$TeacherSignupStateCopyWith(TeacherSignupState _, $Res Function(TeacherSignupState) __);
+abstract mixin class $TeacherSignupStateCopyWith<$Res>  {
+  factory $TeacherSignupStateCopyWith(TeacherSignupState value, $Res Function(TeacherSignupState) _then) = _$TeacherSignupStateCopyWithImpl;
+@useResult
+$Res call({
+ CubitStatus status, AuthEntity? authEntity, ApiErrorModel? apiErrorModel
+});
+
+
+
+
+}
+/// @nodoc
+class _$TeacherSignupStateCopyWithImpl<$Res>
+    implements $TeacherSignupStateCopyWith<$Res> {
+  _$TeacherSignupStateCopyWithImpl(this._self, this._then);
+
+  final TeacherSignupState _self;
+  final $Res Function(TeacherSignupState) _then;
+
+/// Create a copy of TeacherSignupState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? authEntity = freezed,Object? apiErrorModel = freezed,}) {
+  return _then(_self.copyWith(
+status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as CubitStatus,authEntity: freezed == authEntity ? _self.authEntity : authEntity // ignore: cast_nullable_to_non_nullable
+as AuthEntity?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
+as ApiErrorModel?,
+  ));
+}
+
 }
 
 
@@ -55,14 +88,11 @@ extension TeacherSignupStatePatterns on TeacherSignupState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( TeacherSignupInitial value)?  initial,TResult Function( TeacherSignupLoading value)?  loading,TResult Function( TeacherSignupSuccess value)?  success,TResult Function( TeacherSignupFailure value)?  failure,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TeacherSignupState value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case TeacherSignupInitial() when initial != null:
-return initial(_that);case TeacherSignupLoading() when loading != null:
-return loading(_that);case TeacherSignupSuccess() when success != null:
-return success(_that);case TeacherSignupFailure() when failure != null:
-return failure(_that);case _:
+case _TeacherSignupState() when $default != null:
+return $default(_that);case _:
   return orElse();
 
 }
@@ -80,14 +110,14 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( TeacherSignupInitial value)  initial,required TResult Function( TeacherSignupLoading value)  loading,required TResult Function( TeacherSignupSuccess value)  success,required TResult Function( TeacherSignupFailure value)  failure,}){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TeacherSignupState value)  $default,){
 final _that = this;
 switch (_that) {
-case TeacherSignupInitial():
-return initial(_that);case TeacherSignupLoading():
-return loading(_that);case TeacherSignupSuccess():
-return success(_that);case TeacherSignupFailure():
-return failure(_that);}
+case _TeacherSignupState():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -101,14 +131,11 @@ return failure(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( TeacherSignupInitial value)?  initial,TResult? Function( TeacherSignupLoading value)?  loading,TResult? Function( TeacherSignupSuccess value)?  success,TResult? Function( TeacherSignupFailure value)?  failure,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TeacherSignupState value)?  $default,){
 final _that = this;
 switch (_that) {
-case TeacherSignupInitial() when initial != null:
-return initial(_that);case TeacherSignupLoading() when loading != null:
-return loading(_that);case TeacherSignupSuccess() when success != null:
-return success(_that);case TeacherSignupFailure() when failure != null:
-return failure(_that);case _:
+case _TeacherSignupState() when $default != null:
+return $default(_that);case _:
   return null;
 
 }
@@ -125,13 +152,10 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( AuthEntity authEntity)?  success,TResult Function( ApiErrorModel apiErrorModel)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus status,  AuthEntity? authEntity,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case TeacherSignupInitial() when initial != null:
-return initial();case TeacherSignupLoading() when loading != null:
-return loading();case TeacherSignupSuccess() when success != null:
-return success(_that.authEntity);case TeacherSignupFailure() when failure != null:
-return failure(_that.apiErrorModel);case _:
+case _TeacherSignupState() when $default != null:
+return $default(_that.status,_that.authEntity,_that.apiErrorModel);case _:
   return orElse();
 
 }
@@ -149,13 +173,13 @@ return failure(_that.apiErrorModel);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( AuthEntity authEntity)  success,required TResult Function( ApiErrorModel apiErrorModel)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus status,  AuthEntity? authEntity,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
 switch (_that) {
-case TeacherSignupInitial():
-return initial();case TeacherSignupLoading():
-return loading();case TeacherSignupSuccess():
-return success(_that.authEntity);case TeacherSignupFailure():
-return failure(_that.apiErrorModel);}
+case _TeacherSignupState():
+return $default(_that.status,_that.authEntity,_that.apiErrorModel);case _:
+  throw StateError('Unexpected subclass');
+
+}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -169,13 +193,10 @@ return failure(_that.apiErrorModel);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( AuthEntity authEntity)?  success,TResult? Function( ApiErrorModel apiErrorModel)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus status,  AuthEntity? authEntity,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
 switch (_that) {
-case TeacherSignupInitial() when initial != null:
-return initial();case TeacherSignupLoading() when loading != null:
-return loading();case TeacherSignupSuccess() when success != null:
-return success(_that.authEntity);case TeacherSignupFailure() when failure != null:
-return failure(_that.apiErrorModel);case _:
+case _TeacherSignupState() when $default != null:
+return $default(_that.status,_that.authEntity,_that.apiErrorModel);case _:
   return null;
 
 }
@@ -186,107 +207,45 @@ return failure(_that.apiErrorModel);case _:
 /// @nodoc
 
 
-class TeacherSignupInitial implements TeacherSignupState {
-  const TeacherSignupInitial();
+class _TeacherSignupState implements TeacherSignupState {
+  const _TeacherSignupState({this.status = CubitStatus.initial, this.authEntity, this.apiErrorModel});
   
 
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeacherSignupInitial);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'TeacherSignupState.initial()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class TeacherSignupLoading implements TeacherSignupState {
-  const TeacherSignupLoading();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeacherSignupLoading);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'TeacherSignupState.loading()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class TeacherSignupSuccess implements TeacherSignupState {
-  const TeacherSignupSuccess({required this.authEntity});
-  
-
- final  AuthEntity authEntity;
+@override@JsonKey() final  CubitStatus status;
+@override final  AuthEntity? authEntity;
+@override final  ApiErrorModel? apiErrorModel;
 
 /// Create a copy of TeacherSignupState
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
+@override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$TeacherSignupSuccessCopyWith<TeacherSignupSuccess> get copyWith => _$TeacherSignupSuccessCopyWithImpl<TeacherSignupSuccess>(this, _$identity);
+_$TeacherSignupStateCopyWith<_TeacherSignupState> get copyWith => __$TeacherSignupStateCopyWithImpl<_TeacherSignupState>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeacherSignupSuccess&&(identical(other.authEntity, authEntity) || other.authEntity == authEntity));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeacherSignupState&&(identical(other.status, status) || other.status == status)&&(identical(other.authEntity, authEntity) || other.authEntity == authEntity)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,authEntity);
+int get hashCode => Object.hash(runtimeType,status,authEntity,apiErrorModel);
 
 @override
 String toString() {
-  return 'TeacherSignupState.success(authEntity: $authEntity)';
+  return 'TeacherSignupState(status: $status, authEntity: $authEntity, apiErrorModel: $apiErrorModel)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $TeacherSignupSuccessCopyWith<$Res> implements $TeacherSignupStateCopyWith<$Res> {
-  factory $TeacherSignupSuccessCopyWith(TeacherSignupSuccess value, $Res Function(TeacherSignupSuccess) _then) = _$TeacherSignupSuccessCopyWithImpl;
-@useResult
+abstract mixin class _$TeacherSignupStateCopyWith<$Res> implements $TeacherSignupStateCopyWith<$Res> {
+  factory _$TeacherSignupStateCopyWith(_TeacherSignupState value, $Res Function(_TeacherSignupState) _then) = __$TeacherSignupStateCopyWithImpl;
+@override @useResult
 $Res call({
- AuthEntity authEntity
+ CubitStatus status, AuthEntity? authEntity, ApiErrorModel? apiErrorModel
 });
 
 
@@ -294,85 +253,21 @@ $Res call({
 
 }
 /// @nodoc
-class _$TeacherSignupSuccessCopyWithImpl<$Res>
-    implements $TeacherSignupSuccessCopyWith<$Res> {
-  _$TeacherSignupSuccessCopyWithImpl(this._self, this._then);
+class __$TeacherSignupStateCopyWithImpl<$Res>
+    implements _$TeacherSignupStateCopyWith<$Res> {
+  __$TeacherSignupStateCopyWithImpl(this._self, this._then);
 
-  final TeacherSignupSuccess _self;
-  final $Res Function(TeacherSignupSuccess) _then;
-
-/// Create a copy of TeacherSignupState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? authEntity = null,}) {
-  return _then(TeacherSignupSuccess(
-authEntity: null == authEntity ? _self.authEntity : authEntity // ignore: cast_nullable_to_non_nullable
-as AuthEntity,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class TeacherSignupFailure implements TeacherSignupState {
-  const TeacherSignupFailure({required this.apiErrorModel});
-  
-
- final  ApiErrorModel apiErrorModel;
+  final _TeacherSignupState _self;
+  final $Res Function(_TeacherSignupState) _then;
 
 /// Create a copy of TeacherSignupState
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$TeacherSignupFailureCopyWith<TeacherSignupFailure> get copyWith => _$TeacherSignupFailureCopyWithImpl<TeacherSignupFailure>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeacherSignupFailure&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,apiErrorModel);
-
-@override
-String toString() {
-  return 'TeacherSignupState.failure(apiErrorModel: $apiErrorModel)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $TeacherSignupFailureCopyWith<$Res> implements $TeacherSignupStateCopyWith<$Res> {
-  factory $TeacherSignupFailureCopyWith(TeacherSignupFailure value, $Res Function(TeacherSignupFailure) _then) = _$TeacherSignupFailureCopyWithImpl;
-@useResult
-$Res call({
- ApiErrorModel apiErrorModel
-});
-
-
-
-
-}
-/// @nodoc
-class _$TeacherSignupFailureCopyWithImpl<$Res>
-    implements $TeacherSignupFailureCopyWith<$Res> {
-  _$TeacherSignupFailureCopyWithImpl(this._self, this._then);
-
-  final TeacherSignupFailure _self;
-  final $Res Function(TeacherSignupFailure) _then;
-
-/// Create a copy of TeacherSignupState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? apiErrorModel = null,}) {
-  return _then(TeacherSignupFailure(
-apiErrorModel: null == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
-as ApiErrorModel,
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? authEntity = freezed,Object? apiErrorModel = freezed,}) {
+  return _then(_TeacherSignupState(
+status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as CubitStatus,authEntity: freezed == authEntity ? _self.authEntity : authEntity // ignore: cast_nullable_to_non_nullable
+as AuthEntity?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
+as ApiErrorModel?,
   ));
 }
 

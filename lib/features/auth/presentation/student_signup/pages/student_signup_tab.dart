@@ -1,11 +1,13 @@
+import "package:draya_mobile/core/enums/cubit_status.dart";
 import "package:draya_mobile/core/helpers/app_dialog_helper.dart";
+import "package:draya_mobile/core/helpers/app_loading.dart";
 import "package:draya_mobile/core/helpers/app_navigator.dart";
 import "package:draya_mobile/core/router/app_routes.dart";
 import "package:draya_mobile/core/theme/app_sizes.dart";
 import "package:draya_mobile/core/validation/email_validator.dart";
 import "package:draya_mobile/core/validation/password_validator.dart";
+import "package:draya_mobile/core/validation/phone_validator.dart";
 import "package:draya_mobile/core/validation/validation_result.dart";
-import "package:draya_mobile/core/widgets/app_custom_loading.dart";
 import "package:draya_mobile/core/widgets/app_elevated_button.dart";
 import "package:draya_mobile/core/widgets/app_error_dialog.dart";
 import "package:draya_mobile/core/widgets/app_label.dart";
@@ -32,6 +34,8 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
   late final TextEditingController _textEditingControllerPassword;
   late final TextEditingController _textEditingControllerConfirmPassword;
   late final TextEditingController _textEditingControllerFullName;
+  late final TextEditingController _textEditingControllerParentGuardianName;
+  late final TextEditingController _textEditingControllerParentGuardianPhone;
   late final TextEditingController _textEditingControllerParentGuardianEmail;
   late final TextEditingController _textEditingControllerDateOfBirth;
 
@@ -45,6 +49,8 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
     _textEditingControllerPassword = TextEditingController();
     _textEditingControllerConfirmPassword = TextEditingController();
     _textEditingControllerFullName = TextEditingController();
+    _textEditingControllerParentGuardianName = TextEditingController();
+    _textEditingControllerParentGuardianPhone = TextEditingController();
     _textEditingControllerParentGuardianEmail = TextEditingController();
     _textEditingControllerDateOfBirth = TextEditingController();
   }
@@ -55,6 +61,8 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
     _textEditingControllerPassword.dispose();
     _textEditingControllerConfirmPassword.dispose();
     _textEditingControllerFullName.dispose();
+    _textEditingControllerParentGuardianName.dispose();
+    _textEditingControllerParentGuardianPhone.dispose();
     _textEditingControllerParentGuardianEmail.dispose();
     _textEditingControllerDateOfBirth.dispose();
     super.dispose();
@@ -81,27 +89,25 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<StudentSignupCubit, StudentSignupState>(
-      listenWhen: (previous, current) => previous != current,
       listener: (context, state) {
-        state.maybeWhen(
-          orElse: () => {},
-          loading: () {
-            AppDialogHelper.display(context, const AppCustomLoading());
-          },
-          success: (authEntity) {
-            AppNavigator.pop(context: context);
-            _signUp(authEntity: authEntity);
-          },
-          failure: (apiErrorModel) {
-            AppNavigator.pop(context: context);
+        switch (state.status) {
+          case CubitStatus.loading:
+            AppLoading.show();
+            break;
+          case CubitStatus.success:
+            AppLoading.hide();
+            _signUp(authEntity: state.authEntity);
+            break;
+          case CubitStatus.error:
+            AppLoading.hide();
             AppDialogHelper.display(
               context,
-              AppErrorDialog(
-                apiErrorModel: apiErrorModel,
-              ),
+              AppErrorDialog(apiErrorModel: state.apiErrorModel!),
             );
-          },
-        );
+            break;
+          default:
+            break;
+        }
       },
       child: SafeArea(
         child: SingleChildScrollView(
@@ -172,6 +178,38 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
                     return null;
                   },
                 ),
+                const AppLabel(label: "الاسم الكامل للوالد*"),
+                AppTextFormField(
+                  controller: _textEditingControllerParentGuardianName,
+                  hintText: "أدخل اسمك ثلاثياً",
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  prefixIcon: Icons.person_outline,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "الاسم الكامل مطلوب";
+                    }
+                    if (value.length < 3) {
+                      return "الاسم الكامل يجب ان يكون اكثر من 3 حروف";
+                    }
+                    return null;
+                  },
+                ),
+                const AppLabel(label: "رقم الهاتف للوالد"),
+                AppTextFormField(
+                  controller: _textEditingControllerParentGuardianPhone,
+                  hintText: "010xxxxxxx / 011xxxxxxx / 012xxxxxxx / 015xxxxxxx",
+                  keyboardType: TextInputType.phone,
+                  textInputAction: TextInputAction.next,
+                  prefixIcon: Icons.phone_outlined,
+                  validator: (value) {
+                    final result = PhoneValidator.validate(phone: value);
+                    if (result is Invalid) {
+                      return result.message;
+                    }
+                    return null;
+                  },
+                ),
                 const AppLabel(label: "البريد الالكتروني للوالد*"),
                 AppTextFormField(
                   controller: _textEditingControllerParentGuardianEmail,
@@ -232,6 +270,11 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
                             RegisterStudentRequestModel(
                               fullName: _textEditingControllerFullName.text,
                               email: _textEditingControllerEmail.text,
+                              parentGuardianName:
+                                  _textEditingControllerParentGuardianName.text,
+                              parentGuardianPhone:
+                                  _textEditingControllerParentGuardianPhone
+                                      .text,
                               parentGuardianEmail:
                                   _textEditingControllerParentGuardianEmail
                                       .text,
