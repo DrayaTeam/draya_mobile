@@ -1,3 +1,4 @@
+import "package:draya_mobile/core/enums/cubit_status.dart";
 import "package:draya_mobile/core/networking/api_result.dart";
 import "package:draya_mobile/features/auth/data/models/auth_response_model.dart";
 import "package:draya_mobile/features/auth/data/models/register_teacher_request_model.dart";
@@ -8,25 +9,34 @@ import "package:flutter_bloc/flutter_bloc.dart";
 class TeacherSignupCubit extends Cubit<TeacherSignupState> {
   final TeacherRegisterUseCase teacherRegisterUseCase;
   TeacherSignupCubit(this.teacherRegisterUseCase)
-    : super(const TeacherSignupState.initial());
+    : super(const TeacherSignupState());
 
   Future<void> registerTeacher({
     required RegisterTeacherRequestModel registerTeacherRequestModel,
   }) async {
-    emit(const TeacherSignupState.loading());
+    emit(state.copyWith(status: CubitStatus.loading));
+
     final result = await teacherRegisterUseCase.call(
       params: registerTeacherRequestModel,
     );
+
     result.when(
-      success: (authResponse) async {
+      success: (authResponse) {
         emit(
-          TeacherSignupState.success(
+          state.copyWith(
+            status: CubitStatus.success,
             authEntity: authResponse.toEntity(),
           ),
         );
       },
-      failure: (error) =>
-          emit(TeacherSignupState.failure(apiErrorModel: error)),
+      failure: (apiErrorModel) {
+        emit(
+          state.copyWith(
+            status: CubitStatus.error,
+            apiErrorModel: apiErrorModel,
+          ),
+        );
+      },
     );
   }
 }

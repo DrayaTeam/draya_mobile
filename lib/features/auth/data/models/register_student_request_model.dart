@@ -7,6 +7,8 @@ class RegisterStudentRequestModel {
   final String password;
   final String confirmPassword;
   final String fullName;
+  final String parentGuardianName;
+  final String parentGuardianPhone;
   final String parentGuardianEmail;
   final DateTime dateOfBirth;
 
@@ -15,6 +17,8 @@ class RegisterStudentRequestModel {
     required this.password,
     required this.confirmPassword,
     required this.fullName,
+    required this.parentGuardianName,
+    required this.parentGuardianPhone,
     required this.parentGuardianEmail,
     required this.dateOfBirth,
   });

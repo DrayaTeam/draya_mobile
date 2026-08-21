@@ -1,4 +1,6 @@
+import "package:draya_mobile/core/enums/cubit_status.dart";
 import "package:draya_mobile/core/helpers/app_dialog_helper.dart";
+import "package:draya_mobile/core/helpers/app_loading.dart";
 import "package:draya_mobile/core/helpers/app_navigator.dart";
 import "package:draya_mobile/core/router/app_routes.dart";
 import "package:draya_mobile/core/theme/app_sizes.dart";
@@ -6,7 +8,6 @@ import "package:draya_mobile/core/validation/email_validator.dart";
 import "package:draya_mobile/core/validation/password_validator.dart";
 import "package:draya_mobile/core/validation/phone_validator.dart";
 import "package:draya_mobile/core/validation/validation_result.dart";
-import "package:draya_mobile/core/widgets/app_custom_loading.dart";
 import "package:draya_mobile/core/widgets/app_elevated_button.dart";
 import "package:draya_mobile/core/widgets/app_error_dialog.dart";
 import "package:draya_mobile/core/widgets/app_label.dart";
@@ -33,6 +34,8 @@ class _TeacherSignupTabState extends State<TeacherSignupTab> {
   late final TextEditingController _textEditingControllerConfirmPassword;
   late final TextEditingController _textEditingControllerFullName;
   late final TextEditingController _textEditingControllerPhone;
+  late final TextEditingController _textEditingControllerSpecialization;
+  late final TextEditingController _textEditingControllerDescription;
 
   @override
   void initState() {
@@ -43,6 +46,8 @@ class _TeacherSignupTabState extends State<TeacherSignupTab> {
     _textEditingControllerConfirmPassword = TextEditingController();
     _textEditingControllerFullName = TextEditingController();
     _textEditingControllerPhone = TextEditingController();
+    _textEditingControllerSpecialization = TextEditingController();
+    _textEditingControllerDescription = TextEditingController();
   }
 
   @override
@@ -52,6 +57,8 @@ class _TeacherSignupTabState extends State<TeacherSignupTab> {
     _textEditingControllerConfirmPassword.dispose();
     _textEditingControllerFullName.dispose();
     _textEditingControllerPhone.dispose();
+    _textEditingControllerSpecialization.dispose();
+    _textEditingControllerDescription.dispose();
     super.dispose();
   }
 
@@ -67,27 +74,25 @@ class _TeacherSignupTabState extends State<TeacherSignupTab> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<TeacherSignupCubit, TeacherSignupState>(
-      listenWhen: (previous, current) => previous != current,
       listener: (context, state) {
-        state.maybeWhen(
-          orElse: () => {},
-          loading: () {
-            AppDialogHelper.display(context, const AppCustomLoading());
-          },
-          success: (authEntity) {
-            AppNavigator.pop(context: context);
-            _signUp(authEntity: authEntity);
-          },
-          failure: (apiErrorModel) {
-            AppNavigator.pop(context: context);
+        switch (state.status) {
+          case CubitStatus.loading:
+            AppLoading.show();
+            break;
+          case CubitStatus.success:
+            AppLoading.hide();
+            _signUp(authEntity: state.authEntity);
+            break;
+          case CubitStatus.error:
+            AppLoading.hide();
             AppDialogHelper.display(
               context,
-              AppErrorDialog(
-                apiErrorModel: apiErrorModel,
-              ),
+              AppErrorDialog(apiErrorModel: state.apiErrorModel!),
             );
-          },
-        );
+            break;
+          default:
+            break;
+        }
       },
       child: SafeArea(
         child: SingleChildScrollView(
@@ -149,6 +154,22 @@ class _TeacherSignupTabState extends State<TeacherSignupTab> {
                     return null;
                   },
                 ),
+                const AppLabel(label: "التخصص"),
+                AppTextFormField(
+                  controller: _textEditingControllerSpecialization,
+                  hintText: "أدخل التخصص",
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
+                  prefixIcon: Icons.school_outlined,
+                ),
+                const AppLabel(label: "الوصف"),
+                AppTextFormField(
+                  controller: _textEditingControllerDescription,
+                  hintText: "أدخل الوصف",
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.next,
+                  prefixIcon: Icons.description_outlined,
+                ),
                 const AppLabel(label: "كلمة المرور*"),
                 AppTextFormField(
                   controller: _textEditingControllerPassword,
@@ -196,6 +217,9 @@ class _TeacherSignupTabState extends State<TeacherSignupTab> {
                         phone: _textEditingControllerPhone.text,
                         confirmPassword:
                             _textEditingControllerConfirmPassword.text,
+                        specialization:
+                            _textEditingControllerSpecialization.text,
+                        description: _textEditingControllerDescription.text,
                       ),
                     );
                   },
