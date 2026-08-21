@@ -32,6 +32,10 @@ import "package:draya_mobile/features/student/exams/domain/usecases/submit_exam_
 import "package:draya_mobile/features/student/exams/presentation/cubit/student_exam_cubit.dart";
 import "package:draya_mobile/features/student/student_materials/data/source/student_classrooms_sections_api_service.dart";
 import "package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart";
+import "package:draya_mobile/features/teacher/dashboard/data/repos/teacher_dashboard_repo_impl.dart";
+import "package:draya_mobile/features/teacher/dashboard/data/sources/teacher_dashboard_api_service.dart";
+import "package:draya_mobile/features/teacher/dashboard/domain/repos/teacher_dashboard_repo.dart";
+import "package:draya_mobile/features/teacher/dashboard/domain/usecases/get_teacher_dashboard_use_case.dart";
 import "package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart";
 import "package:draya_mobile/features/teacher/sections/data/repos/section_repo_impl.dart";
 import "package:draya_mobile/features/teacher/sections/data/sources/section_api_service.dart";
@@ -574,5 +578,20 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<DeleteSectionUseCase>(
     () => DeleteSectionUseCase(getIt<SectionRepo>()),
+  );
+
+  // teacher dashboard
+  getIt.registerLazySingleton<TeacherDashboardApiService>(
+    () => TeacherDashboardApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<TeacherDashboardRepo>(
+    () => TeacherDashboardRepoImpl(
+      getIt<TeacherDashboardApiService>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetTeacherDashboardUseCase>(
+    () => GetTeacherDashboardUseCase(getIt<TeacherDashboardRepo>()),
   );
 }
