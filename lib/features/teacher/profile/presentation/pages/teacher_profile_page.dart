@@ -19,12 +19,20 @@ import "package:draya_mobile/features/teacher/payments/data/models/payment_webvi
 import "package:draya_mobile/features/teacher/profile/data/models/teacher_model.dart";
 import "package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart";
 import "package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_state.dart";
+import "package:draya_mobile/features/teacher/profile/presentation/widgets/payout_account_bottom_sheet.dart";
 import "package:draya_mobile/features/teacher/profile/presentation/widgets/teacher_top_up_card.dart";
+import "package:draya_mobile/features/teacher/profile/presentation/widgets/teacher_wallet_actions_row.dart";
 import "package:draya_mobile/features/teacher/profile/presentation/widgets/teacher_wallet_card.dart";
+import "package:draya_mobile/features/teacher/profile/presentation/widgets/teacher_wallet_tabs_section.dart";
+import "package:draya_mobile/features/teacher/profile/presentation/widgets/teacher_withdraw_bottom_sheet.dart";
 import "package:draya_mobile/features/teacher/wallet/data/models/top_up_request_model.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/payout_accounts_cubit.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/payout_accounts_state.dart";
 import "package:draya_mobile/features/teacher/wallet/presentation/cubit/top_up_cubit.dart";
 import "package:draya_mobile/features/teacher/wallet/presentation/cubit/top_up_state.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/transactions_cubit.dart";
 import "package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_cubit.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/withdrawals_cubit.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:draya_mobile/core/enums/cubit_status.dart";
@@ -61,6 +69,9 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
   void _loadData() {
     context.read<TeacherProfileCubit>().getTeacherProfile();
     context.read<WalletCubit>().getTeacherBalance();
+    context.read<TransactionsCubit>().getTransactions(isRefresh: true);
+    context.read<WithdrawalsCubit>().getWithdrawals(isRefresh: true);
+    context.read<PayoutAccountsCubit>().getPayoutAccounts();
   }
 
   @override
@@ -86,7 +97,9 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
           ),
           backgroundColor: AppColors.primary700,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       );
     }
@@ -118,6 +131,25 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
     context.read<TopUpCubit>().topUp(
       topUpRequestModel: TopUpRequestModel(amount: amount!),
     );
+  }
+
+  void _openWithdrawBottomSheet() {
+    final available =
+        context
+            .read<WalletCubit>()
+            .state
+            .teacherBalance
+            ?.availableEarnedBalance ??
+        0.0;
+
+    TeacherWithdrawBottomSheet.show(context, availableBalance: available);
+  }
+
+  void _openAddPayoutAccountBottomSheet() async {
+    final created = await PayoutAccountBottomSheet.show(context);
+    if (created == true && mounted) {
+      await context.read<PayoutAccountsCubit>().getPayoutAccounts();
+    }
   }
 
   @override
@@ -196,6 +228,11 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
 
                 if (context.mounted) {
                   await context.read<WalletCubit>().getTeacherBalance();
+                  if (context.mounted) {
+                    await context.read<TransactionsCubit>().getTransactions(
+                      isRefresh: true,
+                    );
+                  }
                 }
 
                 break;
@@ -209,6 +246,34 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                   ),
                 );
                 break;
+            }
+          },
+        ),
+        BlocListener<PayoutAccountsCubit, PayoutAccountsState>(
+          listenWhen: (previous, current) =>
+              previous.actionSuccessMessage != current.actionSuccessMessage &&
+              current.actionSuccessMessage != null,
+          listener: (context, state) {
+            if (state.actionSuccessMessage != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Row(
+                    children: [
+                      const Icon(
+                        Icons.check_circle_outline_rounded,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(state.actionSuccessMessage!),
+                    ],
+                  ),
+                  backgroundColor: AppColors.primary700,
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              );
             }
           },
         ),
@@ -258,14 +323,15 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                     child: _buildSectionTitle(
                       context,
                       icon: Icons.account_balance_wallet_rounded,
-                      title: "المحفظة والمدفوعات",
-                      subtitle: "متابعة الرصيد المالي وإجراء عمليات الشحن",
+                      title: "المحفظة والعمليات المالية",
+                      subtitle:
+                          "متابعة الرصيد المالي وإجراء عمليات السحب والشحن",
                     ),
                   ),
 
                   const SizedBox(height: AppSizes.s12),
 
-                  // 4. Wallet Card (Fintech Card)
+                  // 4. Wallet Card (Fintech Card with Live Balance)
                   FadeInUp(
                     delay: 200,
                     child: TeacherWalletCard(
@@ -275,11 +341,22 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                     ),
                   ),
 
+                  const SizedBox(height: AppSizes.s14),
+
+                  // 5. Quick Wallet Actions (Withdraw & Payout Accounts)
+                  FadeInUp(
+                    delay: 230,
+                    child: TeacherWalletActionsRow(
+                      onWithdraw: _openWithdrawBottomSheet,
+                      onAddPayoutAccount: _openAddPayoutAccountBottomSheet,
+                    ),
+                  ),
+
                   const SizedBox(height: AppSizes.s16),
 
-                  // 5. Quick Top-Up Action Card
+                  // 6. Quick Top-Up Action Card
                   FadeInUp(
-                    delay: 250,
+                    delay: 260,
                     child: BlocBuilder<TopUpCubit, TopUpState>(
                       builder: (context, topUpState) {
                         return TeacherTopUpCard(
@@ -294,6 +371,16 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                           },
                         );
                       },
+                    ),
+                  ),
+
+                  const SizedBox(height: AppSizes.s20),
+
+                  // 7. Wallet Tabs Section (Transactions, Withdrawals with Admin Confirmation, Payout Accounts)
+                  FadeInUp(
+                    delay: 300,
+                    child: TeacherWalletTabsSection(
+                      onRequestWithdrawal: _openWithdrawBottomSheet,
                     ),
                   ),
 
@@ -339,9 +426,9 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                 name: name,
                 isUploading: state.isUploadingPicture,
                 onImagePicked: (file) {
-                  context
-                      .read<TeacherProfileCubit>()
-                      .uploadProfilePicture(file: file);
+                  context.read<TeacherProfileCubit>().uploadProfilePicture(
+                    file: file,
+                  );
                 },
               ),
               const SizedBox(height: AppSizes.s12),

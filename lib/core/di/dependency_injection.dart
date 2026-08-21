@@ -136,9 +136,19 @@ import "package:draya_mobile/features/teacher/wallet/data/repos/wallet_repo_impl
 import "package:draya_mobile/features/teacher/wallet/data/source/wallet_api_service.dart";
 import "package:draya_mobile/features/teacher/wallet/domain/repos/wallet_repo.dart";
 import "package:draya_mobile/features/teacher/wallet/domain/usecases/confirm_payment_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/create_payout_account_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/create_withdrawal_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/delete_payout_account_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/get_payout_accounts_use_case.dart";
 import "package:draya_mobile/features/teacher/wallet/domain/usecases/get_teacher_balance_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/get_transactions_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/get_withdrawals_use_case.dart";
 import "package:draya_mobile/features/teacher/wallet/domain/usecases/top_up_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/update_payout_account_use_case.dart";
 import "package:draya_mobile/features/teacher/wallet/presentation/cubit/confirm_payment_cubit.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/payout_accounts_cubit.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/transactions_cubit.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/withdrawals_cubit.dart";
 import "package:get_it/get_it.dart";
 import "package:draya_mobile/core/services/deep_link_service.dart";
 import "package:draya_mobile/features/student/teachers/domain/usecases/get_payment_status_use_case.dart";
@@ -317,8 +327,56 @@ Future<void> setupGetIt() async {
     () => ConfirmPaymentUseCase(getIt<WalletRepo>()),
   );
 
+  getIt.registerLazySingleton<GetTransactionsUseCase>(
+    () => GetTransactionsUseCase(getIt<WalletRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetPayoutAccountsUseCase>(
+    () => GetPayoutAccountsUseCase(getIt<WalletRepo>()),
+  );
+
+  getIt.registerLazySingleton<CreatePayoutAccountUseCase>(
+    () => CreatePayoutAccountUseCase(getIt<WalletRepo>()),
+  );
+
+  getIt.registerLazySingleton<UpdatePayoutAccountUseCase>(
+    () => UpdatePayoutAccountUseCase(getIt<WalletRepo>()),
+  );
+
+  getIt.registerLazySingleton<DeletePayoutAccountUseCase>(
+    () => DeletePayoutAccountUseCase(getIt<WalletRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetWithdrawalsUseCase>(
+    () => GetWithdrawalsUseCase(getIt<WalletRepo>()),
+  );
+
+  getIt.registerLazySingleton<CreateWithdrawalUseCase>(
+    () => CreateWithdrawalUseCase(getIt<WalletRepo>()),
+  );
+
   getIt.registerFactory<ConfirmPaymentCubit>(
     () => ConfirmPaymentCubit(getIt<ConfirmPaymentUseCase>()),
+  );
+
+  getIt.registerFactory<TransactionsCubit>(
+    () => TransactionsCubit(getIt<GetTransactionsUseCase>()),
+  );
+
+  getIt.registerFactory<PayoutAccountsCubit>(
+    () => PayoutAccountsCubit(
+      getIt<GetPayoutAccountsUseCase>(),
+      getIt<CreatePayoutAccountUseCase>(),
+      getIt<UpdatePayoutAccountUseCase>(),
+      getIt<DeletePayoutAccountUseCase>(),
+    ),
+  );
+
+  getIt.registerFactory<WithdrawalsCubit>(
+    () => WithdrawalsCubit(
+      getIt<GetWithdrawalsUseCase>(),
+      getIt<CreateWithdrawalUseCase>(),
+    ),
   );
 
   // student teachers

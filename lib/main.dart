@@ -56,11 +56,21 @@ import "package:draya_mobile/features/teacher/classrooms/domain/usecases/get_cla
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart";
 import "package:draya_mobile/features/teacher/wallet/domain/usecases/confirm_payment_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/create_payout_account_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/create_withdrawal_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/delete_payout_account_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/get_payout_accounts_use_case.dart";
 import "package:draya_mobile/features/teacher/wallet/domain/usecases/get_teacher_balance_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/get_transactions_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/get_withdrawals_use_case.dart";
 import "package:draya_mobile/features/teacher/wallet/domain/usecases/top_up_use_case.dart";
+import "package:draya_mobile/features/teacher/wallet/domain/usecases/update_payout_account_use_case.dart";
 import "package:draya_mobile/features/teacher/wallet/presentation/cubit/confirm_payment_cubit.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/payout_accounts_cubit.dart";
 import "package:draya_mobile/features/teacher/wallet/presentation/cubit/top_up_cubit.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/transactions_cubit.dart";
 import "package:draya_mobile/features/teacher/wallet/presentation/cubit/wallet_cubit.dart";
+import "package:draya_mobile/features/teacher/wallet/presentation/cubit/withdrawals_cubit.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter/services.dart";
@@ -174,6 +184,23 @@ Future<void> main() async {
         BlocProvider<ConfirmPaymentCubit>(
           create: (context) =>
               ConfirmPaymentCubit(getIt<ConfirmPaymentUseCase>()),
+        ),
+        BlocProvider<TransactionsCubit>(
+          create: (context) => TransactionsCubit(getIt<GetTransactionsUseCase>()),
+        ),
+        BlocProvider<PayoutAccountsCubit>(
+          create: (context) => PayoutAccountsCubit(
+            getIt<GetPayoutAccountsUseCase>(),
+            getIt<CreatePayoutAccountUseCase>(),
+            getIt<UpdatePayoutAccountUseCase>(),
+            getIt<DeletePayoutAccountUseCase>(),
+          ),
+        ),
+        BlocProvider<WithdrawalsCubit>(
+          create: (context) => WithdrawalsCubit(
+            getIt<GetWithdrawalsUseCase>(),
+            getIt<CreateWithdrawalUseCase>(),
+          ),
         ),
         BlocProvider<MaterialsCubit>(
           create: (context) => MaterialsCubit(
