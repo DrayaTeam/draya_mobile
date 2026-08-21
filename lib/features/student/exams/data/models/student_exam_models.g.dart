@@ -55,6 +55,14 @@ StudentExamModel _$StudentExamModelFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       topic: json['topic'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
+      durationMinutes: (json['durationMinutes'] as num?)?.toInt(),
+      startDate: json['startDate'] == null
+          ? null
+          : DateTime.parse(json['startDate'] as String),
+      endDate: json['endDate'] == null
+          ? null
+          : DateTime.parse(json['endDate'] as String),
+      allowedAttempts: (json['allowedAttempts'] as num?)?.toInt(),
       questions:
           (json['questions'] as List<dynamic>?)
               ?.map(
@@ -72,5 +80,9 @@ Map<String, dynamic> _$StudentExamModelToJson(StudentExamModel instance) =>
       'title': instance.title,
       'topic': instance.topic,
       'createdAt': instance.createdAt.toIso8601String(),
+      'durationMinutes': instance.durationMinutes,
+      'startDate': instance.startDate?.toIso8601String(),
+      'endDate': instance.endDate?.toIso8601String(),
+      'allowedAttempts': instance.allowedAttempts,
       'questions': instance.questions,
     };

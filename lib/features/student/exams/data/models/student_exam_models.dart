@@ -68,6 +68,10 @@ class StudentExamModel {
   final String title;
   final String topic;
   final DateTime createdAt;
+  final int? durationMinutes;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final int? allowedAttempts;
   @JsonKey(defaultValue: [])
   final List<ExamQuestionModel> questions;
 
@@ -78,6 +82,10 @@ class StudentExamModel {
     required this.title,
     required this.topic,
     required this.createdAt,
+    this.durationMinutes,
+    this.startDate,
+    this.endDate,
+    this.allowedAttempts,
     this.questions = const [],
   });
 
@@ -93,6 +101,10 @@ class StudentExamModel {
         title: title,
         topic: topic,
         createdAt: createdAt,
+        durationMinutes: durationMinutes,
+        startDate: startDate,
+        endDate: endDate,
+        allowedAttempts: allowedAttempts,
         questions: questions.map((e) => e.toEntity()).toList(),
       );
 }

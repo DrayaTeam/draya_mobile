@@ -2,6 +2,8 @@ import "package:dio/dio.dart";
 import "package:draya_mobile/core/networking/dio_factory.dart";
 import "package:draya_mobile/core/signalr/signalr_service.dart";
 import "package:draya_mobile/core/signalr/signalr_client_service.dart";
+import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart";
+import "package:draya_mobile/features/teacher/exam_generation/data/source/teacher_exam_remote_data_source.dart";
 import "package:draya_mobile/features/auth/data/repos/auth_repo_impl.dart";
 import "package:draya_mobile/features/auth/data/source/auth_api_service.dart";
 import "package:draya_mobile/features/auth/domain/repos/auth_repo.dart";
@@ -39,6 +41,7 @@ import "package:draya_mobile/features/teacher/sections/domain/repos/section_repo
 import "package:draya_mobile/features/teacher/sections/domain/usecases/create_section_use_case.dart";
 import "package:draya_mobile/features/teacher/sections/domain/usecases/delete_section_use_case.dart";
 import "package:draya_mobile/features/teacher/sections/domain/usecases/get_sections_use_case.dart";
+import "package:draya_mobile/features/teacher/sections/presentation/cubit/section_cubit.dart";
 import "package:draya_mobile/features/teacher/teacher_channel/domain/usecases/create_question_use_case.dart"
     as teacher;
 import "package:draya_mobile/features/student/student_channel/domain/usecases/create_reply_use_case.dart"
@@ -251,6 +254,13 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<GetGradeLevelsUseCase>(
     () => GetGradeLevelsUseCase(getIt<ClassroomRepo>()),
+  );
+
+  getIt.registerLazySingleton<ClassroomCubit>(
+    () => ClassroomCubit(
+      getIt<GetClassroomsUseCase>(),
+      getIt<CreateClassroomUseCase>(),
+    ),
   );
 
   // teacher profile
@@ -574,5 +584,18 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<DeleteSectionUseCase>(
     () => DeleteSectionUseCase(getIt<SectionRepo>()),
+  );
+
+  getIt.registerFactory<SectionCubit>(
+    () => SectionCubit(
+      getIt<GetSectionsUseCase>(),
+      getIt<CreateSectionUseCase>(),
+      getIt<DeleteSectionUseCase>(),
+    ),
+  );
+
+  // teacher exam generation
+  getIt.registerLazySingleton<TeacherExamRemoteDataSource>(
+    () => TeacherExamRemoteDataSource(getIt<Dio>()),
   );
 }

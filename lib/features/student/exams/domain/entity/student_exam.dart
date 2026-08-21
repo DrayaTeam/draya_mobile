@@ -77,6 +77,10 @@ class StudentExam {
   final String title;
   final String topic;
   final DateTime createdAt;
+  final int? durationMinutes;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final int? allowedAttempts;
   final List<ExamQuestion> questions;
 
   const StudentExam({
@@ -86,6 +90,10 @@ class StudentExam {
     required this.title,
     required this.topic,
     required this.createdAt,
+    this.durationMinutes,
+    this.startDate,
+    this.endDate,
+    this.allowedAttempts,
     this.questions = const [],
   });
 }

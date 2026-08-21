@@ -72,10 +72,8 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
     super.dispose();
   }
 
-  void _startTimer(int totalQuestions) {
-    // 2 minutes per question or default 30 min
-    final totalMinutes = (totalQuestions * 2).clamp(10, 120);
-    _remainingDuration = Duration(minutes: totalMinutes);
+  void _startTimer(int durationMinutes) {
+    _remainingDuration = Duration(minutes: durationMinutes);
 
     _examCountdownTimer?.cancel();
     _examCountdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
@@ -100,12 +98,14 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
       setState(() {
         _isExamStarted = true;
       });
-      _startTimer(exam.questions.length);
+      final minutes = (exam.durationMinutes != null && exam.durationMinutes! > 0)
+          ? exam.durationMinutes!
+          : (exam.questions.length * 2).clamp(10, 120);
+      _startTimer(minutes);
       // Enter immersive sticky mode during exam
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     }
   }
-
 
   void _goToQuestion(int index) {
     setState(() {
@@ -147,6 +147,25 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                 style: AppTextStyles.body.copyWith(color: Colors.white),
               ),
               backgroundColor: AppColors.error,
+            ),
+          );
+        }
+        if (state.attemptStatus == CubitStatus.error &&
+            state.apiErrorModel?.error?.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                state.apiErrorModel!.error!.message!,
+                style: AppTextStyles.body.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              backgroundColor: AppColors.error,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
           );
         }
@@ -407,17 +426,24 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                 ),
               ),
               const SizedBox(height: 18),
-              Row(
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
                 children: [
                   _buildWhitePill(
                     icon: Icons.quiz_outlined,
                     text: "${exam.questions.length} أسئلة",
                   ),
-                  const SizedBox(width: 8),
                   _buildWhitePill(
                     icon: Icons.timer_outlined,
-                    text: "${(exam.questions.length * 2).clamp(10, 120)} دقيقة",
+                    text:
+                        "${(exam.durationMinutes != null && exam.durationMinutes! > 0) ? exam.durationMinutes : (exam.questions.length * 2).clamp(10, 120)} دقيقة",
                   ),
+                  if (exam.allowedAttempts != null && exam.allowedAttempts! > 0)
+                    _buildWhitePill(
+                      icon: Icons.replay_rounded,
+                      text: "${exam.allowedAttempts} محاولات مسموحة",
+                    ),
                 ],
               ),
             ],

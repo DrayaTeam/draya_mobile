@@ -18,6 +18,7 @@ import "package:draya_mobile/features/teacher/dashboard/presentation/pages/teach
 import "package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_1.dart";
 import "package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_2.dart";
 import "package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_3.dart";
+import "package:draya_mobile/features/teacher/exam_generation/data/models/teacher_exam_models.dart";
 import "package:draya_mobile/features/teacher/materials/presentation/pages/materials_page.dart";
 import "package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart";
 import "package:draya_mobile/features/teacher/payments/presentation/pages/payment_web_view_page.dart";
@@ -107,13 +108,80 @@ abstract final class AppRouter {
       GoRoute(
         path: AppRoutes.examGenerationPage2,
         builder: (context, state) {
-          return const ExamGenerationStep2();
+          final map =
+              state.extra is Map ? state.extra as Map : <String, dynamic>{};
+          final classroomId = map["classroomId"]?.toString() ?? "";
+          final classroomName = map["classroomName"]?.toString();
+          final subjectName = map["subjectName"]?.toString();
+          final sectionId = map["sectionId"]?.toString() ?? "";
+          final sectionTitle = map["sectionTitle"]?.toString();
+          final topic = map["topic"]?.toString() ?? "";
+          final difficultyLevel =
+              map["difficultyLevel"]?.toString() ?? "easy";
+          final rawRequirements = map["questionRequirements"];
+          final questionRequirements = rawRequirements is List
+              ? rawRequirements.whereType<QuestionRequirementModel>().toList()
+              : <QuestionRequirementModel>[];
+          final teacherInstructions =
+              map["teacherInstructions"]?.toString() ?? "";
+
+          return ExamGenerationStep2(
+            classroomId: classroomId,
+            classroomName: classroomName,
+            subjectName: subjectName,
+            sectionId: sectionId,
+            sectionTitle: sectionTitle,
+            topic: topic,
+            difficultyLevel: difficultyLevel,
+            questionRequirements: questionRequirements,
+            teacherInstructions: teacherInstructions,
+          );
         },
       ),
       GoRoute(
         path: AppRoutes.examGenerationPage3,
         builder: (context, state) {
-          return const ExamGenerationStep3();
+          final map =
+              state.extra is Map ? state.extra as Map : <String, dynamic>{};
+          final generationId = map["generationId"]?.toString();
+          final examId = map["examId"]?.toString();
+          final topic = map["topic"]?.toString() ?? "";
+          final classroomId = map["classroomId"]?.toString() ?? "";
+          final classroomName = map["classroomName"]?.toString();
+          final subjectName = map["subjectName"]?.toString();
+          final sectionId = map["sectionId"]?.toString() ?? "";
+          final sectionTitle = map["sectionTitle"]?.toString();
+          final difficultyLevel =
+              map["difficultyLevel"]?.toString() ?? "easy";
+          final rawRequirements = map["questionRequirements"];
+          final questionRequirements = rawRequirements is List
+              ? rawRequirements.whereType<QuestionRequirementModel>().toList()
+              : <QuestionRequirementModel>[];
+          final durationMinutes = map["durationMinutes"] is int
+              ? map["durationMinutes"] as int
+              : int.tryParse(map["durationMinutes"]?.toString() ?? "");
+          final allowedAttempts = map["allowedAttempts"] is int
+              ? map["allowedAttempts"] as int
+              : int.tryParse(map["allowedAttempts"]?.toString() ?? "");
+          final startDate = map["startDate"]?.toString();
+          final endDate = map["endDate"]?.toString();
+
+          return ExamGenerationStep3(
+            generationId: generationId,
+            examId: examId,
+            topic: topic,
+            classroomId: classroomId,
+            classroomName: classroomName,
+            subjectName: subjectName,
+            sectionId: sectionId,
+            sectionTitle: sectionTitle,
+            difficultyLevel: difficultyLevel,
+            questionRequirements: questionRequirements,
+            durationMinutes: durationMinutes,
+            allowedAttempts: allowedAttempts,
+            startDate: startDate,
+            endDate: endDate,
+          );
         },
       ),
       GoRoute(
