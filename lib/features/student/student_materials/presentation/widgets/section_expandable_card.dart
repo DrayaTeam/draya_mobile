@@ -749,6 +749,34 @@ class _ExamTile extends StatelessWidget {
                 ],
               ),
             ),
+          ] else if (onStart == null) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.amber.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.amber.withValues(alpha: 0.25)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.school_outlined,
+                    size: 13,
+                    color: AppColors.amber,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    "خاص بالطلاب",
+                    style: AppTextStyles.label.copyWith(
+                      color: AppColors.amber,
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ] else ...[
             SizedBox(
               height: 32,
