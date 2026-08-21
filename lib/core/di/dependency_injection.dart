@@ -12,11 +12,23 @@ import "package:draya_mobile/features/auth/domain/usecases/login_use_case.dart";
 import "package:draya_mobile/features/auth/domain/usecases/student_register_use_case.dart";
 import "package:draya_mobile/features/auth/domain/usecases/teacher_register_use_case.dart";
 import "package:draya_mobile/features/student/profile/data/repos/student_profile_repo_impl.dart";
+import "package:draya_mobile/features/student/home/data/repos/student_home_repo_impl.dart";
+import "package:draya_mobile/features/student/home/data/source/student_home_api_service.dart";
+import "package:draya_mobile/features/student/home/domain/repos/student_home_repo.dart";
+import "package:draya_mobile/features/student/home/domain/usecases/get_student_dashboard_use_case.dart";
+import "package:draya_mobile/features/student/home/presentation/cubit/student_home_cubit.dart";
 import "package:draya_mobile/features/student/profile/data/source/student_profile_api_service.dart";
 import "package:draya_mobile/features/student/profile/domain/repos/student_profile_repo.dart";
 import "package:draya_mobile/features/student/profile/domain/usecases/get_student_profile_use_case.dart";
 import "package:draya_mobile/features/student/profile/domain/usecases/update_student_profile_use_case.dart";
 import "package:draya_mobile/features/student/profile/presentation/cubit/student_profile_cubit.dart";
+import "package:draya_mobile/features/student/student_weak_topics/data/repos/student_weak_topics_repo_impl.dart";
+import "package:draya_mobile/features/student/student_weak_topics/data/source/student_weak_topics_api_service.dart";
+import "package:draya_mobile/features/student/student_weak_topics/domain/repos/student_weak_topics_repo.dart";
+import "package:draya_mobile/features/student/student_weak_topics/domain/usecases/generate_practice_exam_use_case.dart";
+import "package:draya_mobile/features/student/student_weak_topics/domain/usecases/get_ai_revision_use_case.dart";
+import "package:draya_mobile/features/student/student_weak_topics/domain/usecases/get_latest_performance_report_use_case.dart";
+import "package:draya_mobile/features/student/student_weak_topics/presentation/cubit/student_weak_topics_cubit.dart";
 import "package:draya_mobile/features/student/student_channel/data/repos/student_channel_repo_impl.dart";
 import "package:draya_mobile/features/student/student_channel/data/source/student_channel_remote_data_source.dart";
 import "package:draya_mobile/features/student/student_channel/domain/repos/student_channel_repo.dart";
@@ -616,4 +628,65 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<GetTeacherDashboardUseCase>(
     () => GetTeacherDashboardUseCase(getIt<TeacherDashboardRepo>()),
   );
+
+  // student dashboard
+  getIt.registerLazySingleton<StudentHomeApiService>(
+    () => StudentHomeApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<StudentHomeRepo>(
+    () => StudentHomeRepoImpl(
+      getIt<StudentHomeApiService>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetStudentDashboardUseCase>(
+    () => GetStudentDashboardUseCase(getIt<StudentHomeRepo>()),
+  );
+
+  getIt.registerFactory<StudentHomeCubit>(
+    () => StudentHomeCubit(
+      getIt<GetStudentDashboardUseCase>(),
+    ),
+  );
+
+  // student weak topics
+  getIt.registerLazySingleton<StudentWeakTopicsApiService>(
+    () => StudentWeakTopicsApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<StudentWeakTopicsRepo>(
+    () => StudentWeakTopicsRepoImpl(
+      getIt<StudentWeakTopicsApiService>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetLatestPerformanceReportUseCase>(
+    () => GetLatestPerformanceReportUseCase(
+      getIt<StudentWeakTopicsRepo>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetAiRevisionUseCase>(
+    () => GetAiRevisionUseCase(
+      getIt<StudentWeakTopicsRepo>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GeneratePracticeExamUseCase>(
+    () => GeneratePracticeExamUseCase(
+      getIt<StudentWeakTopicsRepo>(),
+    ),
+  );
+
+  getIt.registerFactory<StudentWeakTopicsCubit>(
+    () => StudentWeakTopicsCubit(
+      getIt<GetLatestPerformanceReportUseCase>(),
+      getIt<GetAiRevisionUseCase>(),
+      getIt<GeneratePracticeExamUseCase>(),
+      getIt<GetCurrentUserProfileUseCase>(),
+      getIt<SignalRService>(),
+    ),
+  );
 }
+

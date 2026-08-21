@@ -116,9 +116,14 @@ List<DrawerModel> getStudentDrawerItemsList() {
       title: "التقييم",
       items: [
         DrawerItemViewModel(
-          icon: Icons.grading_outlined,
-          title: "درجاتى",
+          icon: Icons.auto_awesome_outlined,
+          title: "نقاط الضعف والمراجعة",
+          route: AppRoutes.studentWeakTopicsPage,
         ),
+        // DrawerItemViewModel(
+        //   icon: Icons.grading_outlined,
+        //   title: "درجاتى",
+        // ),
         DrawerItemViewModel(
           icon: Icons.assignment_outlined,
           title: "الامتحانات",

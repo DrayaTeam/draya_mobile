@@ -1,260 +1,285 @@
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
 import "package:draya_mobile/core/theme/app_colors.dart";
 import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/features/student/home/domain/entity/student_dashboard.dart";
 import "package:flutter/material.dart";
 
 class StudentHomeFocusSection extends StatelessWidget {
-  const StudentHomeFocusSection({super.key});
+  final List<PointNeedingFocus> pointsNeedingFocus;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "متابعة دروسك اليومية",
-            style: AppTextStyles.h3.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            "عرض كل المواد",
-            style: AppTextStyles.label.copyWith(
-              color: AppColors.primary600,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 18),
-          const _FocusCard(
-            title: "الجبر وحساب المثلثات",
-            progressLabel: "68%",
-            progressText: "إنجاز الكورس",
-            actionLabel: "استئناف المشاهدة",
-            progressColor: Color(0xFF00A6F4),
-            tagLabel: "الرياضيات",
-            tagBackground: Color.fromRGBO(0, 0, 0, 0.4),
-          ),
-          const SizedBox(height: 16),
-          const _FocusCard(
-            title: "الفيزياء الكهربية والحديثة",
-            progressLabel: "40%",
-            progressText: "إنجاز الكورس",
-            actionLabel: "استئناف المشاهدة",
-            progressColor: Color(0xFFAD46FF),
-            tagLabel: "الفيزياء",
-            tagBackground: Color.fromRGBO(0, 0, 0, 0.4),
-          ),
-          const SizedBox(height: 16),
-          const _FocusCard(
-            title: "الكيمياء العضوية المتقدمة",
-            progressLabel: "85%",
-            progressText: "إنجاز الكورس",
-            actionLabel: "استئناف المشاهدة",
-            progressColor: Color(0xFF00BC7D),
-            tagLabel: "الكيمياء",
-            tagBackground: Color.fromRGBO(0, 0, 0, 0.4),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FocusCard extends StatelessWidget {
-  final String title;
-  final String progressLabel;
-  final String progressText;
-  final String actionLabel;
-  final Color progressColor;
-  final String tagLabel;
-  final Color tagBackground;
-
-  const _FocusCard({
-    required this.title,
-    required this.progressLabel,
-    required this.progressText,
-    required this.actionLabel,
-    required this.progressColor,
-    required this.tagLabel,
-    required this.tagBackground,
+  const StudentHomeFocusSection({
+    super.key,
+    this.pointsNeedingFocus = const [],
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 280,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFF1F5F9)),
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            offset: const Offset(0, 4),
-            blurRadius: 6,
-            spreadRadius: -2,
-          ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            offset: const Offset(0, 2),
-            blurRadius: 4,
-            spreadRadius: -2,
-          ),
-        ],
-      ),
-      child: Stack(
+    if (pointsNeedingFocus.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                image: DecorationImage(
-                  image: const AssetImage("assets/images/course_card_bg.png"),
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                    Colors.black.withValues(alpha: 0.08),
-                    BlendMode.dstATop,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            left: 21,
-            right: 21,
-            top: 21,
-            child: Container(
-              height: 128,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Stack(
+          // Header with AI Badge
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
                 children: [
-                  Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.black.withValues(alpha: 0.6),
-                            Colors.black.withValues(alpha: 0),
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
+                  Container(
+                    width: 4,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      color: AppColors.ai700,
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  Positioned(
-                    right: 8,
-                    top: 8,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: tagBackground,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Text(
-                        tagLabel,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 8,
-                    left: 8,
-                    top: 20,
-                    child: Text(
-                      title,
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                      ),
+                  const SizedBox(width: 8),
+                  Text(
+                    "نقاط تحتاج إلى تركيز",
+                    style: AppTextStyles.h4.copyWith(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16,
                     ),
                   ),
                 ],
               ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.ai50,
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(color: AppColors.ai300),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.auto_awesome_rounded,
+                      size: 13,
+                      color: AppColors.ai700,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      "تحليل الذكاء الاصطناعي",
+                      style: AppTextStyles.label.copyWith(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.ai700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            "المفاهيم التي تحتاج إلى مراجعة وتدريب لرفع مستوى إتقانك بها",
+            style: AppTextStyles.body.copyWith(
+              color: AppColors.textSecondary,
+              fontSize: 12.5,
             ),
           ),
-          Positioned(
-            left: 21,
-            right: 21,
-            top: 169,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  progressLabel,
-                  style: AppTextStyles.label.copyWith(
-                    color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                  ),
+          const SizedBox(height: 14),
+          // Focus Topics List
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: pointsNeedingFocus.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 12),
+            itemBuilder: (context, index) {
+              final focus = pointsNeedingFocus[index];
+              final percent = focus.proficiencyPercent;
+              final percentFormatted =
+                  "${percent.toStringAsFixed(percent.truncateToDouble() == percent ? 0 : 1)}%";
+
+              Color statusColor;
+              Color statusBg;
+              Color statusBorder;
+              String statusLabel;
+
+              if (percent < 50) {
+                statusColor = const Color(0xFFE11D48);
+                statusBg = const Color(0xFFFFF1F2);
+                statusBorder = const Color(0xFFFECDD3);
+                statusLabel = "يحتاج مراجعة عاجلة";
+              } else if (percent < 75) {
+                statusColor = const Color(0xFFD97706);
+                statusBg = const Color(0xFFFFFBEB);
+                statusBorder = const Color(0xFFFDE68A);
+                statusLabel = "متوسط الإتقان";
+              } else {
+                statusColor = const Color(0xFF059669);
+                statusBg = const Color(0xFFF0FDF4);
+                statusBorder = const Color(0xFFBBF7D0);
+                statusLabel = "إتقان جيد";
+              }
+
+              return Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.border),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.04),
+                      offset: const Offset(0, 6),
+                      blurRadius: 16,
+                      spreadRadius: -4,
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  progressText,
-                  style: AppTextStyles.label.copyWith(
-                    color: AppColors.primary900,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(999),
-                  child: Container(
-                    height: 10,
-                    color: const Color(0xFFF1F5F9),
-                    child: FractionallySizedBox(
-                      alignment: Alignment.centerLeft,
-                      widthFactor: 0.68,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              progressColor,
-                              progressColor.withValues(alpha: 0.8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Topic Header Row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                focus.topicName,
+                                style: AppTextStyles.h4.copyWith(
+                                  color: AppColors.textPrimary,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: statusBg,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(color: statusBorder),
+                                ),
+                                child: Text(
+                                  statusLabel,
+                                  style: TextStyle(
+                                    fontSize: 10.5,
+                                    fontWeight: FontWeight.w700,
+                                    color: statusColor,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
-                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        const SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "مستوى الإتقان",
+                              style: AppTextStyles.label.copyWith(
+                                color: AppColors.textSecondary,
+                                fontSize: 11,
+                              ),
+                            ),
+                            Text(
+                              percentFormatted,
+                              style: AppTextStyles.h3.copyWith(
+                                color: statusColor,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    // Proficiency Progress Bar
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: LinearProgressIndicator(
+                        value: (percent / 100).clamp(0.0, 1.0),
+                        minHeight: 7,
+                        backgroundColor: const Color(0xFFF1F5F9),
+                        valueColor: AlwaysStoppedAnimation<Color>(statusColor),
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    // Action: AI Revision Button
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          AppNavigator.push(
+                            context: context,
+                            path: AppRoutes.studentWeakTopicsPage,
+                            extra: {
+                              "initialTopic": focus.topicName,
+                            },
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                AppColors.ai700,
+                                AppColors.ai900,
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.ai700.withValues(alpha: 0.25),
+                                offset: const Offset(0, 4),
+                                blurRadius: 10,
+                                spreadRadius: -2,
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.auto_awesome_rounded,
+                                size: 16,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                "مراجعة المفهوم مع المساعد الذكي",
+                                style: AppTextStyles.button.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-                const SizedBox(height: 12),
-                Container(
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: AppColors.backgroundSecondary,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.border),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    actionLabel,
-                    style: const TextStyle(
-                      color: Color(0xFF0F4F49),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           ),
         ],
       ),

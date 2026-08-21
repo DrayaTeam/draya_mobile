@@ -8,6 +8,7 @@ import "package:draya_mobile/features/student/exams/presentation/pages/student_e
 import "package:draya_mobile/features/student/exams/presentation/pages/student_exams_screen.dart";
 import "package:draya_mobile/features/student/home/presentation/pages/student_home_screen.dart";
 import "package:draya_mobile/features/student/profile/presentation/pages/student_profile_page.dart";
+import "package:draya_mobile/features/student/student_weak_topics/presentation/pages/student_weak_topics.dart";
 import "package:draya_mobile/features/student/student_channel/presentation/pages/student_channel_screen.dart";
 import "package:draya_mobile/features/student/student_enrolled_classrooms/presentation/pages/student_enrolled_classrooms_screen.dart";
 import "package:draya_mobile/features/student/student_materials/presentation/pages/student_classrooms_materials_screen.dart";
@@ -342,6 +343,24 @@ abstract final class AppRouter {
         path: AppRoutes.studentEnrolledClassroomsPage,
         builder: (context, state) {
           return const StudentEnrolledClassroomsScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.studentWeakTopicsPage,
+        builder: (context, state) {
+          String? initialTopic;
+          String? studentId;
+          if (state.extra is Map) {
+            final map = state.extra as Map;
+            initialTopic = map["initialTopic"]?.toString();
+            studentId = map["studentId"]?.toString();
+          } else if (state.extra is String) {
+            initialTopic = state.extra as String;
+          }
+          return StudentWeakTopics(
+            initialTopic: initialTopic,
+            studentId: studentId,
+          );
         },
       ),
       GoRoute(

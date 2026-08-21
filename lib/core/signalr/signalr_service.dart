@@ -16,6 +16,10 @@ abstract class SignalRService {
 
   void onQuestionVoteUpdated(Function(QuestionVoteUpdatedEvent) callback);
 
+  void onReceiveGenerationProgress(
+    Function(ExamGenerationProgressEvent) callback,
+  );
+
   void offEvent(String eventName);
 
   void dispose();

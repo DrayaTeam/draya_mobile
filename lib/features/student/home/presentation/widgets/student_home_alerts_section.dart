@@ -1,176 +1,244 @@
 import "package:draya_mobile/core/theme/app_colors.dart";
-import "package:draya_mobile/core/theme/app_sizes.dart";
 import "package:draya_mobile/core/theme/app_text_styles.dart";
 import "package:flutter/material.dart";
 
 class StudentHomeAlertsSection extends StatelessWidget {
-  const StudentHomeAlertsSection({super.key});
+  final List<String> urgentAlerts;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.95),
-          border: Border.all(
-            color: const Color(0xFFFFCCD3).withValues(alpha: 0.8),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              offset: const Offset(0, 1),
-              blurRadius: 3,
-            ),
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              offset: const Offset(0, 1),
-              blurRadius: 2,
-              spreadRadius: -1,
-            ),
-          ],
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "تنبيهات ومواعيد عاجلة",
-                  style: AppTextStyles.label.copyWith(
-                    color: AppColors.error,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 14,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFE4E6),
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "تنبيهان جديدان",
-                      style: AppTextStyles.label.copyWith(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.error,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSizes.s16),
-            const _AlertItem(
-              accentColor: Color(0xFFEC003F),
-              iconColor: Color(0xFFEC003F),
-              title: "امتحان الباب الثالث (جبر)",
-              subtitle: "غداً 10:00 ص",
-              badgeText: "هام",
-              badgeColor: Color(0xFFFFFFFF),
-              badgeBorderColor: Color(0xFFE2E8F0),
-            ),
-            const SizedBox(height: AppSizes.s8),
-            const _AlertItem(
-              accentColor: Color(0xFFFE9A00),
-              iconColor: Color(0xFFFE9A00),
-              title: "مراجعة قانون كيرشوف (فيزياء)",
-              subtitle: "الخميس 11:00 ص",
-              badgeText: "مراجعة",
-              badgeColor: Color(0xFFFFFFFF),
-              badgeBorderColor: Color(0xFFE2E8F0),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _AlertItem extends StatelessWidget {
-  final Color accentColor;
-  final Color iconColor;
-  final String title;
-  final String subtitle;
-  final String badgeText;
-  final Color badgeColor;
-  final Color badgeBorderColor;
-
-  const _AlertItem({
-    required this.accentColor,
-    required this.iconColor,
-    required this.title,
-    required this.subtitle,
-    required this.badgeText,
-    required this.badgeColor,
-    required this.badgeBorderColor,
+  const StudentHomeAlertsSection({
+    super.key,
+    this.urgentAlerts = const [],
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
-        border: Border.all(color: const Color(0xFFF1F5F9)),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 6,
-            height: 40,
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: accentColor,
-              borderRadius: BorderRadius.circular(999),
-            ),
+    final hasAlerts = urgentAlerts.isNotEmpty;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: hasAlerts
+                ? const Color(0xFFFECDD3)
+                : AppColors.border,
           ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+          boxShadow: [
+            BoxShadow(
+              color: hasAlerts
+                  ? const Color(0xFFF43F5E).withValues(alpha: 0.06)
+                  : Colors.black.withValues(alpha: 0.04),
+              offset: const Offset(0, 8),
+              blurRadius: 20,
+              spreadRadius: -4,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  title,
-                  style: AppTextStyles.label.copyWith(
-                    color: AppColors.textPrimary,
-                    fontWeight: FontWeight.w800,
-                  ),
+                Row(
+                  children: [
+                    Container(
+                      width: 4,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        color: hasAlerts
+                            ? const Color(0xFFE11D48)
+                            : AppColors.primary700,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "تنبيهات ومواعيد عاجلة",
+                      style: AppTextStyles.h4.copyWith(
+                        color: hasAlerts
+                            ? const Color(0xFFBE123C)
+                            : AppColors.textPrimary,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: AppTextStyles.label.copyWith(
-                    color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w600,
+                if (hasAlerts)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFE4E6),
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(
+                        color: const Color(0xFFFDA4AF),
+                      ),
+                    ),
+                    child: Text(
+                      urgentAlerts.length == 1
+                          ? "تنبيه واحد"
+                          : "${urgentAlerts.length} تنبيهات",
+                      style: AppTextStyles.label.copyWith(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: const Color(0xFFBE123C),
+                      ),
+                    ),
+                  )
+                else
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF0FDF4),
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(
+                        color: const Color(0xFFBBF7D0),
+                      ),
+                    ),
+                    child: Text(
+                      "مكتمل ✨",
+                      style: AppTextStyles.label.copyWith(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF15803D),
+                      ),
+                    ),
                   ),
-                ),
               ],
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-            decoration: BoxDecoration(
-              color: badgeColor,
-              border: Border.all(color: badgeBorderColor),
-              borderRadius: BorderRadius.circular(999),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              badgeText,
-              style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF45556C),
+            const SizedBox(height: 14),
+            if (hasAlerts)
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: urgentAlerts.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 10),
+                itemBuilder: (context, index) {
+                  final alert = urgentAlerts[index];
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF1F2),
+                      border: Border.all(
+                        color: const Color(0xFFFFE4E6),
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFE4E6),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(
+                            Icons.priority_high_rounded,
+                            size: 16,
+                            color: Color(0xFFE11D48),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                alert,
+                                style: AppTextStyles.label.copyWith(
+                                  color: const Color(0xFF881337),
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 13,
+                                  height: 1.45,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: const Color(0xFFFECDD3),
+                            ),
+                          ),
+                          child: const Text(
+                            "عاجل",
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              color: Color(0xFFE11D48),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              )
+            else
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFDCFCE7),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(
+                        Icons.check_circle_outline_rounded,
+                        color: Color(0xFF16A34A),
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        "لا توجد تنبيهات عاجلة حالياً - جدولك الدراسي يسير على ما يرام!",
+                        style: AppTextStyles.body.copyWith(
+                          color: AppColors.textSecondary,
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

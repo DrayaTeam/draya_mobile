@@ -39,6 +39,7 @@ abstract final class AppRoutes {
       "/student/classrooms/$classroomId/materials";
   static const String studentEnrolledClassroomsPage =
       "/student/enrolled_classrooms";
+  static const String studentWeakTopicsPage = "/student/weak_topics";
 
   static const String sectionsPage = "/teacher/sections";
 }

@@ -79,3 +79,33 @@ class QuestionVoteUpdatedEvent extends SignalREvent {
     );
   }
 }
+
+class ExamGenerationProgressEvent extends SignalREvent {
+  final String generationId;
+  final String status;
+  final String? errorMessage;
+  final String? examId;
+
+  const ExamGenerationProgressEvent({
+    required this.generationId,
+    required this.status,
+    this.errorMessage,
+    this.examId,
+  });
+
+  factory ExamGenerationProgressEvent.fromJson(Map<String, dynamic> json) {
+    return ExamGenerationProgressEvent(
+      generationId:
+          (json["GenerationId"] ?? json["generationId"] ?? "").toString(),
+      status: (json["Status"] ?? json["status"] ?? "Pending").toString(),
+      errorMessage: json["ErrorMessage"]?.toString() ??
+          json["errorMessage"]?.toString(),
+      examId: json["ExamId"]?.toString() ?? json["examId"]?.toString(),
+    );
+  }
+
+  bool get isCompleted => status.toLowerCase() == "completed";
+  bool get isFailed => status.toLowerCase() == "failed";
+  bool get isGenerating => status.toLowerCase() == "generating";
+}
+

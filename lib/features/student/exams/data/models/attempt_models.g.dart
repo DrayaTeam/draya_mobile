@@ -69,4 +69,3 @@ Map<String, dynamic> _$SubmitAttemptResponseModelToJson(
   'attemptId': instance.attemptId,
   'message': instance.message,
 };
-

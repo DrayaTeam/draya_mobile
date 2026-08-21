@@ -103,4 +103,3 @@ Map<String, dynamic> _$ExamResultModelToJson(ExamResultModel instance) =>
       'needsTeacherReview': instance.needsTeacherReview,
       'answers': instance.answers,
     };
-

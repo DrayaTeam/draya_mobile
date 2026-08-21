@@ -70,6 +70,13 @@ class SignalRClientService implements SignalRService {
     _addListener("QuestionVoteUpdated", callback);
   }
 
+  @override
+  void onReceiveGenerationProgress(
+    void Function(ExamGenerationProgressEvent) callback,
+  ) {
+    _addListener("ReceiveGenerationProgress", callback);
+  }
+
   void _addListener(String eventName, Function callback) {
     _listeners.putIfAbsent(eventName, () => []).add(callback);
     _bindEvent(eventName);
@@ -95,6 +102,8 @@ class SignalRClientService implements SignalRService {
         "QuestionCreated" => QuestionCreatedEvent.fromJson(payload),
         "QuestionReplied" => QuestionRepliedEvent.fromJson(payload),
         "QuestionVoteUpdated" => QuestionVoteUpdatedEvent.fromJson(payload),
+        "ReceiveGenerationProgress" =>
+          ExamGenerationProgressEvent.fromJson(payload),
         _ => null,
       };
       if (event == null) return;
