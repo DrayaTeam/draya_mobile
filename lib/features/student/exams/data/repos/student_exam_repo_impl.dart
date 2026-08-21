@@ -33,7 +33,7 @@ class StudentExamRepoImpl implements StudentExamRepo {
   }
 
   @override
-  Future<ApiResult<String>> submitAttempt({
+  Future<ApiResult<SubmitAttemptResponse>> submitAttempt({
     required String attemptId,
     required String idempotencyKey,
     required List<GradedAnswer> answers,
@@ -53,7 +53,7 @@ class StudentExamRepoImpl implements StudentExamRepo {
       );
 
       final response = await _apiService.submitAttempt(attemptId, request);
-      return ApiResult.success(response.gradingJobId);
+      return ApiResult.success(response.toEntity());
     } catch (error) {
       return ApiResult.failure(ErrorHandler.handle(error));
     }

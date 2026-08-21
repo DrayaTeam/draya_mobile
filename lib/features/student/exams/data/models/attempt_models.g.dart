@@ -51,19 +51,22 @@ Map<String, dynamic> _$SubmitAttemptRequestModelToJson(
   SubmitAttemptRequestModel instance,
 ) => <String, dynamic>{
   'idempotencyKey': instance.idempotencyKey,
-  'answers': instance.answers,
+  'answers': instance.answers.map((e) => e.toJson()).toList(),
 };
 
 SubmitAttemptResponseModel _$SubmitAttemptResponseModelFromJson(
   Map<String, dynamic> json,
 ) => SubmitAttemptResponseModel(
-  gradingJobId: json['gradingJobId'] as String,
-  message: json['message'] as String,
+  gradingJobId: json['gradingJobId'] as String?,
+  attemptId: json['attemptId'] as String?,
+  message: json['message'] as String?,
 );
 
 Map<String, dynamic> _$SubmitAttemptResponseModelToJson(
   SubmitAttemptResponseModel instance,
 ) => <String, dynamic>{
   'gradingJobId': instance.gradingJobId,
+  'attemptId': instance.attemptId,
   'message': instance.message,
 };
+

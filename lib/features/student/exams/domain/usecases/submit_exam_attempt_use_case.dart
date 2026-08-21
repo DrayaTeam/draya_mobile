@@ -16,13 +16,13 @@ class SubmitExamAttemptParams {
 }
 
 class SubmitExamAttemptUseCase
-    implements AppUseCase<ApiResult<String>, SubmitExamAttemptParams> {
+    implements AppUseCase<ApiResult<SubmitAttemptResponse>, SubmitExamAttemptParams> {
   final StudentExamRepo _repo;
 
   SubmitExamAttemptUseCase(this._repo);
 
   @override
-  Future<ApiResult<String>> call({SubmitExamAttemptParams? params}) {
+  Future<ApiResult<SubmitAttemptResponse>> call({SubmitExamAttemptParams? params}) {
     if (params == null) {
       throw ArgumentError("SubmitExamAttemptParams cannot be null");
     }
@@ -33,3 +33,4 @@ class SubmitExamAttemptUseCase
     );
   }
 }
+

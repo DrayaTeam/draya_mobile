@@ -383,57 +383,56 @@ class ExamResultsScreen extends StatelessWidget {
           ),
 
           // AI Rationale if essay / ai-graded
-          if (grading?.rationale != null &&
-              grading!.rationale!.trim().isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: AppColors.ai50,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: AppColors.ai300.withValues(alpha: 0.5),
-                ),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(
-                    Icons.auto_awesome_rounded,
-                    size: 16,
-                    color: AppColors.ai700,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "تقييم وملاحظات الذكاء الاصطناعي:",
-                          style: AppTextStyles.label.copyWith(
-                            color: AppColors.ai700,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 11,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          grading.rationale!,
-                          style: AppTextStyles.body.copyWith(
-                            color: AppColors.textPrimary,
-                            fontSize: 12,
-                            height: 1.4,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          // if (grading?.rationale != null &&
+          //     grading!.rationale!.trim().isNotEmpty) ...[
+          //   const SizedBox(height: 8),
+          //   Container(
+          //     width: double.infinity,
+          //     padding: const EdgeInsets.all(10),
+          //     decoration: BoxDecoration(
+          //       color: AppColors.ai50,
+          //       borderRadius: BorderRadius.circular(10),
+          //       border: Border.all(
+          //         color: AppColors.ai300.withValues(alpha: 0.5),
+          //       ),
+          //     ),
+          //     child: Row(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         const Icon(
+          //           Icons.auto_awesome_rounded,
+          //           size: 16,
+          //           color: AppColors.ai700,
+          //         ),
+          //         const SizedBox(width: 8),
+          //         Expanded(
+          //           child: Column(
+          //             crossAxisAlignment: CrossAxisAlignment.start,
+          //             children: [
+          //               Text(
+          //                 "تقييم وملاحظات الذكاء الاصطناعي:",
+          //                 style: AppTextStyles.label.copyWith(
+          //                   color: AppColors.ai700,
+          //                   fontWeight: FontWeight.w700,
+          //                   fontSize: 11,
+          //                 ),
+          //               ),
+          //               const SizedBox(height: 2),
+          //               Text(
+          //                 grading.rationale!,
+          //                 style: AppTextStyles.body.copyWith(
+          //                   color: AppColors.textPrimary,
+          //                   fontSize: 12,
+          //                   height: 1.4,
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
           ],
-        ],
       ),
     );
   }

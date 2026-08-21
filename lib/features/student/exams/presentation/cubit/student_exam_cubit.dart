@@ -154,15 +154,28 @@ class StudentExamCubit extends Cubit<StudentExamState> {
     );
 
     switch (result) {
-      case Success(data: final jobId):
-        emit(
-          state.copyWith(
-            submissionStatus: CubitStatus.success,
-            gradingJobId: jobId,
-            gradingStatus: CubitStatus.loading,
-          ),
-        );
-        _startGradingPolling(jobId, attemptId);
+      case Success(data: final response):
+        final jobId = response.gradingJobId;
+        final targetAttemptId = response.attemptId ?? attemptId;
+
+        if (jobId != null && jobId.trim().isNotEmpty) {
+          emit(
+            state.copyWith(
+              submissionStatus: CubitStatus.success,
+              gradingJobId: jobId,
+              gradingStatus: CubitStatus.loading,
+            ),
+          );
+          _startGradingPolling(jobId, targetAttemptId);
+        } else {
+          emit(
+            state.copyWith(
+              submissionStatus: CubitStatus.success,
+              gradingStatus: CubitStatus.success,
+            ),
+          );
+          await loadResults(targetAttemptId);
+        }
       case Failure(apiErrorModel: final error):
         emit(
           state.copyWith(

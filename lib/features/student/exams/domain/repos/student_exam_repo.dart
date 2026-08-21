@@ -6,7 +6,7 @@ abstract class StudentExamRepo {
 
   Future<ApiResult<String>> startAttempt(String examId);
 
-  Future<ApiResult<String>> submitAttempt({
+  Future<ApiResult<SubmitAttemptResponse>> submitAttempt({
     required String attemptId,
     required String idempotencyKey,
     required List<GradedAnswer> answers,

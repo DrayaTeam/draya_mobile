@@ -92,6 +92,9 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
   }
 
   void _handleStartAttempt(StudentExam exam) async {
+    if (exam.allowedAttempts != null && exam.allowedAttempts! <= 0) {
+      return;
+    }
     final success =
         await context.read<StudentExamCubit>().startAttempt(exam.id);
     if (success && mounted) {
@@ -138,6 +141,9 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
   Widget build(BuildContext context) {
     return BlocConsumer<StudentExamCubit, StudentExamState>(
       listener: (context, state) {
+        if (state.submissionStatus == CubitStatus.success) {
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+        }
         if (state.examDetailStatus == CubitStatus.error &&
             state.apiErrorModel?.error?.message != null) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -170,6 +176,18 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
           );
         }
         if (state.submissionStatus == CubitStatus.error &&
+            state.apiErrorModel?.error?.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                state.apiErrorModel!.error!.message!,
+                style: AppTextStyles.body.copyWith(color: Colors.white),
+              ),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+        if (state.resultsStatus == CubitStatus.error &&
             state.apiErrorModel?.error?.message != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -248,6 +266,55 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
             exam: exam,
             result: state.attemptResult!,
             onFinish: () => Navigator.of(context).pop(),
+          );
+        }
+
+        // Error loading results after submission
+        if (state.submissionStatus == CubitStatus.success &&
+            state.resultsStatus == CubitStatus.error) {
+          return Scaffold(
+            backgroundColor: AppColors.background,
+            appBar: AppBar(
+              backgroundColor: AppColors.surface,
+              elevation: 0,
+              centerTitle: true,
+              title: const Text("نتيجة الامتحان"),
+            ),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.error_outline_rounded,
+                      color: AppColors.error,
+                      size: 48,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      state.apiErrorModel?.error?.message ??
+                          "تم تسليم الامتحان ولكن تعذر تحميل النتيجة. يرجى إعادة المحاولة.",
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.body.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (state.attemptId != null) {
+                          context
+                              .read<StudentExamCubit>()
+                              .loadResults(state.attemptId!);
+                        }
+                      },
+                      child: const Text("إعادة تحميل النتيجة"),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           );
         }
 
@@ -377,6 +444,9 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
     StudentExam exam,
     StudentExamState state,
   ) {
+    final hasNoAttemptsLeft =
+        exam.allowedAttempts != null && exam.allowedAttempts! <= 0;
+
     return ListView(
       padding: const EdgeInsets.all(AppSizes.s20),
       children: [
@@ -439,10 +509,12 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                     text:
                         "${(exam.durationMinutes != null && exam.durationMinutes! > 0) ? exam.durationMinutes : (exam.questions.length * 2).clamp(10, 120)} دقيقة",
                   ),
-                  if (exam.allowedAttempts != null && exam.allowedAttempts! > 0)
+                  if (exam.allowedAttempts != null)
                     _buildWhitePill(
                       icon: Icons.replay_rounded,
-                      text: "${exam.allowedAttempts} محاولات مسموحة",
+                      text: exam.allowedAttempts! <= 0
+                          ? "لا توجد محاولات متبقية"
+                          : "${exam.allowedAttempts} محاولات مسموحة",
                     ),
                 ],
               ),
@@ -450,6 +522,40 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
           ),
         ),
         const SizedBox(height: AppSizes.s20),
+
+        if (hasNoAttemptsLeft) ...[
+          Container(
+            padding: const EdgeInsets.all(AppSizes.s16),
+            decoration: BoxDecoration(
+              color: AppColors.error.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: AppColors.error.withValues(alpha: 0.3),
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.block_rounded,
+                  color: AppColors.error,
+                  size: 22,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    "لقد استنفدت جميع المحاولات المتاحة لهذا الامتحان، ولا يمكنك بدء محاولة جديدة.",
+                    style: AppTextStyles.body.copyWith(
+                      color: AppColors.error,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: AppSizes.s20),
+        ],
 
         // Rules and Anti-Cheat Instructions Card
         Container(
@@ -505,11 +611,14 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
         SizedBox(
           width: double.infinity,
           child: ElevatedButton.icon(
-            onPressed: state.attemptStatus == CubitStatus.loading
+            onPressed: (hasNoAttemptsLeft ||
+                    state.attemptStatus == CubitStatus.loading)
                 ? null
                 : () => _handleStartAttempt(exam),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
+              disabledBackgroundColor: AppColors.backgroundMuted,
+              disabledForegroundColor: AppColors.textDisabled,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
@@ -526,13 +635,23 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                       color: Colors.white,
                     ),
                   )
-                : const Icon(Icons.play_arrow_rounded, size: 22),
+                : Icon(
+                    hasNoAttemptsLeft
+                        ? Icons.lock_outline_rounded
+                        : Icons.play_arrow_rounded,
+                    size: 22,
+                  ),
             label: Text(
               state.attemptStatus == CubitStatus.loading
                   ? "جاري بدء الاختبار..."
-                  : "بدء الاختبار الآن",
+                  : hasNoAttemptsLeft
+                      ? "لا توجد محاولات متبقية"
+                      : "بدء الاختبار الآن",
               style: AppTextStyles.button.copyWith(
-                color: Colors.white,
+                color: (hasNoAttemptsLeft &&
+                        state.attemptStatus != CubitStatus.loading)
+                    ? AppColors.textDisabled
+                    : Colors.white,
                 fontWeight: FontWeight.w800,
                 fontSize: 15,
               ),

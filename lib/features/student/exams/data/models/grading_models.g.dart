@@ -32,11 +32,11 @@ Map<String, dynamic> _$GradingJobModelToJson(GradingJobModel instance) =>
 
 GradingResultModel _$GradingResultModelFromJson(Map<String, dynamic> json) =>
     GradingResultModel(
-      score: (json['score'] as num).toDouble(),
-      maxScore: (json['maxScore'] as num).toDouble(),
+      score: (json['score'] as num?)?.toDouble() ?? 0.0,
+      maxScore: (json['maxScore'] as num?)?.toDouble() ?? 1.0,
       confidenceScore: (json['confidenceScore'] as num?)?.toDouble(),
-      isAiGraded: json['isAiGraded'] as bool,
-      needsTeacherReview: json['needsTeacherReview'] as bool,
+      isAiGraded: json['isAiGraded'] as bool? ?? false,
+      needsTeacherReview: json['needsTeacherReview'] as bool? ?? false,
       rationale: json['rationale'] as String?,
       teacherOverrideScore: (json['teacherOverrideScore'] as num?)?.toDouble(),
     );
@@ -76,14 +76,14 @@ Map<String, dynamic> _$GradedAnswerModelToJson(GradedAnswerModel instance) =>
 
 ExamResultModel _$ExamResultModelFromJson(Map<String, dynamic> json) =>
     ExamResultModel(
-      attemptId: json['attemptId'] as String,
-      examId: json['examId'] as String,
-      isSubmitted: json['isSubmitted'] as bool,
+      attemptId: json['attemptId'] as String?,
+      examId: json['examId'] as String?,
+      isSubmitted: json['isSubmitted'] as bool? ?? true,
       submittedAt: json['submittedAt'] == null
           ? null
           : DateTime.parse(json['submittedAt'] as String),
-      finalScore: (json['finalScore'] as num).toDouble(),
-      needsTeacherReview: json['needsTeacherReview'] as bool,
+      finalScore: (json['finalScore'] as num?)?.toDouble() ?? 0.0,
+      needsTeacherReview: json['needsTeacherReview'] as bool? ?? false,
       answers:
           (json['answers'] as List<dynamic>?)
               ?.map(
@@ -103,3 +103,4 @@ Map<String, dynamic> _$ExamResultModelToJson(ExamResultModel instance) =>
       'needsTeacherReview': instance.needsTeacherReview,
       'answers': instance.answers,
     };
+

@@ -38,20 +38,24 @@ class GradingJobModel {
 
 @JsonSerializable()
 class GradingResultModel {
+  @JsonKey(defaultValue: 0.0)
   final double score;
+  @JsonKey(defaultValue: 1.0)
   final double maxScore;
   final double? confidenceScore;
+  @JsonKey(defaultValue: false)
   final bool isAiGraded;
+  @JsonKey(defaultValue: false)
   final bool needsTeacherReview;
   final String? rationale;
   final double? teacherOverrideScore;
 
   const GradingResultModel({
-    required this.score,
-    required this.maxScore,
+    this.score = 0.0,
+    this.maxScore = 1.0,
     this.confidenceScore,
-    required this.isAiGraded,
-    required this.needsTeacherReview,
+    this.isAiGraded = false,
+    this.needsTeacherReview = false,
     this.rationale,
     this.teacherOverrideScore,
   });
@@ -104,22 +108,25 @@ class GradedAnswerModel {
 
 @JsonSerializable()
 class ExamResultModel {
-  final String attemptId;
-  final String examId;
+  final String? attemptId;
+  final String? examId;
+  @JsonKey(defaultValue: true)
   final bool isSubmitted;
   final DateTime? submittedAt;
+  @JsonKey(defaultValue: 0.0)
   final double finalScore;
+  @JsonKey(defaultValue: false)
   final bool needsTeacherReview;
   @JsonKey(defaultValue: [])
   final List<GradedAnswerModel> answers;
 
   const ExamResultModel({
-    required this.attemptId,
-    required this.examId,
-    required this.isSubmitted,
+    this.attemptId,
+    this.examId,
+    this.isSubmitted = true,
     this.submittedAt,
-    required this.finalScore,
-    required this.needsTeacherReview,
+    this.finalScore = 0.0,
+    this.needsTeacherReview = false,
     this.answers = const [],
   });
 
@@ -129,8 +136,8 @@ class ExamResultModel {
   Map<String, dynamic> toJson() => _$ExamResultModelToJson(this);
 
   ExamAttemptResult toEntity() => ExamAttemptResult(
-        attemptId: attemptId,
-        examId: examId,
+        attemptId: attemptId ?? "",
+        examId: examId ?? "",
         isSubmitted: isSubmitted,
         submittedAt: submittedAt,
         finalScore: finalScore,
@@ -138,3 +145,4 @@ class ExamResultModel {
         answers: answers.map((e) => e.toEntity()).toList(),
       );
 }
+

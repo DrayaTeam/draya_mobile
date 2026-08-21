@@ -1,3 +1,4 @@
+import "package:draya_mobile/features/student/exams/domain/entity/student_exam.dart";
 import "package:json_annotation/json_annotation.dart";
 
 part "attempt_models.g.dart";
@@ -26,7 +27,7 @@ class StartAttemptResponseModel {
   Map<String, dynamic> toJson() => _$StartAttemptResponseModelToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class SubmitAnswerRequestModel {
   final String examQuestionId;
   final String? answerText;
@@ -44,7 +45,7 @@ class SubmitAnswerRequestModel {
   Map<String, dynamic> toJson() => _$SubmitAnswerRequestModelToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class SubmitAttemptRequestModel {
   final String idempotencyKey;
   final List<SubmitAnswerRequestModel> answers;
@@ -62,16 +63,25 @@ class SubmitAttemptRequestModel {
 
 @JsonSerializable()
 class SubmitAttemptResponseModel {
-  final String gradingJobId;
-  final String message;
+  final String? gradingJobId;
+  final String? attemptId;
+  final String? message;
 
   const SubmitAttemptResponseModel({
-    required this.gradingJobId,
-    required this.message,
+    this.gradingJobId,
+    this.attemptId,
+    this.message,
   });
 
   factory SubmitAttemptResponseModel.fromJson(Map<String, dynamic> json) =>
       _$SubmitAttemptResponseModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$SubmitAttemptResponseModelToJson(this);
+
+  SubmitAttemptResponse toEntity() => SubmitAttemptResponse(
+        gradingJobId: gradingJobId,
+        attemptId: attemptId,
+        message: message,
+      );
 }
+

@@ -210,3 +210,16 @@ class GradingJobStatus {
     this.errorMessage,
   });
 }
+
+class SubmitAttemptResponse {
+  final String? gradingJobId;
+  final String? attemptId;
+  final String? message;
+
+  const SubmitAttemptResponse({
+    this.gradingJobId,
+    this.attemptId,
+    this.message,
+  });
+}
+
