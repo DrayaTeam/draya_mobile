@@ -33,6 +33,8 @@ import "package:draya_mobile/features/teacher/classrooms/domain/usecases/get_cla
 import "package:draya_mobile/features/teacher/classrooms/domain/usecases/get_grade_levels_use_case.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_types_cubit.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/grade_levels_cubit.dart";
+import "package:draya_mobile/features/teacher/dashboard/domain/usecases/get_teacher_dashboard_use_case.dart";
+import "package:draya_mobile/features/teacher/dashboard/presentation/cubit/teacher_dashboard_cubit.dart";
 import "package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart";
 import "package:draya_mobile/features/teacher/materials/domain/usecases/upload_materials_use_case.dart";
 import "package:draya_mobile/features/teacher/materials/presentation/cubit/materials_cubit.dart";
@@ -182,6 +184,11 @@ Future<void> main() async {
             getIt<GetSectionsUseCase>(),
             getIt<CreateSectionUseCase>(),
             getIt<DeleteSectionUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => TeacherDashboardCubit(
+            getIt<GetTeacherDashboardUseCase>(),
           ),
         ),
       ],
