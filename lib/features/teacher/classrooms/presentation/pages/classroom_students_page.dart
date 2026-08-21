@@ -1,15 +1,13 @@
 import "package:draya_mobile/core/enums/cubit_status.dart";
-import "package:draya_mobile/core/helpers/app_extensions.dart";
 import "package:draya_mobile/core/helpers/app_loading.dart";
 import "package:draya_mobile/core/helpers/app_navigator.dart";
 import "package:draya_mobile/core/router/app_routes.dart";
 import "package:draya_mobile/core/theme/app_colors.dart";
 import "package:draya_mobile/core/theme/app_sizes.dart";
-import "package:draya_mobile/core/widgets/app_elevated_button.dart";
+import "package:draya_mobile/core/theme/app_text_styles.dart";
 import "package:draya_mobile/core/widgets/app_error_dialog.dart";
-import "package:draya_mobile/core/widgets/app_outlined_button.dart";
-import "package:draya_mobile/core/widgets/app_text_form_field.dart";
 import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/core/widgets/fade_in_up_animation.dart";
 import "package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart";
 import "package:draya_mobile/features/teacher/classrooms/data/models/student_roster_item_model.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart";
@@ -30,7 +28,6 @@ class ClassroomStudentsPage extends StatefulWidget {
 
 class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
   late final TextEditingController _searchController;
-
   String _query = "";
 
   String get _normalizedQuery => _query.trim().toLowerCase();
@@ -38,14 +35,11 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
   @override
   void initState() {
     super.initState();
-
     _searchController = TextEditingController();
 
-    WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) {
-        _loadStudents();
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadStudents();
+    });
   }
 
   @override
@@ -56,13 +50,12 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
 
   Future<void> _loadStudents() {
     return context.read<ClassroomStudentsCubit>().getStudents(
-      widget.classroom.classroomId,
-    );
+          widget.classroom.classroomId,
+        );
   }
 
   void _loadInitialStudents() {
     AppLoading.show();
-
     _loadStudents();
   }
 
@@ -71,33 +64,32 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
   }
 
   void _onSearchChanged(String value) {
-    setState(() {
-      _query = value;
-    });
+    setState(() => _query = value);
   }
 
   List<StudentRosterItemModel> _filterStudents({
     required List<StudentRosterItemModel> students,
   }) {
     final query = _normalizedQuery;
-
-    if (query.isEmpty) {
-      return students;
-    }
+    if (query.isEmpty) return students;
 
     return students
-        .where(
-          (student) => student.fullName.toLowerCase().contains(query),
-        )
+        .where((student) => student.fullName.toLowerCase().contains(query))
         .toList(growable: false);
+  }
+
+  void _previewAsStudent() {
+    AppNavigator.push(
+      context: context,
+      path: AppRoutes.studentClassroomMaterialsPage(widget.classroom.classroomId),
+      extra: widget.classroom.name,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ClassroomStudentsCubit, ClassroomStudentsState>(
-      listenWhen: (previous, current) {
-        return previous.status != current.status;
-      },
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status != CubitStatus.loading) {
           AppLoading.hide();
@@ -105,10 +97,7 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
 
         if (state.status == CubitStatus.error) {
           final error = state.apiErrorModel;
-
-          if (error == null || !context.mounted) {
-            return;
-          }
+          if (error == null || !context.mounted) return;
 
           showDialog<void>(
             context: context,
@@ -119,79 +108,95 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
           );
         }
       },
-
       builder: (context, state) {
         final students = _filterStudents(students: state.students);
 
         return Scaffold(
-          appBar: const CustomAppBar(title: "قائمة الطلاب"),
+          backgroundColor: AppColors.background,
+          appBar: const CustomAppBar(title: "تفاصيل الفصل والطلاب"),
           body: SafeArea(
             child: RefreshIndicator(
+              color: AppColors.primary,
               onRefresh: _refreshStudents,
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.fromLTRB(
-                  AppSizes.s24,
-                  AppSizes.s20,
-                  AppSizes.s24,
-                  AppSizes.s40,
+                  AppSizes.s16,
+                  AppSizes.s16,
+                  AppSizes.s16,
+                  AppSizes.s36,
                 ),
                 children: [
-                  Text(
-                    "تفاصيل الفصل الدراسي",
-                    textAlign: TextAlign.right,
-                    style: context.textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: AppSizes.s8),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: _SubjectChip(
-                      label: widget.classroom.subjectName,
-                    ),
-                  ),
-                  const SizedBox(height: AppSizes.s16),
-                  _ClassroomSummary(
+                  // Classroom Hero Summary Card
+                  _ClassroomDetailsHero(
                     classroom: widget.classroom,
                     numberOfStudents: state.students.length,
-                  ),
-                  const SizedBox(height: AppSizes.s32),
-                  Row(
-                    children: [
-                      Text(
-                        "قائمة طلاب الفصل",
-                        style: context.textTheme.headlineSmall,
-                      ),
-                      const SizedBox(width: AppSizes.s12),
-                      _CountChip(count: students.length),
-                    ],
-                  ),
-                  const SizedBox(height: AppSizes.s8),
-                  Text(
-                    "يمكنك عرض الطلاب المسجلين في هذا الفصل والبحث عنهم.",
-                    textAlign: TextAlign.right,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: AppColors.foregroundMuted,
-                    ),
-                  ),
-                  const SizedBox(height: AppSizes.s16),
-                  AppTextFormField(
-                    controller: _searchController,
-                    hintText: "بحث باسم الطالب...",
-                    prefixIcon: Icons.search,
-                    onChanged: _onSearchChanged,
-                  ),
-                  const SizedBox(height: AppSizes.s16),
-                  if (students.isEmpty)
-                    const _EmptyStudents()
-                  else
-                    ...students.map(
-                      (student) => Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: AppSizes.s12,
+                    onManageSections: () {
+                      AppNavigator.push(
+                        context: context,
+                        path: AppRoutes.sectionsPage,
+                        extra: widget.classroom,
+                      );
+                    },
+                    onOpenChannel: () {
+                      AppNavigator.push(
+                        context: context,
+                        path: AppRoutes.teacherChannelPage(
+                          widget.classroom.classroomId,
                         ),
-                        child: _StudentCard(student: student),
+                        extra: widget.classroom.name,
+                      );
+                    },
+                    onPreviewAsStudent: _previewAsStudent,
+                  ),
+                  const SizedBox(height: AppSizes.s20),
+
+                  // Students Roster Section Header & Search
+                  _StudentsRosterHeader(
+                    searchController: _searchController,
+                    query: _query,
+                    totalCount: state.students.length,
+                    filteredCount: students.length,
+                    onSearchChanged: _onSearchChanged,
+                    onClearSearch: () {
+                      _searchController.clear();
+                      setState(() => _query = "");
+                    },
+                  ),
+                  const SizedBox(height: AppSizes.s12),
+
+                  // Student List / Empty State
+                  if (state.status == CubitStatus.loading && state.students.isEmpty)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(40),
+                        child: CircularProgressIndicator(color: AppColors.primary),
                       ),
-                    ),
+                    )
+                  else if (state.students.isEmpty)
+                    const _EmptyStudentsState(hasQuery: false)
+                  else if (students.isEmpty)
+                    const _EmptyStudentsState(hasQuery: true)
+                  else
+                    ...students.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final student = entry.value;
+                      final card = _StudentCard(student: student);
+
+                      if (index < 8) {
+                        return FadeInUp(
+                          delay: index * 40,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: AppSizes.s8),
+                            child: card,
+                          ),
+                        );
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: AppSizes.s8),
+                        child: card,
+                      );
+                    }),
                 ],
               ),
             ),
@@ -202,157 +207,479 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
   }
 }
 
-class _ClassroomSummary extends StatelessWidget {
+// ---------------------------------------------------------------------------
+// Classroom Details Hero Card
+// ---------------------------------------------------------------------------
+class _ClassroomDetailsHero extends StatelessWidget {
   final ClassroomModel classroom;
   final int numberOfStudents;
-  const _ClassroomSummary({
+  final VoidCallback onManageSections;
+  final VoidCallback onOpenChannel;
+  final VoidCallback onPreviewAsStudent;
+
+  const _ClassroomDetailsHero({
     required this.classroom,
     required this.numberOfStudents,
+    required this.onManageSections,
+    required this.onOpenChannel,
+    required this.onPreviewAsStudent,
   });
 
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(AppSizes.s20),
-    decoration: BoxDecoration(
-      gradient: const LinearGradient(
-        colors: [AppColors.surface, AppColors.backgroundSecondary],
+  void _copyCode(BuildContext context) {
+    Clipboard.setData(ClipboardData(text: classroom.enrollmentCode));
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: AppColors.primary800,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+            const SizedBox(width: 8),
+            Text(
+              "تم نسخ كود الانضمام: ${classroom.enrollmentCode}",
+              style: AppTextStyles.body.copyWith(color: Colors.white),
+            ),
+          ],
+        ),
+        duration: const Duration(seconds: 2),
       ),
-      border: Border.all(color: AppColors.border),
-      borderRadius: BorderRadius.circular(14),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          "البيانات الأساسية للفصل",
-          textAlign: TextAlign.right,
-          style: context.textTheme.labelMedium?.copyWith(
-            color: AppColors.foregroundMuted,
-          ),
-        ),
-        const SizedBox(height: AppSizes.s8),
-        Text(
-          classroom.name,
-          textAlign: TextAlign.right,
-          style: context.textTheme.headlineSmall,
-        ),
-        const SizedBox(height: AppSizes.s16),
-        _SummaryRow(
-          icon: Icons.groups_outlined,
-          label: "عدد الطلبة المقيدين",
-          value: "$numberOfStudents طالب",
-        ),
-        const SizedBox(height: AppSizes.s12),
-        _SummaryRow(
-          icon: classroom.isActive
-              ? Icons.check_circle_outline
-              : Icons.pause_circle_outline,
-          label: "حالة الفصل",
-          value: classroom.isActive ? "نشط" : "غير نشط",
-        ),
-        const SizedBox(height: AppSizes.s12),
-        _SummaryRow(
-          icon: Icons.copy,
-          label: "كود الاشتراك",
-          value: classroom.enrollmentCode,
-          onTap: () async {
-            await Clipboard.setData(
-              ClipboardData(text: classroom.enrollmentCode),
-            );
-
-            if (!context.mounted) return;
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("تم نسخ كود الاشتراك"),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          },
-        ),
-        const SizedBox(height: AppSizes.s12),
-        AppElevatedButton(
-          onPressed: () {
-            AppNavigator.push(
-              context: context,
-              path: AppRoutes.sectionsPage,
-              extra: classroom,
-            );
-          },
-          label: "ادارة الاقسام",
-        ),
-        const SizedBox(height: AppSizes.s12),
-        AppOutlinedButton(
-          onPressed: () {
-            AppNavigator.push(
-              context: context,
-              path: AppRoutes.teacherChannelPage(
-                classroom.classroomId,
-              ),
-              extra: classroom.name,
-            );
-          },
-          label: "قناة الأسئلة",
-        ),
-      ],
-    ),
-  );
-}
-
-class _SummaryRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  final VoidCallback? onTap;
-  const _SummaryRow({
-    required this.icon,
-    required this.label,
-    required this.value,
-    this.onTap,
-  });
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final child = Container(
-      padding: const EdgeInsets.all(AppSizes.s12),
+    return Container(
       decoration: BoxDecoration(
-        color: AppColors.backgroundMuted,
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.circular(AppSizes.s12),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            color: AppColors.primary700,
-          ),
-          const SizedBox(width: AppSizes.s12),
-          Expanded(
-            child: Text(
-              label,
-              style: context.textTheme.labelMedium,
-            ),
-          ),
-          Text(
-            value,
-            style: context.textTheme.labelLarge,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-    );
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Top Accent Header
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [AppColors.primary800, AppColors.primary600],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      // Subject Chip
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.auto_stories_rounded,
+                              size: 13,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              classroom.subjectName,
+                              style: AppTextStyles.label.copyWith(
+                                color: Colors.white,
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                      // Active Chip
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 6,
+                              height: 6,
+                              decoration: BoxDecoration(
+                                color: classroom.isActive
+                                    ? AppColors.chemistryBiology
+                                    : Colors.white70,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              classroom.isActive ? "نشط" : "غير نشط",
+                              style: AppTextStyles.label.copyWith(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    classroom.name,
+                    style: AppTextStyles.h3.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-    if (onTap == null) {
-      return child;
-    }
+            // Key Metrics
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  // Enrolled Students
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.backgroundSecondary,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppColors.border),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary50,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Icon(
+                              Icons.groups_rounded,
+                              color: AppColors.primary,
+                              size: 20,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "الطلاب المقيدين",
+                                  style: AppTextStyles.label.copyWith(
+                                    color: AppColors.textSecondary,
+                                    fontSize: 10.5,
+                                  ),
+                                ),
+                                Text(
+                                  "$numberOfStudents طالب",
+                                  style: AppTextStyles.label.copyWith(
+                                    color: AppColors.textPrimary,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  // Enrollment Code with Copy
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => _copyCode(context),
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppColors.backgroundSecondary,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppColors.border),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color: AppColors.amber.withValues(alpha: 0.12),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Icon(
+                                Icons.key_rounded,
+                                color: AppColors.amber,
+                                size: 20,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "كود الانضمام",
+                                    style: AppTextStyles.label.copyWith(
+                                      color: AppColors.textSecondary,
+                                      fontSize: 10.5,
+                                    ),
+                                  ),
+                                  Text(
+                                    classroom.enrollmentCode,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppTextStyles.label.copyWith(
+                                      color: AppColors.textPrimary,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Icon(
+                              Icons.copy_rounded,
+                              size: 15,
+                              color: AppColors.foregroundMuted,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppSizes.s12),
-      child: child,
+            const Divider(color: AppColors.border, height: 1),
+
+            // Quick Actions Bar
+            Padding(
+              padding: const EdgeInsets.all(14),
+              child: Row(
+                children: [
+                  // Manage Sections
+                  Expanded(
+                    child: SizedBox(
+                      height: 38,
+                      child: ElevatedButton.icon(
+                        onPressed: onManageSections,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        icon: const Icon(Icons.folder_open_rounded, size: 16),
+                        label: Text(
+                          "الأقسام والمواد",
+                          style: AppTextStyles.label.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // Questions Channel
+                  Expanded(
+                    child: SizedBox(
+                      height: 38,
+                      child: OutlinedButton.icon(
+                        onPressed: onOpenChannel,
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.primary,
+                          side: const BorderSide(color: AppColors.primary300),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        icon: const Icon(Icons.chat_bubble_outline_rounded, size: 16),
+                        label: Text(
+                          "قناة الأسئلة",
+                          style: AppTextStyles.label.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // Preview as Student
+                  Tooltip(
+                    message: "معاينة كطالب",
+                    child: InkWell(
+                      onTap: onPreviewAsStudent,
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                          color: AppColors.ai50,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: AppColors.ai300),
+                        ),
+                        child: const Icon(
+                          Icons.visibility_outlined,
+                          color: AppColors.ai700,
+                          size: 19,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
+// ---------------------------------------------------------------------------
+// Students Roster Header with Search
+// ---------------------------------------------------------------------------
+class _StudentsRosterHeader extends StatelessWidget {
+  final TextEditingController searchController;
+  final String query;
+  final int totalCount;
+  final int filteredCount;
+  final ValueChanged<String> onSearchChanged;
+  final VoidCallback onClearSearch;
+
+  const _StudentsRosterHeader({
+    required this.searchController,
+    required this.query,
+    required this.totalCount,
+    required this.filteredCount,
+    required this.onSearchChanged,
+    required this.onClearSearch,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Text(
+              "قائمة طلاب الفصل",
+              style: AppTextStyles.h5.copyWith(
+                fontWeight: FontWeight.w800,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: AppColors.primary50,
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(color: AppColors.primary200),
+              ),
+              child: Text(
+                "$filteredCount طالب",
+                style: AppTextStyles.label.copyWith(
+                  color: AppColors.primary700,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.border),
+          ),
+          child: TextField(
+            controller: searchController,
+            onChanged: onSearchChanged,
+            decoration: InputDecoration(
+              hintText: "بحث باسم الطالب...",
+              hintStyle: AppTextStyles.body.copyWith(
+                color: AppColors.textDisabled,
+                fontSize: 13,
+              ),
+              prefixIcon: const Icon(
+                Icons.search_rounded,
+                color: AppColors.primary,
+                size: 20,
+              ),
+              suffixIcon: query.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(
+                        Icons.close_rounded,
+                        size: 18,
+                        color: AppColors.foregroundMuted,
+                      ),
+                      onPressed: onClearSearch,
+                    )
+                  : null,
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Student Card Item
+// ---------------------------------------------------------------------------
 class _StudentCard extends StatelessWidget {
   final StudentRosterItemModel student;
   static final DateFormat _dateFormat = DateFormat.yMMMd("ar");
@@ -360,129 +687,140 @@ class _StudentCard extends StatelessWidget {
   const _StudentCard({required this.student});
 
   @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(AppSizes.s16),
-    decoration: BoxDecoration(
-      color: AppColors.surface,
-      border: Border.all(color: AppColors.border),
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Row(
-      children: [
-        CircleAvatar(
-          backgroundColor: AppColors.primary100,
-          foregroundColor: AppColors.primary700,
-          child: Text(student.fullName.isEmpty ? "?" : student.fullName[0]),
-        ),
-        const SizedBox(width: AppSizes.s12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(student.fullName, style: context.textTheme.titleSmall),
-              Text(
-                "انضم في ${_dateFormat.format(student.enrolledAt)}",
-                style: context.textTheme.bodyMedium?.copyWith(
-                  color: AppColors.foregroundMuted,
-                ),
+  Widget build(BuildContext context) {
+    final initial = student.fullName.trim().isNotEmpty
+        ? student.fullName.trim().characters.first
+        : "ط";
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Row(
+        children: [
+          // Initials Avatar
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.primary600, AppColors.primary800],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-            ],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              initial,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+              ),
+            ),
           ),
-        ),
-        const SizedBox(width: AppSizes.s8),
-        _StatusChip(status: student.status),
-      ],
-    ),
-  );
-}
-
-class _StatusChip extends StatelessWidget {
-  final String status;
-  const _StatusChip({required this.status});
-
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.symmetric(
-      horizontal: AppSizes.s8,
-      vertical: AppSizes.s4,
-    ),
-    decoration: BoxDecoration(
-      color: AppColors.primary100,
-      borderRadius: BorderRadius.circular(999),
-    ),
-    child: Text(
-      status,
-      style: context.textTheme.labelMedium?.copyWith(
-        color: AppColors.primary700,
+          const SizedBox(width: 12),
+          // Student Info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  student.fullName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.label.copyWith(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 13.5,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  "انضم في ${_dateFormat.format(student.enrolledAt)}",
+                  style: AppTextStyles.label.copyWith(
+                    color: AppColors.textSecondary,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          // Status Chip
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            decoration: BoxDecoration(
+              color: AppColors.chemistryBiology.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              student.status.isNotEmpty ? student.status : "مقيد",
+              style: AppTextStyles.label.copyWith(
+                color: AppColors.chemistryBiology,
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
       ),
-    ),
-  );
+    );
+  }
 }
 
-class _CountChip extends StatelessWidget {
-  final int count;
-  const _CountChip({required this.count});
+// ---------------------------------------------------------------------------
+// Empty State
+// ---------------------------------------------------------------------------
+class _EmptyStudentsState extends StatelessWidget {
+  final bool hasQuery;
 
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.symmetric(
-      horizontal: AppSizes.s12,
-      vertical: AppSizes.s4,
-    ),
-    decoration: BoxDecoration(
-      color: AppColors.mathPhysics.withValues(alpha: .12),
-      borderRadius: BorderRadius.circular(999),
-    ),
-    child: Text(
-      "$count طلاب",
-      style: context.textTheme.labelMedium?.copyWith(
-        color: AppColors.mathPhysics,
-      ),
-    ),
-  );
-}
-
-class _SubjectChip extends StatelessWidget {
-  final String label;
-  const _SubjectChip({required this.label});
-
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.symmetric(
-      horizontal: AppSizes.s12,
-      vertical: AppSizes.s4,
-    ),
-    decoration: BoxDecoration(
-      color: AppColors.primary100,
-      borderRadius: BorderRadius.circular(999),
-    ),
-    child: Text(
-      label,
-      style: context.textTheme.labelMedium?.copyWith(
-        color: AppColors.primary700,
-      ),
-    ),
-  );
-}
-
-class _EmptyStudents extends StatelessWidget {
-  const _EmptyStudents();
+  const _EmptyStudentsState({required this.hasQuery});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSizes.s48),
+      padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 20),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
-            Icons.people_outline,
-            size: AppSizes.s48,
-            color: AppColors.primary700,
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: AppColors.primary50,
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.primary200),
+            ),
+            child: Icon(
+              hasQuery ? Icons.person_search_rounded : Icons.people_outline_rounded,
+              size: 30,
+              color: AppColors.primary,
+            ),
           ),
-          const SizedBox(height: AppSizes.s12),
+          const SizedBox(height: 14),
           Text(
-            "لا يوجد طلاب",
-            style: context.textTheme.titleMedium,
+            hasQuery ? "لا يوجد طلاب يطابقون البحث" : "لا يوجد طلاب منضمين بعد",
+            style: AppTextStyles.h5.copyWith(
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            hasQuery
+                ? "تأكد من كتابة الاسم بشكل صحيح أو امسح البحث."
+                : "شارك كود الانضمام مع طلابك ليتمكنوا من التسجيل في هذا الفصل.",
+            style: AppTextStyles.body.copyWith(
+              color: AppColors.textSecondary,
+              fontSize: 12.5,
+            ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),

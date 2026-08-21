@@ -17,7 +17,7 @@ class _StudentClassroomSectionsApiService
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://draya-api.runasp.net/api/';
+    baseUrl ??= 'http://draya-api.runasp.net/api/v1/';
   }
 
   final Dio _dio;

@@ -1,5 +1,6 @@
 import "package:draya_mobile/core/enums/cubit_status.dart";
 import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/helpers/app_token_helper.dart";
 import "package:draya_mobile/core/helpers/app_url_helper.dart";
 import "package:draya_mobile/core/router/app_routes.dart";
 import "package:draya_mobile/core/theme/app_colors.dart";
@@ -37,17 +38,30 @@ class StudentClassroomsMaterialsScreen extends StatefulWidget {
 
 class _StudentClassroomsMaterialsScreenState
     extends State<StudentClassroomsMaterialsScreen> {
+  bool _isTeacher = false;
+
   @override
   void initState() {
     super.initState();
+    _checkUserRole();
     _loadData();
+  }
+
+  Future<void> _checkUserRole() async {
+    final role = await AppTokenHelper.getUserRole();
+    if (mounted && role != null) {
+      final normalized = role.trim().toLowerCase();
+      setState(() {
+        _isTeacher = normalized == "teacher" || normalized == "instructor";
+      });
+    }
   }
 
   void _loadData() {
     if (widget.classroomId != null && widget.classroomId!.isNotEmpty) {
-      context
-          .read<StudentMaterialsCubit>()
-          .getClassroomSections(widget.classroomId!);
+      context.read<StudentMaterialsCubit>().getClassroomSections(
+        widget.classroomId!,
+      );
     } else {
       context.read<StudentMaterialsCubit>().getEnrolledMaterials();
     }
@@ -69,7 +83,10 @@ class _StudentClassroomsMaterialsScreenState
     }
   }
 
-  void _handleOpenDocument(SectionDocument doc, List<ClassroomSection> sections) {
+  void _handleOpenDocument(
+    SectionDocument doc,
+    List<ClassroomSection> sections,
+  ) {
     final fileUrl = doc.fileUrl;
     if (fileUrl != null && fileUrl.isNotEmpty) {
       if (doc.isPdf) {
@@ -153,7 +170,11 @@ class _StudentClassroomsMaterialsScreenState
             ? "المواد الدراسية"
             : "مواد ${widget.classroomName}",
       ),
-      drawer: AppDrawer(drawerItemsList: getStudentDrawerItemsList()),
+      drawer: AppDrawer(
+        drawerItemsList: _isTeacher
+            ? getTeacherDrawerItemsList()
+            : getStudentDrawerItemsList(),
+      ),
       backgroundColor: AppColors.background,
       body: BlocConsumer<StudentMaterialsCubit, StudentMaterialsState>(
         listener: (context, state) {
@@ -269,7 +290,8 @@ class _StudentClassroomsMaterialsScreenState
 
     if (state.sectionsStatus == CubitStatus.error && state.sections.isEmpty) {
       return MaterialsErrorState(
-        message: state.apiErrorModel?.error?.message ??
+        message:
+            state.apiErrorModel?.error?.message ??
             "حدث خطأ أثناء تحميل أقسام الفصل الدراسي.",
         onRetry: _loadData,
       );
@@ -314,16 +336,18 @@ class _StudentClassroomsMaterialsScreenState
                     _handleOpenDocument(doc, state.sections),
                 onDownloadDocument: (doc) => _downloadFile(doc.fileUrl),
                 onOpenVideo: (vid) => _handleOpenVideo(vid, state.sections),
-                onStartExam: (exam) {
-                  AppNavigator.push(
-                    context: context,
-                    path: AppRoutes.studentExamDetailsPage,
-                    extra: {
-                      "examId": exam.id,
-                      "classroomName": widget.classroomName,
-                    },
-                  );
-                },
+                onStartExam: _isTeacher
+                    ? null
+                    : (exam) {
+                        AppNavigator.push(
+                          context: context,
+                          path: AppRoutes.studentExamDetailsPage,
+                          extra: {
+                            "examId": exam.id,
+                            "classroomName": widget.classroomName,
+                          },
+                        );
+                      },
               );
 
               if (index < 6) {
@@ -351,7 +375,8 @@ class _StudentClassroomsMaterialsScreenState
     }
     if (state.materialsStatus == CubitStatus.error && state.materials.isEmpty) {
       return MaterialsErrorState(
-        message: state.apiErrorModel?.error?.message ??
+        message:
+            state.apiErrorModel?.error?.message ??
             "حدث خطأ أثناء تحميل المواد.",
         onRetry: _loadData,
       );
@@ -383,12 +408,14 @@ class _StudentClassroomsMaterialsScreenState
                 padding: const EdgeInsets.only(bottom: 12),
                 child: MaterialCard(
                   material: material,
-                  isOpening: state.openingStatus == CubitStatus.loading &&
+                  isOpening:
+                      state.openingStatus == CubitStatus.loading &&
                       state.openingMaterialId == material.materialId,
                   onOpen: () => context
                       .read<StudentMaterialsCubit>()
                       .openMaterial(material),
-                  onDownload: material.currentVersion.fileUrl != null &&
+                  onDownload:
+                      material.currentVersion.fileUrl != null &&
                           material.currentVersion.fileUrl!.isNotEmpty
                       ? () => _downloadFile(material.currentVersion.fileUrl)
                       : null,
@@ -413,10 +440,10 @@ class _StudentClassroomsMaterialsScreenState
                     onPressed: state.materialsStatus == CubitStatus.loading
                         ? null
                         : () => context
-                            .read<StudentMaterialsCubit>()
-                            .getEnrolledMaterials(
-                              page: state.pageNumber + 1,
-                            ),
+                              .read<StudentMaterialsCubit>()
+                              .getEnrolledMaterials(
+                                page: state.pageNumber + 1,
+                              ),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.primary,
                       side: const BorderSide(

@@ -6,7 +6,7 @@ import "package:retrofit/retrofit.dart";
 
 part "student_classrooms_sections_api_service.g.dart";
 
-@RestApi(baseUrl: ApiConstants.baseUrlWithoutV1)
+@RestApi(baseUrl: ApiConstants.baseUrl)
 abstract class StudentClassroomSectionsApiService {
   factory StudentClassroomSectionsApiService(Dio dio) = _StudentClassroomSectionsApiService;
 
