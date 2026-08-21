@@ -32,11 +32,6 @@ List<DrawerModel> getTeacherDrawerItemsList() {
         //   route: AppRoutes.subjectsPage,
         // ),
         DrawerItemViewModel(
-          title: "عن حسابى",
-          icon: Icons.person_outline,
-          route: AppRoutes.teacherProfilePage,
-        ),
-        DrawerItemViewModel(
           icon: Icons.menu_book_outlined,
           title: "الفصول",
           route: AppRoutes.classroomsPage,
@@ -46,11 +41,11 @@ List<DrawerModel> getTeacherDrawerItemsList() {
     DrawerModel(
       title: "التقييم",
       items: [
-        DrawerItemViewModel(
-          icon: Icons.people_outlined,
-          title: "الطلبة",
-          route: AppRoutes.studentsListPage,
-        ),
+        // DrawerItemViewModel(
+        //   icon: Icons.people_outlined,
+        //   title: "الطلبة",
+        //   route: AppRoutes.studentsListPage,
+        // ),
         DrawerItemViewModel(
           icon: Icons.assignment_outlined,
           title: "الامتحانات",
@@ -61,10 +56,10 @@ List<DrawerModel> getTeacherDrawerItemsList() {
     DrawerModel(
       title: "التواصل",
       items: [
-        DrawerItemViewModel(
-          icon: Icons.tv_outlined,
-          title: "القناة",
-        ),
+        // DrawerItemViewModel(
+        //   icon: Icons.tv_outlined,
+        //   title: "القناة",
+        // ),
         DrawerItemViewModel(icon: Icons.chat_outlined, title: "التقييمات"),
       ],
     ),
@@ -76,6 +71,11 @@ List<DrawerModel> getTeacherDrawerItemsList() {
           title: "التحليلات",
         ),
         DrawerItemViewModel(icon: Icons.list_alt_outlined, title: "التقارير"),
+        DrawerItemViewModel(
+          title: "عن حسابى",
+          icon: Icons.person_outline,
+          route: AppRoutes.teacherProfilePage,
+        ),
       ],
     ),
   ];
@@ -138,7 +138,7 @@ List<DrawerModel> getStudentDrawerItemsList() {
         //   icon: Icons.tv_outlined,
         //   title: "القناة الرئيسية",
         // ),
-         DrawerItemViewModel(
+        DrawerItemViewModel(
           title: "عن حسابى",
           icon: Icons.person_outline,
           route: AppRoutes.studentProfilePage,

@@ -49,10 +49,10 @@ class StudentWeakTopicsRepoImpl implements StudentWeakTopicsRepo {
       final encodedTopic = Uri.encodeComponent(topicName);
       final now = DateTime.now().toUtc();
       final body = {
-        "startDate": now.add(const Duration(days: 3)).toIso8601String(),
+        "startDate": now.add(const Duration(hours: 1)).toIso8601String(),
         "endDate": now.add(const Duration(days: 7)).toIso8601String(),
-        "durationMinutes": 30,
-        "allowedAttempts": 5,
+        // "durationMinutes": 30,
+        // "allowedAttempts": 5,
         "topic": topicName,
       };
       final response = await _apiService.generatePracticeExam(
