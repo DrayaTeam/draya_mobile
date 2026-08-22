@@ -17,12 +17,16 @@ abstract final class AppRoutes {
   static const String studentExamDetailsPage = "/student/exams/details";
   static const String teacherExamsPage = "/teacher/exams";
   static const String teacherExamQuestionsPage = "/teacher/exams/questions";
-  static const String studentChannelRoute = "/student/channel/:classroomId";
+  static const String studentChannelMainPage = "/student/channel";
+  static const String studentChannelRoute =
+      "$studentChannelMainPage/:classroomId";
   static String studentChannelPage(String classroomId) =>
-      "/student/channel/$classroomId";
-  static const String teacherChannelRoute = "/teacher/channel/:classroomId";
+      "$studentChannelMainPage/$classroomId";
+  static const String teacherChannelMainPage = "/teacher/channel";
+  static const String teacherChannelRoute =
+      "$teacherChannelMainPage/:classroomId";
   static String teacherChannelPage(String classroomId) =>
-      "/teacher/channel/$classroomId";
+      "$teacherChannelMainPage/$classroomId";
   static String teacherClassroomsPage(String teacherId) =>
       "/student/teachers/$teacherId/classrooms";
   static const String createClassroomPage = "/teacher/classrooms/create";
@@ -44,4 +48,10 @@ abstract final class AppRoutes {
   static const String studentWeakTopicsPage = "/student/weak_topics";
 
   static const String sectionsPage = "/teacher/sections";
+  static const String studentFeedbackPage = "/student/feedback";
+  static const String teacherFeedbackPage = "/teacher/feedback";
+  static const String teacherClassroomFeedbackRoute =
+      "/teacher/feedback/:classroomId";
+  static String teacherClassroomFeedbackPage(String classroomId) =>
+      "/teacher/feedback/$classroomId";
 }

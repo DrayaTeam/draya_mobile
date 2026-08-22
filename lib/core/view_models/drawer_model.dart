@@ -56,11 +56,16 @@ List<DrawerModel> getTeacherDrawerItemsList() {
     DrawerModel(
       title: "التواصل",
       items: [
-        // DrawerItemViewModel(
-        //   icon: Icons.tv_outlined,
-        //   title: "القناة",
-        // ),
-        DrawerItemViewModel(icon: Icons.chat_outlined, title: "التقييمات"),
+        DrawerItemViewModel(
+          icon: Icons.tv_outlined,
+          title: "القناة",
+          route: AppRoutes.teacherChannelMainPage,
+        ),
+        DrawerItemViewModel(
+          icon: Icons.chat_outlined,
+          title: "التقييمات",
+          route: AppRoutes.teacherFeedbackPage,
+        ),
       ],
     ),
     DrawerModel(
@@ -134,10 +139,16 @@ List<DrawerModel> getStudentDrawerItemsList() {
     DrawerModel(
       title: "التواصل",
       items: [
-        // DrawerItemViewModel(
-        //   icon: Icons.tv_outlined,
-        //   title: "القناة الرئيسية",
-        // ),
+        DrawerItemViewModel(
+          icon: Icons.tv_outlined,
+          title: "القناة الرئيسية",
+          route: AppRoutes.studentChannelMainPage,
+        ),
+        DrawerItemViewModel(
+          icon: Icons.chat_outlined,
+          title: "التقييمات",
+          route: AppRoutes.studentFeedbackPage,
+        ),
         DrawerItemViewModel(
           title: "عن حسابى",
           icon: Icons.person_outline,

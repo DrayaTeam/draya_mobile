@@ -47,6 +47,30 @@ class TeacherChannelCubit extends Cubit<TeacherChannelState> {
     await getQuestions(classroomId: classroomId);
   }
 
+  Future<void> switchClassroom({required String classroomId}) async {
+    if (_classroomId == classroomId || _classroomId.isEmpty) return;
+    final previousClassroomId = _classroomId;
+    _classroomId = classroomId;
+    try {
+      await _signalR.leaveClassroom(previousClassroomId);
+    } catch (_) {
+      // Leaving a stale group must not block switching classrooms.
+    }
+    try {
+      await _signalR.joinClassroom(classroomId);
+    } catch (_) {
+      // REST remains available when a real-time connection cannot be opened.
+    }
+    emit(
+      state.copyWith(
+        currentPage: 1,
+        hasPendingNewQuestions: false,
+        apiErrorModel: null,
+      ),
+    );
+    await getQuestions(classroomId: classroomId);
+  }
+
   Future<void> _connectToRealtimeChannel() async {
     final token = await AppTokenHelper.getAccessToken();
     if (token == null || token.isEmpty) return;

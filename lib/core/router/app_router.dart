@@ -11,6 +11,9 @@ import "package:draya_mobile/features/student/profile/presentation/pages/student
 import "package:draya_mobile/features/student/student_weak_topics/presentation/pages/student_weak_topics.dart";
 import "package:draya_mobile/features/student/student_channel/presentation/pages/student_channel_screen.dart";
 import "package:draya_mobile/features/student/student_enrolled_classrooms/presentation/pages/student_enrolled_classrooms_screen.dart";
+import "package:draya_mobile/features/student/student_feedback/presentation/pages/student_feedback_screen.dart";
+import "package:draya_mobile/features/teacher/teacher_feedback/presentation/pages/classroom_feedback_screen.dart";
+import "package:draya_mobile/features/teacher/teacher_feedback/presentation/pages/teacher_feedback_screen.dart";
 import "package:draya_mobile/features/student/student_materials/presentation/pages/student_classrooms_materials_screen.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/pages/create_classroom_page.dart";
 import "package:draya_mobile/features/student/teachers/presentation/pages/browse_teachers_screen.dart";
@@ -297,18 +300,30 @@ abstract final class AppRouter {
         },
       ),
       GoRoute(
+        path: AppRoutes.studentChannelMainPage,
+        builder: (context, state) {
+          return const StudentChannelScreen();
+        },
+      ),
+      GoRoute(
         path: AppRoutes.studentChannelRoute,
         builder: (context, state) {
           return StudentChannelScreen(
-            classroomId: state.pathParameters["classroomId"]!,
+            initialClassroomId: state.pathParameters["classroomId"],
           );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.teacherChannelMainPage,
+        builder: (context, state) {
+          return const TeacherChannelScreen();
         },
       ),
       GoRoute(
         path: AppRoutes.teacherChannelRoute,
         builder: (context, state) {
           return TeacherChannelScreen(
-            classroomId: state.pathParameters["classroomId"]!,
+            initialClassroomId: state.pathParameters["classroomId"],
           );
         },
       ),
@@ -389,6 +404,27 @@ abstract final class AppRouter {
           final ClassroomModel classroomModel = state.extra as ClassroomModel;
 
           return SectionsPage(classroomModel);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.studentFeedbackPage,
+        builder: (context, state) {
+          return const StudentFeedbackScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.teacherFeedbackPage,
+        builder: (context, state) {
+          return const TeacherFeedbackScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.teacherClassroomFeedbackRoute,
+        builder: (context, state) {
+          return ClassroomFeedbackScreen(
+            classroomId: state.pathParameters["classroomId"] ?? "",
+            classroomName: state.extra as String?,
+          );
         },
       ),
     ],

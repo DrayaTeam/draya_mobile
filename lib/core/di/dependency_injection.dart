@@ -29,6 +29,17 @@ import "package:draya_mobile/features/student/student_weak_topics/domain/usecase
 import "package:draya_mobile/features/student/student_weak_topics/domain/usecases/get_ai_revision_use_case.dart";
 import "package:draya_mobile/features/student/student_weak_topics/domain/usecases/get_latest_performance_report_use_case.dart";
 import "package:draya_mobile/features/student/student_weak_topics/presentation/cubit/student_weak_topics_cubit.dart";
+import "package:draya_mobile/features/student/student_feedback/data/repos/student_feedback_repo_impl.dart";
+import "package:draya_mobile/features/student/student_feedback/data/source/student_feedback_api_service.dart";
+import "package:draya_mobile/features/student/student_feedback/domain/repos/student_feedback_repo.dart";
+import "package:draya_mobile/features/student/student_feedback/domain/usecases/submit_feedback_use_case.dart";
+import "package:draya_mobile/features/student/student_feedback/presentation/cubit/student_feedback_cubit.dart";
+import "package:draya_mobile/features/teacher/teacher_feedback/data/repos/teacher_feedback_repo_impl.dart";
+import "package:draya_mobile/features/teacher/teacher_feedback/data/source/teacher_feedback_api_service.dart";
+import "package:draya_mobile/features/teacher/teacher_feedback/domain/repos/teacher_feedback_repo.dart";
+import "package:draya_mobile/features/teacher/teacher_feedback/domain/usecases/get_classroom_feedback_use_case.dart";
+import "package:draya_mobile/features/teacher/teacher_feedback/presentation/cubit/classroom_feedback_cubit.dart";
+import "package:draya_mobile/features/teacher/teacher_feedback/presentation/cubit/teacher_feedback_cubit.dart";
 import "package:draya_mobile/features/student/student_channel/data/repos/student_channel_repo_impl.dart";
 import "package:draya_mobile/features/student/student_channel/data/source/student_channel_remote_data_source.dart";
 import "package:draya_mobile/features/student/student_channel/domain/repos/student_channel_repo.dart";
@@ -745,6 +756,47 @@ Future<void> setupGetIt() async {
       getIt<GetCurrentUserProfileUseCase>(),
       getIt<SignalRService>(),
     ),
+  );
+
+  // student feedback
+  getIt.registerLazySingleton<StudentFeedbackApiService>(
+    () => StudentFeedbackApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<StudentFeedbackRepo>(
+    () => StudentFeedbackRepoImpl(getIt<StudentFeedbackApiService>()),
+  );
+
+  getIt.registerLazySingleton<SubmitFeedbackUseCase>(
+    () => SubmitFeedbackUseCase(getIt<StudentFeedbackRepo>()),
+  );
+
+  getIt.registerFactory<StudentFeedbackCubit>(
+    () => StudentFeedbackCubit(
+      getIt<GetStudentEnrolledClassroomsUseCase>(),
+      getIt<SubmitFeedbackUseCase>(),
+    ),
+  );
+
+  // teacher feedback
+  getIt.registerLazySingleton<TeacherFeedbackApiService>(
+    () => TeacherFeedbackApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<TeacherFeedbackRepo>(
+    () => TeacherFeedbackRepoImpl(getIt<TeacherFeedbackApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetClassroomFeedbackUseCase>(
+    () => GetClassroomFeedbackUseCase(getIt<TeacherFeedbackRepo>()),
+  );
+
+  getIt.registerFactory<TeacherFeedbackCubit>(
+    () => TeacherFeedbackCubit(getIt<GetClassroomsUseCase>()),
+  );
+
+  getIt.registerFactory<ClassroomFeedbackCubit>(
+    () => ClassroomFeedbackCubit(getIt<GetClassroomFeedbackUseCase>()),
   );
 }
 

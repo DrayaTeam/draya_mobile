@@ -188,6 +188,11 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
                                 path: AppRoutes.sectionsPage,
                                 extra: classroom,
                               ),
+                              onOpenChannel: () => context.push(
+                                AppRoutes.teacherChannelPage(
+                                  classroom.classroomId,
+                                ),
+                              ),
                               onPreviewAsStudent: () =>
                                   _previewAsStudent(classroom),
                             );
@@ -606,12 +611,14 @@ class _ModernClassroomCard extends StatelessWidget {
   final ClassroomModel classroom;
   final VoidCallback onViewStudents;
   final VoidCallback onManageSections;
+  final VoidCallback onOpenChannel;
   final VoidCallback onPreviewAsStudent;
 
   const _ModernClassroomCard({
     required this.classroom,
     required this.onViewStudents,
     required this.onManageSections,
+    required this.onOpenChannel,
     required this.onPreviewAsStudent,
   });
 
@@ -935,6 +942,29 @@ class _ModernClassroomCard extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                             fontSize: 11.5,
                           ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // Channel Action
+                  Tooltip(
+                    message: "قناة الأسئلة",
+                    child: InkWell(
+                      onTap: onOpenChannel,
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary50,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: AppColors.primary200),
+                        ),
+                        child: const Icon(
+                          Icons.forum_outlined,
+                          color: AppColors.primary,
+                          size: 18,
                         ),
                       ),
                     ),

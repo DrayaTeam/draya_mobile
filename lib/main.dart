@@ -19,6 +19,8 @@ import "package:draya_mobile/features/student/profile/presentation/cubit/student
 import "package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/enroll_classroom_use_case.dart";
 import "package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/get_student_enrolled_classrooms_use_case.dart";
 import "package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_cubit.dart";
+import "package:draya_mobile/features/student/student_feedback/domain/usecases/submit_feedback_use_case.dart";
+import "package:draya_mobile/features/student/student_feedback/presentation/cubit/student_feedback_cubit.dart";
 import "package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart";
 import "package:draya_mobile/features/student/student_materials/domain/usecases/get_enrolled_materials_use_case.dart";
 import "package:draya_mobile/features/student/student_materials/domain/usecases/get_material_stream_use_case.dart";
@@ -55,6 +57,9 @@ import "package:draya_mobile/features/teacher/classrooms/domain/usecases/get_cla
 import "package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classroom_students_use_case.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart";
+import "package:draya_mobile/features/teacher/teacher_feedback/domain/usecases/get_classroom_feedback_use_case.dart";
+import "package:draya_mobile/features/teacher/teacher_feedback/presentation/cubit/classroom_feedback_cubit.dart";
+import "package:draya_mobile/features/teacher/teacher_feedback/presentation/cubit/teacher_feedback_cubit.dart";
 import "package:draya_mobile/features/teacher/wallet/domain/usecases/confirm_payment_use_case.dart";
 import "package:draya_mobile/features/teacher/wallet/domain/usecases/create_payout_account_use_case.dart";
 import "package:draya_mobile/features/teacher/wallet/domain/usecases/create_withdrawal_use_case.dart";
@@ -223,6 +228,22 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => StudentHomeCubit(
             getIt<GetStudentDashboardUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => TeacherFeedbackCubit(
+            getIt<GetClassroomsUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => StudentFeedbackCubit(
+            getIt<GetStudentEnrolledClassroomsUseCase>(),
+            getIt<SubmitFeedbackUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => ClassroomFeedbackCubit(
+            getIt<GetClassroomFeedbackUseCase>(),
           ),
         ),
       ],
