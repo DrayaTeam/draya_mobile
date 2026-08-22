@@ -20,6 +20,8 @@ import "package:draya_mobile/features/teacher/exam_generation/presentation/pages
 import "package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_2.dart";
 import "package:draya_mobile/features/teacher/exam_generation/presentation/pages/exam_generation_step_3.dart";
 import "package:draya_mobile/features/teacher/exam_generation/data/models/teacher_exam_models.dart";
+import "package:draya_mobile/features/teacher/exams/presentation/pages/teacher_exam_questions_screen.dart";
+import "package:draya_mobile/features/teacher/exams/presentation/pages/teacher_exams_screen.dart";
 import "package:draya_mobile/features/teacher/materials/presentation/pages/materials_page.dart";
 import "package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart";
 import "package:draya_mobile/features/teacher/payments/presentation/pages/payment_web_view_page.dart";
@@ -219,6 +221,24 @@ abstract final class AppRouter {
         path: AppRoutes.browseTeachersPage,
         builder: (context, state) {
           return const BrowseTeachersScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.teacherExamsPage,
+        builder: (context, state) {
+          return const TeacherExamsScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.teacherExamQuestionsPage,
+        builder: (context, state) {
+          final map =
+              state.extra is Map ? state.extra as Map : <String, dynamic>{};
+          return TeacherExamQuestionsScreen(
+            examId: map["examId"]?.toString() ?? "",
+            classroomName: map["classroomName"]?.toString(),
+            sectionTitle: map["sectionTitle"]?.toString(),
+          );
         },
       ),
       GoRoute(

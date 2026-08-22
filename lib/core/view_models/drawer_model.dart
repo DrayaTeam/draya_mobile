@@ -49,7 +49,7 @@ List<DrawerModel> getTeacherDrawerItemsList() {
         DrawerItemViewModel(
           icon: Icons.assignment_outlined,
           title: "الامتحانات",
-          route: AppRoutes.examGenerationPage1,
+          route: AppRoutes.teacherExamsPage,
         ),
       ],
     ),

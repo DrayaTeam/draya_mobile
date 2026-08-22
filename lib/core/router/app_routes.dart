@@ -15,6 +15,8 @@ abstract final class AppRoutes {
   static const String browseTeachersPage = "/teacher/browse_teachers";
   static const String studentExamsPage = "/student/exams";
   static const String studentExamDetailsPage = "/student/exams/details";
+  static const String teacherExamsPage = "/teacher/exams";
+  static const String teacherExamQuestionsPage = "/teacher/exams/questions";
   static const String studentChannelRoute = "/student/channel/:classroomId";
   static String studentChannelPage(String classroomId) =>
       "/student/channel/$classroomId";

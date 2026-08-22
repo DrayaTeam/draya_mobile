@@ -94,6 +94,7 @@ class _ExamGenerationStep1State extends State<ExamGenerationStep1>
   @override
   void initState() {
     super.initState();
+    context.read<ClassroomCubit>().getClassrooms();
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
@@ -245,9 +246,6 @@ class _ExamGenerationStep1State extends State<ExamGenerationStep1>
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<ClassroomCubit>(
-          create: (_) => getIt<ClassroomCubit>()..getClassrooms(),
-        ),
         BlocProvider<SectionCubit>(
           create: (_) => getIt<SectionCubit>(),
         ),
