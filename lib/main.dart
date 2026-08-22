@@ -41,6 +41,7 @@ import "package:draya_mobile/features/teacher/materials/domain/usecases/get_mate
 import "package:draya_mobile/features/teacher/materials/domain/usecases/upload_materials_use_case.dart";
 import "package:draya_mobile/features/teacher/materials/presentation/cubit/materials_cubit.dart";
 import "package:draya_mobile/features/teacher/profile/domain/usecases/get_teacher_profile_use_case.dart";
+import "package:draya_mobile/features/teacher/profile/domain/usecases/update_teacher_profile_use_case.dart";
 import "package:draya_mobile/features/teacher/profile/domain/usecases/upload_teacher_profile_picture_use_case.dart";
 import "package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart";
 import "package:draya_mobile/features/teacher/sections/domain/usecases/create_section_use_case.dart";
@@ -166,6 +167,7 @@ Future<void> main() async {
           create: (context) => TeacherProfileCubit(
             getIt<GetTeacherProfileUseCase>(),
             getIt<UploadTeacherProfilePictureUseCase>(),
+            getIt<UpdateTeacherProfileUseCase>(),
           ),
         ),
         BlocProvider<StudentProfileCubit>(
@@ -186,7 +188,8 @@ Future<void> main() async {
               ConfirmPaymentCubit(getIt<ConfirmPaymentUseCase>()),
         ),
         BlocProvider<TransactionsCubit>(
-          create: (context) => TransactionsCubit(getIt<GetTransactionsUseCase>()),
+          create: (context) =>
+              TransactionsCubit(getIt<GetTransactionsUseCase>()),
         ),
         BlocProvider<PayoutAccountsCubit>(
           create: (context) => PayoutAccountsCubit(

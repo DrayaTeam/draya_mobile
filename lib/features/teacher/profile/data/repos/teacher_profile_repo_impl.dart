@@ -1,6 +1,7 @@
 import "package:draya_mobile/core/networking/api_error_handler.dart";
 import "package:draya_mobile/core/networking/api_result.dart";
 import "package:draya_mobile/features/teacher/profile/data/models/teacher_model.dart";
+import "package:draya_mobile/features/teacher/profile/data/models/update_teacher_request_model.dart";
 import "package:draya_mobile/features/teacher/profile/data/source/teacher_profile_api_service.dart";
 import "package:draya_mobile/features/teacher/profile/domain/repos/teacher_profile_repo.dart";
 import "dart:io";
@@ -34,6 +35,21 @@ class TeacherProfileRepoImpl implements TeacherProfileRepo {
       final response = await _teacherProfileApiService.uploadProfilePicture(
         multipartFile,
       );
+      return ApiResult.success(response);
+    } catch (e) {
+      return ApiResult.failure(ErrorHandler.handle(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<void>> updateTeacherProfile({
+    required UpdateTeacherRequestModel updateTeacherRequestModel,
+  }) async {
+    try {
+      final response = await _teacherProfileApiService.updateTeacherProfile(
+        updateTeacherRequestModel,
+      );
+
       return ApiResult.success(response);
     } catch (e) {
       return ApiResult.failure(ErrorHandler.handle(e));

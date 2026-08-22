@@ -8,7 +8,8 @@ part "teacher_profile_state.freezed.dart";
 @freezed
 abstract class TeacherProfileState with _$TeacherProfileState {
   const factory TeacherProfileState({
-    @Default(CubitStatus.initial) CubitStatus status,
+    @Default(CubitStatus.initial) CubitStatus getTeacherProfileStatus,
+    @Default(CubitStatus.initial) CubitStatus updateTeacherProfileStatus,
     @Default(null) TeacherModel? teacher,
     @Default(false) bool isUploadingPicture,
     ApiErrorModel? apiErrorModel,
