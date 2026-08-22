@@ -1,6 +1,7 @@
 import "package:dio/dio.dart";
 import "package:draya_mobile/core/networking/api_constants.dart";
 import "package:draya_mobile/features/teacher/profile/data/models/teacher_model.dart";
+import "package:draya_mobile/features/teacher/profile/data/models/update_teacher_request_model.dart";
 import "package:draya_mobile/features/teacher/profile/data/source/teacher_profile_api_constants.dart";
 import "package:retrofit/retrofit.dart";
 
@@ -17,5 +18,10 @@ abstract class TeacherProfileApiService {
   @MultiPart()
   Future<dynamic> uploadProfilePicture(
     @Part(name: "file") MultipartFile file,
+  );
+
+  @PUT(TeacherProfileApiConstants.updateTeacherProfile)
+  Future<void> updateTeacherProfile(
+    @Body() UpdateTeacherRequestModel updateTeacherRequestModel,
   );
 }

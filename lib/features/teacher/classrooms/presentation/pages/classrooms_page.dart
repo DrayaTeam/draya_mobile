@@ -78,6 +78,66 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
     );
   }
 
+  Future<void> _deleteClassroom({required String classroomId}) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.error.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.delete_forever_rounded,
+                  color: AppColors.error,
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 10),
+              const Text("حذف الفصل"),
+            ],
+          ),
+          content: Text(
+            "هل أنت متأكد من حذف الفصل؟",
+            style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+          ),
+          actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: const Text("إلغاء"),
+            ),
+            FilledButton.icon(
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.error,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () => Navigator.pop(dialogContext, true),
+              icon: const Icon(Icons.delete_outline, size: 18),
+              label: const Text("حذف نهائي"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldDelete != true || !mounted) return;
+
+    await context.read<ClassroomCubit>().deleteClassroom(
+      classroomId: classroomId,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ClassroomCubit, ClassroomState>(
@@ -112,7 +172,8 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
             child: RefreshIndicator(
               color: AppColors.primary,
               onRefresh: context.read<ClassroomCubit>().getClassrooms,
-              child: state.status == CubitStatus.loading && allClassrooms.isEmpty
+              child:
+                  state.status == CubitStatus.loading && allClassrooms.isEmpty
                   ? const Center(
                       child: CircularProgressIndicator(
                         color: AppColors.primary,
@@ -144,7 +205,8 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
                           totalCount: allClassrooms.length,
                           activeCount: activeCount,
                           inactiveCount: allClassrooms.length - activeCount,
-                          onSearchChanged: (val) => setState(() => _query = val),
+                          onSearchChanged: (val) =>
+                              setState(() => _query = val),
                           onClearSearch: () {
                             _searchController.clear();
                             setState(() => _query = "");
@@ -195,6 +257,11 @@ class _ClassroomsPageState extends State<ClassroomsPage> {
                               ),
                               onPreviewAsStudent: () =>
                                   _previewAsStudent(classroom),
+                              onDeleteClassroom: () {
+                                _deleteClassroom(
+                                  classroomId: classroom.classroomId,
+                                );
+                              },
                             );
 
                             if (index < 6) {
@@ -613,6 +680,7 @@ class _ModernClassroomCard extends StatelessWidget {
   final VoidCallback onManageSections;
   final VoidCallback onOpenChannel;
   final VoidCallback onPreviewAsStudent;
+  final VoidCallback onDeleteClassroom;
 
   const _ModernClassroomCard({
     required this.classroom,
@@ -620,6 +688,7 @@ class _ModernClassroomCard extends StatelessWidget {
     required this.onManageSections,
     required this.onOpenChannel,
     required this.onPreviewAsStudent,
+    required this.onDeleteClassroom,
   });
 
   void _copyEnrollmentCode(BuildContext context) {
@@ -632,7 +701,11 @@ class _ModernClassroomCard extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         content: Row(
           children: [
-            const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+            const Icon(
+              Icons.check_circle_rounded,
+              color: Colors.white,
+              size: 18,
+            ),
             const SizedBox(width: 8),
             Text(
               "تم نسخ كود الانضمام: ${classroom.enrollmentCode}",
@@ -712,10 +785,11 @@ class _ModernClassroomCard extends StatelessWidget {
                           vertical: 3,
                         ),
                         decoration: BoxDecoration(
-                          color: (classroom.isActive
-                                  ? AppColors.chemistryBiology
-                                  : AppColors.foregroundMuted)
-                              .withValues(alpha: 0.1),
+                          color:
+                              (classroom.isActive
+                                      ? AppColors.chemistryBiology
+                                      : AppColors.foregroundMuted)
+                                  .withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Row(
@@ -885,112 +959,175 @@ class _ModernClassroomCard extends StatelessWidget {
             // Actions Row
             Padding(
               padding: const EdgeInsets.all(12),
-              child: Row(
+              child: Column(
+                spacing: AppSizes.s8,
                 children: [
-                  // View Students Action
-                  Expanded(
-                    child: SizedBox(
-                      height: 36,
-                      child: ElevatedButton.icon(
-                        onPressed: onViewStudents,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        icon: const Icon(Icons.people_outline_rounded, size: 16),
-                        label: Text(
-                          "الطلاب",
-                          style: AppTextStyles.label.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  // Manage Sections Action
-                  Expanded(
-                    child: SizedBox(
-                      height: 36,
-                      child: OutlinedButton.icon(
-                        onPressed: onManageSections,
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.primary,
-                          side: const BorderSide(color: AppColors.primary300),
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        icon: const Icon(
-                          Icons.folder_open_rounded,
-                          size: 16,
-                        ),
-                        label: Text(
-                          "الأقسام والمواد",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTextStyles.label.copyWith(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 11.5,
+                  Row(
+                    spacing: AppSizes.s8,
+                    children: [
+                      // View Students Action
+                      Expanded(
+                        child: SizedBox(
+                          height: 36,
+                          child: ElevatedButton.icon(
+                            onPressed: onViewStudents,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            icon: const Icon(
+                              Icons.people_outline_rounded,
+                              size: 16,
+                            ),
+                            label: Text(
+                              "الطلاب",
+                              style: AppTextStyles.label.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+
+                      // Manage Sections Action
+                      Expanded(
+                        child: SizedBox(
+                          height: 36,
+                          child: OutlinedButton.icon(
+                            onPressed: onManageSections,
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.primary,
+                              side: const BorderSide(
+                                color: AppColors.primary300,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            icon: const Icon(
+                              Icons.folder_open_rounded,
+                              size: 16,
+                            ),
+                            label: Text(
+                              "الأقسام والمواد",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.label.copyWith(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 11.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                  // Channel Action
-                  Tooltip(
-                    message: "قناة الأسئلة",
-                    child: InkWell(
-                      onTap: onOpenChannel,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        width: 36,
+                  Row(
+                    //spacing: AppSizes.s8,
+                    children: [
+                      // View Like Student Preview Action
+                      SizedBox(
                         height: 36,
-                        decoration: BoxDecoration(
-                          color: AppColors.primary50,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.primary200),
-                        ),
-                        child: const Icon(
-                          Icons.forum_outlined,
-                          color: AppColors.primary,
-                          size: 18,
+                        child: ElevatedButton.icon(
+                          onPressed: onPreviewAsStudent,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          icon: const Icon(
+                            Icons.visibility_outlined,
+                            size: 16,
+                          ),
+                          label: Text(
+                            "معاينة كطالب",
+                            style: AppTextStyles.label.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  // View Like Student Preview Action
-                  Tooltip(
-                    message: "معاينة كطالب",
-                    child: InkWell(
-                      onTap: onPreviewAsStudent,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        width: 36,
+
+                      const SizedBox(width: 8),
+                      // Channel Action
+                      Tooltip(
+                        message: "قناة الأسئلة",
+                        child: InkWell(
+                          onTap: onOpenChannel,
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary50,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: AppColors.primary200),
+                            ),
+                            child: const Icon(
+                              Icons.forum_outlined,
+                              color: AppColors.primary,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      SizedBox(
                         height: 36,
-                        decoration: BoxDecoration(
-                          color: AppColors.ai50,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.ai300),
-                        ),
-                        child: const Icon(
-                          Icons.visibility_outlined,
-                          color: AppColors.ai700,
-                          size: 18,
+                        child: OutlinedButton.icon(
+                          onPressed: onDeleteClassroom,
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.primary,
+                            backgroundColor: AppColors.error,
+                            side: const BorderSide(
+                              color: AppColors.error,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          icon: const Icon(
+                            Icons.delete_outline,
+                            size: 16,
+                            color: AppColors.surface,
+                          ),
+                          label: Text(
+                            "مسح الفصل",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.label.copyWith(
+                              color: AppColors.surface,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 11.5,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
