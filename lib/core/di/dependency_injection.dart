@@ -287,6 +287,7 @@ Future<void> setupGetIt() async {
     () => ClassroomCubit(
       getIt<GetClassroomsUseCase>(),
       getIt<CreateClassroomUseCase>(),
+      getIt<DeleteClassroomUseCase>(),
     ),
   );
 

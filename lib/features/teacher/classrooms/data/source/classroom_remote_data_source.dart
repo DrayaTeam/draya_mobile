@@ -38,7 +38,9 @@ abstract class ClassroomRemoteDataSource {
   );
 
   @DELETE(ClassroomApiConstants.classroomById)
-  Future<void> deleteClassroom(@Path("classroomId") String classroomId);
+  Future<void> deleteClassroom(
+    @Path(ClassroomApiConstants.classroomId) String classroomId,
+  );
 
   @POST(ClassroomApiConstants.regenerateCode)
   Future<ClassroomModel> regenerateClassroomCode(
@@ -47,7 +49,7 @@ abstract class ClassroomRemoteDataSource {
 
   @GET(ClassroomApiConstants.students)
   Future<StudentRosterPagedResultModel> getClassroomStudents(
-    @Path("classroomId") String classroomId,
+    @Path(ClassroomApiConstants.classroomId) String classroomId,
   );
 
   @PUT(ClassroomApiConstants.pricing)
