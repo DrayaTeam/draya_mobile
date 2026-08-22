@@ -30,7 +30,8 @@ class TeacherWalletTabsSection extends StatefulWidget {
 }
 
 class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
-  int _selectedTabIndex = 0; // 0: Transactions, 1: Withdrawals, 2: Payout Accounts
+  int _selectedTabIndex =
+      0; // 0: Transactions, 1: Withdrawals, 2: Payout Accounts
 
   @override
   void initState() {
@@ -135,18 +136,21 @@ class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
                           : AppColors.textSecondary,
                     ),
                     const SizedBox(width: 6),
-                    Text(
-                      tab["label"] as String,
-                      style: AppTextStyles.label.copyWith(
-                        fontSize: 12,
-                        fontWeight:
-                            isSelected ? FontWeight.bold : FontWeight.w500,
-                        color: isSelected
-                            ? AppColors.primary800
-                            : AppColors.textSecondary,
+                    Flexible(
+                      child: Text(
+                        tab["label"] as String,
+                        style: AppTextStyles.label.copyWith(
+                          fontSize: 12,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.w500,
+                          color: isSelected
+                              ? AppColors.primary800
+                              : AppColors.textSecondary,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
@@ -189,8 +193,9 @@ class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
             state.transactionsResult == null) {
           return _buildErrorPlaceholder(
             message: "تعذر تحميل سجل المعاملات المالية",
-            onRetry: () =>
-                context.read<TransactionsCubit>().getTransactions(isRefresh: true),
+            onRetry: () => context.read<TransactionsCubit>().getTransactions(
+              isRefresh: true,
+            ),
           );
         }
 
@@ -262,17 +267,41 @@ class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                tx.description?.isNotEmpty == true
-                    ? tx.description!
-                    : tx.typeName,
-                style: AppTextStyles.label.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                  fontSize: 13,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      tx.description?.isNotEmpty == true
+                          ? tx.description!
+                          : tx.typeName,
+                      style: AppTextStyles.label.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                        fontSize: 13,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: tx.backgroundColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      tx.formattedAmount,
+                      style: AppTextStyles.label.copyWith(
+                        color: tx.color,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 2),
               Row(
@@ -306,23 +335,6 @@ class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
             ],
           ),
         ),
-        const SizedBox(width: AppSizes.s8),
-        // Amount Pill
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: tx.backgroundColor,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            tx.formattedAmount,
-            style: AppTextStyles.label.copyWith(
-              color: tx.color,
-              fontWeight: FontWeight.bold,
-              fontSize: 13,
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -345,8 +357,9 @@ class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
             state.withdrawalsResult == null) {
           return _buildErrorPlaceholder(
             message: "تعذر تحميل سجل طلبات السحب",
-            onRetry: () =>
-                context.read<WithdrawalsCubit>().getWithdrawals(isRefresh: true),
+            onRetry: () => context.read<WithdrawalsCubit>().getWithdrawals(
+              isRefresh: true,
+            ),
           );
         }
 
@@ -356,7 +369,8 @@ class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
           return _buildEmptyPlaceholder(
             icon: Icons.hourglass_empty_rounded,
             title: "لا توجد طلبات سحب حتى الآن",
-            subtitle: "عند طلب سحب رصيدك، ستتمكن من متابعة حالة موافقة الإدارة هنا",
+            subtitle:
+                "عند طلب سحب رصيدك، ستتمكن من متابعة حالة موافقة الإدارة هنا",
             actionButtonText: "طلب سحب جديد",
             onAction: widget.onRequestWithdrawal,
           );
@@ -407,10 +421,10 @@ class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
           color: item.status == 0
               ? const Color(0xFFFDE68A)
               : item.status == 1
-                  ? const Color(0xFFBBF7D0)
-                  : item.status == 2
-                      ? const Color(0xFFFECACA)
-                      : AppColors.border,
+              ? const Color(0xFFBBF7D0)
+              : item.status == 2
+              ? const Color(0xFFFECACA)
+              : AppColors.border,
         ),
       ),
       child: Column(
@@ -613,9 +627,13 @@ class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
                 ),
                 TextButton.icon(
                   onPressed: () async {
-                    final created = await PayoutAccountBottomSheet.show(context);
+                    final created = await PayoutAccountBottomSheet.show(
+                      context,
+                    );
                     if (created == true && context.mounted) {
-                      await context.read<PayoutAccountsCubit>().getPayoutAccounts();
+                      await context
+                          .read<PayoutAccountsCubit>()
+                          .getPayoutAccounts();
                     }
                   },
                   icon: const Icon(Icons.add_rounded, size: 16),
@@ -630,12 +648,15 @@ class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
               _buildEmptyPlaceholder(
                 icon: Icons.account_balance_wallet_outlined,
                 title: "لم يتم حفظ أي حساب سحب بعد",
-                subtitle: "أضف حسابك البنكي أو محفظة كاش أو إنستاباي لتتمكن من استلام أرباحك",
+                subtitle:
+                    "أضف حسابك البنكي أو محفظة كاش أو إنستاباي لتتمكن من استلام أرباحك",
                 actionButtonText: "إضافة حساب سحب الآن",
                 onAction: () async {
                   final created = await PayoutAccountBottomSheet.show(context);
                   if (created == true && context.mounted) {
-                    await context.read<PayoutAccountsCubit>().getPayoutAccounts();
+                    await context
+                        .read<PayoutAccountsCubit>()
+                        .getPayoutAccounts();
                   }
                 },
               )
@@ -663,9 +684,7 @@ class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
         color: AppColors.backgroundSecondary,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: account.isDefault
-              ? AppColors.primary300
-              : AppColors.border,
+          color: account.isDefault ? AppColors.primary300 : AppColors.border,
           width: account.isDefault ? 1.5 : 1,
         ),
       ),
@@ -768,7 +787,11 @@ class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
                 value: "edit",
                 child: Row(
                   children: [
-                    Icon(Icons.edit_outlined, size: 18, color: AppColors.textPrimary),
+                    Icon(
+                      Icons.edit_outlined,
+                      size: 18,
+                      color: AppColors.textPrimary,
+                    ),
                     SizedBox(width: 8),
                     Text("تعديل الحساب"),
                   ],
@@ -778,9 +801,16 @@ class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
                 value: "delete",
                 child: Row(
                   children: [
-                    Icon(Icons.delete_outline_rounded, size: 18, color: AppColors.error),
+                    Icon(
+                      Icons.delete_outline_rounded,
+                      size: 18,
+                      color: AppColors.error,
+                    ),
                     SizedBox(width: 8),
-                    Text("حذف الحساب", style: TextStyle(color: AppColors.error)),
+                    Text(
+                      "حذف الحساب",
+                      style: TextStyle(color: AppColors.error),
+                    ),
                   ],
                 ),
               ),
@@ -819,9 +849,9 @@ class _TeacherWalletTabsSectionState extends State<TeacherWalletTabsSection> {
             ),
             onPressed: () async {
               Navigator.of(dialogCtx).pop();
-              await context
-                  .read<PayoutAccountsCubit>()
-                  .deletePayoutAccount(account.id);
+              await context.read<PayoutAccountsCubit>().deletePayoutAccount(
+                account.id,
+              );
             },
             child: const Text("حذف"),
           ),
