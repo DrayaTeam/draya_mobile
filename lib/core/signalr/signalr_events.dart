@@ -109,3 +109,41 @@ class ExamGenerationProgressEvent extends SignalREvent {
   bool get isGenerating => status.toLowerCase() == "generating";
 }
 
+class ReportGeneratedEvent extends SignalREvent {
+  final String reportId;
+  final String studentId;
+
+  const ReportGeneratedEvent({
+    required this.reportId,
+    required this.studentId,
+  });
+
+  factory ReportGeneratedEvent.fromJson(Map<String, dynamic> json) {
+    return ReportGeneratedEvent(
+      reportId:
+          (json["ReportId"] ?? json["reportId"] ?? "").toString(),
+      studentId:
+          (json["StudentId"] ?? json["studentId"] ?? "").toString(),
+    );
+  }
+}
+
+class StudentAtRiskEvent extends SignalREvent {
+  final String studentId;
+  final String topicName;
+
+  const StudentAtRiskEvent({
+    required this.studentId,
+    required this.topicName,
+  });
+
+  factory StudentAtRiskEvent.fromJson(Map<String, dynamic> json) {
+    return StudentAtRiskEvent(
+      studentId:
+          (json["StudentId"] ?? json["studentId"] ?? "").toString(),
+      topicName:
+          (json["TopicName"] ?? json["topicName"] ?? "").toString(),
+    );
+  }
+}
+

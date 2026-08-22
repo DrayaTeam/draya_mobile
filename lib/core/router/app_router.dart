@@ -39,6 +39,7 @@ import "package:draya_mobile/features/student/teachers/data/models/teacher_model
 import "package:draya_mobile/features/student/teachers/presentation/pages/payment_result_page.dart";
 import "package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart";
 import "package:draya_mobile/features/teacher/teacher_channel/presentation/pages/teacher_channel_screen.dart";
+import "package:draya_mobile/features/notifications/presentation/pages/notifications_page.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 
@@ -416,6 +417,12 @@ abstract final class AppRouter {
         path: AppRoutes.teacherFeedbackPage,
         builder: (context, state) {
           return const TeacherFeedbackScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.notificationsPage,
+        builder: (context, state) {
+          return const NotificationsPage();
         },
       ),
       GoRoute(

@@ -20,6 +20,10 @@ abstract class SignalRService {
     Function(ExamGenerationProgressEvent) callback,
   );
 
+  void onReportGenerated(Function(ReportGeneratedEvent) callback);
+
+  void onStudentAtRisk(Function(StudentAtRiskEvent) callback);
+
   void offEvent(String eventName);
 
   void dispose();

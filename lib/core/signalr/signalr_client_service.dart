@@ -9,6 +9,7 @@ import "package:signalr_netcore/http_connection_options.dart";
 
 class SignalRClientService implements SignalRService {
   HubConnection? _connection;
+  String? _currentHubUrl;
   final Map<String, List<Function>> _listeners = {};
 
   @override
@@ -16,9 +17,10 @@ class SignalRClientService implements SignalRService {
 
   @override
   Future<void> connect({required String hubUrl, required String token}) async {
-    if (isConnected) return;
+    if (isConnected && _currentHubUrl == hubUrl) return;
 
     await disconnect();
+    _currentHubUrl = hubUrl;
     _connection = HubConnectionBuilder()
         .withUrl(
           hubUrl,
@@ -37,6 +39,7 @@ class SignalRClientService implements SignalRService {
   Future<void> disconnect() async {
     final connection = _connection;
     _connection = null;
+    _currentHubUrl = null;
     if (connection != null) {
       await connection.stop();
     }
@@ -77,6 +80,16 @@ class SignalRClientService implements SignalRService {
     _addListener("ReceiveGenerationProgress", callback);
   }
 
+  @override
+  void onReportGenerated(void Function(ReportGeneratedEvent) callback) {
+    _addListener("ReportGenerated", callback);
+  }
+
+  @override
+  void onStudentAtRisk(void Function(StudentAtRiskEvent) callback) {
+    _addListener("StudentAtRisk", callback);
+  }
+
   void _addListener(String eventName, Function callback) {
     _listeners.putIfAbsent(eventName, () => []).add(callback);
     _bindEvent(eventName);
@@ -104,6 +117,8 @@ class SignalRClientService implements SignalRService {
         "QuestionVoteUpdated" => QuestionVoteUpdatedEvent.fromJson(payload),
         "ReceiveGenerationProgress" =>
           ExamGenerationProgressEvent.fromJson(payload),
+        "ReportGenerated" => ReportGeneratedEvent.fromJson(payload),
+        "StudentAtRisk" => StudentAtRiskEvent.fromJson(payload),
         _ => null,
       };
       if (event == null) return;

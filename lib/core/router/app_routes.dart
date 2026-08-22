@@ -46,6 +46,7 @@ abstract final class AppRoutes {
   static const String studentEnrolledClassroomsPage =
       "/student/enrolled_classrooms";
   static const String studentWeakTopicsPage = "/student/weak_topics";
+  static const String notificationsPage = "/notifications";
 
   static const String sectionsPage = "/teacher/sections";
   static const String studentFeedbackPage = "/student/feedback";
