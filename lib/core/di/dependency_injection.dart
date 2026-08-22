@@ -51,6 +51,7 @@ import "package:draya_mobile/features/teacher/dashboard/data/sources/teacher_das
 import "package:draya_mobile/features/teacher/dashboard/domain/repos/teacher_dashboard_repo.dart";
 import "package:draya_mobile/features/teacher/dashboard/domain/usecases/get_teacher_dashboard_use_case.dart";
 import "package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart";
+import "package:draya_mobile/features/teacher/profile/domain/usecases/update_teacher_profile_use_case.dart";
 import "package:draya_mobile/features/teacher/sections/data/repos/section_repo_impl.dart";
 import "package:draya_mobile/features/teacher/sections/data/sources/section_api_service.dart";
 import "package:draya_mobile/features/teacher/sections/domain/repos/section_repo.dart";
@@ -304,6 +305,10 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<UploadTeacherProfilePictureUseCase>(
     () => UploadTeacherProfilePictureUseCase(getIt<TeacherProfileRepo>()),
+  );
+
+  getIt.registerLazySingleton<UpdateTeacherProfileUseCase>(
+    () => UpdateTeacherProfileUseCase(getIt<TeacherProfileRepo>()),
   );
 
   // wallet
@@ -747,4 +752,3 @@ Future<void> setupGetIt() async {
     ),
   );
 }
-

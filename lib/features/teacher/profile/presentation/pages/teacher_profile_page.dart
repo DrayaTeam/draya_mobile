@@ -1,8 +1,8 @@
 import "package:draya_mobile/core/helpers/app_dialog_helper.dart";
+import "package:draya_mobile/core/helpers/app_loading.dart";
 import "package:draya_mobile/core/helpers/app_navigator.dart";
 import "package:draya_mobile/core/router/app_routes.dart";
 import "package:draya_mobile/core/theme/app_sizes.dart";
-import "package:draya_mobile/core/validation/email_validator.dart";
 import "package:draya_mobile/core/validation/phone_validator.dart";
 import "package:draya_mobile/core/validation/validation_result.dart";
 import "package:draya_mobile/core/view_models/drawer_model.dart";
@@ -17,6 +17,7 @@ import "package:draya_mobile/core/widgets/fade_in_up_animation.dart";
 import "package:draya_mobile/core/widgets/profile_avatar_picker.dart";
 import "package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart";
 import "package:draya_mobile/features/teacher/profile/data/models/teacher_model.dart";
+import "package:draya_mobile/features/teacher/profile/data/models/update_teacher_request_model.dart";
 import "package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart";
 import "package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_state.dart";
 import "package:draya_mobile/features/teacher/profile/presentation/widgets/payout_account_bottom_sheet.dart";
@@ -50,6 +51,8 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
   late final TextEditingController _textEditingControllerName;
   late final TextEditingController _textEditingControllerEmail;
   late final TextEditingController _textEditingControllerPhoneNumber;
+  late final TextEditingController _textEditingControllerSpecialization;
+  late final TextEditingController _textEditingControllerDescription;
   late final TextEditingController _textEditingControllerTopUpAmount;
   late final GlobalKey<FormState> _formKey;
   String? _topUpAmountError;
@@ -61,9 +64,22 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
     _textEditingControllerName = TextEditingController();
     _textEditingControllerEmail = TextEditingController();
     _textEditingControllerPhoneNumber = TextEditingController();
+    _textEditingControllerSpecialization = TextEditingController();
+    _textEditingControllerDescription = TextEditingController();
     _textEditingControllerTopUpAmount = TextEditingController();
 
     _loadData();
+  }
+
+  @override
+  void dispose() {
+    _textEditingControllerName.dispose();
+    _textEditingControllerEmail.dispose();
+    _textEditingControllerPhoneNumber.dispose();
+    _textEditingControllerSpecialization.dispose();
+    _textEditingControllerDescription.dispose();
+    _textEditingControllerTopUpAmount.dispose();
+    super.dispose();
   }
 
   void _loadData() {
@@ -74,32 +90,16 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
     context.read<PayoutAccountsCubit>().getPayoutAccounts();
   }
 
-  @override
-  void dispose() {
-    _textEditingControllerName.dispose();
-    _textEditingControllerEmail.dispose();
-    _textEditingControllerPhoneNumber.dispose();
-    _textEditingControllerTopUpAmount.dispose();
-    super.dispose();
-  }
-
   void _editTeacherProfile() {
     if (_formKey.currentState!.validate()) {
       FocusScope.of(context).unfocus();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Row(
-            children: [
-              Icon(Icons.check_circle_outline_rounded, color: Colors.white),
-              SizedBox(width: 8),
-              Text("تم حفظ التعديلات بنجاح"),
-            ],
-          ),
-          backgroundColor: AppColors.primary700,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+
+      context.read<TeacherProfileCubit>().updateTeacherProfile(
+        updateTeacherRequestModel: UpdateTeacherRequestModel(
+          fullName: _textEditingControllerName.text,
+          phone: _textEditingControllerPhoneNumber.text,
+          specialization: _textEditingControllerSpecialization.text,
+          description: _textEditingControllerDescription.text,
         ),
       );
     }
@@ -157,43 +157,77 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
     return MultiBlocListener(
       listeners: [
         BlocListener<TeacherProfileCubit, TeacherProfileState>(
-          listenWhen: (previous, current) {
-            return previous.status != current.status ||
-                (previous.apiErrorModel != current.apiErrorModel &&
-                    current.apiErrorModel != null);
-          },
+          // listenWhen: (previous, current) {
+          //   return previous.status != current.status ||
+          //       (previous.apiErrorModel != current.apiErrorModel &&
+          //           current.apiErrorModel != null);
+          // },
           listener: (BuildContext context, TeacherProfileState state) {
-            switch (state.status) {
-              case CubitStatus.initial:
-                break;
-              case CubitStatus.loading:
-                AppDialogHelper.display(context, const AppCustomLoading());
-                break;
-              case CubitStatus.success:
-                final TeacherModel? teacher = state.teacher;
+            if (state.getTeacherProfileStatus == CubitStatus.loading ||
+                state.updateTeacherProfileStatus == CubitStatus.loading) {
+              AppLoading.show();
+            }
 
-                if (teacher != null) {
-                  _textEditingControllerName.text = teacher.fullName;
-                  _textEditingControllerEmail.text = teacher.email;
-                  _textEditingControllerPhoneNumber.text = teacher.phone;
-                }
+            if (state.getTeacherProfileStatus == CubitStatus.error) {
+              AppLoading.hide();
+              AppDialogHelper.display(
+                context,
+                AppErrorDialog(
+                  apiErrorModel: state.apiErrorModel!,
+                  onRetry: () =>
+                      context.read<TeacherProfileCubit>().getTeacherProfile(),
+                ),
+              );
+            }
 
-                AppNavigator.pop(context: context);
-                break;
-              case CubitStatus.error:
-                AppNavigator.pop(context: context);
-                if (state.apiErrorModel != null) {
-                  AppDialogHelper.display(
-                    context,
-                    AppErrorDialog(
-                      apiErrorModel: state.apiErrorModel!,
-                      onRetry: () => context
-                          .read<TeacherProfileCubit>()
-                          .getTeacherProfile(),
-                    ),
-                  );
-                }
-                break;
+            if (state.updateTeacherProfileStatus == CubitStatus.error) {
+              AppLoading.hide();
+              AppDialogHelper.display(
+                context,
+                AppErrorDialog(
+                  apiErrorModel: state.apiErrorModel!,
+                ),
+              );
+            }
+
+            if (state.getTeacherProfileStatus == CubitStatus.success) {
+              AppLoading.hide();
+
+              final TeacherModel? teacher = state.teacher;
+
+              if (teacher != null) {
+                _textEditingControllerName.text = teacher.fullName;
+                _textEditingControllerEmail.text = teacher.email;
+                _textEditingControllerPhoneNumber.text = teacher.phone;
+                _textEditingControllerSpecialization.text =
+                    teacher.specialization ?? "";
+                _textEditingControllerDescription.text =
+                    teacher.description ?? "";
+              }
+            }
+
+            if (state.updateTeacherProfileStatus == CubitStatus.success) {
+              AppLoading.hide();
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Row(
+                    children: [
+                      Icon(
+                        Icons.check_circle_outline_rounded,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 8),
+                      Text("تم حفظ التعديلات بنجاح"),
+                    ],
+                  ),
+                  backgroundColor: AppColors.primary700,
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              );
             }
           },
         ),
@@ -569,18 +603,11 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
             const AppLabel(label: "البريد الإلكتروني"),
             const SizedBox(height: AppSizes.s8),
             AppTextFormField(
+              isReadOnly: true,
               controller: _textEditingControllerEmail,
               hintText: "name@example.com",
-              keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               prefixIcon: Icons.email_outlined,
-              validator: (value) {
-                final result = EmailValidator.validate(email: value);
-                if (result is Invalid) {
-                  return result.message;
-                }
-                return null;
-              },
             ),
 
             const SizedBox(height: AppSizes.s16),
@@ -601,9 +628,30 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
                 return null;
               },
             ),
+            const SizedBox(height: AppSizes.s16),
 
+            const AppLabel(label: "التخصص"),
+            const SizedBox(height: AppSizes.s8),
+            AppTextFormField(
+              controller: _textEditingControllerSpecialization,
+              hintText: "أدخل التخصص",
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              prefixIcon: Icons.school_outlined,
+            ),
+
+            const SizedBox(height: AppSizes.s16),
+
+            const AppLabel(label: "الوصف"),
+            const SizedBox(height: AppSizes.s8),
+            AppTextFormField(
+              controller: _textEditingControllerDescription,
+              hintText: "أدخل الوصف",
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              prefixIcon: Icons.description_outlined,
+            ),
             const SizedBox(height: AppSizes.s20),
-
             AppElevatedButton(
               onPressed: _editTeacherProfile,
               label: "حفظ التغييرات",
