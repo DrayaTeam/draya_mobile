@@ -11,7 +11,6 @@ import "package:draya_mobile/core/validation/validation_result.dart";
 import "package:draya_mobile/core/widgets/app_elevated_button.dart";
 import "package:draya_mobile/core/widgets/app_error_dialog.dart";
 import "package:draya_mobile/core/widgets/app_label.dart";
-import "package:draya_mobile/core/widgets/app_logo_and_name.dart";
 import "package:draya_mobile/core/widgets/app_text_form_field.dart";
 import "package:draya_mobile/features/auth/data/models/register_student_request_model.dart";
 import "package:draya_mobile/features/auth/domain/entity/auth_entity.dart";
@@ -118,8 +117,6 @@ class _StudentSignupTabState extends State<StudentSignupTab> {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: AppSizes.s16,
               children: [
-                const AppLogoAndName(),
-                const SizedBox(height: AppSizes.s20),
                 const AppLabel(label: "الاسم الكامل*"),
                 AppTextFormField(
                   controller: _textEditingControllerFullName,
