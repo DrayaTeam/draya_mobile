@@ -1,14 +1,18 @@
 import "package:draya_mobile/core/enums/cubit_status.dart";
 import "package:draya_mobile/core/networking/api_result.dart";
 import "package:draya_mobile/features/teacher/dashboard/domain/usecases/get_teacher_dashboard_use_case.dart";
+import "package:draya_mobile/features/teacher/dashboard/domain/usecases/get_teacher_pending_reviews_use_case.dart";
 import "package:draya_mobile/features/teacher/dashboard/presentation/cubit/teacher_dashboard_state.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 
 class TeacherDashboardCubit extends Cubit<TeacherDashboardState> {
   final GetTeacherDashboardUseCase _getTeacherDashboardUseCase;
+  final GetTeacherPendingReviewsUseCase _getTeacherPendingReviewsUseCase;
 
-  TeacherDashboardCubit(this._getTeacherDashboardUseCase)
-    : super(const TeacherDashboardState());
+  TeacherDashboardCubit(
+    this._getTeacherDashboardUseCase,
+    this._getTeacherPendingReviewsUseCase,
+  ) : super(const TeacherDashboardState());
 
   Future<void> getTeacherDashboard() async {
     emit(state.copyWith(status: CubitStatus.loading));
@@ -32,6 +36,25 @@ class TeacherDashboardCubit extends Cubit<TeacherDashboardState> {
           ),
         );
       },
+    );
+  }
+
+  Future<void> getPendingReviews() async {
+    emit(state.copyWith(pendingReviewsStatus: CubitStatus.loading));
+
+    final result = await _getTeacherPendingReviewsUseCase.call();
+
+    result.when(
+      success: (classrooms) => emit(
+        state.copyWith(
+          pendingReviewsStatus: CubitStatus.success,
+          pendingReviews:
+              classrooms.where((c) => c.exams.isNotEmpty).toList(),
+        ),
+      ),
+      failure: (_) => emit(
+        state.copyWith(pendingReviewsStatus: CubitStatus.error),
+      ),
     );
   }
 }

@@ -2,12 +2,16 @@ class WeakTopic {
   final String topicName;
   final double proficiencyPercent;
   final String recommendation;
+  final bool? isActive;
 
   const WeakTopic({
     required this.topicName,
     required this.proficiencyPercent,
     required this.recommendation,
+    this.isActive,
   });
+
+  bool get isResolved => isActive == false;
 }
 
 class SubjectProficiency {

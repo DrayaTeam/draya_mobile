@@ -43,6 +43,7 @@ import "package:draya_mobile/features/teacher/classrooms/domain/usecases/get_gra
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_types_cubit.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/grade_levels_cubit.dart";
 import "package:draya_mobile/features/teacher/dashboard/domain/usecases/get_teacher_dashboard_use_case.dart";
+import "package:draya_mobile/features/teacher/dashboard/domain/usecases/get_teacher_pending_reviews_use_case.dart";
 import "package:draya_mobile/features/teacher/dashboard/presentation/cubit/teacher_dashboard_cubit.dart";
 import "package:draya_mobile/features/teacher/materials/domain/usecases/delete_material_use_case.dart";
 import "package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart";
@@ -242,6 +243,7 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => TeacherDashboardCubit(
             getIt<GetTeacherDashboardUseCase>(),
+            getIt<GetTeacherPendingReviewsUseCase>(),
           ),
         ),
         BlocProvider(

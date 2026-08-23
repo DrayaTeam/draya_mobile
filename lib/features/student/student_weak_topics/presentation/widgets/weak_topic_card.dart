@@ -27,7 +27,13 @@ class WeakTopicCard extends StatelessWidget {
     String statusLabel;
     IconData statusIcon;
 
-    if (percent < 50) {
+    if (topic.isResolved) {
+      statusColor = const Color(0xFF059669);
+      statusBg = const Color(0xFFF0FDF4);
+      statusBorder = const Color(0xFFBBF7D0);
+      statusLabel = "تم الإتقان";
+      statusIcon = Icons.verified_rounded;
+    } else if (percent < 50) {
       statusColor = const Color(0xFFE11D48);
       statusBg = const Color(0xFFFFF1F2);
       statusBorder = const Color(0xFFFECDD3);

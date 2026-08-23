@@ -43,8 +43,11 @@ import "package:draya_mobile/features/teacher/reports/domain/usecases/get_perfor
 import "package:draya_mobile/features/teacher/students_grades/data/repos/students_grades_repo_impl.dart";
 import "package:draya_mobile/features/teacher/students_grades/data/source/students_grades_remote_data_source.dart";
 import "package:draya_mobile/features/teacher/students_grades/domain/repos/students_grades_repo.dart";
+import "package:draya_mobile/features/teacher/students_grades/domain/usecases/get_attempt_review_use_case.dart";
 import "package:draya_mobile/features/teacher/students_grades/domain/usecases/get_exam_attempts_use_case.dart";
+import "package:draya_mobile/features/teacher/students_grades/domain/usecases/override_answer_score_use_case.dart";
 import "package:draya_mobile/features/teacher/students_grades/presentation/cubit/exam_attempts_cubit.dart";
+import "package:draya_mobile/features/teacher/students_grades/presentation/cubit/attempt_review_cubit.dart";
 import "package:draya_mobile/features/teacher/students_grades/presentation/cubit/grades_classrooms_cubit.dart";
 import "package:draya_mobile/features/teacher/students_grades/presentation/cubit/grades_exams_cubit.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/data/repos/teacher_feedback_repo_impl.dart";
@@ -68,12 +71,18 @@ import "package:draya_mobile/features/student/exams/domain/usecases/get_grading_
 import "package:draya_mobile/features/student/exams/domain/usecases/start_exam_attempt_use_case.dart";
 import "package:draya_mobile/features/student/exams/domain/usecases/submit_exam_attempt_use_case.dart";
 import "package:draya_mobile/features/student/exams/presentation/cubit/student_exam_cubit.dart";
+import "package:draya_mobile/features/student/exams_history/data/repos/exams_history_repo_impl.dart";
+import "package:draya_mobile/features/student/exams_history/data/source/exams_history_api_service.dart";
+import "package:draya_mobile/features/student/exams_history/domain/repos/exams_history_repo.dart";
+import "package:draya_mobile/features/student/exams_history/domain/usecases/get_student_exams_history_use_case.dart";
+import "package:draya_mobile/features/student/exams_history/presentation/cubit/exams_history_cubit.dart";
 import "package:draya_mobile/features/student/student_materials/data/source/student_classrooms_sections_api_service.dart";
 import "package:draya_mobile/features/student/student_materials/domain/usecases/get_classroom_sections_use_case.dart";
 import "package:draya_mobile/features/teacher/dashboard/data/repos/teacher_dashboard_repo_impl.dart";
 import "package:draya_mobile/features/teacher/dashboard/data/sources/teacher_dashboard_api_service.dart";
 import "package:draya_mobile/features/teacher/dashboard/domain/repos/teacher_dashboard_repo.dart";
 import "package:draya_mobile/features/teacher/dashboard/domain/usecases/get_teacher_dashboard_use_case.dart";
+import "package:draya_mobile/features/teacher/dashboard/domain/usecases/get_teacher_pending_reviews_use_case.dart";
 import "package:draya_mobile/features/teacher/materials/domain/usecases/get_materials_use_case.dart";
 import "package:draya_mobile/features/teacher/profile/domain/usecases/update_teacher_profile_use_case.dart";
 import "package:draya_mobile/features/teacher/sections/data/repos/section_repo_impl.dart";
@@ -679,6 +688,26 @@ Future<void> setupGetIt() async {
     ),
   );
 
+  // student exams history
+  getIt.registerLazySingleton<ExamsHistoryApiService>(
+    () => ExamsHistoryApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<ExamsHistoryRepo>(
+    () => ExamsHistoryRepoImpl(getIt<ExamsHistoryApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetStudentExamsHistoryUseCase>(
+    () => GetStudentExamsHistoryUseCase(getIt<ExamsHistoryRepo>()),
+  );
+
+  getIt.registerFactory<ExamsHistoryCubit>(
+    () => ExamsHistoryCubit(
+      getIt<GetStudentExamsHistoryUseCase>(),
+      getIt<GetStudentEnrolledClassroomsUseCase>(),
+    ),
+  );
+
   // sections
   getIt.registerLazySingleton<SectionApiService>(
     () => SectionApiService(getIt<Dio>()),
@@ -725,6 +754,10 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<GetTeacherDashboardUseCase>(
     () => GetTeacherDashboardUseCase(getIt<TeacherDashboardRepo>()),
+  );
+
+  getIt.registerLazySingleton<GetTeacherPendingReviewsUseCase>(
+    () => GetTeacherPendingReviewsUseCase(getIt<TeacherDashboardRepo>()),
   );
 
   // student dashboard
@@ -866,6 +899,14 @@ Future<void> setupGetIt() async {
     () => GetExamAttemptsUseCase(getIt<StudentsGradesRepo>()),
   );
 
+  getIt.registerLazySingleton<GetAttemptReviewUseCase>(
+    () => GetAttemptReviewUseCase(getIt<StudentsGradesRepo>()),
+  );
+
+  getIt.registerLazySingleton<OverrideAnswerScoreUseCase>(
+    () => OverrideAnswerScoreUseCase(getIt<StudentsGradesRepo>()),
+  );
+
   getIt.registerFactory<GradesClassroomsCubit>(
     () => GradesClassroomsCubit(getIt<GetClassroomsUseCase>()),
   );
@@ -876,5 +917,12 @@ Future<void> setupGetIt() async {
 
   getIt.registerFactory<ExamAttemptsCubit>(
     () => ExamAttemptsCubit(getIt<GetExamAttemptsUseCase>()),
+  );
+
+  getIt.registerFactory<AttemptReviewCubit>(
+    () => AttemptReviewCubit(
+      getIt<GetAttemptReviewUseCase>(),
+      getIt<OverrideAnswerScoreUseCase>(),
+    ),
   );
 }

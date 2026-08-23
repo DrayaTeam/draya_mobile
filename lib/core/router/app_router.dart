@@ -6,6 +6,8 @@ import "package:draya_mobile/features/auth/presentation/signup_choice/pages/sign
 import "package:draya_mobile/features/auth/presentation/verification_code_page/pages/verification_code_page.dart";
 import "package:draya_mobile/features/student/exams/presentation/pages/student_exam_details_screen.dart";
 import "package:draya_mobile/features/student/exams/presentation/pages/student_exams_screen.dart";
+import "package:draya_mobile/features/student/exams_history/presentation/pages/exams_history_screen.dart";
+import "package:draya_mobile/features/teacher/students_grades/presentation/pages/attempt_review_screen.dart";
 import "package:draya_mobile/features/student/home/presentation/pages/student_home_screen.dart";
 import "package:draya_mobile/features/student/profile/presentation/pages/student_profile_page.dart";
 import "package:draya_mobile/features/student/student_weak_topics/presentation/pages/student_weak_topics.dart";
@@ -264,6 +266,23 @@ abstract final class AppRouter {
           return TeacherClassroomsPage(
             teacherId: teacherId,
             teacher: teacher,
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.studentExamsHistoryPage,
+        builder: (context, state) {
+          return const ExamsHistoryScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.teacherAttemptReviewPage(":attemptId"),
+        builder: (context, state) {
+          final map = state.extra is Map ? state.extra as Map : <String, dynamic>{};
+          return AttemptReviewScreen(
+            attemptId: state.pathParameters["attemptId"] ?? "",
+            examTitle: map["examTitle"]?.toString(),
+            studentName: map["studentName"]?.toString(),
           );
         },
       ),

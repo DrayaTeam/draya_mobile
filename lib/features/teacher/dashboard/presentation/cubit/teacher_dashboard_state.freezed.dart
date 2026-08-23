@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TeacherDashboardState {
 
- CubitStatus get status; TeacherDashboardModel? get teacherDashboardModel; ApiErrorModel? get apiErrorModel;
+ CubitStatus get status; CubitStatus get pendingReviewsStatus; TeacherDashboardModel? get teacherDashboardModel; List<ClassroomPendingReviewsModel> get pendingReviews; ApiErrorModel? get apiErrorModel;
 /// Create a copy of TeacherDashboardState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TeacherDashboardStateCopyWith<TeacherDashboardState> get copyWith => _$TeacherD
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeacherDashboardState&&(identical(other.status, status) || other.status == status)&&(identical(other.teacherDashboardModel, teacherDashboardModel) || other.teacherDashboardModel == teacherDashboardModel)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TeacherDashboardState&&(identical(other.status, status) || other.status == status)&&(identical(other.pendingReviewsStatus, pendingReviewsStatus) || other.pendingReviewsStatus == pendingReviewsStatus)&&(identical(other.teacherDashboardModel, teacherDashboardModel) || other.teacherDashboardModel == teacherDashboardModel)&&const DeepCollectionEquality().equals(other.pendingReviews, pendingReviews)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,teacherDashboardModel,apiErrorModel);
+int get hashCode => Object.hash(runtimeType,status,pendingReviewsStatus,teacherDashboardModel,const DeepCollectionEquality().hash(pendingReviews),apiErrorModel);
 
 @override
 String toString() {
-  return 'TeacherDashboardState(status: $status, teacherDashboardModel: $teacherDashboardModel, apiErrorModel: $apiErrorModel)';
+  return 'TeacherDashboardState(status: $status, pendingReviewsStatus: $pendingReviewsStatus, teacherDashboardModel: $teacherDashboardModel, pendingReviews: $pendingReviews, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $TeacherDashboardStateCopyWith<$Res>  {
   factory $TeacherDashboardStateCopyWith(TeacherDashboardState value, $Res Function(TeacherDashboardState) _then) = _$TeacherDashboardStateCopyWithImpl;
 @useResult
 $Res call({
- CubitStatus status, TeacherDashboardModel? teacherDashboardModel, ApiErrorModel? apiErrorModel
+ CubitStatus status, CubitStatus pendingReviewsStatus, TeacherDashboardModel? teacherDashboardModel, List<ClassroomPendingReviewsModel> pendingReviews, ApiErrorModel? apiErrorModel
 });
 
 
@@ -62,11 +62,13 @@ class _$TeacherDashboardStateCopyWithImpl<$Res>
 
 /// Create a copy of TeacherDashboardState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? teacherDashboardModel = freezed,Object? apiErrorModel = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? pendingReviewsStatus = null,Object? teacherDashboardModel = freezed,Object? pendingReviews = null,Object? apiErrorModel = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as CubitStatus,pendingReviewsStatus: null == pendingReviewsStatus ? _self.pendingReviewsStatus : pendingReviewsStatus // ignore: cast_nullable_to_non_nullable
 as CubitStatus,teacherDashboardModel: freezed == teacherDashboardModel ? _self.teacherDashboardModel : teacherDashboardModel // ignore: cast_nullable_to_non_nullable
-as TeacherDashboardModel?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
+as TeacherDashboardModel?,pendingReviews: null == pendingReviews ? _self.pendingReviews : pendingReviews // ignore: cast_nullable_to_non_nullable
+as List<ClassroomPendingReviewsModel>,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
 as ApiErrorModel?,
   ));
 }
@@ -152,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus status,  TeacherDashboardModel? teacherDashboardModel,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus status,  CubitStatus pendingReviewsStatus,  TeacherDashboardModel? teacherDashboardModel,  List<ClassroomPendingReviewsModel> pendingReviews,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TeacherDashboardState() when $default != null:
-return $default(_that.status,_that.teacherDashboardModel,_that.apiErrorModel);case _:
+return $default(_that.status,_that.pendingReviewsStatus,_that.teacherDashboardModel,_that.pendingReviews,_that.apiErrorModel);case _:
   return orElse();
 
 }
@@ -173,10 +175,10 @@ return $default(_that.status,_that.teacherDashboardModel,_that.apiErrorModel);ca
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus status,  TeacherDashboardModel? teacherDashboardModel,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus status,  CubitStatus pendingReviewsStatus,  TeacherDashboardModel? teacherDashboardModel,  List<ClassroomPendingReviewsModel> pendingReviews,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
 switch (_that) {
 case _TeacherDashboardState():
-return $default(_that.status,_that.teacherDashboardModel,_that.apiErrorModel);case _:
+return $default(_that.status,_that.pendingReviewsStatus,_that.teacherDashboardModel,_that.pendingReviews,_that.apiErrorModel);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +195,10 @@ return $default(_that.status,_that.teacherDashboardModel,_that.apiErrorModel);ca
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus status,  TeacherDashboardModel? teacherDashboardModel,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus status,  CubitStatus pendingReviewsStatus,  TeacherDashboardModel? teacherDashboardModel,  List<ClassroomPendingReviewsModel> pendingReviews,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
 switch (_that) {
 case _TeacherDashboardState() when $default != null:
-return $default(_that.status,_that.teacherDashboardModel,_that.apiErrorModel);case _:
+return $default(_that.status,_that.pendingReviewsStatus,_that.teacherDashboardModel,_that.pendingReviews,_that.apiErrorModel);case _:
   return null;
 
 }
@@ -208,11 +210,19 @@ return $default(_that.status,_that.teacherDashboardModel,_that.apiErrorModel);ca
 
 
 class _TeacherDashboardState implements TeacherDashboardState {
-  const _TeacherDashboardState({this.status = CubitStatus.initial, this.teacherDashboardModel, this.apiErrorModel});
+  const _TeacherDashboardState({this.status = CubitStatus.initial, this.pendingReviewsStatus = CubitStatus.initial, this.teacherDashboardModel, final  List<ClassroomPendingReviewsModel> pendingReviews = const [], this.apiErrorModel}): _pendingReviews = pendingReviews;
   
 
 @override@JsonKey() final  CubitStatus status;
+@override@JsonKey() final  CubitStatus pendingReviewsStatus;
 @override final  TeacherDashboardModel? teacherDashboardModel;
+ final  List<ClassroomPendingReviewsModel> _pendingReviews;
+@override@JsonKey() List<ClassroomPendingReviewsModel> get pendingReviews {
+  if (_pendingReviews is EqualUnmodifiableListView) return _pendingReviews;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_pendingReviews);
+}
+
 @override final  ApiErrorModel? apiErrorModel;
 
 /// Create a copy of TeacherDashboardState
@@ -225,16 +235,16 @@ _$TeacherDashboardStateCopyWith<_TeacherDashboardState> get copyWith => __$Teach
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeacherDashboardState&&(identical(other.status, status) || other.status == status)&&(identical(other.teacherDashboardModel, teacherDashboardModel) || other.teacherDashboardModel == teacherDashboardModel)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TeacherDashboardState&&(identical(other.status, status) || other.status == status)&&(identical(other.pendingReviewsStatus, pendingReviewsStatus) || other.pendingReviewsStatus == pendingReviewsStatus)&&(identical(other.teacherDashboardModel, teacherDashboardModel) || other.teacherDashboardModel == teacherDashboardModel)&&const DeepCollectionEquality().equals(other._pendingReviews, _pendingReviews)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,teacherDashboardModel,apiErrorModel);
+int get hashCode => Object.hash(runtimeType,status,pendingReviewsStatus,teacherDashboardModel,const DeepCollectionEquality().hash(_pendingReviews),apiErrorModel);
 
 @override
 String toString() {
-  return 'TeacherDashboardState(status: $status, teacherDashboardModel: $teacherDashboardModel, apiErrorModel: $apiErrorModel)';
+  return 'TeacherDashboardState(status: $status, pendingReviewsStatus: $pendingReviewsStatus, teacherDashboardModel: $teacherDashboardModel, pendingReviews: $pendingReviews, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -245,7 +255,7 @@ abstract mixin class _$TeacherDashboardStateCopyWith<$Res> implements $TeacherDa
   factory _$TeacherDashboardStateCopyWith(_TeacherDashboardState value, $Res Function(_TeacherDashboardState) _then) = __$TeacherDashboardStateCopyWithImpl;
 @override @useResult
 $Res call({
- CubitStatus status, TeacherDashboardModel? teacherDashboardModel, ApiErrorModel? apiErrorModel
+ CubitStatus status, CubitStatus pendingReviewsStatus, TeacherDashboardModel? teacherDashboardModel, List<ClassroomPendingReviewsModel> pendingReviews, ApiErrorModel? apiErrorModel
 });
 
 
@@ -262,11 +272,13 @@ class __$TeacherDashboardStateCopyWithImpl<$Res>
 
 /// Create a copy of TeacherDashboardState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? teacherDashboardModel = freezed,Object? apiErrorModel = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? pendingReviewsStatus = null,Object? teacherDashboardModel = freezed,Object? pendingReviews = null,Object? apiErrorModel = freezed,}) {
   return _then(_TeacherDashboardState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as CubitStatus,pendingReviewsStatus: null == pendingReviewsStatus ? _self.pendingReviewsStatus : pendingReviewsStatus // ignore: cast_nullable_to_non_nullable
 as CubitStatus,teacherDashboardModel: freezed == teacherDashboardModel ? _self.teacherDashboardModel : teacherDashboardModel // ignore: cast_nullable_to_non_nullable
-as TeacherDashboardModel?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
+as TeacherDashboardModel?,pendingReviews: null == pendingReviews ? _self._pendingReviews : pendingReviews // ignore: cast_nullable_to_non_nullable
+as List<ClassroomPendingReviewsModel>,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
 as ApiErrorModel?,
   ));
 }

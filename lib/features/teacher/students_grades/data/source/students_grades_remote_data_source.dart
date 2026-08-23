@@ -1,5 +1,6 @@
 import "package:dio/dio.dart";
 import "package:draya_mobile/core/networking/api_constants.dart";
+import "package:draya_mobile/features/teacher/students_grades/data/models/attempt_review_models.dart";
 import "package:draya_mobile/features/teacher/students_grades/data/models/exam_attempts_paged_result_model.dart";
 import "package:draya_mobile/features/teacher/students_grades/data/source/students_grades_api_constants.dart";
 import "package:retrofit/retrofit.dart";
@@ -17,4 +18,16 @@ abstract class StudentsGradesRemoteDataSource {
     @Query("page") int? page,
     @Query("pageSize") int? pageSize,
   });
+
+  @GET(StudentsGradesApiConstants.attemptResults)
+  Future<AttemptReviewResultsModel> getAttemptResults(
+    @Path(StudentsGradesApiConstants.attemptId) String attemptId,
+  );
+
+  @PUT(StudentsGradesApiConstants.overrideAnswerScore)
+  Future<void> overrideAnswerScore(
+    @Path(StudentsGradesApiConstants.attemptId) String attemptId,
+    @Path(StudentsGradesApiConstants.answerId) String answerId,
+    @Body() OverrideAnswerScoreRequestModel request,
+  );
 }

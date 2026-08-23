@@ -12,6 +12,7 @@ WeakTopicModel _$WeakTopicModelFromJson(Map<String, dynamic> json) =>
       proficiencyPercent:
           (json['proficiencyPercent'] as num?)?.toDouble() ?? 0.0,
       recommendation: json['recommendation'] as String? ?? '',
+      isActive: json['isActive'] as bool?,
     );
 
 Map<String, dynamic> _$WeakTopicModelToJson(WeakTopicModel instance) =>
@@ -19,6 +20,7 @@ Map<String, dynamic> _$WeakTopicModelToJson(WeakTopicModel instance) =>
       'topicName': instance.topicName,
       'proficiencyPercent': instance.proficiencyPercent,
       'recommendation': instance.recommendation,
+      'isActive': instance.isActive,
     };
 
 SubjectProficiencyModel _$SubjectProficiencyModelFromJson(

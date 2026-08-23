@@ -9,6 +9,8 @@ class AttemptCard extends StatelessWidget {
   final double finalScore;
   final DateTime? submittedAt;
   final int index;
+  final bool needsTeacherReview;
+  final VoidCallback? onTap;
 
   const AttemptCard({
     super.key,
@@ -16,6 +18,8 @@ class AttemptCard extends StatelessWidget {
     required this.finalScore,
     this.submittedAt,
     required this.index,
+    this.needsTeacherReview = false,
+    this.onTap,
   });
 
   static final DateFormat _dateFormat = DateFormat.yMMMd("ar");
@@ -51,7 +55,9 @@ class AttemptCard extends StatelessWidget {
         border:
             isTopThree
                 ? Border.all(color: _medalColors[index].withValues(alpha: 0.4))
-                : Border.all(color: AppColors.border),
+                : needsTeacherReview
+                    ? Border.all(color: AppColors.amber.withValues(alpha: 0.45))
+                    : Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: isTopThree ? 0.06 : 0.03),
@@ -60,14 +66,18 @@ class AttemptCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          _buildRankBadge(isTopThree),
-          const SizedBox(width: AppSizes.s12),
-          Expanded(child: _buildStudentInfo()),
-          const SizedBox(width: AppSizes.s12),
-          _buildScoreBadge(),
-        ],
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppSizes.s16),
+        child: Row(
+          children: [
+            _buildRankBadge(isTopThree),
+            const SizedBox(width: AppSizes.s12),
+            Expanded(child: _buildStudentInfo()),
+            const SizedBox(width: AppSizes.s12),
+            _buildScoreBadge(),
+          ],
+        ),
       ),
     );
   }
@@ -159,6 +169,38 @@ class AttemptCard extends StatelessWidget {
                 style: AppTextStyles.h5.copyWith(fontSize: 14),
               ),
             ),
+            if (needsTeacherReview) ...[
+              const SizedBox(width: AppSizes.s6),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSizes.s8,
+                  vertical: 2,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.amber.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(AppSizes.s6),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.rate_review_rounded,
+                      size: AppSizes.s12,
+                      color: AppColors.amber,
+                    ),
+                    const SizedBox(width: 3),
+                    Text(
+                      "تحتاج مراجعة",
+                      style: AppTextStyles.label.copyWith(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.amber,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ],
         ),
         const SizedBox(height: AppSizes.s8),

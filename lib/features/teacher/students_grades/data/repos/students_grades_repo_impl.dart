@@ -1,5 +1,6 @@
 import "package:draya_mobile/core/networking/api_error_handler.dart";
 import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/teacher/students_grades/data/models/attempt_review_models.dart";
 import "package:draya_mobile/features/teacher/students_grades/data/models/exam_attempts_paged_result_model.dart";
 import "package:draya_mobile/features/teacher/students_grades/data/source/students_grades_remote_data_source.dart";
 import "package:draya_mobile/features/teacher/students_grades/domain/repos/students_grades_repo.dart";
@@ -19,6 +20,24 @@ class StudentsGradesRepoImpl implements StudentsGradesRepo {
           examId,
           page: page,
           pageSize: pageSize,
+        ),
+      );
+
+  @override
+  Future<ApiResult<AttemptReviewResultsModel>> getAttemptResults(
+    String attemptId,
+  ) => _guard(() => _remoteDataSource.getAttemptResults(attemptId));
+
+  @override
+  Future<ApiResult<void>> overrideAnswerScore({
+    required String attemptId,
+    required String answerId,
+    required double newScore,
+  }) => _guard(
+        () => _remoteDataSource.overrideAnswerScore(
+          attemptId,
+          answerId,
+          OverrideAnswerScoreRequestModel(newScore: newScore),
         ),
       );
 

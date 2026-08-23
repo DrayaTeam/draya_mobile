@@ -14,10 +14,14 @@ class WeakTopicModel {
   @JsonKey(name: "recommendation", defaultValue: "")
   final String recommendation;
 
+  @JsonKey(name: "isActive")
+  final bool? isActive;
+
   const WeakTopicModel({
     required this.topicName,
     required this.proficiencyPercent,
     required this.recommendation,
+    this.isActive,
   });
 
   factory WeakTopicModel.fromJson(Map<String, dynamic> json) =>
@@ -30,6 +34,7 @@ class WeakTopicModel {
       topicName: topicName,
       proficiencyPercent: proficiencyPercent,
       recommendation: recommendation,
+      isActive: isActive,
     );
   }
 }

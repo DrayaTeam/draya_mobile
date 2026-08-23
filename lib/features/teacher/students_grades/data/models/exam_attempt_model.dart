@@ -9,6 +9,8 @@ class ExamAttemptModel {
   final String studentName;
   final double finalScore;
   final DateTime? submittedAt;
+  @JsonKey(name: "needsTeacherReview", defaultValue: false)
+  final bool needsTeacherReview;
 
   const ExamAttemptModel({
     required this.id,
@@ -16,6 +18,7 @@ class ExamAttemptModel {
     required this.studentName,
     required this.finalScore,
     this.submittedAt,
+    this.needsTeacherReview = false,
   });
 
   factory ExamAttemptModel.fromJson(Map<String, dynamic> json) =>

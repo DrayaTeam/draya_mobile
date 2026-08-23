@@ -10,6 +10,7 @@ import "package:draya_mobile/features/teacher/dashboard/presentation/cubit/teach
 import "package:draya_mobile/features/teacher/dashboard/presentation/cubit/teacher_dashboard_state.dart";
 import "package:draya_mobile/features/teacher/dashboard/presentation/widgets/teacher_dashboard_metrics_grid.dart";
 import "package:draya_mobile/features/teacher/dashboard/presentation/widgets/teacher_dashboard_needs_attention_section.dart";
+import "package:draya_mobile/features/teacher/dashboard/presentation/widgets/teacher_dashboard_pending_reviews_section.dart";
 import "package:draya_mobile/features/teacher/dashboard/presentation/widgets/teacher_dashboard_recent_submissions_section.dart";
 import "package:draya_mobile/features/teacher/dashboard/presentation/widgets/teacher_dashboard_weekly_chart.dart";
 import "package:draya_mobile/features/teacher/dashboard/presentation/widgets/teacher_dashboard_welcome_card.dart";
@@ -36,6 +37,9 @@ class _TeacherDashboardScreenState extends State<TeacherDashboardScreen> {
       context.read<TeacherProfileCubit>().getTeacherProfile(),
       context.read<TeacherDashboardCubit>().getTeacherDashboard(),
     ]);
+    if (mounted) {
+      await context.read<TeacherDashboardCubit>().getPendingReviews();
+    }
   }
 
   @override
@@ -187,9 +191,22 @@ class _TeacherDashboardScreenState extends State<TeacherDashboardScreen> {
                     ),
                     const SizedBox(height: 24),
 
-                    // Students Needing Attention
+                    // Pending Reviews (attempts needing teacher override)
                     _StaggeredEntrance(
                       index: 3,
+                      child:
+                          TeacherDashboardPendingReviewsSection(
+                        classrooms: state.pendingReviews,
+                        isLoading:
+                            state.pendingReviewsStatus ==
+                            CubitStatus.loading,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Students Needing Attention
+                    _StaggeredEntrance(
+                      index: 4,
                       child: TeacherDashboardNeedsAttentionSection(
                         students: dashboard.needsAttentionList,
                       ),
@@ -198,7 +215,7 @@ class _TeacherDashboardScreenState extends State<TeacherDashboardScreen> {
 
                     // Recent Submissions Activity Feed
                     _StaggeredEntrance(
-                      index: 4,
+                      index: 5,
                       child: TeacherDashboardRecentSubmissionsSection(
                         submissions: dashboard.recentSubmissions,
                       ),

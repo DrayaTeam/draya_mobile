@@ -11,14 +11,21 @@ import "package:go_router/go_router.dart";
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final PreferredSizeWidget? bottom;
+  final List<Widget> actions;
 
-  const CustomAppBar({super.key, required this.title, this.bottom});
+  const CustomAppBar({
+    super.key,
+    required this.title,
+    this.bottom,
+    this.actions = const [],
+  });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(title),
       actions: [
+        ...actions,
         BlocProvider.value(
           value: getIt<NotificationsCubit>(),
           child: Semantics(

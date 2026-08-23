@@ -15,6 +15,7 @@ ExamAttemptModel _$ExamAttemptModelFromJson(Map<String, dynamic> json) =>
       submittedAt: json['submittedAt'] == null
           ? null
           : DateTime.parse(json['submittedAt'] as String),
+      needsTeacherReview: json['needsTeacherReview'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$ExamAttemptModelToJson(ExamAttemptModel instance) =>
@@ -24,4 +25,5 @@ Map<String, dynamic> _$ExamAttemptModelToJson(ExamAttemptModel instance) =>
       'studentName': instance.studentName,
       'finalScore': instance.finalScore,
       'submittedAt': instance.submittedAt?.toIso8601String(),
+      'needsTeacherReview': instance.needsTeacherReview,
     };

@@ -1,4 +1,6 @@
 import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/helpers/app_navigator.dart";
+import "package:draya_mobile/core/router/app_routes.dart";
 import "package:draya_mobile/core/theme/app_colors.dart";
 import "package:draya_mobile/core/theme/app_sizes.dart";
 import "package:draya_mobile/core/widgets/app_error_dialog.dart";
@@ -177,6 +179,18 @@ class _ExamAttemptsScreenState extends State<ExamAttemptsScreen> {
               finalScore: attempt.finalScore,
               submittedAt: attempt.submittedAt,
               index: index,
+              needsTeacherReview: attempt.needsTeacherReview,
+              onTap: () {
+                AppNavigator.push(
+                  context: context,
+                  path:
+                      AppRoutes.teacherAttemptReviewPage(attempt.id),
+                  extra: {
+                    "examTitle": widget.examTitle ?? "مراجعة المحاولة",
+                    "studentName": attempt.studentName,
+                  },
+                );
+              },
             ),
           );
         },
