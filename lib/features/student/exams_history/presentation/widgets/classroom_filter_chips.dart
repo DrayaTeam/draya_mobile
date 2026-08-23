@@ -1,6 +1,7 @@
 import "package:draya_mobile/core/theme/app_colors.dart";
 import "package:draya_mobile/core/theme/app_text_styles.dart";
 import "package:draya_mobile/features/student/exams_history/domain/entity/student_exam_history.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/domain/entity/student_enrolled_classroom.dart";
 import "package:flutter/material.dart";
 
 class ClassroomExamGroup {
@@ -17,42 +18,58 @@ class ClassroomExamGroup {
 
 List<ClassroomExamGroup> buildClassroomGroups(
   List<StudentExamWithAttempts> exams,
+  List<StudentEnrolledClassroom> classrooms,
 ) {
-  final map = <String?, ClassroomExamGroup>{};
-  for (final exam in exams) {
-    final existing = map[exam.classroomId];
-    if (existing != null) {
-      map[exam.classroomId] = ClassroomExamGroup(
-        classroomId: existing.classroomId,
-        name: existing.name,
-        examCount: existing.examCount + 1,
-      );
-    } else {
-      map[exam.classroomId] = ClassroomExamGroup(
-        classroomId: exam.classroomId,
-        name: exam.classroomName ?? "فصل دراسي",
-        examCount: 1,
-      );
+  if (classrooms.isEmpty) {
+    final map = <String?, ClassroomExamGroup>{};
+    for (final exam in exams) {
+      final existing = map[exam.classroomId];
+      if (existing != null) {
+        map[exam.classroomId] = ClassroomExamGroup(
+          classroomId: existing.classroomId,
+          name: existing.name,
+          examCount: existing.examCount + 1,
+        );
+      } else {
+        map[exam.classroomId] = ClassroomExamGroup(
+          classroomId: exam.classroomId,
+          name: exam.classroomName ?? "فصل دراسي",
+          examCount: 1,
+        );
+      }
     }
+    return map.values.toList();
   }
-  return map.values.toList();
+
+  return [
+    for (final classroom in classrooms)
+      ClassroomExamGroup(
+        classroomId: classroom.classroomId,
+        name: classroom.name,
+        examCount: exams
+            .where((e) => e.classroomId == classroom.classroomId)
+            .length,
+      ),
+  ];
 }
 
 class ClassroomFilterChips extends StatelessWidget {
   final List<StudentExamWithAttempts> exams;
+  final List<StudentEnrolledClassroom> classrooms;
   final String? selectedClassroomId;
   final ValueChanged<String?> onSelected;
 
   const ClassroomFilterChips({
     super.key,
     required this.exams,
+    required this.classrooms,
     required this.selectedClassroomId,
     required this.onSelected,
   });
 
   @override
   Widget build(BuildContext context) {
-    final groups = buildClassroomGroups(exams);
+    final groups = buildClassroomGroups(exams, classrooms);
 
     return SizedBox(
       height: 40,

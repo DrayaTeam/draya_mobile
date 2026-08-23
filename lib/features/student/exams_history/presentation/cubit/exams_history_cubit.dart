@@ -3,8 +3,10 @@ import "package:draya_mobile/core/networking/api_result.dart";
 import "package:draya_mobile/features/student/exams_history/domain/entity/student_exam_history.dart";
 import "package:draya_mobile/features/student/exams_history/domain/usecases/get_student_exams_history_params.dart";
 import "package:draya_mobile/features/student/exams_history/domain/usecases/get_student_exams_history_use_case.dart";
-import "package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/get_student_enrolled_classrooms_use_case.dart";
 import "package:draya_mobile/features/student/exams_history/presentation/cubit/exams_history_state.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/data/models/student_enrolled_classroom_model.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/domain/entity/student_enrolled_classroom.dart";
+import "package:draya_mobile/features/student/student_enrolled_classrooms/domain/usecases/get_student_enrolled_classrooms_use_case.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 
 class ExamsHistoryCubit extends Cubit<ExamsHistoryState> {
@@ -61,14 +63,38 @@ class ExamsHistoryCubit extends Cubit<ExamsHistoryState> {
   }
 
   Future<void> _loadClassroomNames() async {
-    final result = await _getStudentEnrolledClassroomsUseCase();
-    result.whenOrNull(
-      success: (page) {
-        _classroomNames = {
-          for (final c in page.items) c.classroomId: c.name,
-        };
-      },
-    );
+    final classrooms = await _fetchAllClassrooms();
+    _classroomNames = {for (final c in classrooms) c.classroomId: c.name};
+    emit(state.copyWith(classrooms: classrooms));
+  }
+
+  Future<List<StudentEnrolledClassroom>> _fetchAllClassrooms() async {
+    const pageSize = 50;
+    final classrooms = <StudentEnrolledClassroom>[];
+    var page = 1;
+
+    while (true) {
+      final result = await _getStudentEnrolledClassroomsUseCase(
+        params: StudentEnrolledClassroomsParams(
+          page: page,
+          pageSize: pageSize,
+        ),
+      );
+
+      var reachedEnd = true;
+      result.whenOrNull(
+        success: (paged) {
+          classrooms.addAll(paged.items.map((item) => item.toEntity()));
+          reachedEnd =
+              paged.items.isEmpty || paged.page >= paged.totalPages;
+        },
+      );
+
+      if (reachedEnd) break;
+      page++;
+    }
+
+    return classrooms;
   }
 
   StudentExamWithAttempts _withClassroomName(StudentExamWithAttempts exam) {

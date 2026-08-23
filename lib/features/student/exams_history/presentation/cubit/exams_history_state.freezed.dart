@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ExamsHistoryState {
 
- CubitStatus get status; List<StudentExamWithAttempts> get exams; int get totalCount; int get currentPage; bool get hasReachedMax; bool get isLoadingMore; String? get selectedClassroomId; ApiErrorModel? get apiErrorModel;
+ CubitStatus get status; List<StudentExamWithAttempts> get exams; List<StudentEnrolledClassroom> get classrooms; int get totalCount; int get currentPage; bool get hasReachedMax; bool get isLoadingMore; String? get selectedClassroomId; ApiErrorModel? get apiErrorModel;
 /// Create a copy of ExamsHistoryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ExamsHistoryStateCopyWith<ExamsHistoryState> get copyWith => _$ExamsHistoryStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExamsHistoryState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.exams, exams)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasReachedMax, hasReachedMax) || other.hasReachedMax == hasReachedMax)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.selectedClassroomId, selectedClassroomId) || other.selectedClassroomId == selectedClassroomId)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExamsHistoryState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.exams, exams)&&const DeepCollectionEquality().equals(other.classrooms, classrooms)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasReachedMax, hasReachedMax) || other.hasReachedMax == hasReachedMax)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.selectedClassroomId, selectedClassroomId) || other.selectedClassroomId == selectedClassroomId)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(exams),totalCount,currentPage,hasReachedMax,isLoadingMore,selectedClassroomId,apiErrorModel);
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(exams),const DeepCollectionEquality().hash(classrooms),totalCount,currentPage,hasReachedMax,isLoadingMore,selectedClassroomId,apiErrorModel);
 
 @override
 String toString() {
-  return 'ExamsHistoryState(status: $status, exams: $exams, totalCount: $totalCount, currentPage: $currentPage, hasReachedMax: $hasReachedMax, isLoadingMore: $isLoadingMore, selectedClassroomId: $selectedClassroomId, apiErrorModel: $apiErrorModel)';
+  return 'ExamsHistoryState(status: $status, exams: $exams, classrooms: $classrooms, totalCount: $totalCount, currentPage: $currentPage, hasReachedMax: $hasReachedMax, isLoadingMore: $isLoadingMore, selectedClassroomId: $selectedClassroomId, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ExamsHistoryStateCopyWith<$Res>  {
   factory $ExamsHistoryStateCopyWith(ExamsHistoryState value, $Res Function(ExamsHistoryState) _then) = _$ExamsHistoryStateCopyWithImpl;
 @useResult
 $Res call({
- CubitStatus status, List<StudentExamWithAttempts> exams, int totalCount, int currentPage, bool hasReachedMax, bool isLoadingMore, String? selectedClassroomId, ApiErrorModel? apiErrorModel
+ CubitStatus status, List<StudentExamWithAttempts> exams, List<StudentEnrolledClassroom> classrooms, int totalCount, int currentPage, bool hasReachedMax, bool isLoadingMore, String? selectedClassroomId, ApiErrorModel? apiErrorModel
 });
 
 
@@ -62,11 +62,12 @@ class _$ExamsHistoryStateCopyWithImpl<$Res>
 
 /// Create a copy of ExamsHistoryState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? exams = null,Object? totalCount = null,Object? currentPage = null,Object? hasReachedMax = null,Object? isLoadingMore = null,Object? selectedClassroomId = freezed,Object? apiErrorModel = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? exams = null,Object? classrooms = null,Object? totalCount = null,Object? currentPage = null,Object? hasReachedMax = null,Object? isLoadingMore = null,Object? selectedClassroomId = freezed,Object? apiErrorModel = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as CubitStatus,exams: null == exams ? _self.exams : exams // ignore: cast_nullable_to_non_nullable
-as List<StudentExamWithAttempts>,totalCount: null == totalCount ? _self.totalCount : totalCount // ignore: cast_nullable_to_non_nullable
+as List<StudentExamWithAttempts>,classrooms: null == classrooms ? _self.classrooms : classrooms // ignore: cast_nullable_to_non_nullable
+as List<StudentEnrolledClassroom>,totalCount: null == totalCount ? _self.totalCount : totalCount // ignore: cast_nullable_to_non_nullable
 as int,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as int,hasReachedMax: null == hasReachedMax ? _self.hasReachedMax : hasReachedMax // ignore: cast_nullable_to_non_nullable
 as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus status,  List<StudentExamWithAttempts> exams,  int totalCount,  int currentPage,  bool hasReachedMax,  bool isLoadingMore,  String? selectedClassroomId,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus status,  List<StudentExamWithAttempts> exams,  List<StudentEnrolledClassroom> classrooms,  int totalCount,  int currentPage,  bool hasReachedMax,  bool isLoadingMore,  String? selectedClassroomId,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ExamsHistoryState() when $default != null:
-return $default(_that.status,_that.exams,_that.totalCount,_that.currentPage,_that.hasReachedMax,_that.isLoadingMore,_that.selectedClassroomId,_that.apiErrorModel);case _:
+return $default(_that.status,_that.exams,_that.classrooms,_that.totalCount,_that.currentPage,_that.hasReachedMax,_that.isLoadingMore,_that.selectedClassroomId,_that.apiErrorModel);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.status,_that.exams,_that.totalCount,_that.currentPage,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus status,  List<StudentExamWithAttempts> exams,  int totalCount,  int currentPage,  bool hasReachedMax,  bool isLoadingMore,  String? selectedClassroomId,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus status,  List<StudentExamWithAttempts> exams,  List<StudentEnrolledClassroom> classrooms,  int totalCount,  int currentPage,  bool hasReachedMax,  bool isLoadingMore,  String? selectedClassroomId,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
 switch (_that) {
 case _ExamsHistoryState():
-return $default(_that.status,_that.exams,_that.totalCount,_that.currentPage,_that.hasReachedMax,_that.isLoadingMore,_that.selectedClassroomId,_that.apiErrorModel);case _:
+return $default(_that.status,_that.exams,_that.classrooms,_that.totalCount,_that.currentPage,_that.hasReachedMax,_that.isLoadingMore,_that.selectedClassroomId,_that.apiErrorModel);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +199,10 @@ return $default(_that.status,_that.exams,_that.totalCount,_that.currentPage,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus status,  List<StudentExamWithAttempts> exams,  int totalCount,  int currentPage,  bool hasReachedMax,  bool isLoadingMore,  String? selectedClassroomId,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus status,  List<StudentExamWithAttempts> exams,  List<StudentEnrolledClassroom> classrooms,  int totalCount,  int currentPage,  bool hasReachedMax,  bool isLoadingMore,  String? selectedClassroomId,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
 switch (_that) {
 case _ExamsHistoryState() when $default != null:
-return $default(_that.status,_that.exams,_that.totalCount,_that.currentPage,_that.hasReachedMax,_that.isLoadingMore,_that.selectedClassroomId,_that.apiErrorModel);case _:
+return $default(_that.status,_that.exams,_that.classrooms,_that.totalCount,_that.currentPage,_that.hasReachedMax,_that.isLoadingMore,_that.selectedClassroomId,_that.apiErrorModel);case _:
   return null;
 
 }
@@ -213,7 +214,7 @@ return $default(_that.status,_that.exams,_that.totalCount,_that.currentPage,_tha
 
 
 class _ExamsHistoryState implements ExamsHistoryState {
-  const _ExamsHistoryState({this.status = CubitStatus.initial, final  List<StudentExamWithAttempts> exams = const [], this.totalCount = 0, this.currentPage = 1, this.hasReachedMax = false, this.isLoadingMore = false, this.selectedClassroomId, this.apiErrorModel}): _exams = exams;
+  const _ExamsHistoryState({this.status = CubitStatus.initial, final  List<StudentExamWithAttempts> exams = const [], final  List<StudentEnrolledClassroom> classrooms = const [], this.totalCount = 0, this.currentPage = 1, this.hasReachedMax = false, this.isLoadingMore = false, this.selectedClassroomId, this.apiErrorModel}): _exams = exams,_classrooms = classrooms;
   
 
 @override@JsonKey() final  CubitStatus status;
@@ -222,6 +223,13 @@ class _ExamsHistoryState implements ExamsHistoryState {
   if (_exams is EqualUnmodifiableListView) return _exams;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_exams);
+}
+
+ final  List<StudentEnrolledClassroom> _classrooms;
+@override@JsonKey() List<StudentEnrolledClassroom> get classrooms {
+  if (_classrooms is EqualUnmodifiableListView) return _classrooms;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_classrooms);
 }
 
 @override@JsonKey() final  int totalCount;
@@ -241,16 +249,16 @@ _$ExamsHistoryStateCopyWith<_ExamsHistoryState> get copyWith => __$ExamsHistoryS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExamsHistoryState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._exams, _exams)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasReachedMax, hasReachedMax) || other.hasReachedMax == hasReachedMax)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.selectedClassroomId, selectedClassroomId) || other.selectedClassroomId == selectedClassroomId)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExamsHistoryState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._exams, _exams)&&const DeepCollectionEquality().equals(other._classrooms, _classrooms)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasReachedMax, hasReachedMax) || other.hasReachedMax == hasReachedMax)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.selectedClassroomId, selectedClassroomId) || other.selectedClassroomId == selectedClassroomId)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_exams),totalCount,currentPage,hasReachedMax,isLoadingMore,selectedClassroomId,apiErrorModel);
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_exams),const DeepCollectionEquality().hash(_classrooms),totalCount,currentPage,hasReachedMax,isLoadingMore,selectedClassroomId,apiErrorModel);
 
 @override
 String toString() {
-  return 'ExamsHistoryState(status: $status, exams: $exams, totalCount: $totalCount, currentPage: $currentPage, hasReachedMax: $hasReachedMax, isLoadingMore: $isLoadingMore, selectedClassroomId: $selectedClassroomId, apiErrorModel: $apiErrorModel)';
+  return 'ExamsHistoryState(status: $status, exams: $exams, classrooms: $classrooms, totalCount: $totalCount, currentPage: $currentPage, hasReachedMax: $hasReachedMax, isLoadingMore: $isLoadingMore, selectedClassroomId: $selectedClassroomId, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -261,7 +269,7 @@ abstract mixin class _$ExamsHistoryStateCopyWith<$Res> implements $ExamsHistoryS
   factory _$ExamsHistoryStateCopyWith(_ExamsHistoryState value, $Res Function(_ExamsHistoryState) _then) = __$ExamsHistoryStateCopyWithImpl;
 @override @useResult
 $Res call({
- CubitStatus status, List<StudentExamWithAttempts> exams, int totalCount, int currentPage, bool hasReachedMax, bool isLoadingMore, String? selectedClassroomId, ApiErrorModel? apiErrorModel
+ CubitStatus status, List<StudentExamWithAttempts> exams, List<StudentEnrolledClassroom> classrooms, int totalCount, int currentPage, bool hasReachedMax, bool isLoadingMore, String? selectedClassroomId, ApiErrorModel? apiErrorModel
 });
 
 
@@ -278,11 +286,12 @@ class __$ExamsHistoryStateCopyWithImpl<$Res>
 
 /// Create a copy of ExamsHistoryState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? exams = null,Object? totalCount = null,Object? currentPage = null,Object? hasReachedMax = null,Object? isLoadingMore = null,Object? selectedClassroomId = freezed,Object? apiErrorModel = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? exams = null,Object? classrooms = null,Object? totalCount = null,Object? currentPage = null,Object? hasReachedMax = null,Object? isLoadingMore = null,Object? selectedClassroomId = freezed,Object? apiErrorModel = freezed,}) {
   return _then(_ExamsHistoryState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as CubitStatus,exams: null == exams ? _self._exams : exams // ignore: cast_nullable_to_non_nullable
-as List<StudentExamWithAttempts>,totalCount: null == totalCount ? _self.totalCount : totalCount // ignore: cast_nullable_to_non_nullable
+as List<StudentExamWithAttempts>,classrooms: null == classrooms ? _self._classrooms : classrooms // ignore: cast_nullable_to_non_nullable
+as List<StudentEnrolledClassroom>,totalCount: null == totalCount ? _self.totalCount : totalCount // ignore: cast_nullable_to_non_nullable
 as int,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as int,hasReachedMax: null == hasReachedMax ? _self.hasReachedMax : hasReachedMax // ignore: cast_nullable_to_non_nullable
 as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable

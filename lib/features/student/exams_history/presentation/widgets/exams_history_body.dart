@@ -80,6 +80,7 @@ class _ExamsHistoryBodyState extends State<ExamsHistoryBody> {
                 const SizedBox(height: AppSizes.s16),
                 ClassroomFilterChips(
                   exams: state.exams,
+                  classrooms: state.classrooms,
                   selectedClassroomId: state.selectedClassroomId,
                   onSelected: (classroomId) => context
                       .read<ExamsHistoryCubit>()
@@ -130,78 +131,81 @@ class _ExamsHistoryBodyState extends State<ExamsHistoryBody> {
     final isError = state.status == CubitStatus.error;
     return Padding(
       padding: const EdgeInsets.all(AppSizes.s32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  (isError ? AppColors.error : AppColors.amber)
-                      .withValues(alpha: 0.16),
-                  (isError ? AppColors.error : AppColors.amber)
-                      .withValues(alpha: 0.06),
-                ],
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                    (isError ? AppColors.error : AppColors.amber)
+                        .withValues(alpha: 0.16),
+                    (isError ? AppColors.error : AppColors.amber)
+                        .withValues(alpha: 0.06),
+                  ],
+                ),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: (isError ? AppColors.error : AppColors.amber)
+                      .withValues(alpha: 0.25),
+                ),
               ),
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: (isError ? AppColors.error : AppColors.amber)
-                    .withValues(alpha: 0.25),
+              child: Icon(
+                isError ? Icons.error_outline_rounded : Icons.history_rounded,
+                size: 38,
+                color: isError ? AppColors.error : AppColors.amber,
               ),
             ),
-            child: Icon(
-              isError ? Icons.error_outline_rounded : Icons.history_rounded,
-              size: 38,
-              color: isError ? AppColors.error : AppColors.amber,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            isError ? "حدث خطأ" : "لا يوجد سجل محاولات بعد",
-            style: AppTextStyles.h5.copyWith(
-              fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            isError
-                ? "تعذر تحميل سجل المحاولات، حاول مرة أخرى"
-                : "بعد أداء أي امتحان ستظهر هنا جميع محاولاتك ودرجاتها.",
-            textAlign: TextAlign.center,
-            style: AppTextStyles.body.copyWith(
-              color: AppColors.textSecondary,
-              fontSize: 12.5,
-            ),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton.icon(
-            onPressed: () =>
-                context.read<ExamsHistoryCubit>().getExamsHistory(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary700,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppSizes.s12),
-              ),
-              elevation: 0,
-            ),
-            icon: const Icon(Icons.refresh_rounded, size: 18),
-            label: Text(
-              "تحديث",
-              style: AppTextStyles.button.copyWith(
-                fontSize: 13,
+            const SizedBox(height: 16),
+            Text(
+              isError ? "حدث خطأ" : "لا يوجد سجل محاولات بعد",
+              style: AppTextStyles.h5.copyWith(
                 fontWeight: FontWeight.w800,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 6),
+            Text(
+              isError
+                  ? "تعذر تحميل سجل المحاولات، حاول مرة أخرى"
+                  : "بعد أداء أي امتحان ستظهر هنا جميع محاولاتك ودرجاتها.",
+              textAlign: TextAlign.center,
+              style: AppTextStyles.body.copyWith(
+                color: AppColors.textSecondary,
+                fontSize: 12.5,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () =>
+                  context.read<ExamsHistoryCubit>().getExamsHistory(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary700,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppSizes.s12),
+                ),
+                elevation: 0,
+              ),
+              icon: const Icon(Icons.refresh_rounded, size: 18),
+              label: Text(
+                "تحديث",
+                style: AppTextStyles.button.copyWith(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

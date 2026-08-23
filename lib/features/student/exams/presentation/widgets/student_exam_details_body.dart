@@ -17,6 +17,7 @@ import "package:draya_mobile/features/student/exams/presentation/widgets/exam_su
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
+import "package:intl/intl.dart";
 
 class StudentExamDetailsBody extends StatefulWidget {
   final String examId;
@@ -91,7 +92,40 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
     });
   }
 
+  bool _isExamWithinDateWindow(StudentExam exam) {
+    final now = DateTime.now().toUtc();
+    if (exam.startDate != null && now.isBefore(exam.startDate!.toUtc())) {
+      return false;
+    }
+    if (exam.endDate != null && now.isAfter(exam.endDate!.toUtc())) {
+      return false;
+    }
+    return true;
+  }
+
   void _handleStartAttempt(StudentExam exam) async {
+    if (!_isExamWithinDateWindow(exam)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            exam.startDate != null &&
+                    DateTime.now().toUtc().isBefore(exam.startDate!.toUtc())
+                ? "لم يبدأ موعد الامتحان بعد، لا يمكنك البدء الآن."
+                : "انتهت فترة الامتحان، لا يمكنك البدء الآن.",
+            style: AppTextStyles.body.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          backgroundColor: AppColors.error,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      );
+      return;
+    }
     if (exam.allowedAttempts != null && exam.allowedAttempts! <= 0) {
       return;
     }
@@ -446,6 +480,10 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
   ) {
     final hasNoAttemptsLeft =
         exam.allowedAttempts != null && exam.allowedAttempts! <= 0;
+    final isWithinWindow = _isExamWithinDateWindow(exam);
+    final isUpcoming = exam.startDate != null &&
+        DateTime.now().toUtc().isBefore(exam.startDate!.toUtc());
+    final dateTimeFormat = DateFormat("d MMM yyyy - hh:mm a", "ar");
 
     return ListView(
       padding: const EdgeInsets.all(AppSizes.s20),
@@ -557,6 +595,44 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
           const SizedBox(height: AppSizes.s20),
         ],
 
+        if (!isWithinWindow) ...[
+          Container(
+            padding: const EdgeInsets.all(AppSizes.s16),
+            decoration: BoxDecoration(
+              color: AppColors.error.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: AppColors.error.withValues(alpha: 0.3),
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  isUpcoming
+                      ? Icons.schedule_rounded
+                      : Icons.event_busy_rounded,
+                  color: AppColors.error,
+                  size: 22,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    isUpcoming
+                        ? "لم يبدأ موعد الامتحان بعد (${dateTimeFormat.format(exam.startDate!.toLocal())})، لا يمكنك بدء المحاولة الآن."
+                        : "انتهت فترة الامتحان (${dateTimeFormat.format(exam.endDate!.toLocal())})، لا يمكنك بدء محاولة جديدة.",
+                    style: AppTextStyles.body.copyWith(
+                      color: AppColors.error,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: AppSizes.s20),
+        ],
+
         // Rules and Anti-Cheat Instructions Card
         Container(
           padding: const EdgeInsets.all(AppSizes.s20),
@@ -612,6 +688,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
           width: double.infinity,
           child: ElevatedButton.icon(
             onPressed: (hasNoAttemptsLeft ||
+                    !isWithinWindow ||
                     state.attemptStatus == CubitStatus.loading)
                 ? null
                 : () => _handleStartAttempt(exam),
@@ -636,7 +713,7 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                     ),
                   )
                 : Icon(
-                    hasNoAttemptsLeft
+                    hasNoAttemptsLeft || !isWithinWindow
                         ? Icons.lock_outline_rounded
                         : Icons.play_arrow_rounded,
                     size: 22,
@@ -646,9 +723,13 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
                   ? "جاري بدء الاختبار..."
                   : hasNoAttemptsLeft
                       ? "لا توجد محاولات متبقية"
-                      : "بدء الاختبار الآن",
+                      : !isWithinWindow
+                          ? (isUpcoming
+                              ? "لم يبدأ موعد الامتحان بعد"
+                              : "انتهت فترة الامتحان")
+                          : "بدء الاختبار الآن",
               style: AppTextStyles.button.copyWith(
-                color: (hasNoAttemptsLeft &&
+                color: ((hasNoAttemptsLeft || !isWithinWindow) &&
                         state.attemptStatus != CubitStatus.loading)
                     ? AppColors.textDisabled
                     : Colors.white,
