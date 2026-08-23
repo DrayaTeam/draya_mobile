@@ -51,6 +51,11 @@ List<DrawerModel> getTeacherDrawerItemsList() {
           title: "الامتحانات",
           route: AppRoutes.teacherExamsPage,
         ),
+        DrawerItemViewModel(
+          icon: Icons.grading_outlined,
+          title: "درجات الطلاب",
+          route: AppRoutes.studentsGradesPage,
+        ),
       ],
     ),
     DrawerModel(

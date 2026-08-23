@@ -37,7 +37,11 @@ class TeacherDashboardMetricsGrid extends StatelessWidget {
                   width: 4,
                   height: 18,
                   decoration: BoxDecoration(
-                    color: AppColors.primary700,
+                    gradient: const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [AppColors.primary400, AppColors.primary700],
+                    ),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -96,11 +100,10 @@ class TeacherDashboardMetricsGrid extends StatelessWidget {
                 subtitle: "تفاعل هذا الشهر",
                 icon: Icons.people_alt_outlined,
                 primaryColor: const Color(0xFF0F766E),
-                backgroundColor: const Color(0xFFF0FDFA),
-                borderColor: const Color(0xFFCCFBF1),
                 badgeText: "نشط ⚡",
                 badgeBg: const Color(0xFFCCFBF1),
                 badgeTextColor: const Color(0xFF0F766E),
+                progress: null,
               ),
             ),
             const SizedBox(width: 12),
@@ -113,11 +116,10 @@ class TeacherDashboardMetricsGrid extends StatelessWidget {
                     : (classAverage >= 55 ? "أداء جيد" : "بحاجة لدعم"),
                 icon: Icons.insights_rounded,
                 primaryColor: const Color(0xFF0369A1),
-                backgroundColor: const Color(0xFFF0F9FF),
-                borderColor: const Color(0xFFBAE6FD),
                 badgeText: classAverage >= 75 ? "ممتاز 🌟" : "عام 📈",
                 badgeBg: const Color(0xFFE0F2FE),
                 badgeTextColor: const Color(0xFF0369A1),
+                progress: (classAverage / 100).clamp(0.0, 1.0),
               ),
             ),
           ],
@@ -135,20 +137,15 @@ class TeacherDashboardMetricsGrid extends StatelessWidget {
                 icon: Icons.assignment_turned_in_outlined,
                 primaryColor: examsAwaitingReview > 0
                     ? const Color(0xFFC2410C)
-                    : const Color(0xFF4B5563),
-                backgroundColor: examsAwaitingReview > 0
-                    ? const Color(0xFFFFF7ED)
-                    : const Color(0xFFF9FAFB),
-                borderColor: examsAwaitingReview > 0
-                    ? const Color(0xFFFFEDD5)
-                    : const Color(0xFFE5E7EB),
+                    : const Color(0xFF64748B),
                 badgeText: examsAwaitingReview > 0 ? "معلق ⏳" : "مكتمل ✔",
                 badgeBg: examsAwaitingReview > 0
                     ? const Color(0xFFFFEDD5)
-                    : const Color(0xFFE5E7EB),
+                    : const Color(0xFFE2E8F0),
                 badgeTextColor: examsAwaitingReview > 0
                     ? const Color(0xFFC2410C)
-                    : const Color(0xFF4B5563),
+                    : const Color(0xFF475569),
+                progress: null,
               ),
             ),
             const SizedBox(width: 12),
@@ -160,12 +157,11 @@ class TeacherDashboardMetricsGrid extends StatelessWidget {
                     ? "تحليلات جديدة"
                     : "لا تقارير معلقة",
                 icon: Icons.auto_graph_rounded,
-                primaryColor: const Color(0xFF6D28D9),
-                backgroundColor: const Color(0xFFF5F3FF),
-                borderColor: const Color(0xFFDDD6FE),
+                primaryColor: const Color(0xFF7C3AED),
                 badgeText: "ذكاء اصطناعي ✨",
                 badgeBg: const Color(0xFFEDE9FE),
                 badgeTextColor: const Color(0xFF6D28D9),
+                progress: null,
               ),
             ),
           ],
@@ -181,11 +177,10 @@ class _MetricCard extends StatelessWidget {
   final String subtitle;
   final IconData icon;
   final Color primaryColor;
-  final Color backgroundColor;
-  final Color borderColor;
   final String badgeText;
   final Color badgeBg;
   final Color badgeTextColor;
+  final double? progress;
 
   const _MetricCard({
     required this.title,
@@ -193,107 +188,151 @@ class _MetricCard extends StatelessWidget {
     required this.subtitle,
     required this.icon,
     required this.primaryColor,
-    required this.backgroundColor,
-    required this.borderColor,
     required this.badgeText,
     required this.badgeBg,
     required this.badgeTextColor,
+    required this.progress,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      clipBehavior: Clip.antiAlias,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: borderColor, width: 1.2),
+        border: Border.all(color: AppColors.border, width: 1.2),
         boxShadow: [
           BoxShadow(
-            color: primaryColor.withValues(alpha: 0.04),
+            color: primaryColor.withValues(alpha: 0.07),
             offset: const Offset(0, 8),
-            blurRadius: 16,
+            blurRadius: 18,
             spreadRadius: -4,
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(9),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: primaryColor.withValues(alpha: 0.08),
-                      offset: const Offset(0, 3),
-                      blurRadius: 6,
-                    ),
+          // Decorative corner glow
+          Positioned(
+            top: -28,
+            left: -28,
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    primaryColor.withValues(alpha: 0.14),
+                    primaryColor.withValues(alpha: 0.02),
                   ],
                 ),
-                child: Icon(
-                  icon,
-                  size: 20,
+              ),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(9),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [
+                          primaryColor.withValues(alpha: 0.16),
+                          primaryColor.withValues(alpha: 0.05),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: primaryColor.withValues(alpha: 0.15),
+                      ),
+                    ),
+                    child: Icon(
+                      icon,
+                      size: 20,
+                      color: primaryColor,
+                    ),
+                  ),
+                  Flexible(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 7,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: badgeBg,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        badgeText,
+                        style: AppTextStyles.label.copyWith(
+                          color: badgeTextColor,
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Text(
+                value,
+                style: AppTextStyles.h2.copyWith(
                   color: primaryColor,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 26,
+                  height: 1.1,
                 ),
               ),
-              Flexible(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 7,
-                    vertical: 3,
-                  ),
-                  decoration: BoxDecoration(
-                    color: badgeBg,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    badgeText,
-                    style: AppTextStyles.label.copyWith(
-                      color: badgeTextColor,
-                      fontSize: 10.5,
-                      fontWeight: FontWeight.w700,
+              const SizedBox(height: 4),
+              Text(
+                title,
+                style: AppTextStyles.label.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 2),
+              Text(
+                subtitle,
+                style: AppTextStyles.body.copyWith(
+                  color: AppColors.textSecondary,
+                  fontSize: 11.5,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              if (progress != null) ...[
+                const SizedBox(height: 10),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: TweenAnimationBuilder<double>(
+                    tween: Tween(begin: 0, end: progress),
+                    duration: const Duration(milliseconds: 800),
+                    curve: Curves.easeOutCubic,
+                    builder: (context, t, _) => LinearProgressIndicator(
+                      value: t,
+                      minHeight: 5,
+                      backgroundColor: AppColors.backgroundMuted,
+                      valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
                     ),
                   ),
                 ),
-              ),
+              ],
             ],
-          ),
-          const SizedBox(height: 14),
-          Text(
-            value,
-            style: AppTextStyles.h2.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w900,
-              fontSize: 24,
-              height: 1.1,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            style: AppTextStyles.label.copyWith(
-              color: AppColors.textPrimary.withValues(alpha: 0.85),
-              fontWeight: FontWeight.w700,
-              fontSize: 13,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 2),
-          Text(
-            subtitle,
-            style: AppTextStyles.body.copyWith(
-              color: AppColors.textSecondary,
-              fontSize: 11.5,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

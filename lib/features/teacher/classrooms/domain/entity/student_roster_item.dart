@@ -3,11 +3,13 @@ class StudentRosterItem {
   final String fullName;
   final DateTime enrolledAt;
   final String status;
+  final String? profilePictureUrl;
 
   const StudentRosterItem({
     required this.studentId,
     required this.fullName,
     required this.enrolledAt,
     required this.status,
+    this.profilePictureUrl,
   });
 }

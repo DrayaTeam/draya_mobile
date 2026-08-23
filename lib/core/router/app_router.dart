@@ -13,6 +13,9 @@ import "package:draya_mobile/features/student/student_channel/presentation/pages
 import "package:draya_mobile/features/student/student_enrolled_classrooms/presentation/pages/student_enrolled_classrooms_screen.dart";
 import "package:draya_mobile/features/student/student_feedback/presentation/pages/student_feedback_screen.dart";
 import "package:draya_mobile/features/teacher/reports/presentation/pages/reports_page.dart";
+import "package:draya_mobile/features/teacher/students_grades/presentation/pages/classroom_exam_grades_screen.dart";
+import "package:draya_mobile/features/teacher/students_grades/presentation/pages/exam_attempts_screen.dart";
+import "package:draya_mobile/features/teacher/students_grades/presentation/pages/students_grades_screen.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/presentation/pages/classroom_feedback_screen.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/presentation/pages/teacher_feedback_screen.dart";
 import "package:draya_mobile/features/student/student_materials/presentation/pages/student_classrooms_materials_screen.dart";
@@ -440,6 +443,30 @@ abstract final class AppRouter {
         path: AppRoutes.reportsPage,
         builder: (context, state) {
           return const ReportsPage();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.studentsGradesPage,
+        builder: (context, state) {
+          return const StudentsGradesScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.classroomExamGradesPage(":classroomId"),
+        builder: (context, state) {
+          return ClassroomExamGradesScreen(
+            classroomId: state.pathParameters["classroomId"] ?? "",
+            classroomName: state.extra as String?,
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.examAttemptsPage(":examId"),
+        builder: (context, state) {
+          return ExamAttemptsScreen(
+            examId: state.pathParameters["examId"] ?? "",
+            examTitle: state.extra as String?,
+          );
         },
       ),
     ],

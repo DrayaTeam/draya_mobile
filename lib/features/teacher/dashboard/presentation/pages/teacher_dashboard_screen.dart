@@ -155,42 +155,53 @@ class _TeacherDashboardScreenState extends State<TeacherDashboardScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // Welcome Banner
-                    TeacherDashboardWelcomeCard(
-                      teacherName: teacherProfile?.fullName,
-                      examsAwaitingReview: dashboard.examsAwaitingReview,
-                      reportsReadyForReview: dashboard.reportsReadyForReview,
+                    _StaggeredEntrance(
+                      index: 0,
+                      child: TeacherDashboardWelcomeCard(
+                        teacherName: teacherProfile?.fullName,
+                        examsAwaitingReview: dashboard.examsAwaitingReview,
+                        reportsReadyForReview: dashboard.reportsReadyForReview,
+                      ),
                     ),
                     const SizedBox(height: 24),
 
-                    // Quick Actions
-                    // const TeacherDashboardQuickActions(),
-                    // const SizedBox(height: 24),
-
                     // Metrics Grid (activeStudents, classAverage, examsAwaitingReview, reportsReadyForReview, newMessagesCount)
-                    TeacherDashboardMetricsGrid(
-                      activeStudents: dashboard.activeStudents,
-                      classAverage: dashboard.classAverage,
-                      examsAwaitingReview: dashboard.examsAwaitingReview,
-                      reportsReadyForReview: dashboard.reportsReadyForReview,
-                      newMessagesCount: dashboard.newMessagesCount,
+                    _StaggeredEntrance(
+                      index: 1,
+                      child: TeacherDashboardMetricsGrid(
+                        activeStudents: dashboard.activeStudents,
+                        classAverage: dashboard.classAverage,
+                        examsAwaitingReview: dashboard.examsAwaitingReview,
+                        reportsReadyForReview: dashboard.reportsReadyForReview,
+                        newMessagesCount: dashboard.newMessagesCount,
+                      ),
                     ),
                     const SizedBox(height: 24),
 
                     // Weekly Submissions Activity Chart
-                    TeacherDashboardWeeklyChart(
-                      weeklyActivity: dashboard.weeklySubmissionsActivity,
+                    _StaggeredEntrance(
+                      index: 2,
+                      child: TeacherDashboardWeeklyChart(
+                        weeklyActivity: dashboard.weeklySubmissionsActivity,
+                      ),
                     ),
                     const SizedBox(height: 24),
 
                     // Students Needing Attention
-                    TeacherDashboardNeedsAttentionSection(
-                      students: dashboard.needsAttentionList,
+                    _StaggeredEntrance(
+                      index: 3,
+                      child: TeacherDashboardNeedsAttentionSection(
+                        students: dashboard.needsAttentionList,
+                      ),
                     ),
                     const SizedBox(height: 24),
 
                     // Recent Submissions Activity Feed
-                    TeacherDashboardRecentSubmissionsSection(
-                      submissions: dashboard.recentSubmissions,
+                    _StaggeredEntrance(
+                      index: 4,
+                      child: TeacherDashboardRecentSubmissionsSection(
+                        submissions: dashboard.recentSubmissions,
+                      ),
                     ),
                     const SizedBox(height: 24),
                   ],
@@ -200,6 +211,34 @@ class _TeacherDashboardScreenState extends State<TeacherDashboardScreen> {
           },
         ),
       ),
+    );
+  }
+}
+
+class _StaggeredEntrance extends StatelessWidget {
+  final int index;
+  final Widget child;
+
+  const _StaggeredEntrance({required this.index, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 550),
+      curve: Interval(
+        (index * 0.12).clamp(0.0, 0.6),
+        1.0,
+        curve: Curves.easeOutCubic,
+      ),
+      builder: (context, t, child) => Opacity(
+        opacity: t.clamp(0.0, 1.0),
+        child: Transform.translate(
+          offset: Offset(0, (1 - t) * 24),
+          child: child,
+        ),
+      ),
+      child: child,
     );
   }
 }

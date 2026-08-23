@@ -13,6 +13,7 @@ StudentRosterItemModel _$StudentRosterItemModelFromJson(
   fullName: json['fullName'] as String,
   enrolledAt: DateTime.parse(json['enrolledAt'] as String),
   status: json['status'] as String,
+  profilePictureUrl: json['profilePictureUrl'] as String?,
 );
 
 Map<String, dynamic> _$StudentRosterItemModelToJson(
@@ -22,4 +23,5 @@ Map<String, dynamic> _$StudentRosterItemModelToJson(
   'fullName': instance.fullName,
   'enrolledAt': instance.enrolledAt.toIso8601String(),
   'status': instance.status,
+  'profilePictureUrl': instance.profilePictureUrl,
 };

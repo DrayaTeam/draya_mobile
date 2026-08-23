@@ -40,6 +40,13 @@ import "package:draya_mobile/features/teacher/reports/data/repos/reports_repo_im
 import "package:draya_mobile/features/teacher/reports/data/sources/reports_api_service.dart";
 import "package:draya_mobile/features/teacher/reports/domain/repos/reports_repo.dart";
 import "package:draya_mobile/features/teacher/reports/domain/usecases/get_performance_report_use_case.dart";
+import "package:draya_mobile/features/teacher/students_grades/data/repos/students_grades_repo_impl.dart";
+import "package:draya_mobile/features/teacher/students_grades/data/source/students_grades_remote_data_source.dart";
+import "package:draya_mobile/features/teacher/students_grades/domain/repos/students_grades_repo.dart";
+import "package:draya_mobile/features/teacher/students_grades/domain/usecases/get_exam_attempts_use_case.dart";
+import "package:draya_mobile/features/teacher/students_grades/presentation/cubit/exam_attempts_cubit.dart";
+import "package:draya_mobile/features/teacher/students_grades/presentation/cubit/grades_classrooms_cubit.dart";
+import "package:draya_mobile/features/teacher/students_grades/presentation/cubit/grades_exams_cubit.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/data/repos/teacher_feedback_repo_impl.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/data/source/teacher_feedback_api_service.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/domain/repos/teacher_feedback_repo.dart";
@@ -844,5 +851,30 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<GetPerformanceReportUseCase>(
     () => GetPerformanceReportUseCase(getIt<ReportsRepo>()),
+  );
+
+  // teacher students grades
+  getIt.registerLazySingleton<StudentsGradesRemoteDataSource>(
+    () => StudentsGradesRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<StudentsGradesRepo>(
+    () => StudentsGradesRepoImpl(getIt<StudentsGradesRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<GetExamAttemptsUseCase>(
+    () => GetExamAttemptsUseCase(getIt<StudentsGradesRepo>()),
+  );
+
+  getIt.registerFactory<GradesClassroomsCubit>(
+    () => GradesClassroomsCubit(getIt<GetClassroomsUseCase>()),
+  );
+
+  getIt.registerFactory<GradesExamsCubit>(
+    () => GradesExamsCubit(getIt<GetSectionsUseCase>()),
+  );
+
+  getIt.registerFactory<ExamAttemptsCubit>(
+    () => ExamAttemptsCubit(getIt<GetExamAttemptsUseCase>()),
   );
 }

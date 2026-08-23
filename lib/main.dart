@@ -58,6 +58,10 @@ import "package:draya_mobile/features/teacher/sections/domain/usecases/create_se
 import "package:draya_mobile/features/teacher/sections/domain/usecases/delete_section_use_case.dart";
 import "package:draya_mobile/features/teacher/sections/domain/usecases/get_sections_use_case.dart";
 import "package:draya_mobile/features/teacher/sections/presentation/cubit/section_cubit.dart";
+import "package:draya_mobile/features/teacher/students_grades/domain/usecases/get_exam_attempts_use_case.dart";
+import "package:draya_mobile/features/teacher/students_grades/presentation/cubit/exam_attempts_cubit.dart";
+import "package:draya_mobile/features/teacher/students_grades/presentation/cubit/grades_classrooms_cubit.dart";
+import "package:draya_mobile/features/teacher/students_grades/presentation/cubit/grades_exams_cubit.dart";
 import "package:draya_mobile/features/teacher/subjects/domain/usecases/add_subject_use_case.dart";
 import "package:draya_mobile/features/teacher/subjects/domain/usecases/get_subjects_use_case.dart";
 import "package:draya_mobile/features/teacher/subjects/presentation/cubit/subject_cubit.dart";
@@ -264,6 +268,21 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => ReportsCubit(
             getIt<GetPerformanceReportUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => GradesClassroomsCubit(
+            getIt<GetClassroomsUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => GradesExamsCubit(
+            getIt<GetSectionsUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => ExamAttemptsCubit(
+            getIt<GetExamAttemptsUseCase>(),
           ),
         ),
       ],

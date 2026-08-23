@@ -9,12 +9,14 @@ class StudentRosterItemModel {
   final String fullName;
   final DateTime enrolledAt;
   final String status;
+  final String? profilePictureUrl;
 
   const StudentRosterItemModel({
     required this.studentId,
     required this.fullName,
     required this.enrolledAt,
     required this.status,
+    this.profilePictureUrl,
   });
 
   factory StudentRosterItemModel.fromJson(Map<String, dynamic> json) =>
@@ -29,5 +31,6 @@ extension StudentRosterItemModelExtension on StudentRosterItemModel {
     fullName: fullName,
     enrolledAt: enrolledAt,
     status: status,
+    profilePictureUrl: profilePictureUrl,
   );
 }

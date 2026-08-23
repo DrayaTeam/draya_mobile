@@ -65,6 +65,7 @@ dependencies:
   chewie: ^1.13.1
   pdfrx: ^2.4.7
   app_links: ^7.2.1
+  fl_chart: ^1.2.0
 
 dev_dependencies:
   # for updating your Flutter app's launcher icon.
