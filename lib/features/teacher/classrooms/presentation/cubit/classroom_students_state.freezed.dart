@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ClassroomStudentsState {
 
- CubitStatus get status; List<StudentRosterItemModel> get students; ApiErrorModel? get apiErrorModel;
+ CubitStatus get getStudentsStatus; CubitStatus get deleteStudentStatus; List<StudentRosterItemModel> get students; ApiErrorModel? get apiErrorModel;
 /// Create a copy of ClassroomStudentsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ClassroomStudentsStateCopyWith<ClassroomStudentsState> get copyWith => _$Classr
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClassroomStudentsState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.students, students)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClassroomStudentsState&&(identical(other.getStudentsStatus, getStudentsStatus) || other.getStudentsStatus == getStudentsStatus)&&(identical(other.deleteStudentStatus, deleteStudentStatus) || other.deleteStudentStatus == deleteStudentStatus)&&const DeepCollectionEquality().equals(other.students, students)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(students),apiErrorModel);
+int get hashCode => Object.hash(runtimeType,getStudentsStatus,deleteStudentStatus,const DeepCollectionEquality().hash(students),apiErrorModel);
 
 @override
 String toString() {
-  return 'ClassroomStudentsState(status: $status, students: $students, apiErrorModel: $apiErrorModel)';
+  return 'ClassroomStudentsState(getStudentsStatus: $getStudentsStatus, deleteStudentStatus: $deleteStudentStatus, students: $students, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ClassroomStudentsStateCopyWith<$Res>  {
   factory $ClassroomStudentsStateCopyWith(ClassroomStudentsState value, $Res Function(ClassroomStudentsState) _then) = _$ClassroomStudentsStateCopyWithImpl;
 @useResult
 $Res call({
- CubitStatus status, List<StudentRosterItemModel> students, ApiErrorModel? apiErrorModel
+ CubitStatus getStudentsStatus, CubitStatus deleteStudentStatus, List<StudentRosterItemModel> students, ApiErrorModel? apiErrorModel
 });
 
 
@@ -62,9 +62,10 @@ class _$ClassroomStudentsStateCopyWithImpl<$Res>
 
 /// Create a copy of ClassroomStudentsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? students = null,Object? apiErrorModel = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? getStudentsStatus = null,Object? deleteStudentStatus = null,Object? students = null,Object? apiErrorModel = freezed,}) {
   return _then(_self.copyWith(
-status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+getStudentsStatus: null == getStudentsStatus ? _self.getStudentsStatus : getStudentsStatus // ignore: cast_nullable_to_non_nullable
+as CubitStatus,deleteStudentStatus: null == deleteStudentStatus ? _self.deleteStudentStatus : deleteStudentStatus // ignore: cast_nullable_to_non_nullable
 as CubitStatus,students: null == students ? _self.students : students // ignore: cast_nullable_to_non_nullable
 as List<StudentRosterItemModel>,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
 as ApiErrorModel?,
@@ -152,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus status,  List<StudentRosterItemModel> students,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus getStudentsStatus,  CubitStatus deleteStudentStatus,  List<StudentRosterItemModel> students,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ClassroomStudentsState() when $default != null:
-return $default(_that.status,_that.students,_that.apiErrorModel);case _:
+return $default(_that.getStudentsStatus,_that.deleteStudentStatus,_that.students,_that.apiErrorModel);case _:
   return orElse();
 
 }
@@ -173,10 +174,10 @@ return $default(_that.status,_that.students,_that.apiErrorModel);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus status,  List<StudentRosterItemModel> students,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus getStudentsStatus,  CubitStatus deleteStudentStatus,  List<StudentRosterItemModel> students,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
 switch (_that) {
 case _ClassroomStudentsState():
-return $default(_that.status,_that.students,_that.apiErrorModel);case _:
+return $default(_that.getStudentsStatus,_that.deleteStudentStatus,_that.students,_that.apiErrorModel);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +194,10 @@ return $default(_that.status,_that.students,_that.apiErrorModel);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus status,  List<StudentRosterItemModel> students,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus getStudentsStatus,  CubitStatus deleteStudentStatus,  List<StudentRosterItemModel> students,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
 switch (_that) {
 case _ClassroomStudentsState() when $default != null:
-return $default(_that.status,_that.students,_that.apiErrorModel);case _:
+return $default(_that.getStudentsStatus,_that.deleteStudentStatus,_that.students,_that.apiErrorModel);case _:
   return null;
 
 }
@@ -208,10 +209,11 @@ return $default(_that.status,_that.students,_that.apiErrorModel);case _:
 
 
 class _ClassroomStudentsState implements ClassroomStudentsState {
-  const _ClassroomStudentsState({this.status = CubitStatus.initial, final  List<StudentRosterItemModel> students = const [], this.apiErrorModel}): _students = students;
+  const _ClassroomStudentsState({this.getStudentsStatus = CubitStatus.initial, this.deleteStudentStatus = CubitStatus.initial, final  List<StudentRosterItemModel> students = const [], this.apiErrorModel}): _students = students;
   
 
-@override@JsonKey() final  CubitStatus status;
+@override@JsonKey() final  CubitStatus getStudentsStatus;
+@override@JsonKey() final  CubitStatus deleteStudentStatus;
  final  List<StudentRosterItemModel> _students;
 @override@JsonKey() List<StudentRosterItemModel> get students {
   if (_students is EqualUnmodifiableListView) return _students;
@@ -231,16 +233,16 @@ _$ClassroomStudentsStateCopyWith<_ClassroomStudentsState> get copyWith => __$Cla
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClassroomStudentsState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._students, _students)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClassroomStudentsState&&(identical(other.getStudentsStatus, getStudentsStatus) || other.getStudentsStatus == getStudentsStatus)&&(identical(other.deleteStudentStatus, deleteStudentStatus) || other.deleteStudentStatus == deleteStudentStatus)&&const DeepCollectionEquality().equals(other._students, _students)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_students),apiErrorModel);
+int get hashCode => Object.hash(runtimeType,getStudentsStatus,deleteStudentStatus,const DeepCollectionEquality().hash(_students),apiErrorModel);
 
 @override
 String toString() {
-  return 'ClassroomStudentsState(status: $status, students: $students, apiErrorModel: $apiErrorModel)';
+  return 'ClassroomStudentsState(getStudentsStatus: $getStudentsStatus, deleteStudentStatus: $deleteStudentStatus, students: $students, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -251,7 +253,7 @@ abstract mixin class _$ClassroomStudentsStateCopyWith<$Res> implements $Classroo
   factory _$ClassroomStudentsStateCopyWith(_ClassroomStudentsState value, $Res Function(_ClassroomStudentsState) _then) = __$ClassroomStudentsStateCopyWithImpl;
 @override @useResult
 $Res call({
- CubitStatus status, List<StudentRosterItemModel> students, ApiErrorModel? apiErrorModel
+ CubitStatus getStudentsStatus, CubitStatus deleteStudentStatus, List<StudentRosterItemModel> students, ApiErrorModel? apiErrorModel
 });
 
 
@@ -268,9 +270,10 @@ class __$ClassroomStudentsStateCopyWithImpl<$Res>
 
 /// Create a copy of ClassroomStudentsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? students = null,Object? apiErrorModel = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? getStudentsStatus = null,Object? deleteStudentStatus = null,Object? students = null,Object? apiErrorModel = freezed,}) {
   return _then(_ClassroomStudentsState(
-status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+getStudentsStatus: null == getStudentsStatus ? _self.getStudentsStatus : getStudentsStatus // ignore: cast_nullable_to_non_nullable
+as CubitStatus,deleteStudentStatus: null == deleteStudentStatus ? _self.deleteStudentStatus : deleteStudentStatus // ignore: cast_nullable_to_non_nullable
 as CubitStatus,students: null == students ? _self._students : students // ignore: cast_nullable_to_non_nullable
 as List<StudentRosterItemModel>,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
 as ApiErrorModel?,

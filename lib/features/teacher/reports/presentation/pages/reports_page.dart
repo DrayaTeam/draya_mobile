@@ -139,7 +139,8 @@ class _ReportsPageState extends State<ReportsPage> {
               else
                 BlocBuilder<ClassroomStudentsCubit, ClassroomStudentsState>(
                   builder: (context, studentsState) {
-                    if (studentsState.status == CubitStatus.loading) {
+                    if (studentsState.getStudentsStatus ==
+                        CubitStatus.loading) {
                       return const Padding(
                         padding: EdgeInsets.all(AppSizes.s32),
                         child: Center(
@@ -148,7 +149,7 @@ class _ReportsPageState extends State<ReportsPage> {
                       );
                     }
 
-                    if (studentsState.status == CubitStatus.error) {
+                    if (studentsState.getStudentsStatus == CubitStatus.error) {
                       return Center(
                         child: Text(
                           "حدث خطأ عند استرجاع طلاب الفصل",

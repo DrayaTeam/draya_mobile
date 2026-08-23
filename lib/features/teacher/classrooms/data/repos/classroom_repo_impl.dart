@@ -72,6 +72,19 @@ class ClassroomRepoImpl implements ClassroomRepo {
     return _guard(() => _remoteDataSource.getGradeLevels());
   }
 
+  @override
+  Future<ApiResult<void>> deleteClassroomStudent({
+    required String classroomId,
+    required String studentId,
+  }) async {
+    return _guard(
+      () => _remoteDataSource.deleteClassroomStudent(
+        classroomId,
+        studentId,
+      ),
+    );
+  }
+
   Future<ApiResult<T>> _guard<T>(Future<T> Function() request) async {
     try {
       return ApiResult.success(await request());

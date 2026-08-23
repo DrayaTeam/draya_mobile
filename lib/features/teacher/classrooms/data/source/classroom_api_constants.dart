@@ -8,4 +8,7 @@ abstract final class ClassroomApiConstants {
   static const String pricing = "/classrooms/{$classroomId}/pricing";
   static const String classroomTypes = "/classrooms/types";
   static const String gradeLevels = "/classrooms/grade-levels";
+  static const String studentId = "studentId";
+  static const String classroomStudentById =
+      "/classrooms/{$classroomId}/students/{$studentId}";
 }

@@ -33,6 +33,7 @@ import "package:draya_mobile/features/student/teachers/presentation/cubit/paymen
 import "package:draya_mobile/features/student/teachers/presentation/cubit/student_checkout_cubit.dart";
 import "package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_cubit.dart";
 import "package:draya_mobile/features/student/teachers/presentation/cubit/teacher_cubit.dart";
+import "package:draya_mobile/features/teacher/classrooms/domain/usecases/delete_classroom_student_use_case.dart";
 import "package:draya_mobile/features/teacher/classrooms/domain/usecases/delete_classroom_use_case.dart";
 import "package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classroom_types_use_case.dart";
 import "package:draya_mobile/features/teacher/classrooms/domain/usecases/get_grade_levels_use_case.dart";
@@ -143,6 +144,7 @@ Future<void> main() async {
         BlocProvider<ClassroomStudentsCubit>(
           create: (context) => ClassroomStudentsCubit(
             getIt<GetClassroomStudentsUseCase>(),
+            getIt<DeleteClassroomStudentUseCase>(),
           ),
         ),
         BlocProvider<TeacherCubit>(

@@ -2,6 +2,7 @@ import "package:dio/dio.dart";
 import "package:draya_mobile/core/networking/dio_factory.dart";
 import "package:draya_mobile/core/signalr/signalr_service.dart";
 import "package:draya_mobile/core/signalr/signalr_client_service.dart";
+import "package:draya_mobile/features/teacher/classrooms/domain/usecases/delete_classroom_student_use_case.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart";
 import "package:draya_mobile/features/teacher/exam_generation/data/source/teacher_exam_remote_data_source.dart";
 import "package:draya_mobile/features/auth/data/repos/auth_repo_impl.dart";
@@ -298,6 +299,10 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<GetGradeLevelsUseCase>(
     () => GetGradeLevelsUseCase(getIt<ClassroomRepo>()),
+  );
+
+  getIt.registerLazySingleton<DeleteClassroomStudentUseCase>(
+    () => DeleteClassroomStudentUseCase(getIt<ClassroomRepo>()),
   );
 
   getIt.registerLazySingleton<ClassroomCubit>(
