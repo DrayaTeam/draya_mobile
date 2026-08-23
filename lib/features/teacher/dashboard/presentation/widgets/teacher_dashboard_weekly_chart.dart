@@ -358,9 +358,12 @@ class _TeacherDashboardWeeklyChartState
                   sideTitles: SideTitles(
                     showTitles: true,
                     reservedSize: 30,
+                    interval: 1,
                     getTitlesWidget: (value, meta) {
                       final index = value.toInt();
-                      if (index < 0 || index >= items.length) {
+                      if (value != index.toDouble() ||
+                          index < 0 ||
+                          index >= items.length) {
                         return const SizedBox.shrink();
                       }
                       final selected = _isSelected(index);
