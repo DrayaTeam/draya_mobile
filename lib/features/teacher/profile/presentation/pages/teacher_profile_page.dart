@@ -15,6 +15,7 @@ import "package:draya_mobile/core/widgets/app_text_form_field.dart";
 import "package:draya_mobile/core/widgets/custom_app_bar.dart";
 import "package:draya_mobile/core/widgets/fade_in_up_animation.dart";
 import "package:draya_mobile/core/widgets/profile_avatar_picker.dart";
+import "package:draya_mobile/features/teacher/exam_generation/presentation/widgets/ai_quota_card.dart";
 import "package:draya_mobile/features/teacher/payments/data/models/payment_webview_model.dart";
 import "package:draya_mobile/features/teacher/profile/data/models/teacher_model.dart";
 import "package:draya_mobile/features/teacher/profile/data/models/update_teacher_request_model.dart";
@@ -351,9 +352,30 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
 
                   const SizedBox(height: AppSizes.s24),
 
-                  // 3. Wallet Section Header
+                  // 3. AI Quota Section
                   FadeInUp(
+                    delay: 120,
+                    child: _buildSectionTitle(
+                      context,
+                      icon: Icons.auto_awesome_rounded,
+                      title: "رصيد الذكاء الاصطناعي",
+                      subtitle:
+                          "حصتك الشهرية المجانية لتوليد الامتحانات بالذكاء الاصطناعي",
+                    ),
+                  ),
+
+                  const SizedBox(height: AppSizes.s12),
+
+                  const FadeInUp(
                     delay: 150,
+                    child: AiQuotaCard(),
+                  ),
+
+                  const SizedBox(height: AppSizes.s24),
+
+                  // 4. Wallet Section Header
+                  FadeInUp(
+                    delay: 200,
                     child: _buildSectionTitle(
                       context,
                       icon: Icons.account_balance_wallet_rounded,
@@ -365,9 +387,9 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
 
                   const SizedBox(height: AppSizes.s12),
 
-                  // 4. Wallet Card (Fintech Card with Live Balance)
+                  // 5. Wallet Card (Fintech Card with Live Balance)
                   FadeInUp(
-                    delay: 200,
+                    delay: 230,
                     child: TeacherWalletCard(
                       onRefresh: () {
                         context.read<WalletCubit>().getTeacherBalance();
@@ -377,9 +399,9 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
 
                   const SizedBox(height: AppSizes.s14),
 
-                  // 5. Quick Wallet Actions (Withdraw & Payout Accounts)
+                  // 6. Quick Wallet Actions (Withdraw & Payout Accounts)
                   FadeInUp(
-                    delay: 230,
+                    delay: 260,
                     child: TeacherWalletActionsRow(
                       onWithdraw: _openWithdrawBottomSheet,
                       onAddPayoutAccount: _openAddPayoutAccountBottomSheet,
@@ -388,9 +410,9 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
 
                   const SizedBox(height: AppSizes.s16),
 
-                  // 6. Quick Top-Up Action Card
+                  // 7. Quick Top-Up Action Card
                   FadeInUp(
-                    delay: 260,
+                    delay: 290,
                     child: BlocBuilder<TopUpCubit, TopUpState>(
                       builder: (context, topUpState) {
                         return TeacherTopUpCard(
@@ -410,9 +432,9 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
 
                   const SizedBox(height: AppSizes.s20),
 
-                  // 7. Wallet Tabs Section (Transactions, Withdrawals with Admin Confirmation, Payout Accounts)
+                  // 8. Wallet Tabs Section (Transactions, Withdrawals with Admin Confirmation, Payout Accounts)
                   FadeInUp(
-                    delay: 300,
+                    delay: 330,
                     child: TeacherWalletTabsSection(
                       onRequestWithdrawal: _openWithdrawBottomSheet,
                     ),

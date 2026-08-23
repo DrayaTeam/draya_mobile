@@ -19,6 +19,13 @@ class TeacherExamRemoteDataSource {
     );
   }
 
+  Future<AiQuotaModel> getQuota() async {
+    final response = await _dio.get(
+      "${ApiConstants.baseUrl}exams/quota",
+    );
+    return AiQuotaModel.fromJson(response.data as Map<String, dynamic>);
+  }
+
   Future<ExamGenerationStatusModel> getGenerationStatus(
     String generationId,
   ) async {

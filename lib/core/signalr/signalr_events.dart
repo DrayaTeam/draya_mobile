@@ -109,6 +109,71 @@ class ExamGenerationProgressEvent extends SignalREvent {
   bool get isGenerating => status.toLowerCase() == "generating";
 }
 
+class GradingProgressEvent extends SignalREvent {
+  final String gradingJobId;
+  final String status;
+  final String? errorMessage;
+  final double? finalScore;
+  final bool needsTeacherReview;
+
+  const GradingProgressEvent({
+    required this.gradingJobId,
+    required this.status,
+    this.errorMessage,
+    this.finalScore,
+    this.needsTeacherReview = false,
+  });
+
+  factory GradingProgressEvent.fromJson(Map<String, dynamic> json) {
+    return GradingProgressEvent(
+      gradingJobId:
+          (json["GradingJobId"] ?? json["gradingJobId"] ?? "").toString(),
+      status: (json["Status"] ?? json["status"] ?? "Pending").toString(),
+      errorMessage: json["ErrorMessage"]?.toString() ??
+          json["errorMessage"]?.toString(),
+      finalScore:
+          (json["FinalScore"] ?? json["finalScore"]) is num
+          ? (json["FinalScore"] ?? json["finalScore"]).toDouble()
+          : null,
+      needsTeacherReview:
+          json["NeedsTeacherReview"] as bool? ??
+          json["needsTeacherReview"] as bool? ??
+          false,
+    );
+  }
+
+  bool get isCompleted => status.toLowerCase() == "completed";
+  bool get isFailed => status.toLowerCase() == "failed";
+}
+
+class MaterialParsedEvent extends SignalREvent {
+  final String materialId;
+  final String versionId;
+  final String status;
+  final String message;
+
+  const MaterialParsedEvent({
+    required this.materialId,
+    required this.versionId,
+    required this.status,
+    required this.message,
+  });
+
+  factory MaterialParsedEvent.fromJson(Map<String, dynamic> json) {
+    return MaterialParsedEvent(
+      materialId:
+          (json["MaterialId"] ?? json["materialId"] ?? "").toString(),
+      versionId:
+          (json["VersionId"] ?? json["versionId"] ?? "").toString(),
+      status: (json["Status"] ?? json["status"] ?? "").toString(),
+      message: (json["Message"] ?? json["message"] ?? "").toString(),
+    );
+  }
+
+  bool get isSuccess => status.toLowerCase() == "success";
+  bool get isFailed => status.toLowerCase() == "failed";
+}
+
 class ReportGeneratedEvent extends SignalREvent {
   final String reportId;
   final String studentId;

@@ -15,6 +15,7 @@ import "package:draya_mobile/features/teacher/classrooms/data/models/classroom_m
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_state.dart";
 import "package:draya_mobile/features/teacher/exam_generation/data/models/teacher_exam_models.dart";
+import "package:draya_mobile/features/teacher/exam_generation/presentation/widgets/ai_quota_card.dart";
 import "package:draya_mobile/features/teacher/exam_generation/presentation/widgets/exam_generation_steps.dart";
 import "package:draya_mobile/features/teacher/sections/data/models/section_model.dart";
 import "package:draya_mobile/features/teacher/sections/presentation/cubit/section_cubit.dart";
@@ -275,6 +276,10 @@ class _ExamGenerationStep1State extends State<ExamGenerationStep1>
                         delay: 40,
                         child: _buildAiHeaderBanner(),
                       ),
+                      const SizedBox(height: AppSizes.s12),
+
+                      // AI Quota Card
+                      const AiQuotaCard(),
                       const SizedBox(height: AppSizes.s16),
 
                       // Classroom & Section Selector Card

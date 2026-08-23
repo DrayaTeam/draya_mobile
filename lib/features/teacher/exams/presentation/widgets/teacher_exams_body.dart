@@ -10,6 +10,7 @@ import "package:draya_mobile/core/widgets/fade_in_up_animation.dart";
 import "package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_state.dart";
+import "package:draya_mobile/features/teacher/exam_generation/presentation/widgets/ai_quota_card.dart";
 import "package:draya_mobile/features/teacher/exams/presentation/widgets/teacher_exam_card_item.dart";
 import "package:draya_mobile/features/teacher/sections/data/models/section_exam_model.dart";
 import "package:draya_mobile/features/teacher/sections/data/models/section_model.dart";
@@ -164,6 +165,12 @@ class _TeacherExamsBodyState extends State<TeacherExamsBody> {
             padding: const EdgeInsets.all(AppSizes.s16),
             children: [
               _buildHeaderCard(),
+              const SizedBox(height: AppSizes.s16),
+
+              const FadeInUp(
+                delay: 40,
+                child: AiQuotaCard(),
+              ),
               const SizedBox(height: AppSizes.s16),
 
               if (_allExams.isNotEmpty) ...[

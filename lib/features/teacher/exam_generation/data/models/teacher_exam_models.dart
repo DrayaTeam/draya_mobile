@@ -366,3 +366,38 @@ class RefinedQuestionResponseModel {
     );
   }
 }
+
+class AiQuotaModel {
+  final int freeMonthlyQuota;
+  final int freeExamsUsed;
+  final int remainingFreeQuota;
+  final double aiExamPrice;
+  final bool hasSufficientBalanceForPaid;
+
+  const AiQuotaModel({
+    required this.freeMonthlyQuota,
+    required this.freeExamsUsed,
+    required this.remainingFreeQuota,
+    required this.aiExamPrice,
+    required this.hasSufficientBalanceForPaid,
+  });
+
+  bool get hasFreeRemaining => remainingFreeQuota > 0;
+
+  double get usagePercent => freeMonthlyQuota <= 0
+      ? 1.0
+      : (freeExamsUsed / freeMonthlyQuota).clamp(0.0, 1.0);
+
+  String get formattedPrice =>
+      aiExamPrice % 1 == 0 ? aiExamPrice.toStringAsFixed(0) : aiExamPrice.toStringAsFixed(2);
+
+  factory AiQuotaModel.fromJson(Map<String, dynamic> json) {
+    return AiQuotaModel(
+      freeMonthlyQuota: (json["freeMonthlyQuota"] as num?)?.toInt() ?? 0,
+      freeExamsUsed: (json["freeExamsUsed"] as num?)?.toInt() ?? 0,
+      remainingFreeQuota: (json["remainingFreeQuota"] as num?)?.toInt() ?? 0,
+      aiExamPrice: (json["aiExamPrice"] as num?)?.toDouble() ?? 0.0,
+      hasSufficientBalanceForPaid: json["hasSufficientBalanceForPaid"] == true,
+    );
+  }
+}

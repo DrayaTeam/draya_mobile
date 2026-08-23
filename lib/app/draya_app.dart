@@ -86,6 +86,9 @@ class DrayaApp extends StatelessWidget {
                 child: Icon(
                   switch (notification.type) {
                     AppNotificationType.examGeneration => Icons.quiz_outlined,
+                    AppNotificationType.examGrading => Icons.grading_rounded,
+                    AppNotificationType.materialParsed =>
+                      Icons.menu_book_outlined,
                     AppNotificationType.reportGenerated =>
                       Icons.assessment_outlined,
                     AppNotificationType.studentAtRisk =>

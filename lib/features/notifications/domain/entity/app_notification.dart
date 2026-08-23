@@ -1,5 +1,7 @@
 enum AppNotificationType {
   examGeneration,
+  examGrading,
+  materialParsed,
   reportGenerated,
   studentAtRisk,
 }

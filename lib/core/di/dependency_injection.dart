@@ -163,6 +163,7 @@ import "package:draya_mobile/features/teacher/wallet/presentation/cubit/transact
 import "package:draya_mobile/features/teacher/wallet/presentation/cubit/withdrawals_cubit.dart";
 import "package:get_it/get_it.dart";
 import "package:draya_mobile/core/services/deep_link_service.dart";
+import "package:draya_mobile/core/services/local_notification_service.dart";
 import "package:draya_mobile/features/student/teachers/domain/usecases/get_payment_status_use_case.dart";
 import "package:draya_mobile/features/student/teachers/presentation/cubit/payment_verification_cubit.dart";
 import "package:draya_mobile/features/notifications/presentation/cubit/notifications_cubit.dart";
@@ -807,7 +808,14 @@ Future<void> setupGetIt() async {
   );
 
   // Notifications
+  getIt.registerLazySingleton<LocalNotificationService>(
+    () => LocalNotificationService(),
+  );
+
   getIt.registerLazySingleton<NotificationsCubit>(
-    () => NotificationsCubit(getIt<SignalRService>()),
+    () => NotificationsCubit(
+      getIt<SignalRService>(),
+      getIt<LocalNotificationService>(),
+    ),
   );
 }

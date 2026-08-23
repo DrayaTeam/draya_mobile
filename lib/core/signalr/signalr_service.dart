@@ -4,11 +4,25 @@ abstract class SignalRService {
   Future<void> connect({required String hubUrl, required String token});
   Future<void> disconnect();
 
+  /// Connects an additional long-lived hub without dropping the primary
+  /// connection (used by notification hubs that run app-wide).
+  Future<void> connectBackgroundHub({
+    required String key,
+    required String hubUrl,
+    required String token,
+  });
+
+  Future<void> disconnectBackgroundHub(String key);
+
+  Future<void> disconnectAllBackgroundHubs();
+
   bool get isConnected;
 
   Future<void> joinClassroom(String classroomId);
 
   Future<void> leaveClassroom(String classroomId);
+
+  Future<void> joinGradingGroup(String gradingJobId);
 
   void onQuestionCreated(Function(QuestionCreatedEvent) callback);
 
@@ -23,6 +37,10 @@ abstract class SignalRService {
   void onReportGenerated(Function(ReportGeneratedEvent) callback);
 
   void onStudentAtRisk(Function(StudentAtRiskEvent) callback);
+
+  void onGradingProgressUpdated(Function(GradingProgressEvent) callback);
+
+  void onMaterialParsed(Function(MaterialParsedEvent) callback);
 
   void offEvent(String eventName);
 

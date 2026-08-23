@@ -20,6 +20,10 @@ class NotificationCard extends StatelessWidget {
     switch (notification.type) {
       case AppNotificationType.examGeneration:
         return Icons.quiz_outlined;
+      case AppNotificationType.examGrading:
+        return Icons.grading_rounded;
+      case AppNotificationType.materialParsed:
+        return Icons.menu_book_outlined;
       case AppNotificationType.reportGenerated:
         return Icons.assessment_outlined;
       case AppNotificationType.studentAtRisk:
@@ -31,6 +35,10 @@ class NotificationCard extends StatelessWidget {
     switch (notification.type) {
       case AppNotificationType.examGeneration:
         return AppColors.ai700;
+      case AppNotificationType.examGrading:
+        return AppColors.success;
+      case AppNotificationType.materialParsed:
+        return AppColors.ai500;
       case AppNotificationType.reportGenerated:
         return AppColors.primary600;
       case AppNotificationType.studentAtRisk:

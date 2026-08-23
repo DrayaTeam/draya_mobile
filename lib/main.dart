@@ -1,8 +1,11 @@
+import "dart:async";
+
 import "package:draya_mobile/core/di/dependency_injection.dart";
 import "package:draya_mobile/core/helpers/app_shared_pref_helper.dart";
 import "package:draya_mobile/core/helpers/app_token_helper.dart";
 import "package:draya_mobile/core/localization/locale_cubit.dart";
 import "package:draya_mobile/core/services/deep_link_service.dart";
+import "package:draya_mobile/core/services/local_notification_service.dart";
 import "package:draya_mobile/features/auth/domain/usecases/login_use_case.dart";
 import "package:draya_mobile/features/auth/domain/usecases/student_register_use_case.dart";
 import "package:draya_mobile/features/auth/domain/usecases/teacher_register_use_case.dart";
@@ -98,6 +101,7 @@ Future<void> main() async {
   );
   await setupGetIt();
   getIt<DeepLinkService>().init();
+  unawaited(getIt<LocalNotificationService>().init());
   await AppTokenHelper.clearSessionIfNotRemembered();
   runApp(
     MultiBlocProvider(
