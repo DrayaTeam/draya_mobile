@@ -81,7 +81,9 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
                     context: context,
                     barrierDismissible: false,
                     builder: (context) => const Center(
-                      child: CircularProgressIndicator(color: AppColors.primary),
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
                     ),
                   ),
                 );
@@ -146,7 +148,9 @@ class _TeacherClassroomsPageState extends State<TeacherClassroomsPage> {
             body: SafeArea(
               child: state.status == CubitStatus.loading && classrooms.isEmpty
                   ? const Center(
-                      child: CircularProgressIndicator(color: AppColors.primary),
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
                     )
                   : RefreshIndicator(
                       color: AppColors.primary,
@@ -655,7 +659,10 @@ class _ClassroomCardState extends State<_ClassroomCard> {
               onTap: _toggleSections,
               borderRadius: BorderRadius.circular(12),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: _isSectionsExpanded
                       ? AppColors.primary50
@@ -786,7 +793,10 @@ class _ClassroomCardState extends State<_ClassroomCard> {
               else ...[
                 Container(
                   margin: const EdgeInsets.only(bottom: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.amber.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(10),
@@ -971,4 +981,3 @@ class _EmptyClassroomsState extends StatelessWidget {
     );
   }
 }
-

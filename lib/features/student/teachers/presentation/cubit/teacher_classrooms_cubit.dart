@@ -8,7 +8,7 @@ class TeacherClassroomsCubit extends Cubit<TeacherClassroomsState> {
   final GetTeacherClassroomsUseCase _getTeacherClassroomsUseCase;
 
   TeacherClassroomsCubit(this._getTeacherClassroomsUseCase)
-      : super(const TeacherClassroomsState());
+    : super(const TeacherClassroomsState());
 
   Future<void> getTeacherClassrooms(
     String teacherId, {

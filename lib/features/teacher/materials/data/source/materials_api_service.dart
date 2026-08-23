@@ -20,6 +20,11 @@ abstract class MaterialsApiService {
     @Part(name: "file") MultipartFile file,
   );
 
+  @DELETE(MaterialsApiConstants.materialById)
+  Future<void> deleteMaterial(
+    @Path(MaterialsApiConstants.materialId) String materialId,
+  );
+
   // @GET(MaterialsApiConstants.materials)
   // Future<TeacherMaterialPagedResultModel> getMaterials(
   //   @Path(MaterialsApiConstants.classroomId) String classroomId,

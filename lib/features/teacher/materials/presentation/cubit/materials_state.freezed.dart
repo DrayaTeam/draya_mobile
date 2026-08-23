@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MaterialsState {
 
- CubitStatus get getMaterialsStatus; CubitStatus get uploadMaterialsStatus; SectionModel? get sectionModel; ApiErrorModel? get apiErrorModel;
+ CubitStatus get getMaterialsStatus; CubitStatus get uploadMaterialsStatus; CubitStatus get deleteMaterialStatus; SectionModel? get sectionModel; ApiErrorModel? get apiErrorModel;
 /// Create a copy of MaterialsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $MaterialsStateCopyWith<MaterialsState> get copyWith => _$MaterialsStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MaterialsState&&(identical(other.getMaterialsStatus, getMaterialsStatus) || other.getMaterialsStatus == getMaterialsStatus)&&(identical(other.uploadMaterialsStatus, uploadMaterialsStatus) || other.uploadMaterialsStatus == uploadMaterialsStatus)&&(identical(other.sectionModel, sectionModel) || other.sectionModel == sectionModel)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MaterialsState&&(identical(other.getMaterialsStatus, getMaterialsStatus) || other.getMaterialsStatus == getMaterialsStatus)&&(identical(other.uploadMaterialsStatus, uploadMaterialsStatus) || other.uploadMaterialsStatus == uploadMaterialsStatus)&&(identical(other.deleteMaterialStatus, deleteMaterialStatus) || other.deleteMaterialStatus == deleteMaterialStatus)&&(identical(other.sectionModel, sectionModel) || other.sectionModel == sectionModel)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,getMaterialsStatus,uploadMaterialsStatus,sectionModel,apiErrorModel);
+int get hashCode => Object.hash(runtimeType,getMaterialsStatus,uploadMaterialsStatus,deleteMaterialStatus,sectionModel,apiErrorModel);
 
 @override
 String toString() {
-  return 'MaterialsState(getMaterialsStatus: $getMaterialsStatus, uploadMaterialsStatus: $uploadMaterialsStatus, sectionModel: $sectionModel, apiErrorModel: $apiErrorModel)';
+  return 'MaterialsState(getMaterialsStatus: $getMaterialsStatus, uploadMaterialsStatus: $uploadMaterialsStatus, deleteMaterialStatus: $deleteMaterialStatus, sectionModel: $sectionModel, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $MaterialsStateCopyWith<$Res>  {
   factory $MaterialsStateCopyWith(MaterialsState value, $Res Function(MaterialsState) _then) = _$MaterialsStateCopyWithImpl;
 @useResult
 $Res call({
- CubitStatus getMaterialsStatus, CubitStatus uploadMaterialsStatus, SectionModel? sectionModel, ApiErrorModel? apiErrorModel
+ CubitStatus getMaterialsStatus, CubitStatus uploadMaterialsStatus, CubitStatus deleteMaterialStatus, SectionModel? sectionModel, ApiErrorModel? apiErrorModel
 });
 
 
@@ -62,10 +62,11 @@ class _$MaterialsStateCopyWithImpl<$Res>
 
 /// Create a copy of MaterialsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? getMaterialsStatus = null,Object? uploadMaterialsStatus = null,Object? sectionModel = freezed,Object? apiErrorModel = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? getMaterialsStatus = null,Object? uploadMaterialsStatus = null,Object? deleteMaterialStatus = null,Object? sectionModel = freezed,Object? apiErrorModel = freezed,}) {
   return _then(_self.copyWith(
 getMaterialsStatus: null == getMaterialsStatus ? _self.getMaterialsStatus : getMaterialsStatus // ignore: cast_nullable_to_non_nullable
 as CubitStatus,uploadMaterialsStatus: null == uploadMaterialsStatus ? _self.uploadMaterialsStatus : uploadMaterialsStatus // ignore: cast_nullable_to_non_nullable
+as CubitStatus,deleteMaterialStatus: null == deleteMaterialStatus ? _self.deleteMaterialStatus : deleteMaterialStatus // ignore: cast_nullable_to_non_nullable
 as CubitStatus,sectionModel: freezed == sectionModel ? _self.sectionModel : sectionModel // ignore: cast_nullable_to_non_nullable
 as SectionModel?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
 as ApiErrorModel?,
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus getMaterialsStatus,  CubitStatus uploadMaterialsStatus,  SectionModel? sectionModel,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus getMaterialsStatus,  CubitStatus uploadMaterialsStatus,  CubitStatus deleteMaterialStatus,  SectionModel? sectionModel,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MaterialsState() when $default != null:
-return $default(_that.getMaterialsStatus,_that.uploadMaterialsStatus,_that.sectionModel,_that.apiErrorModel);case _:
+return $default(_that.getMaterialsStatus,_that.uploadMaterialsStatus,_that.deleteMaterialStatus,_that.sectionModel,_that.apiErrorModel);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.getMaterialsStatus,_that.uploadMaterialsStatus,_that.secti
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus getMaterialsStatus,  CubitStatus uploadMaterialsStatus,  SectionModel? sectionModel,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus getMaterialsStatus,  CubitStatus uploadMaterialsStatus,  CubitStatus deleteMaterialStatus,  SectionModel? sectionModel,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
 switch (_that) {
 case _MaterialsState():
-return $default(_that.getMaterialsStatus,_that.uploadMaterialsStatus,_that.sectionModel,_that.apiErrorModel);case _:
+return $default(_that.getMaterialsStatus,_that.uploadMaterialsStatus,_that.deleteMaterialStatus,_that.sectionModel,_that.apiErrorModel);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +195,10 @@ return $default(_that.getMaterialsStatus,_that.uploadMaterialsStatus,_that.secti
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus getMaterialsStatus,  CubitStatus uploadMaterialsStatus,  SectionModel? sectionModel,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus getMaterialsStatus,  CubitStatus uploadMaterialsStatus,  CubitStatus deleteMaterialStatus,  SectionModel? sectionModel,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
 switch (_that) {
 case _MaterialsState() when $default != null:
-return $default(_that.getMaterialsStatus,_that.uploadMaterialsStatus,_that.sectionModel,_that.apiErrorModel);case _:
+return $default(_that.getMaterialsStatus,_that.uploadMaterialsStatus,_that.deleteMaterialStatus,_that.sectionModel,_that.apiErrorModel);case _:
   return null;
 
 }
@@ -209,11 +210,12 @@ return $default(_that.getMaterialsStatus,_that.uploadMaterialsStatus,_that.secti
 
 
 class _MaterialsState implements MaterialsState {
-  const _MaterialsState({this.getMaterialsStatus = CubitStatus.initial, this.uploadMaterialsStatus = CubitStatus.initial, this.sectionModel, this.apiErrorModel});
+  const _MaterialsState({this.getMaterialsStatus = CubitStatus.initial, this.uploadMaterialsStatus = CubitStatus.initial, this.deleteMaterialStatus = CubitStatus.initial, this.sectionModel, this.apiErrorModel});
   
 
 @override@JsonKey() final  CubitStatus getMaterialsStatus;
 @override@JsonKey() final  CubitStatus uploadMaterialsStatus;
+@override@JsonKey() final  CubitStatus deleteMaterialStatus;
 @override final  SectionModel? sectionModel;
 @override final  ApiErrorModel? apiErrorModel;
 
@@ -227,16 +229,16 @@ _$MaterialsStateCopyWith<_MaterialsState> get copyWith => __$MaterialsStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MaterialsState&&(identical(other.getMaterialsStatus, getMaterialsStatus) || other.getMaterialsStatus == getMaterialsStatus)&&(identical(other.uploadMaterialsStatus, uploadMaterialsStatus) || other.uploadMaterialsStatus == uploadMaterialsStatus)&&(identical(other.sectionModel, sectionModel) || other.sectionModel == sectionModel)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MaterialsState&&(identical(other.getMaterialsStatus, getMaterialsStatus) || other.getMaterialsStatus == getMaterialsStatus)&&(identical(other.uploadMaterialsStatus, uploadMaterialsStatus) || other.uploadMaterialsStatus == uploadMaterialsStatus)&&(identical(other.deleteMaterialStatus, deleteMaterialStatus) || other.deleteMaterialStatus == deleteMaterialStatus)&&(identical(other.sectionModel, sectionModel) || other.sectionModel == sectionModel)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,getMaterialsStatus,uploadMaterialsStatus,sectionModel,apiErrorModel);
+int get hashCode => Object.hash(runtimeType,getMaterialsStatus,uploadMaterialsStatus,deleteMaterialStatus,sectionModel,apiErrorModel);
 
 @override
 String toString() {
-  return 'MaterialsState(getMaterialsStatus: $getMaterialsStatus, uploadMaterialsStatus: $uploadMaterialsStatus, sectionModel: $sectionModel, apiErrorModel: $apiErrorModel)';
+  return 'MaterialsState(getMaterialsStatus: $getMaterialsStatus, uploadMaterialsStatus: $uploadMaterialsStatus, deleteMaterialStatus: $deleteMaterialStatus, sectionModel: $sectionModel, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -247,7 +249,7 @@ abstract mixin class _$MaterialsStateCopyWith<$Res> implements $MaterialsStateCo
   factory _$MaterialsStateCopyWith(_MaterialsState value, $Res Function(_MaterialsState) _then) = __$MaterialsStateCopyWithImpl;
 @override @useResult
 $Res call({
- CubitStatus getMaterialsStatus, CubitStatus uploadMaterialsStatus, SectionModel? sectionModel, ApiErrorModel? apiErrorModel
+ CubitStatus getMaterialsStatus, CubitStatus uploadMaterialsStatus, CubitStatus deleteMaterialStatus, SectionModel? sectionModel, ApiErrorModel? apiErrorModel
 });
 
 
@@ -264,10 +266,11 @@ class __$MaterialsStateCopyWithImpl<$Res>
 
 /// Create a copy of MaterialsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? getMaterialsStatus = null,Object? uploadMaterialsStatus = null,Object? sectionModel = freezed,Object? apiErrorModel = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? getMaterialsStatus = null,Object? uploadMaterialsStatus = null,Object? deleteMaterialStatus = null,Object? sectionModel = freezed,Object? apiErrorModel = freezed,}) {
   return _then(_MaterialsState(
 getMaterialsStatus: null == getMaterialsStatus ? _self.getMaterialsStatus : getMaterialsStatus // ignore: cast_nullable_to_non_nullable
 as CubitStatus,uploadMaterialsStatus: null == uploadMaterialsStatus ? _self.uploadMaterialsStatus : uploadMaterialsStatus // ignore: cast_nullable_to_non_nullable
+as CubitStatus,deleteMaterialStatus: null == deleteMaterialStatus ? _self.deleteMaterialStatus : deleteMaterialStatus // ignore: cast_nullable_to_non_nullable
 as CubitStatus,sectionModel: freezed == sectionModel ? _self.sectionModel : sectionModel // ignore: cast_nullable_to_non_nullable
 as SectionModel?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
 as ApiErrorModel?,
