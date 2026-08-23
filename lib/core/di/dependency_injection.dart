@@ -34,6 +34,7 @@ import "package:draya_mobile/features/student/student_feedback/data/source/stude
 import "package:draya_mobile/features/student/student_feedback/domain/repos/student_feedback_repo.dart";
 import "package:draya_mobile/features/student/student_feedback/domain/usecases/submit_feedback_use_case.dart";
 import "package:draya_mobile/features/student/student_feedback/presentation/cubit/student_feedback_cubit.dart";
+import "package:draya_mobile/features/teacher/materials/domain/usecases/delete_material_use_case.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/data/repos/teacher_feedback_repo_impl.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/data/source/teacher_feedback_api_service.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/domain/repos/teacher_feedback_repo.dart";
@@ -616,6 +617,10 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<GetMaterialsUseCase>(
     () => GetMaterialsUseCase(getIt<MaterialsRepo>()),
+  );
+
+  getIt.registerLazySingleton<DeleteMaterialUseCase>(
+    () => DeleteMaterialUseCase(getIt<MaterialsRepo>()),
   );
 
   // student exams

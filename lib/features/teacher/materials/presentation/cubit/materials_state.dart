@@ -10,6 +10,7 @@ abstract class MaterialsState with _$MaterialsState {
   const factory MaterialsState({
     @Default(CubitStatus.initial) CubitStatus getMaterialsStatus,
     @Default(CubitStatus.initial) CubitStatus uploadMaterialsStatus,
+    @Default(CubitStatus.initial) CubitStatus deleteMaterialStatus,
     SectionModel? sectionModel,
     ApiErrorModel? apiErrorModel,
   }) = _MaterialsState;

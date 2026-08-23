@@ -59,4 +59,15 @@ class MaterialsRepoImpl implements MaterialsRepo {
       return ApiResult.failure(ErrorHandler.handle(e));
     }
   }
+
+  @override
+  Future<ApiResult<void>> deleteMaterial({required String materialId}) async {
+    try {
+      final response = await _materialsApiService.deleteMaterial(materialId);
+
+      return ApiResult.success(response);
+    } catch (e) {
+      return ApiResult.failure(ErrorHandler.handle(e));
+    }
+  }
 }

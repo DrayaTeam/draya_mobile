@@ -8,7 +8,7 @@ class StudentHomeCubit extends Cubit<StudentHomeState> {
   final GetStudentDashboardUseCase _getStudentDashboardUseCase;
 
   StudentHomeCubit(this._getStudentDashboardUseCase)
-      : super(const StudentHomeState());
+    : super(const StudentHomeState());
 
   Future<void> getStudentDashboard() async {
     emit(state.copyWith(status: CubitStatus.loading));

@@ -7,7 +7,8 @@ import "package:draya_mobile/features/student/student_feedback/presentation/cubi
 import "package:flutter_bloc/flutter_bloc.dart";
 
 class StudentFeedbackCubit extends Cubit<StudentFeedbackState> {
-  final GetStudentEnrolledClassroomsUseCase _getStudentEnrolledClassroomsUseCase;
+  final GetStudentEnrolledClassroomsUseCase
+  _getStudentEnrolledClassroomsUseCase;
   final SubmitFeedbackUseCase _submitFeedbackUseCase;
 
   StudentFeedbackCubit(
@@ -25,7 +26,7 @@ class StudentFeedbackCubit extends Cubit<StudentFeedbackState> {
       ),
     );
 
-    final result = await _getStudentEnrolledClassroomsUseCase.call(
+    final result = await _getStudentEnrolledClassroomsUseCase(
       params: const StudentEnrolledClassroomsParams(
         page: 1,
         pageSize: _pageSize,
@@ -69,7 +70,7 @@ class StudentFeedbackCubit extends Cubit<StudentFeedbackState> {
       ),
     );
 
-    final result = await _submitFeedbackUseCase.call(
+    final result = await _submitFeedbackUseCase(
       params: SubmitFeedbackParams(
         classroomId: classroomId,
         rating: rating,

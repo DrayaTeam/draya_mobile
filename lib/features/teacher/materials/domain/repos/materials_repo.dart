@@ -12,4 +12,6 @@ abstract class MaterialsRepo {
   Future<ApiResult<SectionModel>> getMaterials({
     required GetMaterialsParams getMaterialsParams,
   });
+
+  Future<ApiResult<void>> deleteMaterial({required String materialId});
 }

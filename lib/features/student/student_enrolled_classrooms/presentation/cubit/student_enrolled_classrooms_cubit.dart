@@ -9,7 +9,8 @@ import "package:flutter_bloc/flutter_bloc.dart";
 
 class StudentEnrolledClassroomsCubit
     extends Cubit<StudentEnrolledClassroomsState> {
-  final GetStudentEnrolledClassroomsUseCase _getStudentEnrolledClassroomsUseCase;
+  final GetStudentEnrolledClassroomsUseCase
+  _getStudentEnrolledClassroomsUseCase;
   final EnrollClassroomUseCase _enrollClassroomUseCase;
 
   StudentEnrolledClassroomsCubit(
