@@ -1039,31 +1039,33 @@ class _ModernClassroomCard extends StatelessWidget {
                     //spacing: AppSizes.s8,
                     children: [
                       // View Like Student Preview Action
-                      SizedBox(
-                        height: 36,
-                        child: ElevatedButton.icon(
-                          onPressed: onPreviewAsStudent,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
+                      Expanded(
+                        child: SizedBox(
+                          height: 36,
+                          child: ElevatedButton.icon(
+                            onPressed: onPreviewAsStudent,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                            icon: const Icon(
+                              Icons.visibility_outlined,
+                              size: 16,
                             ),
-                          ),
-                          icon: const Icon(
-                            Icons.visibility_outlined,
-                            size: 16,
-                          ),
-                          label: Text(
-                            "معاينة كطالب",
-                            style: AppTextStyles.label.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12,
+                            label: Text(
+                              "معاينة كطالب",
+                              style: AppTextStyles.label.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
                         ),
@@ -1093,36 +1095,38 @@ class _ModernClassroomCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      SizedBox(
-                        height: 36,
-                        child: OutlinedButton.icon(
-                          onPressed: onDeleteClassroom,
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: AppColors.primary,
-                            backgroundColor: AppColors.error,
-                            side: const BorderSide(
-                              color: AppColors.error,
+                      Expanded(
+                        child: SizedBox(
+                          height: 36,
+                          child: OutlinedButton.icon(
+                            onPressed: onDeleteClassroom,
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.primary,
+                              backgroundColor: AppColors.error,
+                              side: const BorderSide(
+                                color: AppColors.error,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          icon: const Icon(
-                            Icons.delete_outline,
-                            size: 16,
-                            color: AppColors.surface,
-                          ),
-                          label: Text(
-                            "مسح الفصل",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTextStyles.label.copyWith(
+                            icon: const Icon(
+                              Icons.delete_outline,
+                              size: 16,
                               color: AppColors.surface,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 11.5,
+                            ),
+                            label: Text(
+                              "مسح الفصل",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.label.copyWith(
+                                color: AppColors.surface,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 11.5,
+                              ),
                             ),
                           ),
                         ),

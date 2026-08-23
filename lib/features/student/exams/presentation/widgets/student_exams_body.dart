@@ -63,8 +63,9 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
     final collected = <_ClassroomExamItem>[];
 
     for (final classroom in classrooms) {
-      final result =
-          await getSectionsUseCase.call(params: classroom.classroomId);
+      final result = await getSectionsUseCase.call(
+        params: classroom.classroomId,
+      );
       if (result is Success<List<ClassroomSection>>) {
         for (final section in result.data) {
           for (final exam in section.exams) {
@@ -102,8 +103,10 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<StudentEnrolledClassroomsCubit,
-        StudentEnrolledClassroomsState>(
+    return BlocConsumer<
+      StudentEnrolledClassroomsCubit,
+      StudentEnrolledClassroomsState
+    >(
       listener: (context, state) {
         if (state.status == CubitStatus.success &&
             state.classrooms.isNotEmpty) {
@@ -111,8 +114,7 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
         }
       },
       builder: (context, state) {
-        if (state.status == CubitStatus.loading &&
-            state.classrooms.isEmpty) {
+        if (state.status == CubitStatus.loading && state.classrooms.isEmpty) {
           return const Center(
             child: CircularProgressIndicator(color: AppColors.primary),
           );
@@ -121,8 +123,8 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
         final filteredExams = _selectedClassroomId == null
             ? _allExams
             : _allExams
-                .where((e) => e.classroomId == _selectedClassroomId)
-                .toList();
+                  .where((e) => e.classroomId == _selectedClassroomId)
+                  .toList();
 
         return RefreshIndicator(
           color: AppColors.primary,

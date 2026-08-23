@@ -12,6 +12,7 @@ import "package:draya_mobile/features/student/student_weak_topics/presentation/p
 import "package:draya_mobile/features/student/student_channel/presentation/pages/student_channel_screen.dart";
 import "package:draya_mobile/features/student/student_enrolled_classrooms/presentation/pages/student_enrolled_classrooms_screen.dart";
 import "package:draya_mobile/features/student/student_feedback/presentation/pages/student_feedback_screen.dart";
+import "package:draya_mobile/features/teacher/reports/presentation/pages/reports_page.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/presentation/pages/classroom_feedback_screen.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/presentation/pages/teacher_feedback_screen.dart";
 import "package:draya_mobile/features/student/student_materials/presentation/pages/student_classrooms_materials_screen.dart";
@@ -115,16 +116,16 @@ abstract final class AppRouter {
       GoRoute(
         path: AppRoutes.examGenerationPage2,
         builder: (context, state) {
-          final map =
-              state.extra is Map ? state.extra as Map : <String, dynamic>{};
+          final map = state.extra is Map
+              ? state.extra as Map
+              : <String, dynamic>{};
           final classroomId = map["classroomId"]?.toString() ?? "";
           final classroomName = map["classroomName"]?.toString();
           final subjectName = map["subjectName"]?.toString();
           final sectionId = map["sectionId"]?.toString() ?? "";
           final sectionTitle = map["sectionTitle"]?.toString();
           final topic = map["topic"]?.toString() ?? "";
-          final difficultyLevel =
-              map["difficultyLevel"]?.toString() ?? "easy";
+          final difficultyLevel = map["difficultyLevel"]?.toString() ?? "easy";
           final rawRequirements = map["questionRequirements"];
           final questionRequirements = rawRequirements is List
               ? rawRequirements.whereType<QuestionRequirementModel>().toList()
@@ -148,8 +149,9 @@ abstract final class AppRouter {
       GoRoute(
         path: AppRoutes.examGenerationPage3,
         builder: (context, state) {
-          final map =
-              state.extra is Map ? state.extra as Map : <String, dynamic>{};
+          final map = state.extra is Map
+              ? state.extra as Map
+              : <String, dynamic>{};
           final generationId = map["generationId"]?.toString();
           final examId = map["examId"]?.toString();
           final topic = map["topic"]?.toString() ?? "";
@@ -158,8 +160,7 @@ abstract final class AppRouter {
           final subjectName = map["subjectName"]?.toString();
           final sectionId = map["sectionId"]?.toString() ?? "";
           final sectionTitle = map["sectionTitle"]?.toString();
-          final difficultyLevel =
-              map["difficultyLevel"]?.toString() ?? "easy";
+          final difficultyLevel = map["difficultyLevel"]?.toString() ?? "easy";
           final rawRequirements = map["questionRequirements"];
           final questionRequirements = rawRequirements is List
               ? rawRequirements.whereType<QuestionRequirementModel>().toList()
@@ -236,8 +237,9 @@ abstract final class AppRouter {
       GoRoute(
         path: AppRoutes.teacherExamQuestionsPage,
         builder: (context, state) {
-          final map =
-              state.extra is Map ? state.extra as Map : <String, dynamic>{};
+          final map = state.extra is Map
+              ? state.extra as Map
+              : <String, dynamic>{};
           return TeacherExamQuestionsScreen(
             examId: map["examId"]?.toString() ?? "",
             classroomName: map["classroomName"]?.toString(),
@@ -432,6 +434,12 @@ abstract final class AppRouter {
             classroomId: state.pathParameters["classroomId"] ?? "",
             classroomName: state.extra as String?,
           );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.reportsPage,
+        builder: (context, state) {
+          return const ReportsPage();
         },
       ),
     ],

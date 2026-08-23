@@ -12,7 +12,7 @@ class PaymentVerificationCubit extends Cubit<PaymentVerificationState> {
   static const Duration retryDelay = Duration(seconds: 3);
 
   PaymentVerificationCubit(this._getPaymentStatusUseCase)
-      : super(const PaymentVerificationState());
+    : super(const PaymentVerificationState());
 
   Future<void> verifyPayment(String transactionId) async {
     if (transactionId.trim().isEmpty) {

@@ -8,7 +8,7 @@ class StudentCheckoutCubit extends Cubit<StudentCheckoutState> {
   final CheckoutClassroomUseCase _checkoutClassroomUseCase;
 
   StudentCheckoutCubit(this._checkoutClassroomUseCase)
-      : super(const StudentCheckoutState());
+    : super(const StudentCheckoutState());
 
   static const paymentResultRedirectUrl = "draya://payment-result";
 

@@ -2,6 +2,7 @@ import "package:dio/dio.dart";
 import "package:draya_mobile/core/networking/dio_factory.dart";
 import "package:draya_mobile/core/signalr/signalr_service.dart";
 import "package:draya_mobile/core/signalr/signalr_client_service.dart";
+import "package:draya_mobile/features/teacher/classrooms/domain/usecases/delete_classroom_student_use_case.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart";
 import "package:draya_mobile/features/teacher/exam_generation/data/source/teacher_exam_remote_data_source.dart";
 import "package:draya_mobile/features/auth/data/repos/auth_repo_impl.dart";
@@ -34,6 +35,11 @@ import "package:draya_mobile/features/student/student_feedback/data/source/stude
 import "package:draya_mobile/features/student/student_feedback/domain/repos/student_feedback_repo.dart";
 import "package:draya_mobile/features/student/student_feedback/domain/usecases/submit_feedback_use_case.dart";
 import "package:draya_mobile/features/student/student_feedback/presentation/cubit/student_feedback_cubit.dart";
+import "package:draya_mobile/features/teacher/materials/domain/usecases/delete_material_use_case.dart";
+import "package:draya_mobile/features/teacher/reports/data/repos/reports_repo_impl.dart";
+import "package:draya_mobile/features/teacher/reports/data/sources/reports_api_service.dart";
+import "package:draya_mobile/features/teacher/reports/domain/repos/reports_repo.dart";
+import "package:draya_mobile/features/teacher/reports/domain/usecases/get_performance_report_use_case.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/data/repos/teacher_feedback_repo_impl.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/data/source/teacher_feedback_api_service.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/domain/repos/teacher_feedback_repo.dart";
@@ -294,6 +300,10 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<GetGradeLevelsUseCase>(
     () => GetGradeLevelsUseCase(getIt<ClassroomRepo>()),
+  );
+
+  getIt.registerLazySingleton<DeleteClassroomStudentUseCase>(
+    () => DeleteClassroomStudentUseCase(getIt<ClassroomRepo>()),
   );
 
   getIt.registerLazySingleton<ClassroomCubit>(
@@ -619,6 +629,10 @@ Future<void> setupGetIt() async {
     () => GetMaterialsUseCase(getIt<MaterialsRepo>()),
   );
 
+  getIt.registerLazySingleton<DeleteMaterialUseCase>(
+    () => DeleteMaterialUseCase(getIt<MaterialsRepo>()),
+  );
+
   // student exams
   getIt.registerLazySingleton<StudentExamApiService>(
     () => StudentExamApiService(getIt<Dio>()),
@@ -817,5 +831,18 @@ Future<void> setupGetIt() async {
       getIt<SignalRService>(),
       getIt<LocalNotificationService>(),
     ),
+  );
+
+  // teacher reports
+  getIt.registerLazySingleton<ReportsApiService>(
+    () => ReportsApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<ReportsRepo>(
+    () => ReportsRepoImpl(getIt<ReportsApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetPerformanceReportUseCase>(
+    () => GetPerformanceReportUseCase(getIt<ReportsRepo>()),
   );
 }

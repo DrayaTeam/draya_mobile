@@ -43,4 +43,9 @@ abstract class ClassroomRepo {
   Future<ApiResult<List<ClassroomTypeModel>>> getClassroomTypes();
 
   Future<ApiResult<List<GradeLevelModel>>> getGradeLevels();
+
+  Future<ApiResult<void>> deleteClassroomStudent({
+    required String classroomId,
+    required String studentId,
+  });
 }

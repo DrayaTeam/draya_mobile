@@ -8,7 +8,8 @@ part "classroom_students_state.freezed.dart";
 @freezed
 abstract class ClassroomStudentsState with _$ClassroomStudentsState {
   const factory ClassroomStudentsState({
-    @Default(CubitStatus.initial) CubitStatus status,
+    @Default(CubitStatus.initial) CubitStatus getStudentsStatus,
+    @Default(CubitStatus.initial) CubitStatus deleteStudentStatus,
     @Default([]) List<StudentRosterItemModel> students,
     ApiErrorModel? apiErrorModel,
   }) = _ClassroomStudentsState;

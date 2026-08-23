@@ -50,11 +50,11 @@ class _MaterialsPageState extends State<MaterialsPage> {
 
   void _loadMaterials() {
     context.read<MaterialsCubit>().getMaterials(
-          getMaterialsParams: GetMaterialsParams(
-            classroomId: widget._classroomId,
-            sectionId: widget._sectionModel.id,
-          ),
-        );
+      getMaterialsParams: GetMaterialsParams(
+        classroomId: widget._classroomId,
+        sectionId: widget._sectionModel.id,
+      ),
+    );
   }
 
   Future<void> _pickFile() async {
@@ -108,8 +108,7 @@ class _MaterialsPageState extends State<MaterialsPage> {
         ? fileName.substring(0, fileName.lastIndexOf("."))
         : fileName;
 
-    final materialType =
-        fileName.contains(".") ? fileName.split(".").last : "";
+    final materialType = fileName.contains(".") ? fileName.split(".").last : "";
 
     final request = MaterialsRequestModel(
       sectionId: widget._sectionModel.id,
@@ -119,9 +118,9 @@ class _MaterialsPageState extends State<MaterialsPage> {
     );
 
     await context.read<MaterialsCubit>().uploadMaterials(
-          sectionId: widget._sectionModel.id,
-          materialsRequestModel: request,
-        );
+      sectionId: widget._sectionModel.id,
+      materialsRequestModel: request,
+    );
   }
 
   void _downloadFile(String? fileUrl) {
@@ -147,7 +146,8 @@ class _MaterialsPageState extends State<MaterialsPage> {
   ) {
     final fileUrl = document.fileUrl;
     if (fileUrl != null && fileUrl.isNotEmpty) {
-      final isPdf = document.materialType.toLowerCase().contains("pdf") ||
+      final isPdf =
+          document.materialType.toLowerCase().contains("pdf") ||
           fileUrl.toLowerCase().endsWith(".pdf");
 
       if (isPdf) {
@@ -234,15 +234,72 @@ class _MaterialsPageState extends State<MaterialsPage> {
     return "${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB";
   }
 
+  Future<void> _deleteMaterial({required String materialId}) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.error.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.delete_forever_rounded,
+                  color: AppColors.error,
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 10),
+              const Text("حذف المادة"),
+            ],
+          ),
+          content: Text(
+            "هل أنت متأكد من حذف المادة؟",
+            style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+          ),
+          actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: const Text("إلغاء"),
+            ),
+            FilledButton.icon(
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.error,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () => Navigator.pop(dialogContext, true),
+              icon: const Icon(Icons.delete_outline, size: 18),
+              label: const Text("حذف نهائي"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldDelete != true || !mounted) return;
+
+    await context.read<MaterialsCubit>().deleteMaterial(materialId: materialId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<MaterialsCubit, MaterialsState>(
       listener: (BuildContext context, MaterialsState state) {
-        if (state.uploadMaterialsStatus == CubitStatus.loading) {
+        if (state.getMaterialsStatus == CubitStatus.loading ||
+            state.uploadMaterialsStatus == CubitStatus.loading) {
           AppLoading.show();
-        }
-
-        if (state.uploadMaterialsStatus == CubitStatus.success) {
+        } else if (state.uploadMaterialsStatus == CubitStatus.success) {
           AppLoading.hide();
           setState(() {
             _isUploading = false;
@@ -260,18 +317,51 @@ class _MaterialsPageState extends State<MaterialsPage> {
               ),
               content: const Row(
                 children: [
-                  Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+                  Icon(
+                    Icons.check_circle_rounded,
+                    color: Colors.white,
+                    size: 18,
+                  ),
                   SizedBox(width: 8),
-                  Text("تم رفع المادة التعليمية بنجاح",
-                      style: TextStyle(color: Colors.white)),
+                  Text(
+                    "تم رفع المادة التعليمية بنجاح",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ],
               ),
             ),
           );
-        }
+        } else if (state.deleteMaterialStatus == CubitStatus.success) {
+          AppLoading.hide();
 
-        if (state.uploadMaterialsStatus == CubitStatus.error ||
-            state.getMaterialsStatus == CubitStatus.error) {
+          _loadMaterials();
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: AppColors.chemistryBiology,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              content: const Row(
+                children: [
+                  Icon(
+                    Icons.check_circle_rounded,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    "تم مسح المادة التعليمية بنجاح",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else if (state.uploadMaterialsStatus == CubitStatus.error ||
+            state.getMaterialsStatus == CubitStatus.error ||
+            state.deleteMaterialStatus == CubitStatus.error) {
           AppLoading.hide();
           setState(() => _isUploading = false);
           if (state.apiErrorModel != null) {
@@ -280,6 +370,8 @@ class _MaterialsPageState extends State<MaterialsPage> {
               AppErrorDialog(apiErrorModel: state.apiErrorModel!),
             );
           }
+        } else {
+          AppLoading.hide();
         }
       },
       child: Scaffold(
@@ -387,8 +479,9 @@ class _MaterialsPageState extends State<MaterialsPage> {
                         children: documents.isEmpty
                             ? [
                                 const _EmptyCategoryPlaceholder(
-                                  text: "لم يتم رفع أي مستندات في هذا القسم بعد",
-                                )
+                                  text:
+                                      "لم يتم رفع أي مستندات في هذا القسم بعد",
+                                ),
                               ]
                             : documents.map((doc) {
                                 return _DocumentItemTile(
@@ -396,6 +489,9 @@ class _MaterialsPageState extends State<MaterialsPage> {
                                   onPreview: () =>
                                       _openDocumentInViewer(doc, section),
                                   onDownload: () => _downloadFile(doc.fileUrl),
+                                  onDelete: () {
+                                    _deleteMaterial(materialId: doc.id);
+                                  },
                                 );
                               }).toList(),
                       ),
@@ -414,14 +510,18 @@ class _MaterialsPageState extends State<MaterialsPage> {
                         children: videos.isEmpty
                             ? [
                                 const _EmptyCategoryPlaceholder(
-                                  text: "لم يتم إضافة أي فيديوهات في هذا القسم بعد",
-                                )
+                                  text:
+                                      "لم يتم إضافة أي فيديوهات في هذا القسم بعد",
+                                ),
                               ]
                             : videos.map((video) {
                                 return _VideoItemTile(
                                   video: video,
                                   onWatch: () =>
                                       _openVideoInViewer(video, section),
+                                  onDelete: () {
+                                    _deleteMaterial(materialId: video.id);
+                                  },
                                 );
                               }).toList(),
                       ),
@@ -441,7 +541,7 @@ class _MaterialsPageState extends State<MaterialsPage> {
                             ? [
                                 const _EmptyCategoryPlaceholder(
                                   text: "لا توجد اختبارات في هذا القسم حالياً",
-                                )
+                                ),
                               ]
                             : exams.map((exam) {
                                 return _ExamItemTile(exam: exam);
@@ -662,8 +762,9 @@ class _UploadZoneCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasFile = selectedFile != null;
     final fileName = selectedFile?.name ?? "";
-    final extension =
-        fileName.contains(".") ? fileName.split(".").last.toUpperCase() : "FILE";
+    final extension = fileName.contains(".")
+        ? fileName.split(".").last.toUpperCase()
+        : "FILE";
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -719,7 +820,10 @@ class _UploadZoneCard extends StatelessWidget {
               onTap: onPickFile,
               borderRadius: BorderRadius.circular(12),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 24,
+                  horizontal: 16,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.backgroundSecondary,
                   borderRadius: BorderRadius.circular(12),
@@ -996,11 +1100,13 @@ class _DocumentItemTile extends StatelessWidget {
   final SectionDocumentModel document;
   final VoidCallback onPreview;
   final VoidCallback onDownload;
+  final VoidCallback onDelete;
 
   const _DocumentItemTile({
     required this.document,
     required this.onPreview,
     required this.onDownload,
+    required this.onDelete,
   });
 
   @override
@@ -1076,9 +1182,9 @@ class _DocumentItemTile extends StatelessWidget {
           // View in Student Viewer Action
           SizedBox(
             height: 32,
-            child: ElevatedButton.icon(
+            child: IconButton(
               onPressed: onPreview,
-              style: ElevatedButton.styleFrom(
+              style: IconButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -1087,15 +1193,29 @@ class _DocumentItemTile extends StatelessWidget {
                 ),
                 elevation: 0,
               ),
-              icon: const Icon(Icons.visibility_outlined, size: 14),
-              label: Text(
-                "معاينة",
-                style: AppTextStyles.label.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 11.5,
+              icon: const Icon(Icons.visibility_outlined, size: 20),
+              tooltip: "مشاهدة",
+            ),
+          ),
+          SizedBox(
+            height: 32,
+            child: IconButton(
+              onPressed: onDelete,
+              style: IconButton.styleFrom(
+                backgroundColor: AppColors.error,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
+                elevation: 0,
               ),
+              icon: const Icon(
+                Icons.delete_outline,
+                size: 20,
+                color: Colors.black,
+              ),
+              tooltip: "مسح",
             ),
           ),
         ],
@@ -1110,10 +1230,12 @@ class _DocumentItemTile extends StatelessWidget {
 class _VideoItemTile extends StatelessWidget {
   final SectionVideoModel video;
   final VoidCallback onWatch;
+  final VoidCallback onDelete;
 
   const _VideoItemTile({
     required this.video,
     required this.onWatch,
+    required this.onDelete,
   });
 
   String _formatDuration(int seconds) {
@@ -1184,9 +1306,9 @@ class _VideoItemTile extends StatelessWidget {
           // Watch in Student Video Player Action
           SizedBox(
             height: 32,
-            child: ElevatedButton.icon(
+            child: IconButton(
               onPressed: onWatch,
-              style: ElevatedButton.styleFrom(
+              style: IconButton.styleFrom(
                 backgroundColor: AppColors.ai700,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -1196,14 +1318,28 @@ class _VideoItemTile extends StatelessWidget {
                 elevation: 0,
               ),
               icon: const Icon(Icons.play_arrow_rounded, size: 16),
-              label: Text(
-                "مشاهدة",
-                style: AppTextStyles.label.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 11.5,
+              tooltip: "مشاهدة",
+            ),
+          ),
+          SizedBox(
+            height: 32,
+            child: IconButton(
+              onPressed: onDelete,
+              style: IconButton.styleFrom(
+                backgroundColor: AppColors.error,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
+                elevation: 0,
               ),
+              icon: const Icon(
+                Icons.delete_outline,
+                size: 20,
+                color: Colors.black,
+              ),
+              tooltip: "مسح",
             ),
           ),
         ],

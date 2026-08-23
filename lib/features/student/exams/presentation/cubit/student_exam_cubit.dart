@@ -190,7 +190,9 @@ class StudentExamCubit extends Cubit<StudentExamState> {
     _gradingPollTimer?.cancel();
     _pollCount = 0;
 
-    _gradingPollTimer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+    _gradingPollTimer = Timer.periodic(const Duration(seconds: 3), (
+      timer,
+    ) async {
       _pollCount++;
       if (_pollCount > 40) {
         // Timeout after 2 minutes
