@@ -1,4 +1,5 @@
 import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/helpers/app_dialog_helper.dart";
 import "package:draya_mobile/core/helpers/app_loading.dart";
 import "package:draya_mobile/core/helpers/app_navigator.dart";
 import "package:draya_mobile/core/router/app_routes.dart";
@@ -10,6 +11,7 @@ import "package:draya_mobile/core/widgets/custom_app_bar.dart";
 import "package:draya_mobile/core/widgets/fade_in_up_animation.dart";
 import "package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart";
 import "package:draya_mobile/features/teacher/classrooms/data/models/student_roster_item_model.dart";
+import "package:draya_mobile/features/teacher/classrooms/domain/usecases/delete_classroom_student_use_case.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_cubit.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_students_state.dart";
 import "package:flutter/material.dart";
@@ -50,8 +52,8 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
 
   Future<void> _loadStudents() {
     return context.read<ClassroomStudentsCubit>().getStudents(
-          widget.classroom.classroomId,
-        );
+      widget.classroom.classroomId,
+    );
   }
 
   void _loadInitialStudents() {
@@ -81,21 +83,91 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
   void _previewAsStudent() {
     AppNavigator.push(
       context: context,
-      path: AppRoutes.studentClassroomMaterialsPage(widget.classroom.classroomId),
+      path: AppRoutes.studentClassroomMaterialsPage(
+        widget.classroom.classroomId,
+      ),
       extra: widget.classroom.name,
+    );
+  }
+
+  Future<void> _deleteClassroomStudent({
+    required String classroomId,
+    required String studentId,
+  }) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.error.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.delete_forever_rounded,
+                  color: AppColors.error,
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 10),
+              const Text("حذف الطالب"),
+            ],
+          ),
+          content: Text(
+            "هل أنت متأكد من حذف الطالب؟",
+            style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+          ),
+          actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: const Text("إلغاء"),
+            ),
+            FilledButton.icon(
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.error,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () => Navigator.pop(dialogContext, true),
+              icon: const Icon(Icons.delete_outline, size: 18),
+              label: const Text("حذف نهائي"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldDelete != true || !mounted) return;
+
+    await context.read<ClassroomStudentsCubit>().deleteClassroomStudent(
+      deleteClassroomStudentUseCaseParams: DeleteClassroomStudentUseCaseParams(
+        classroomId: classroomId,
+        studentId: studentId,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ClassroomStudentsCubit, ClassroomStudentsState>(
-      listenWhen: (previous, current) => previous.status != current.status,
+      // listenWhen: (previous, current) =>
+      //     previous.getStudentsStatus != current.getStudentsStatus,
       listener: (context, state) {
-        if (state.status != CubitStatus.loading) {
+        if (state.getStudentsStatus == CubitStatus.loading ||
+            state.deleteStudentStatus == CubitStatus.loading) {
+          AppLoading.show();
+        } else if (state.getStudentsStatus == CubitStatus.error) {
           AppLoading.hide();
-        }
 
-        if (state.status == CubitStatus.error) {
           final error = state.apiErrorModel;
           if (error == null || !context.mounted) return;
 
@@ -106,6 +178,43 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
               onRetry: _loadInitialStudents,
             ),
           );
+        } else if (state.deleteStudentStatus == CubitStatus.error) {
+          AppLoading.hide();
+
+          AppDialogHelper.display(
+            context,
+            AppErrorDialog(apiErrorModel: state.apiErrorModel!),
+          );
+        } else if (state.deleteStudentStatus == CubitStatus.success) {
+          AppLoading.hide();
+
+          _loadStudents();
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: AppColors.chemistryBiology,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              content: const Row(
+                children: [
+                  Icon(
+                    Icons.check_circle_rounded,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    "تم مسح الطالب بنجاح",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          AppLoading.hide();
         }
       },
       builder: (context, state) {
@@ -166,11 +275,14 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
                   const SizedBox(height: AppSizes.s12),
 
                   // Student List / Empty State
-                  if (state.status == CubitStatus.loading && state.students.isEmpty)
+                  if (state.getStudentsStatus == CubitStatus.loading &&
+                      state.students.isEmpty)
                     const Center(
                       child: Padding(
                         padding: EdgeInsets.all(40),
-                        child: CircularProgressIndicator(color: AppColors.primary),
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        ),
                       ),
                     )
                   else if (state.students.isEmpty)
@@ -181,7 +293,15 @@ class _ClassroomStudentsPageState extends State<ClassroomStudentsPage> {
                     ...students.asMap().entries.map((entry) {
                       final index = entry.key;
                       final student = entry.value;
-                      final card = _StudentCard(student: student);
+                      final card = _StudentCard(
+                        student: student,
+                        onDeleteClassroomStudent: () {
+                          _deleteClassroomStudent(
+                            classroomId: widget.classroom.classroomId,
+                            studentId: student.studentId,
+                          );
+                        },
+                      );
 
                       if (index < 8) {
                         return FadeInUp(
@@ -235,7 +355,11 @@ class _ClassroomDetailsHero extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         content: Row(
           children: [
-            const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+            const Icon(
+              Icons.check_circle_rounded,
+              color: Colors.white,
+              size: 18,
+            ),
             const SizedBox(width: 8),
             Text(
               "تم نسخ كود الانضمام: ${classroom.enrollmentCode}",
@@ -535,7 +659,10 @@ class _ClassroomDetailsHero extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        icon: const Icon(Icons.chat_bubble_outline_rounded, size: 16),
+                        icon: const Icon(
+                          Icons.chat_bubble_outline_rounded,
+                          size: 16,
+                        ),
                         label: Text(
                           "قناة الأسئلة",
                           style: AppTextStyles.label.copyWith(
@@ -682,9 +809,13 @@ class _StudentsRosterHeader extends StatelessWidget {
 // ---------------------------------------------------------------------------
 class _StudentCard extends StatelessWidget {
   final StudentRosterItemModel student;
+  final VoidCallback onDeleteClassroomStudent;
   static final DateFormat _dateFormat = DateFormat.yMMMd("ar");
 
-  const _StudentCard({required this.student});
+  const _StudentCard({
+    required this.student,
+    required this.onDeleteClassroomStudent,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -767,6 +898,31 @@ class _StudentCard extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(
+            height: 36,
+            child: IconButton(
+              onPressed: onDeleteClassroomStudent,
+              style: IconButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                backgroundColor: AppColors.error,
+                side: const BorderSide(
+                  color: AppColors.error,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              icon: const Icon(
+                Icons.delete_outline,
+                size: 16,
+                color: AppColors.surface,
+              ),
+              tooltip: "مسح الطالب",
+            ),
+          ),
         ],
       ),
     );
@@ -797,7 +953,9 @@ class _EmptyStudentsState extends StatelessWidget {
               border: Border.all(color: AppColors.primary200),
             ),
             child: Icon(
-              hasQuery ? Icons.person_search_rounded : Icons.people_outline_rounded,
+              hasQuery
+                  ? Icons.person_search_rounded
+                  : Icons.people_outline_rounded,
               size: 30,
               color: AppColors.primary,
             ),

@@ -68,4 +68,10 @@ abstract class ClassroomRemoteDataSource {
 
   @GET(ClassroomApiConstants.gradeLevels)
   Future<List<GradeLevelModel>> getGradeLevels();
+
+  @DELETE(ClassroomApiConstants.classroomStudentById)
+  Future<void> deleteClassroomStudent(
+    @Path(ClassroomApiConstants.classroomId) String classroomId,
+    @Path(ClassroomApiConstants.studentId) String studentId,
+  );
 }

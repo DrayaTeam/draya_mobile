@@ -55,4 +55,5 @@ abstract final class AppRoutes {
       "/teacher/feedback/:classroomId";
   static String teacherClassroomFeedbackPage(String classroomId) =>
       "/teacher/feedback/$classroomId";
+  static const String reportsPage = "/teacher/reports";
 }

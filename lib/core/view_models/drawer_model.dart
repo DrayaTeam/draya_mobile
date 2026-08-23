@@ -71,11 +71,15 @@ List<DrawerModel> getTeacherDrawerItemsList() {
     DrawerModel(
       title: "التحليل",
       items: [
+        // DrawerItemViewModel(
+        //   icon: Icons.bar_chart_outlined,
+        //   title: "التحليلات",
+        // ),
         DrawerItemViewModel(
-          icon: Icons.bar_chart_outlined,
-          title: "التحليلات",
+          icon: Icons.list_alt_outlined,
+          title: "التقارير",
+          route: AppRoutes.reportsPage,
         ),
-        DrawerItemViewModel(icon: Icons.list_alt_outlined, title: "التقارير"),
         DrawerItemViewModel(
           title: "عن حسابى",
           icon: Icons.person_outline,

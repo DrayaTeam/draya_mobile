@@ -33,6 +33,7 @@ import "package:draya_mobile/features/student/teachers/presentation/cubit/paymen
 import "package:draya_mobile/features/student/teachers/presentation/cubit/student_checkout_cubit.dart";
 import "package:draya_mobile/features/student/teachers/presentation/cubit/teacher_classrooms_cubit.dart";
 import "package:draya_mobile/features/student/teachers/presentation/cubit/teacher_cubit.dart";
+import "package:draya_mobile/features/teacher/classrooms/domain/usecases/delete_classroom_student_use_case.dart";
 import "package:draya_mobile/features/teacher/classrooms/domain/usecases/delete_classroom_use_case.dart";
 import "package:draya_mobile/features/teacher/classrooms/domain/usecases/get_classroom_types_use_case.dart";
 import "package:draya_mobile/features/teacher/classrooms/domain/usecases/get_grade_levels_use_case.dart";
@@ -48,6 +49,8 @@ import "package:draya_mobile/features/teacher/profile/domain/usecases/get_teache
 import "package:draya_mobile/features/teacher/profile/domain/usecases/update_teacher_profile_use_case.dart";
 import "package:draya_mobile/features/teacher/profile/domain/usecases/upload_teacher_profile_picture_use_case.dart";
 import "package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart";
+import "package:draya_mobile/features/teacher/reports/domain/usecases/get_performance_report_use_case.dart";
+import "package:draya_mobile/features/teacher/reports/presentation/cubit/reports_cubit.dart";
 import "package:draya_mobile/features/teacher/sections/domain/usecases/create_section_use_case.dart";
 import "package:draya_mobile/features/teacher/sections/domain/usecases/delete_section_use_case.dart";
 import "package:draya_mobile/features/teacher/sections/domain/usecases/get_sections_use_case.dart";
@@ -141,6 +144,7 @@ Future<void> main() async {
         BlocProvider<ClassroomStudentsCubit>(
           create: (context) => ClassroomStudentsCubit(
             getIt<GetClassroomStudentsUseCase>(),
+            getIt<DeleteClassroomStudentUseCase>(),
           ),
         ),
         BlocProvider<TeacherCubit>(
@@ -251,6 +255,11 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => ClassroomFeedbackCubit(
             getIt<GetClassroomFeedbackUseCase>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => ReportsCubit(
+            getIt<GetPerformanceReportUseCase>(),
           ),
         ),
       ],
