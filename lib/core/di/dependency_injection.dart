@@ -35,6 +35,10 @@ import "package:draya_mobile/features/student/student_feedback/domain/repos/stud
 import "package:draya_mobile/features/student/student_feedback/domain/usecases/submit_feedback_use_case.dart";
 import "package:draya_mobile/features/student/student_feedback/presentation/cubit/student_feedback_cubit.dart";
 import "package:draya_mobile/features/teacher/materials/domain/usecases/delete_material_use_case.dart";
+import "package:draya_mobile/features/teacher/reports/data/repos/reports_repo_impl.dart";
+import "package:draya_mobile/features/teacher/reports/data/sources/reports_api_service.dart";
+import "package:draya_mobile/features/teacher/reports/domain/repos/reports_repo.dart";
+import "package:draya_mobile/features/teacher/reports/domain/usecases/get_performance_report_use_case.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/data/repos/teacher_feedback_repo_impl.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/data/source/teacher_feedback_api_service.dart";
 import "package:draya_mobile/features/teacher/teacher_feedback/domain/repos/teacher_feedback_repo.dart";
@@ -814,5 +818,18 @@ Future<void> setupGetIt() async {
   // Notifications
   getIt.registerLazySingleton<NotificationsCubit>(
     () => NotificationsCubit(getIt<SignalRService>()),
+  );
+
+  // teacher reports
+  getIt.registerLazySingleton<ReportsApiService>(
+    () => ReportsApiService(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<ReportsRepo>(
+    () => ReportsRepoImpl(getIt<ReportsApiService>()),
+  );
+
+  getIt.registerLazySingleton<GetPerformanceReportUseCase>(
+    () => GetPerformanceReportUseCase(getIt<ReportsRepo>()),
   );
 }

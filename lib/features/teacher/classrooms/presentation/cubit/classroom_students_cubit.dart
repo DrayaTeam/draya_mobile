@@ -11,7 +11,13 @@ class ClassroomStudentsCubit extends Cubit<ClassroomStudentsState> {
     : super(const ClassroomStudentsState());
 
   Future<void> getStudents(String classroomId) async {
-    emit(state.copyWith(status: CubitStatus.loading, apiErrorModel: null));
+    emit(
+      state.copyWith(
+        status: CubitStatus.loading,
+        apiErrorModel: null,
+        students: [],
+      ),
+    );
     final result = await _getClassroomStudentsUseCase(params: classroomId);
     result.when(
       success: (page) => emit(
