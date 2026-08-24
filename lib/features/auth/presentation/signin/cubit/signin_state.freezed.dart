@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SigninState {
 
- CubitStatus get status; bool get rememberMe; AuthEntity? get authEntity; ApiErrorModel? get apiErrorModel;
+ CubitStatus get signinStatus; CubitStatus get requestPasswordResetStatus; bool get rememberMe; AuthEntity? get authEntity; ApiErrorModel? get apiErrorModel;
 /// Create a copy of SigninState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SigninStateCopyWith<SigninState> get copyWith => _$SigninStateCopyWithImpl<Sign
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SigninState&&(identical(other.status, status) || other.status == status)&&(identical(other.rememberMe, rememberMe) || other.rememberMe == rememberMe)&&(identical(other.authEntity, authEntity) || other.authEntity == authEntity)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SigninState&&(identical(other.signinStatus, signinStatus) || other.signinStatus == signinStatus)&&(identical(other.requestPasswordResetStatus, requestPasswordResetStatus) || other.requestPasswordResetStatus == requestPasswordResetStatus)&&(identical(other.rememberMe, rememberMe) || other.rememberMe == rememberMe)&&(identical(other.authEntity, authEntity) || other.authEntity == authEntity)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,rememberMe,authEntity,apiErrorModel);
+int get hashCode => Object.hash(runtimeType,signinStatus,requestPasswordResetStatus,rememberMe,authEntity,apiErrorModel);
 
 @override
 String toString() {
-  return 'SigninState(status: $status, rememberMe: $rememberMe, authEntity: $authEntity, apiErrorModel: $apiErrorModel)';
+  return 'SigninState(signinStatus: $signinStatus, requestPasswordResetStatus: $requestPasswordResetStatus, rememberMe: $rememberMe, authEntity: $authEntity, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SigninStateCopyWith<$Res>  {
   factory $SigninStateCopyWith(SigninState value, $Res Function(SigninState) _then) = _$SigninStateCopyWithImpl;
 @useResult
 $Res call({
- CubitStatus status, bool rememberMe, AuthEntity? authEntity, ApiErrorModel? apiErrorModel
+ CubitStatus signinStatus, CubitStatus requestPasswordResetStatus, bool rememberMe, AuthEntity? authEntity, ApiErrorModel? apiErrorModel
 });
 
 
@@ -62,9 +62,10 @@ class _$SigninStateCopyWithImpl<$Res>
 
 /// Create a copy of SigninState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? rememberMe = null,Object? authEntity = freezed,Object? apiErrorModel = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? signinStatus = null,Object? requestPasswordResetStatus = null,Object? rememberMe = null,Object? authEntity = freezed,Object? apiErrorModel = freezed,}) {
   return _then(_self.copyWith(
-status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+signinStatus: null == signinStatus ? _self.signinStatus : signinStatus // ignore: cast_nullable_to_non_nullable
+as CubitStatus,requestPasswordResetStatus: null == requestPasswordResetStatus ? _self.requestPasswordResetStatus : requestPasswordResetStatus // ignore: cast_nullable_to_non_nullable
 as CubitStatus,rememberMe: null == rememberMe ? _self.rememberMe : rememberMe // ignore: cast_nullable_to_non_nullable
 as bool,authEntity: freezed == authEntity ? _self.authEntity : authEntity // ignore: cast_nullable_to_non_nullable
 as AuthEntity?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus status,  bool rememberMe,  AuthEntity? authEntity,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CubitStatus signinStatus,  CubitStatus requestPasswordResetStatus,  bool rememberMe,  AuthEntity? authEntity,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SigninState() when $default != null:
-return $default(_that.status,_that.rememberMe,_that.authEntity,_that.apiErrorModel);case _:
+return $default(_that.signinStatus,_that.requestPasswordResetStatus,_that.rememberMe,_that.authEntity,_that.apiErrorModel);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.status,_that.rememberMe,_that.authEntity,_that.apiErrorMod
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus status,  bool rememberMe,  AuthEntity? authEntity,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CubitStatus signinStatus,  CubitStatus requestPasswordResetStatus,  bool rememberMe,  AuthEntity? authEntity,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
 switch (_that) {
 case _SigninState():
-return $default(_that.status,_that.rememberMe,_that.authEntity,_that.apiErrorModel);case _:
+return $default(_that.signinStatus,_that.requestPasswordResetStatus,_that.rememberMe,_that.authEntity,_that.apiErrorModel);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +195,10 @@ return $default(_that.status,_that.rememberMe,_that.authEntity,_that.apiErrorMod
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus status,  bool rememberMe,  AuthEntity? authEntity,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CubitStatus signinStatus,  CubitStatus requestPasswordResetStatus,  bool rememberMe,  AuthEntity? authEntity,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
 switch (_that) {
 case _SigninState() when $default != null:
-return $default(_that.status,_that.rememberMe,_that.authEntity,_that.apiErrorModel);case _:
+return $default(_that.signinStatus,_that.requestPasswordResetStatus,_that.rememberMe,_that.authEntity,_that.apiErrorModel);case _:
   return null;
 
 }
@@ -209,10 +210,11 @@ return $default(_that.status,_that.rememberMe,_that.authEntity,_that.apiErrorMod
 
 
 class _SigninState implements SigninState {
-  const _SigninState({this.status = CubitStatus.initial, this.rememberMe = false, this.authEntity, this.apiErrorModel});
+  const _SigninState({this.signinStatus = CubitStatus.initial, this.requestPasswordResetStatus = CubitStatus.initial, this.rememberMe = false, this.authEntity, this.apiErrorModel});
   
 
-@override@JsonKey() final  CubitStatus status;
+@override@JsonKey() final  CubitStatus signinStatus;
+@override@JsonKey() final  CubitStatus requestPasswordResetStatus;
 @override@JsonKey() final  bool rememberMe;
 @override final  AuthEntity? authEntity;
 @override final  ApiErrorModel? apiErrorModel;
@@ -227,16 +229,16 @@ _$SigninStateCopyWith<_SigninState> get copyWith => __$SigninStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SigninState&&(identical(other.status, status) || other.status == status)&&(identical(other.rememberMe, rememberMe) || other.rememberMe == rememberMe)&&(identical(other.authEntity, authEntity) || other.authEntity == authEntity)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SigninState&&(identical(other.signinStatus, signinStatus) || other.signinStatus == signinStatus)&&(identical(other.requestPasswordResetStatus, requestPasswordResetStatus) || other.requestPasswordResetStatus == requestPasswordResetStatus)&&(identical(other.rememberMe, rememberMe) || other.rememberMe == rememberMe)&&(identical(other.authEntity, authEntity) || other.authEntity == authEntity)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,rememberMe,authEntity,apiErrorModel);
+int get hashCode => Object.hash(runtimeType,signinStatus,requestPasswordResetStatus,rememberMe,authEntity,apiErrorModel);
 
 @override
 String toString() {
-  return 'SigninState(status: $status, rememberMe: $rememberMe, authEntity: $authEntity, apiErrorModel: $apiErrorModel)';
+  return 'SigninState(signinStatus: $signinStatus, requestPasswordResetStatus: $requestPasswordResetStatus, rememberMe: $rememberMe, authEntity: $authEntity, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -247,7 +249,7 @@ abstract mixin class _$SigninStateCopyWith<$Res> implements $SigninStateCopyWith
   factory _$SigninStateCopyWith(_SigninState value, $Res Function(_SigninState) _then) = __$SigninStateCopyWithImpl;
 @override @useResult
 $Res call({
- CubitStatus status, bool rememberMe, AuthEntity? authEntity, ApiErrorModel? apiErrorModel
+ CubitStatus signinStatus, CubitStatus requestPasswordResetStatus, bool rememberMe, AuthEntity? authEntity, ApiErrorModel? apiErrorModel
 });
 
 
@@ -264,9 +266,10 @@ class __$SigninStateCopyWithImpl<$Res>
 
 /// Create a copy of SigninState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? rememberMe = null,Object? authEntity = freezed,Object? apiErrorModel = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? signinStatus = null,Object? requestPasswordResetStatus = null,Object? rememberMe = null,Object? authEntity = freezed,Object? apiErrorModel = freezed,}) {
   return _then(_SigninState(
-status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+signinStatus: null == signinStatus ? _self.signinStatus : signinStatus // ignore: cast_nullable_to_non_nullable
+as CubitStatus,requestPasswordResetStatus: null == requestPasswordResetStatus ? _self.requestPasswordResetStatus : requestPasswordResetStatus // ignore: cast_nullable_to_non_nullable
 as CubitStatus,rememberMe: null == rememberMe ? _self.rememberMe : rememberMe // ignore: cast_nullable_to_non_nullable
 as bool,authEntity: freezed == authEntity ? _self.authEntity : authEntity // ignore: cast_nullable_to_non_nullable
 as AuthEntity?,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable

@@ -49,12 +49,6 @@ import "package:draya_mobile/features/notifications/presentation/pages/notificat
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 
-const authRoutes = {
-  AppRoutes.signinPage,
-  AppRoutes.signupPage,
-  AppRoutes.verificationCodePage,
-};
-
 abstract final class AppRouter {
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
@@ -64,23 +58,33 @@ abstract final class AppRouter {
 
     redirect: (context, state) async {
       await AppTokenHelper.isSignedIn();
-      final isSignedIn = AppTokenHelper.isLoggedIn;
-      final isGoingToAuthFlow = authRoutes.contains(state.matchedLocation);
-      final goingToSignin = state.matchedLocation == AppRoutes.signinPage;
 
-      if (isSignedIn && goingToSignin) {
+      final isSignedIn = AppTokenHelper.isLoggedIn;
+
+      final isGoingToSignin = state.matchedLocation == AppRoutes.signinPage;
+
+      final location = state.matchedLocation;
+
+      final isAuthRoute =
+          location == AppRoutes.signinPage ||
+          location == AppRoutes.signupPage ||
+          location.startsWith("/verification_code/");
+
+      if (isSignedIn && isGoingToSignin) {
         final role = await AppTokenHelper.getUserRole();
+
         return role == "Teacher"
             ? AppRoutes.teacherDashboardPage
             : AppRoutes.studentHomePage;
       }
 
-      if (!isSignedIn && !isGoingToAuthFlow) {
+      if (!isSignedIn && !isAuthRoute) {
         return AppRoutes.signinPage;
       }
 
       return null;
     },
+
     routes: [
       GoRoute(
         path: AppRoutes.signupChoice,
@@ -103,7 +107,11 @@ abstract final class AppRouter {
       GoRoute(
         path: AppRoutes.verificationCodePage,
         builder: (context, state) {
-          return const VerificationCodePage();
+          final email = state.uri.queryParameters["email"] as String;
+
+          return VerificationCodePage(
+            email: email,
+          );
         },
       ),
       GoRoute(
@@ -278,7 +286,9 @@ abstract final class AppRouter {
       GoRoute(
         path: AppRoutes.teacherAttemptReviewPage(":attemptId"),
         builder: (context, state) {
-          final map = state.extra is Map ? state.extra as Map : <String, dynamic>{};
+          final map = state.extra is Map
+              ? state.extra as Map
+              : <String, dynamic>{};
           return AttemptReviewScreen(
             attemptId: state.pathParameters["attemptId"] ?? "",
             examTitle: map["examTitle"]?.toString(),

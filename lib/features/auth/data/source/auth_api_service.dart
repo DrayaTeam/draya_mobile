@@ -1,10 +1,12 @@
 import "package:dio/dio.dart";
 import "package:draya_mobile/core/networking/api_constants.dart";
 import "package:draya_mobile/features/auth/data/models/auth_response_model.dart";
+import "package:draya_mobile/features/auth/data/models/confirm_password_reset_model.dart";
 import "package:draya_mobile/features/auth/data/models/login_request_model.dart";
 import "package:draya_mobile/features/auth/data/models/refresh_token_request_model.dart";
 import "package:draya_mobile/features/auth/data/models/register_student_request_model.dart";
 import "package:draya_mobile/features/auth/data/models/register_teacher_request_model.dart";
+import "package:draya_mobile/features/auth/data/models/request_password_reset_model.dart";
 import "package:draya_mobile/features/auth/data/models/user_profile_model.dart";
 import "package:draya_mobile/features/auth/data/source/auth_api_constants.dart";
 import "package:retrofit/retrofit.dart";
@@ -34,4 +36,14 @@ abstract class AuthApiService {
 
   @GET(AuthApiConstants.me)
   Future<UserProfileModel> getCurrentUserProfile();
+
+  @POST(AuthApiConstants.requestPasswordReset)
+  Future<void> requestPasswordReset(
+    @Body() RequestPasswordResetModel requestPasswordResetModel,
+  );
+
+  @POST(AuthApiConstants.confirmPasswordReset)
+  Future<void> confirmPasswordReset(
+    @Body() ConfirmPasswordResetModel confirmPasswordResetModel,
+  );
 }

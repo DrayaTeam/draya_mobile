@@ -1,5 +1,6 @@
 import "package:draya_mobile/core/enums/cubit_status.dart";
 import "package:draya_mobile/core/helpers/app_dialog_helper.dart";
+import "package:draya_mobile/core/helpers/app_loading.dart";
 import "package:draya_mobile/core/helpers/app_navigator.dart";
 import "package:draya_mobile/core/router/app_routes.dart";
 import "package:draya_mobile/core/theme/app_colors.dart";
@@ -8,13 +9,13 @@ import "package:draya_mobile/core/validation/email_validator.dart";
 import "package:draya_mobile/core/validation/password_validator.dart";
 import "package:draya_mobile/core/validation/validation_result.dart";
 import "package:draya_mobile/core/widgets/app_check_box.dart";
-import "package:draya_mobile/core/widgets/app_custom_loading.dart";
 import "package:draya_mobile/core/widgets/app_elevated_button.dart";
 import "package:draya_mobile/core/widgets/app_error_dialog.dart";
 import "package:draya_mobile/core/widgets/app_label.dart";
 import "package:draya_mobile/core/widgets/app_logo_and_name.dart";
 import "package:draya_mobile/core/widgets/app_text_form_field.dart";
 import "package:draya_mobile/features/auth/data/models/login_request_model.dart";
+import "package:draya_mobile/features/auth/data/models/request_password_reset_model.dart";
 import "package:draya_mobile/features/auth/domain/entity/auth_entity.dart";
 import "package:draya_mobile/features/auth/presentation/signin/cubit/signin_cubit.dart";
 import "package:draya_mobile/features/auth/presentation/signin/cubit/signin_state.dart";
@@ -62,36 +63,51 @@ class _SigninPageState extends State<SigninPage> {
     );
   }
 
-  void _handleForgotPassword() {
-    _validateEmailOnly = true;
-    // todo: pass email to verification code page
-    AppNavigator.push(context: context, path: AppRoutes.verificationCodePage);
+  Future<void> _handleForgotPassword() async {
+    final result = await AppNavigator.push<bool>(
+      context: context,
+      path: AppRoutes.verificationCodePage,
+      queryParameters: {
+        "email": _textEditingControllerEmail.text,
+      },
+    );
+
+    if (result == true && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("تم تغيير كلمة المرور بنجاح")),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<SigninCubit, SigninState>(
-      listenWhen: (previous, current) => previous.status != current.status,
-      listener: (context, state) {
-        switch (state.status) {
-          case CubitStatus.initial:
-            break;
-          case CubitStatus.loading:
-            AppDialogHelper.display(context, const AppCustomLoading());
-            break;
-          case CubitStatus.error:
-            AppNavigator.pop(context: context);
-            AppDialogHelper.display(
-              context,
-              AppErrorDialog(
-                apiErrorModel: state.apiErrorModel!,
-              ),
-            );
-            break;
-          case CubitStatus.success:
-            AppNavigator.pop(context: context);
-            _signIn(authEntity: state.authEntity);
-            break;
+      // listenWhen: (previous, current) =>
+      //     previous.signinStatus != current.signinStatus,
+      listener: (context, state) async {
+        if (state.signinStatus == CubitStatus.loading ||
+            state.requestPasswordResetStatus == CubitStatus.loading) {
+          AppLoading.show();
+        } else if (state.signinStatus == CubitStatus.error ||
+            state.requestPasswordResetStatus == CubitStatus.error) {
+          AppLoading.hide();
+
+          AppDialogHelper.display(
+            context,
+            AppErrorDialog(
+              apiErrorModel: state.apiErrorModel!,
+            ),
+          );
+        } else if (state.signinStatus == CubitStatus.success) {
+          AppLoading.hide;
+
+          _signIn(authEntity: state.authEntity);
+        } else if (state.requestPasswordResetStatus == CubitStatus.success) {
+          AppLoading.hide();
+
+          await _handleForgotPassword();
+        } else {
+          AppLoading.hide();
         }
       },
       child: Scaffold(
@@ -151,9 +167,11 @@ class _SigninPageState extends State<SigninPage> {
                         final result = PasswordValidator.validate(
                           password: value,
                         );
+
                         if (result is Invalid) {
                           return result.message;
                         }
+
                         return null;
                       },
                     ),
@@ -174,7 +192,16 @@ class _SigninPageState extends State<SigninPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            _handleForgotPassword();
+                            _validateEmailOnly = true;
+
+                            if (_formKey.currentState!.validate()) {
+                              context.read<SigninCubit>().requestPasswordReset(
+                                requestPasswordResetModel:
+                                    RequestPasswordResetModel(
+                                      email: _textEditingControllerEmail.text,
+                                    ),
+                              );
+                            }
                           },
                           child: const Text("نسيت كلمة المرور؟"),
                         ),
@@ -183,6 +210,8 @@ class _SigninPageState extends State<SigninPage> {
                     const SizedBox(height: AppSizes.s16),
                     AppElevatedButton(
                       onPressed: () {
+                        _validateEmailOnly = false;
+
                         if (_formKey.currentState!.validate()) {
                           context.read<SigninCubit>().signin(
                             loginRequestModel: LoginRequestModel(
