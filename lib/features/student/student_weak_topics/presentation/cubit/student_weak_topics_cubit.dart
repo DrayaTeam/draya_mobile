@@ -11,6 +11,7 @@ import "package:draya_mobile/features/auth/domain/usecases/get_current_user_prof
 import "package:draya_mobile/features/student/student_weak_topics/domain/usecases/generate_practice_exam_use_case.dart";
 import "package:draya_mobile/features/student/student_weak_topics/domain/usecases/get_ai_revision_use_case.dart";
 import "package:draya_mobile/features/student/student_weak_topics/domain/usecases/get_latest_performance_report_use_case.dart";
+import "package:draya_mobile/features/student/student_weak_topics/domain/usecases/get_practice_exam_generation_status_use_case.dart";
 import "package:draya_mobile/features/student/student_weak_topics/presentation/cubit/student_weak_topics_state.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 
@@ -20,6 +21,7 @@ class StudentWeakTopicsCubit extends Cubit<StudentWeakTopicsState> {
   final GeneratePracticeExamUseCase _generatePracticeExamUseCase;
   final GetCurrentUserProfileUseCase _getCurrentUserProfileUseCase;
   final SignalRService _signalRService;
+  final GetPracticeExamGenerationStatusUseCase _getGenerationStatusUseCase;
 
   Timer? _examPollTimer;
   int _examPollCount = 0;
@@ -30,6 +32,7 @@ class StudentWeakTopicsCubit extends Cubit<StudentWeakTopicsState> {
     this._generatePracticeExamUseCase,
     this._getCurrentUserProfileUseCase,
     this._signalRService,
+    this._getGenerationStatusUseCase,
   ) : super(const StudentWeakTopicsState()) {
     _initSignalRListener();
   }
@@ -39,6 +42,10 @@ class StudentWeakTopicsCubit extends Cubit<StudentWeakTopicsState> {
   }
 
   void _handleSignalRGenerationProgress(ExamGenerationProgressEvent event) {
+    if (state.examGenerationStatus == PracticeExamGenerationStatus.completed ||
+        state.examGenerationStatus == PracticeExamGenerationStatus.failed) {
+      return;
+    }
     if (state.examGenerationId != null &&
         state.examGenerationId == event.generationId) {
       if (event.isCompleted) {
@@ -207,8 +214,9 @@ class StudentWeakTopicsCubit extends Cubit<StudentWeakTopicsState> {
       return;
     }
 
-    // Connect SignalR if not connected
-    unawaited(_connectSignalRHub());
+    // Ensure the hub is connected & listening BEFORE requesting generation,
+    // otherwise early progress events are missed.
+    await _connectSignalRHub();
 
     final result = await _generatePracticeExamUseCase(
       params: GeneratePracticeExamParams(
@@ -258,22 +266,55 @@ class StudentWeakTopicsCubit extends Cubit<StudentWeakTopicsState> {
     _examPollTimer?.cancel();
     _examPollCount = 0;
 
-    _examPollTimer = Timer.periodic(const Duration(seconds: 4), (timer) async {
-      _examPollCount++;
-      if (_examPollCount > 40) {
+    _examPollTimer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+      if (state.examGenerationStatus != PracticeExamGenerationStatus.generating) {
         timer.cancel();
-        if (state.examGenerationStatus ==
-            PracticeExamGenerationStatus.generating) {
-          emit(
-            state.copyWith(
-              examGenerationStatus: PracticeExamGenerationStatus.failed,
-              examGenerationError:
-                  "استغرقت عملية التوليد وقتاً أطول من المتوقع. يرجى إعادة المحاولة.",
-            ),
-          );
-        }
         return;
       }
+
+      _examPollCount++;
+      if (_examPollCount > 60) {
+        timer.cancel();
+        emit(
+          state.copyWith(
+            examGenerationStatus: PracticeExamGenerationStatus.failed,
+            examGenerationError:
+                "استغرقت عملية التوليد وقتاً أطول من المتوقع. يرجى إعادة المحاولة.",
+          ),
+        );
+        return;
+      }
+
+      final result = await _getGenerationStatusUseCase(params: generationId);
+      if (!timer.isActive) return;
+
+      result.when(
+        success: (statusEntity) {
+          if (!statusEntity.isFinished) return;
+          timer.cancel();
+
+          if (statusEntity.isCompleted) {
+            emit(
+              state.copyWith(
+                examGenerationStatus: PracticeExamGenerationStatus.completed,
+                generatedExamId:
+                    statusEntity.examId ?? state.generatedExamId,
+              ),
+            );
+          } else {
+            emit(
+              state.copyWith(
+                examGenerationStatus: PracticeExamGenerationStatus.failed,
+                examGenerationError: statusEntity.errorMessage ??
+                    "فشل توليد الامتحان التدريبي",
+              ),
+            );
+          }
+        },
+        failure: (_) {
+          // Transient network error — keep polling until the deadline.
+        },
+      );
     });
   }
 
@@ -292,7 +333,10 @@ class StudentWeakTopicsCubit extends Cubit<StudentWeakTopicsState> {
   @override
   Future<void> close() {
     _examPollTimer?.cancel();
-    _signalRService.offEvent("ReceiveGenerationProgress");
+    _signalRService.removeListener(
+      "ReceiveGenerationProgress",
+      _handleSignalRGenerationProgress,
+    );
     return super.close();
   }
 }

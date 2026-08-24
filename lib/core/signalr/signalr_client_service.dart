@@ -246,6 +246,21 @@ class SignalRClientService implements SignalRService {
   }
 
   @override
+  void removeListener(String eventName, Function callback) {
+    final listeners = _listeners[eventName];
+    if (listeners == null) return;
+    listeners.remove(callback);
+    if (listeners.isEmpty) {
+      _listeners.remove(eventName);
+      for (final connection in _allConnections.toList()) {
+        try {
+          connection.off(eventName);
+        } catch (_) {}
+      }
+    }
+  }
+
+  @override
   void dispose() {
     _listeners.clear();
     for (final connection in _backgroundConnections.values) {

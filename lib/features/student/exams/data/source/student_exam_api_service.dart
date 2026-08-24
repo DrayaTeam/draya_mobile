@@ -12,6 +12,12 @@ part "student_exam_api_service.g.dart";
 abstract class StudentExamApiService {
   factory StudentExamApiService(Dio dio) = _StudentExamApiService;
 
+  @GET(StudentExamApiConstants.studentExams)
+  Future<StudentExamsPageModel> getStudentExams({
+    @Query("page") required int page,
+    @Query("pageSize") required int pageSize,
+  });
+
   @GET(StudentExamApiConstants.examDetails)
   Future<StudentExamModel> getExamDetails(
     @Path(StudentExamApiConstants.examId) String examId,

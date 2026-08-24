@@ -29,4 +29,9 @@ abstract class StudentWeakTopicsApiService {
     @Path("topicName") String topicName,
     @Body() Map<String, dynamic> body,
   );
+
+  @GET("exams/generations/{generationId}")
+  Future<PracticeExamGenerationStatusModel> getGenerationStatus(
+    @Path("generationId") String generationId,
+  );
 }

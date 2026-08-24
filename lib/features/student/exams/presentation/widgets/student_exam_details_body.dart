@@ -22,11 +22,13 @@ import "package:intl/intl.dart";
 class StudentExamDetailsBody extends StatefulWidget {
   final String examId;
   final String? classroomName;
+  final String? initialAttemptId;
 
   const StudentExamDetailsBody({
     super.key,
     required this.examId,
     this.classroomName,
+    this.initialAttemptId,
   });
 
   @override
@@ -46,6 +48,10 @@ class _StudentExamDetailsBodyState extends State<StudentExamDetailsBody>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     context.read<StudentExamCubit>().loadExamDetails(widget.examId);
+    final initialAttemptId = widget.initialAttemptId;
+    if (initialAttemptId != null && initialAttemptId.isNotEmpty) {
+      context.read<StudentExamCubit>().loadResults(initialAttemptId);
+    }
   }
 
   @override

@@ -11,6 +11,16 @@ class StudentExamRepoImpl implements StudentExamRepo {
   StudentExamRepoImpl(this._apiService);
 
   @override
+  Future<ApiResult<List<StudentExamOverview>>> getStudentExams() async {
+    try {
+      final response = await _apiService.getStudentExams(page: 1, pageSize: 100);
+      return ApiResult.success(response.toEntities());
+    } catch (error) {
+      return ApiResult.failure(ErrorHandler.handle(error));
+    }
+  }
+
+  @override
   Future<ApiResult<StudentExam>> getExamDetails(String examId) async {
     try {
       final response = await _apiService.getExamDetails(examId);

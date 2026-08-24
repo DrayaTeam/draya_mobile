@@ -70,6 +70,71 @@ class ExamQuestion {
       type == QuestionType.multipleChoice || type == QuestionType.trueFalse;
 }
 
+class ExamAttemptSummary {
+  final String id;
+  final double finalScore;
+  final double maxScore;
+  final bool needsTeacherReview;
+  final DateTime? submittedAt;
+  final DateTime? startedAt;
+
+  const ExamAttemptSummary({
+    required this.id,
+    this.finalScore = 0.0,
+    this.maxScore = 0.0,
+    this.needsTeacherReview = false,
+    this.submittedAt,
+    this.startedAt,
+  });
+
+  DateTime get sortDate => submittedAt ?? startedAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+
+  double get scorePercentage => maxScore > 0 ? (finalScore / maxScore) * 100 : 0.0;
+}
+
+class StudentExamOverview {
+  final String id;
+  final String classroomId;
+  final String? sectionId;
+  final String title;
+  final String topic;
+  final int? allowedAttempts;
+  final int usedAttempts;
+  final bool hasSubmitted;
+  final String? attemptStatus;
+  final double? latestScore;
+  final double? maxScore;
+  final List<ExamAttemptSummary> attempts;
+
+  const StudentExamOverview({
+    required this.id,
+    required this.classroomId,
+    this.sectionId,
+    this.title = "",
+    this.topic = "",
+    this.allowedAttempts,
+    this.usedAttempts = 0,
+    this.hasSubmitted = false,
+    this.attemptStatus,
+    this.latestScore,
+    this.maxScore,
+    this.attempts = const [],
+  });
+
+  bool get hasAttemptsLeft =>
+      allowedAttempts == null || usedAttempts < allowedAttempts!;
+
+  bool get hasViewableResult =>
+      hasSubmitted && latestAttempt != null;
+
+  ExamAttemptSummary? get latestAttempt {
+    if (attempts.isEmpty) return null;
+    final sorted = List<ExamAttemptSummary>.from(attempts)
+      ..sort((a, b) => b.sortDate.compareTo(a.sortDate));
+    return sorted.first;
+  }
+}
+
 class StudentExam {
   final String id;
   final String classroomId;

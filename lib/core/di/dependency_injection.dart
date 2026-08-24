@@ -29,6 +29,7 @@ import "package:draya_mobile/features/student/student_weak_topics/data/repos/stu
 import "package:draya_mobile/features/student/student_weak_topics/data/source/student_weak_topics_api_service.dart";
 import "package:draya_mobile/features/student/student_weak_topics/domain/repos/student_weak_topics_repo.dart";
 import "package:draya_mobile/features/student/student_weak_topics/domain/usecases/generate_practice_exam_use_case.dart";
+import "package:draya_mobile/features/student/student_weak_topics/domain/usecases/get_practice_exam_generation_status_use_case.dart";
 import "package:draya_mobile/features/student/student_weak_topics/domain/usecases/get_ai_revision_use_case.dart";
 import "package:draya_mobile/features/student/student_weak_topics/domain/usecases/get_latest_performance_report_use_case.dart";
 import "package:draya_mobile/features/student/student_weak_topics/presentation/cubit/student_weak_topics_cubit.dart";
@@ -69,6 +70,7 @@ import "package:draya_mobile/features/student/exams/data/repos/student_exam_repo
 import "package:draya_mobile/features/student/exams/data/source/student_exam_api_service.dart";
 import "package:draya_mobile/features/student/exams/domain/repos/student_exam_repo.dart";
 import "package:draya_mobile/features/student/exams/domain/usecases/get_attempt_results_use_case.dart";
+import "package:draya_mobile/features/student/exams/domain/usecases/get_student_exams_use_case.dart";
 import "package:draya_mobile/features/student/exams/domain/usecases/get_exam_details_use_case.dart";
 import "package:draya_mobile/features/student/exams/domain/usecases/get_grading_job_status_use_case.dart";
 import "package:draya_mobile/features/student/exams/domain/usecases/start_exam_attempt_use_case.dart";
@@ -690,6 +692,10 @@ Future<void> setupGetIt() async {
     () => GetAttemptResultsUseCase(getIt<StudentExamRepo>()),
   );
 
+  getIt.registerLazySingleton<GetStudentExamsUseCase>(
+    () => GetStudentExamsUseCase(getIt<StudentExamRepo>()),
+  );
+
   getIt.registerFactory<StudentExamCubit>(
     () => StudentExamCubit(
       getIt<GetExamDetailsUseCase>(),
@@ -822,6 +828,12 @@ Future<void> setupGetIt() async {
     ),
   );
 
+  getIt.registerLazySingleton<GetPracticeExamGenerationStatusUseCase>(
+    () => GetPracticeExamGenerationStatusUseCase(
+      getIt<StudentWeakTopicsRepo>(),
+    ),
+  );
+
   getIt.registerFactory<StudentWeakTopicsCubit>(
     () => StudentWeakTopicsCubit(
       getIt<GetLatestPerformanceReportUseCase>(),
@@ -829,6 +841,7 @@ Future<void> setupGetIt() async {
       getIt<GeneratePracticeExamUseCase>(),
       getIt<GetCurrentUserProfileUseCase>(),
       getIt<SignalRService>(),
+      getIt<GetPracticeExamGenerationStatusUseCase>(),
     ),
   );
 

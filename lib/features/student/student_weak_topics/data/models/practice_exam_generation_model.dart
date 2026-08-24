@@ -63,3 +63,67 @@ class PracticeExamProgressModel {
   bool get isGenerating => status.toLowerCase() == "generating";
   bool get isPending => status.toLowerCase() == "pending";
 }
+
+@JsonSerializable()
+class PracticeExamGenerationStatusModel {
+  @JsonKey(name: "id", defaultValue: "")
+  final String id;
+
+  @JsonKey(name: "status", defaultValue: 0)
+  final int status;
+
+  @JsonKey(name: "statusName", defaultValue: "")
+  final String statusName;
+
+  @JsonKey(name: "requestedCount", defaultValue: 0)
+  final int requestedCount;
+
+  @JsonKey(name: "generatedCount", defaultValue: 0)
+  final int generatedCount;
+
+  @JsonKey(name: "createdAt")
+  final DateTime? createdAt;
+
+  @JsonKey(name: "completedAt")
+  final DateTime? completedAt;
+
+  @JsonKey(name: "errorMessage")
+  final String? errorMessage;
+
+  @JsonKey(name: "examId")
+  final String? examId;
+
+  const PracticeExamGenerationStatusModel({
+    required this.id,
+    required this.status,
+    required this.statusName,
+    required this.requestedCount,
+    required this.generatedCount,
+    this.createdAt,
+    this.completedAt,
+    this.errorMessage,
+    this.examId,
+  });
+
+  factory PracticeExamGenerationStatusModel.fromJson(
+    Map<String, dynamic> json,
+  ) =>
+      _$PracticeExamGenerationStatusModelFromJson(json);
+
+  Map<String, dynamic> toJson() =>
+      _$PracticeExamGenerationStatusModelToJson(this);
+
+  PracticeExamGenerationStatus toEntity() {
+    return PracticeExamGenerationStatus(
+      id: id,
+      status: status,
+      statusName: statusName,
+      requestedCount: requestedCount,
+      generatedCount: generatedCount,
+      createdAt: createdAt,
+      completedAt: completedAt,
+      errorMessage: errorMessage,
+      examId: examId,
+    );
+  }
+}

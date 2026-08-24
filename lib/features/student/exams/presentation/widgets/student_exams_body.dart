@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:draya_mobile/core/di/dependency_injection.dart";
 import "package:draya_mobile/core/enums/cubit_status.dart";
 import "package:draya_mobile/core/helpers/app_navigator.dart";
@@ -7,6 +9,8 @@ import "package:draya_mobile/core/theme/app_colors.dart";
 import "package:draya_mobile/core/theme/app_sizes.dart";
 import "package:draya_mobile/core/theme/app_text_styles.dart";
 import "package:draya_mobile/core/widgets/fade_in_up_animation.dart";
+import "package:draya_mobile/features/student/exams/domain/entity/student_exam.dart";
+import "package:draya_mobile/features/student/exams/domain/usecases/get_student_exams_use_case.dart";
 import "package:draya_mobile/features/student/exams/presentation/widgets/exam_card_item.dart";
 import "package:draya_mobile/features/student/student_enrolled_classrooms/domain/entity/student_enrolled_classroom.dart";
 import "package:draya_mobile/features/student/student_enrolled_classrooms/presentation/cubit/student_enrolled_classrooms_cubit.dart";
@@ -22,12 +26,14 @@ class _ClassroomExamItem {
   final String classroomId;
   final String classroomName;
   final String sectionTitle;
+  final StudentExamOverview? overview;
 
   const _ClassroomExamItem({
     required this.exam,
     required this.classroomId,
     required this.classroomName,
     required this.sectionTitle,
+    this.overview,
   });
 }
 
@@ -42,6 +48,7 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
   String? _selectedClassroomId;
   bool _isLoadingSections = false;
   List<_ClassroomExamItem> _allExams = [];
+  final Map<String, StudentExamOverview> _overviewsById = {};
 
   @override
   void initState() {
@@ -62,6 +69,9 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
     final getSectionsUseCase = getIt<GetClassroomSectionsUseCase>();
     final collected = <_ClassroomExamItem>[];
 
+    // Load the student's exam overviews (attempts info) in parallel
+    unawaited(_loadExamOverviews());
+
     for (final classroom in classrooms) {
       final result = await getSectionsUseCase.call(
         params: classroom.classroomId,
@@ -75,6 +85,7 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
                 classroomId: classroom.classroomId,
                 classroomName: classroom.name,
                 sectionTitle: section.title,
+                overview: _overviewsById[exam.id],
               ),
             );
           }
@@ -90,6 +101,27 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
     }
   }
 
+  Future<void> _loadExamOverviews() async {
+    final result = await getIt<GetStudentExamsUseCase>().call();
+    if (result is Success<List<StudentExamOverview>> && mounted) {
+      setState(() {
+        _overviewsById
+          ..clear()
+          ..addEntries(result.data.map((e) => MapEntry(e.id, e)));
+        _allExams = [
+          for (final item in _allExams)
+            _ClassroomExamItem(
+              exam: item.exam,
+              classroomId: item.classroomId,
+              classroomName: item.classroomName,
+              sectionTitle: item.sectionTitle,
+              overview: _overviewsById[item.exam.id],
+            ),
+        ];
+      });
+    }
+  }
+
   void _onStartExam(_ClassroomExamItem item) {
     AppNavigator.push(
       context: context,
@@ -97,6 +129,20 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
       extra: {
         "examId": item.exam.id,
         "classroomName": item.classroomName,
+      },
+    );
+  }
+
+  void _onViewResult(_ClassroomExamItem item) {
+    final attemptId = item.overview?.latestAttempt?.id;
+    if (attemptId == null || attemptId.isEmpty) return;
+    AppNavigator.push(
+      context: context,
+      path: AppRoutes.studentExamDetailsPage,
+      extra: {
+        "examId": item.exam.id,
+        "classroomName": item.classroomName,
+        "attemptId": attemptId,
       },
     );
   }
@@ -297,7 +343,9 @@ class _StudentExamsBodyState extends State<StudentExamsBody> {
                     exam: item.exam,
                     classroomName: item.classroomName,
                     sectionTitle: item.sectionTitle,
+                    overview: item.overview,
                     onStart: () => _onStartExam(item),
+                    onViewResult: () => _onViewResult(item),
                   );
 
                   if (index < 6) {

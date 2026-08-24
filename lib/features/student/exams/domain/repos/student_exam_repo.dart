@@ -2,6 +2,8 @@ import "package:draya_mobile/core/networking/api_result.dart";
 import "package:draya_mobile/features/student/exams/domain/entity/student_exam.dart";
 
 abstract class StudentExamRepo {
+  Future<ApiResult<List<StudentExamOverview>>> getStudentExams();
+
   Future<ApiResult<StudentExam>> getExamDetails(String examId);
 
   Future<ApiResult<String>> startAttempt(String examId);

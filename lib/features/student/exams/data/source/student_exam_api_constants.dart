@@ -1,4 +1,5 @@
 abstract final class StudentExamApiConstants {
+  static const String studentExams = "students/exams";
   static const String examDetails = "students/exams/{examId}";
   static const String startAttempt = "attempts/start";
   static const String submitAttempt = "attempts/{attemptId}/submit";

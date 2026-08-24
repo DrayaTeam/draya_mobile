@@ -65,4 +65,16 @@ class StudentWeakTopicsRepoImpl implements StudentWeakTopicsRepo {
       return ApiResult.failure(ErrorHandler.handle(error));
     }
   }
+
+  @override
+  Future<ApiResult<PracticeExamGenerationStatus>> getGenerationStatus(
+    String generationId,
+  ) async {
+    try {
+      final response = await _apiService.getGenerationStatus(generationId);
+      return ApiResult.success(response.toEntity());
+    } catch (error) {
+      return ApiResult.failure(ErrorHandler.handle(error));
+    }
+  }
 }

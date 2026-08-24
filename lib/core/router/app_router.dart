@@ -318,16 +318,20 @@ abstract final class AppRouter {
         builder: (context, state) {
           String examId = "";
           String? classroomName;
+          String? attemptId;
           if (state.extra is Map) {
             final map = state.extra as Map;
             examId = map["examId"]?.toString() ?? "";
             classroomName = map["classroomName"]?.toString();
+            attemptId = map["attemptId"]?.toString();
           } else if (state.extra is String) {
             examId = state.extra as String;
           }
           return StudentExamDetailsScreen(
             examId: examId,
             classroomName: classroomName,
+            initialAttemptId:
+                (attemptId == null || attemptId.isEmpty) ? null : attemptId,
           );
         },
       ),

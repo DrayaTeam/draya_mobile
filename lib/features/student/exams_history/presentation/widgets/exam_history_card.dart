@@ -306,6 +306,7 @@ class _ExamHistoryCardState extends State<ExamHistoryCard>
                             child: AttemptHistoryTile(
                               attempt: entry.value,
                               index: entry.key,
+                              examId: exam.id,
                             ),
                           ),
                         ),

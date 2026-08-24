@@ -17,4 +17,8 @@ abstract class StudentWeakTopicsRepo {
     required String studentId,
     required String topicName,
   });
+
+  Future<ApiResult<PracticeExamGenerationStatus>> getGenerationStatus(
+    String generationId,
+  );
 }

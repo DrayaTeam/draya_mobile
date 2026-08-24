@@ -7,11 +7,13 @@ import "package:flutter_bloc/flutter_bloc.dart";
 class StudentExamDetailsScreen extends StatelessWidget {
   final String examId;
   final String? classroomName;
+  final String? initialAttemptId;
 
   const StudentExamDetailsScreen({
     super.key,
     required this.examId,
     this.classroomName,
+    this.initialAttemptId,
   });
 
   @override
@@ -21,6 +23,7 @@ class StudentExamDetailsScreen extends StatelessWidget {
       child: StudentExamDetailsBody(
         examId: examId,
         classroomName: classroomName,
+        initialAttemptId: initialAttemptId,
       ),
     );
   }

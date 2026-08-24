@@ -50,5 +50,9 @@ abstract class SignalRService {
 
   void offEvent(String eventName);
 
+  /// Removes a specific callback for [eventName] without affecting other
+  /// listeners registered for the same event.
+  void removeListener(String eventName, Function callback);
+
   void dispose();
 }
