@@ -6,19 +6,19 @@ import "package:flutter/material.dart";
 class AttemptsSummaryHeader extends StatelessWidget {
   final int totalCount;
   final String examTitle;
-  final double? averageScore;
+  final double? averagePercent;
 
   const AttemptsSummaryHeader({
     super.key,
     required this.totalCount,
     required this.examTitle,
-    this.averageScore,
+    this.averagePercent,
   });
 
   String get _formattedAverage {
-    if (averageScore == null) return "--";
-    if (averageScore! % 1 == 0) return averageScore!.toInt().toString();
-    return averageScore!.toStringAsFixed(1);
+    if (averagePercent == null) return "--";
+    final rounded = averagePercent!.round();
+    return "$rounded%";
   }
 
   @override

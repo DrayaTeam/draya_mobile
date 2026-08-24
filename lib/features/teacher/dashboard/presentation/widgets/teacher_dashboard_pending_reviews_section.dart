@@ -90,7 +90,7 @@ class TeacherDashboardPendingReviewsSection extends StatelessWidget {
           if (!isLoading && classrooms.isEmpty) ...[
             const SizedBox(height: AppSizes.s12),
             Text(
-              "لا توجد إجابات تحتاج مراجعة حالياً. أحسنت!",
+              "لا توجد إجابات تحتاج مراجعة حالياً.",
               style: AppTextStyles.body.copyWith(
                 fontSize: 12.5,
                 color: AppColors.textSecondary,

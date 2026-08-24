@@ -12,6 +12,7 @@ ExamAttemptModel _$ExamAttemptModelFromJson(Map<String, dynamic> json) =>
       studentId: json['studentId'] as String,
       studentName: json['studentName'] as String,
       finalScore: (json['finalScore'] as num).toDouble(),
+      maxScore: (json['maxScore'] as num?)?.toDouble(),
       submittedAt: json['submittedAt'] == null
           ? null
           : DateTime.parse(json['submittedAt'] as String),
@@ -24,6 +25,7 @@ Map<String, dynamic> _$ExamAttemptModelToJson(ExamAttemptModel instance) =>
       'studentId': instance.studentId,
       'studentName': instance.studentName,
       'finalScore': instance.finalScore,
+      'maxScore': instance.maxScore,
       'submittedAt': instance.submittedAt?.toIso8601String(),
       'needsTeacherReview': instance.needsTeacherReview,
     };

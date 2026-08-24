@@ -42,6 +42,12 @@ abstract class SignalRService {
 
   void onMaterialParsed(Function(MaterialParsedEvent) callback);
 
+  /// Unified notification hub event (ReceiveNotification).
+  void onReceiveNotification(Function(NotificationReceivedEvent) callback);
+
+  /// Fired on the notifications hub when a teacher overrides an answer score.
+  void onAnswerScoreOverridden(Function(AnswerScoreOverriddenEvent) callback);
+
   void offEvent(String eventName);
 
   void dispose();

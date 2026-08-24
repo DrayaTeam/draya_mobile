@@ -1,37 +1,46 @@
 import "dart:async";
+import "dart:math";
 
 import "package:draya_mobile/core/helpers/app_token_helper.dart";
 import "package:draya_mobile/core/networking/api_constants.dart";
 import "package:draya_mobile/core/services/local_notification_service.dart";
 import "package:draya_mobile/core/signalr/signalr_events.dart";
 import "package:draya_mobile/core/signalr/signalr_service.dart";
-import "package:draya_mobile/features/notifications/domain/entity/app_notification.dart";
+import "package:draya_mobile/features/notifications/data/source/notifications_api_service.dart";
 import "package:draya_mobile/features/notifications/presentation/cubit/notifications_state.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 
+/// Manages the unified notification system:
+/// - REST hydration via [NotificationsApiService] (GET /notifications)
+/// - Real-time events from the unified hub (/hubs/notifications):
+///   ReceiveNotification + AnswerScoreOverridden
+/// - Optimistic read/delete sync with the backend.
 class NotificationsCubit extends Cubit<NotificationsState> {
   final SignalRService _signalRService;
   final LocalNotificationService _localNotifications;
+  final NotificationsApiService _apiService;
 
-  static const String _reportsHubUrl =
-      "${ApiConstants.baseUrlWithoutV1}hubs/reports";
-  static const String _materialsHubUrl =
-      "${ApiConstants.baseUrlWithoutV1}hubs/materials";
-  static const String _examGradingHubUrl =
-      "${ApiConstants.baseUrlWithoutV1}hubs/exam-grading";
-  static const String _examGenerationHubUrl =
-      "${ApiConstants.baseUrlWithoutV1}hubs/exam-generation";
+  static const String _notificationsHubUrl =
+      "${ApiConstants.baseUrlWithoutV1}hubs/notifications";
+  static const String _notificationsHubKey = "notifications";
 
-  static const String _reportsHubKey = "reports";
-  static const String _materialsHubKey = "materials";
-  static const String _examGradingHubKey = "exam-grading";
-  static const String _examGenerationHubKey = "exam-generation";
+  static const int _pageSize = 20;
+
+  /// Broadcast stream for AnswerScoreOverridden so open exam-attempt
+  /// screens can update the overridden answer score in real time.
+  final StreamController<AnswerScoreOverriddenEvent>
+  _answerScoreOverriddenController =
+      StreamController<AnswerScoreOverriddenEvent>.broadcast();
+
+  Stream<AnswerScoreOverriddenEvent> get onAnswerScoreOverridden =>
+      _answerScoreOverriddenController.stream;
 
   bool _initialized = false;
 
   NotificationsCubit(
     this._signalRService,
     this._localNotifications,
+    this._apiService,
   ) : super(const NotificationsState()) {
     _init();
   }
@@ -40,40 +49,29 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     if (_initialized) return;
     _initialized = true;
 
-    _signalRService.onReceiveGenerationProgress(
-      _handleExamGenerationProgress,
-    );
-    _signalRService.onGradingProgressUpdated(_handleGradingProgress);
-    _signalRService.onMaterialParsed(_handleMaterialParsed);
-    _signalRService.onReportGenerated(_handleReportGenerated);
-    _signalRService.onStudentAtRisk(_handleStudentAtRisk);
+    // Unified notifications hub (real-time bell dropdown feed).
+    _signalRService.onReceiveNotification(_handleNotificationReceived);
+
+    // Teacher score-override push (also arrives on the same hub).
+    _signalRService.onAnswerScoreOverridden(_handleAnswerScoreOverridden);
 
     await ensureConnected();
+    await refresh();
   }
 
-  /// Connects to all notification hubs matching the current user role.
-  ///
-  /// Hubs are attached as background connections so they never clash with
-  /// the primary SignalR connection used by the classroom Q&A features.
-  /// Safe to call multiple times; skips hubs that are already connected.
+  /// Connects to the unified notifications hub as a background connection so
+  /// it never clashes with the primary SignalR connection used by the
+  /// classroom Q&A features. Safe to call multiple times.
   Future<void> ensureConnected() async {
     try {
-      final role = await AppTokenHelper.getUserRole();
       final token = await AppTokenHelper.getAccessToken();
       if (token == null || token.isEmpty) return;
 
-      await _connectHubs(
-        role == "Teacher"
-            ? {
-                _reportsHubKey: _reportsHubUrl,
-                _materialsHubKey: _materialsHubUrl,
-              }
-            : {_examGenerationHubKey: _examGenerationHubUrl},
-        token,
+      await _signalRService.connectBackgroundHub(
+        key: _notificationsHubKey,
+        hubUrl: _notificationsHubUrl,
+        token: token,
       );
-
-      // Exam grading updates apply to both roles.
-      await _connectHubs({_examGradingHubKey: _examGradingHubUrl}, token);
 
       emit(state.copyWith(isConnected: true));
     } catch (_) {
@@ -81,131 +79,62 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     }
   }
 
-  /// Connects the given hubs (no-op for hubs that are already connected).
-  Future<void> _connectHubs(
-    Map<String, String> hubs,
-    String token,
-  ) async {
-    for (final entry in hubs.entries) {
-      await _signalRService.connectBackgroundHub(
-        key: entry.key,
-        hubUrl: entry.value,
-        token: token,
+  /// Re-fetches page 1 from REST and hydrates the store,
+  /// including the authoritative unreadCount.
+  Future<void> refresh() async {
+    emit(state.copyWith(isInitialLoading: true));
+    try {
+      final page = await _apiService.getNotifications(
+        page: 1,
+        pageSize: _pageSize,
       );
+      emit(
+        state.copyWith(
+          isInitialLoading: false,
+          notifications: page.items,
+          unreadCount: page.unreadCount,
+          currentPage: 1,
+          hasMore: page.items.length < page.totalCount,
+        ),
+      );
+    } catch (_) {
+      emit(state.copyWith(isInitialLoading: false));
     }
   }
 
-  void _handleExamGenerationProgress(ExamGenerationProgressEvent event) {
-    if (event.isCompleted && event.examId != null) {
-      _addNotification(
-        AppNotification(
-          id: "exam-generation-${event.generationId}-${DateTime.now().millisecondsSinceEpoch}",
-          title: "امتحانك التدريبي جاهز",
-          message: "تم إنشاء الامتحان التدريبي بالذكاء الاصطناعي بنجاح، يمكنك البدء الآن.",
-          type: AppNotificationType.examGeneration,
-          createdAt: DateTime.now(),
+  /// Loads the next page of older notifications (infinite scroll).
+  Future<void> loadNextPage() async {
+    if (state.isLoadingMore || !state.hasMore) return;
+    emit(state.copyWith(isLoadingMore: true));
+    try {
+      final nextPage = state.currentPage + 1;
+      final page = await _apiService.getNotifications(
+        page: nextPage,
+        pageSize: _pageSize,
+      );
+      final existingIds = state.notifications.map((n) => n.id).toSet();
+      final newItems = page.items
+          .where((n) => !existingIds.contains(n.id))
+          .toList();
+      emit(
+        state.copyWith(
+          isLoadingMore: false,
+          notifications: [...state.notifications, ...newItems],
+          unreadCount: page.unreadCount,
+          currentPage: nextPage,
+          hasMore:
+              state.notifications.length + newItems.length < page.totalCount,
         ),
       );
-    } else if (event.isFailed) {
-      _addNotification(
-        AppNotification(
-          id: "exam-generation-failed-${event.generationId}-${DateTime.now().millisecondsSinceEpoch}",
-          title: "فشل توليد الامتحان",
-          message:
-              event.errorMessage ?? "تعذر إنشاء الامتحان التدريبي، حاول مرة أخرى.",
-          type: AppNotificationType.examGeneration,
-          createdAt: DateTime.now(),
-        ),
-      );
+    } catch (_) {
+      emit(state.copyWith(isLoadingMore: false));
     }
   }
 
-  void _handleGradingProgress(GradingProgressEvent event) {
-    if (event.isCompleted) {
-      final scorePart =
-          event.finalScore != null ? " درجتك: ${_formatScore(event.finalScore!)}." : "";
-      final reviewPart =
-          event.needsTeacherReview
-          ? " إجاباتك المقالية بانتظار مراجعة المعلم."
-          : "";
-      _addNotification(
-        AppNotification(
-          id: "exam-grading-${event.gradingJobId}",
-          title: "تم تصحيح امتحانك",
-          message: "انتهى تصحيح الامتحان بالذكاء الاصطناعي.$scorePart$reviewPart",
-          type: AppNotificationType.examGrading,
-          createdAt: DateTime.now(),
-        ),
-      );
-    } else if (event.isFailed) {
-      _addNotification(
-        AppNotification(
-          id: "exam-grading-failed-${event.gradingJobId}-${DateTime.now().millisecondsSinceEpoch}",
-          title: "فشل تصحيح الامتحان",
-          message:
-              event.errorMessage ?? "تعذر تصحيح الامتحان، سيتم إعادة المحاولة تلقائيًا.",
-          type: AppNotificationType.examGrading,
-          createdAt: DateTime.now(),
-        ),
-      );
-    }
-  }
+  void _handleNotificationReceived(NotificationReceivedEvent event) {
+    final notification = event.notification;
+    if (state.notifications.any((n) => n.id == notification.id)) return;
 
-  void _handleMaterialParsed(MaterialParsedEvent event) {
-    if (event.isSuccess) {
-      _addNotification(
-        AppNotification(
-          id: "material-parsed-${event.materialId}-${event.versionId}",
-          title: "تمت معالجة الملف",
-          message: event.message.isNotEmpty
-              ? event.message
-              : "انتهت معالجة الملف بالذكاء الاصطناعي وأصبح جاهزًا للاستخدام.",
-          type: AppNotificationType.materialParsed,
-          createdAt: DateTime.now(),
-        ),
-      );
-    } else if (event.isFailed) {
-      _addNotification(
-        AppNotification(
-          id: "material-parsed-failed-${event.materialId}-${event.versionId}-${DateTime.now().millisecondsSinceEpoch}",
-          title: "فشلت معالجة الملف",
-          message:
-              event.message.isNotEmpty ? event.message : "تعذرت معالجة الملف، حاول رفعه مرة أخرى.",
-          type: AppNotificationType.materialParsed,
-          createdAt: DateTime.now(),
-        ),
-      );
-    }
-  }
-
-  String _formatScore(double score) =>
-      score % 1 == 0 ? score.toStringAsFixed(0) : score.toStringAsFixed(1);
-
-  void _handleReportGenerated(ReportGeneratedEvent event) {
-    _addNotification(
-      AppNotification(
-        id: "report-${event.reportId}",
-        title: "تقرير أداء جديد",
-        message: "يتوفر تقرير أداء جديد بانتظار مراجعتك واعتماده.",
-        type: AppNotificationType.reportGenerated,
-        createdAt: DateTime.now(),
-      ),
-    );
-  }
-
-  void _handleStudentAtRisk(StudentAtRiskEvent event) {
-    _addNotification(
-      AppNotification(
-        id: "at-risk-${event.studentId}-${event.topicName}-${DateTime.now().millisecondsSinceEpoch}",
-        title: "تنبيه: طالب متعثر",
-        message: "أحد الطلاب يعاني صعوبة في ${event.topicName}.",
-        type: AppNotificationType.studentAtRisk,
-        createdAt: DateTime.now(),
-      ),
-    );
-  }
-
-  void _addNotification(AppNotification notification) {
     unawaited(
       _localNotifications.show(
         title: notification.title,
@@ -213,37 +142,101 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       ),
     );
 
-    final updated = [notification, ...state.notifications];
-    emit(state.copyWith(notifications: updated));
+    emit(
+      state.copyWith(
+        notifications: [notification, ...state.notifications],
+        unreadCount: notification.isRead
+            ? state.unreadCount
+            : state.unreadCount + 1,
+      ),
+    );
   }
 
+  void _handleAnswerScoreOverridden(AnswerScoreOverriddenEvent event) {
+    _answerScoreOverriddenController.add(event);
+
+    unawaited(
+      _localNotifications.show(
+        title: "تم تحديث درجة إجابتك",
+        body: "قام معلمك بتحديث درجة إحدى إجاباتك إلى ${_formatScore(event.newScore)}.",
+      ),
+    );
+  }
+
+  String _formatScore(double score) =>
+      score % 1 == 0 ? score.toStringAsFixed(0) : score.toStringAsFixed(1);
+
+  /// Optimistically marks a notification as read, then syncs with the API.
   void markAsRead(String id) {
-    final updated = state.notifications
-        .map(
-          (notification) =>
-              notification.id == id
-              ? notification.copyWith(isRead: true)
-              : notification,
-        )
-        .toList();
-    emit(state.copyWith(notifications: updated));
+    bool wasUnread = false;
+    final updated = state.notifications.map((notification) {
+      if (notification.id == id && !notification.isRead) {
+        wasUnread = true;
+        return notification.copyWith(isRead: true);
+      }
+      return notification;
+    }).toList();
+
+    emit(
+      state.copyWith(
+        notifications: updated,
+        unreadCount: wasUnread ? max(0, state.unreadCount - 1) : state.unreadCount,
+      ),
+    );
+
+    if (wasUnread) {
+      unawaited(_apiService.markAsRead(id).catchError((_) {}));
+    }
   }
 
+  /// Optimistically marks all as read, then syncs with the API.
   void markAllAsRead() {
-    final updated = state.notifications
-        .map((notification) => notification.copyWith(isRead: true))
-        .toList();
-    emit(state.copyWith(notifications: updated));
+    if (state.unreadCount == 0 &&
+        state.notifications.every((notification) => notification.isRead)) {
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        notifications: state.notifications
+            .map((notification) => notification.copyWith(isRead: true))
+            .toList(),
+        unreadCount: 0,
+      ),
+    );
+
+    unawaited(_apiService.markAllAsRead().catchError((_) {}));
   }
 
+  /// Optimistically removes a notification, then syncs with the API.
   void removeNotification(String id) {
-    final updated = state.notifications
-        .where((notification) => notification.id != id)
-        .toList();
-    emit(state.copyWith(notifications: updated));
+    final matches = state.notifications.where((n) => n.id == id).toList();
+    if (matches.isEmpty) return;
+    final target = matches.first;
+
+    emit(
+      state.copyWith(
+        notifications: state.notifications
+            .where((notification) => notification.id != id)
+            .toList(),
+        unreadCount: target.isRead
+            ? state.unreadCount
+            : max(0, state.unreadCount - 1),
+      ),
+    );
+
+    unawaited(_apiService.deleteNotification(id).catchError((_) {}));
   }
 
+  /// Optimistically clears everything, then syncs with the API.
   void clearAll() {
-    emit(state.copyWith(notifications: []));
+    emit(state.copyWith(notifications: [], unreadCount: 0));
+    unawaited(_apiService.clearAll().catchError((_) {}));
+  }
+
+  @override
+  Future<void> close() {
+    unawaited(_answerScoreOverriddenController.close());
+    return super.close();
   }
 }

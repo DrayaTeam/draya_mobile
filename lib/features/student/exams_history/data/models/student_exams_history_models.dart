@@ -8,6 +8,7 @@ class AttemptSummaryModel {
   final String id;
   @JsonKey(defaultValue: 0.0)
   final double finalScore;
+  final double? maxScore;
   @JsonKey(defaultValue: false)
   final bool needsTeacherReview;
   @JsonKey(defaultValue: false)
@@ -18,6 +19,7 @@ class AttemptSummaryModel {
   const AttemptSummaryModel({
     required this.id,
     this.finalScore = 0.0,
+    this.maxScore,
     this.needsTeacherReview = false,
     this.isFinalized = false,
     this.startedAt,
@@ -32,6 +34,7 @@ class AttemptSummaryModel {
   AttemptSummary toEntity() => AttemptSummary(
         id: id,
         finalScore: finalScore,
+        maxScore: maxScore,
         needsTeacherReview: needsTeacherReview,
         isFinalized: isFinalized,
         startedAt: startedAt,
@@ -46,6 +49,7 @@ class StudentExamWithAttemptsModel {
   final String? classroomId;
   final String? classroomName;
   final double? latestScore;
+  final double? maxScore;
   @JsonKey(defaultValue: 0)
   final int usedAttempts;
   final int? allowedAttempts;
@@ -61,6 +65,7 @@ class StudentExamWithAttemptsModel {
     this.classroomId,
     this.classroomName,
     this.latestScore,
+    this.maxScore,
     this.usedAttempts = 0,
     this.allowedAttempts,
     this.hasSubmitted = false,
@@ -79,6 +84,7 @@ class StudentExamWithAttemptsModel {
         classroomId: classroomId,
         classroomName: classroomName,
         latestScore: latestScore,
+        maxScore: maxScore,
         usedAttempts: usedAttempts,
         allowedAttempts: allowedAttempts,
         hasSubmitted: hasSubmitted,

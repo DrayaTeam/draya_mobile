@@ -1,5 +1,40 @@
+import "package:draya_mobile/features/notifications/domain/entity/app_notification.dart";
+
 abstract class SignalREvent {
   const SignalREvent();
+}
+
+class NotificationReceivedEvent extends SignalREvent {
+  final AppNotification notification;
+
+  const NotificationReceivedEvent({required this.notification});
+
+  factory NotificationReceivedEvent.fromJson(Map<String, dynamic> json) {
+    return NotificationReceivedEvent(
+      notification: AppNotification.fromJson(json),
+    );
+  }
+}
+
+class AnswerScoreOverriddenEvent extends SignalREvent {
+  final String attemptId;
+  final String answerId;
+  final double newScore;
+
+  const AnswerScoreOverriddenEvent({
+    required this.attemptId,
+    required this.answerId,
+    required this.newScore,
+  });
+
+  factory AnswerScoreOverriddenEvent.fromJson(Map<String, dynamic> json) {
+    final payload = AnswerScoreOverriddenPayload.fromJson(json);
+    return AnswerScoreOverriddenEvent(
+      attemptId: payload.attemptId,
+      answerId: payload.answerId,
+      newScore: payload.newScore,
+    );
+  }
 }
 
 class QuestionCreatedEvent extends SignalREvent {
@@ -114,6 +149,7 @@ class GradingProgressEvent extends SignalREvent {
   final String status;
   final String? errorMessage;
   final double? finalScore;
+  final double? maxScore;
   final bool needsTeacherReview;
 
   const GradingProgressEvent({
@@ -121,6 +157,7 @@ class GradingProgressEvent extends SignalREvent {
     required this.status,
     this.errorMessage,
     this.finalScore,
+    this.maxScore,
     this.needsTeacherReview = false,
   });
 
@@ -134,6 +171,10 @@ class GradingProgressEvent extends SignalREvent {
       finalScore:
           (json["FinalScore"] ?? json["finalScore"]) is num
           ? (json["FinalScore"] ?? json["finalScore"]).toDouble()
+          : null,
+      maxScore:
+          (json["MaxScore"] ?? json["maxScore"]) is num
+          ? (json["MaxScore"] ?? json["maxScore"]).toDouble()
           : null,
       needsTeacherReview:
           json["NeedsTeacherReview"] as bool? ??

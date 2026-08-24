@@ -115,6 +115,7 @@ class ExamResultModel {
   final DateTime? submittedAt;
   @JsonKey(defaultValue: 0.0)
   final double finalScore;
+  final double? maxScore;
   @JsonKey(defaultValue: false)
   final bool needsTeacherReview;
   @JsonKey(defaultValue: [])
@@ -126,6 +127,7 @@ class ExamResultModel {
     this.isSubmitted = true,
     this.submittedAt,
     this.finalScore = 0.0,
+    this.maxScore,
     this.needsTeacherReview = false,
     this.answers = const [],
   });
@@ -141,6 +143,7 @@ class ExamResultModel {
         isSubmitted: isSubmitted,
         submittedAt: submittedAt,
         finalScore: finalScore,
+        maxScore: maxScore,
         needsTeacherReview: needsTeacherReview,
         answers: answers.map((e) => e.toEntity()).toList(),
       );

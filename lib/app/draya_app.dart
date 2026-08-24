@@ -28,8 +28,13 @@ class DrayaApp extends StatelessWidget {
             return BlocProvider.value(
               value: getIt<NotificationsCubit>(),
               child: BlocListener<NotificationsCubit, NotificationsState>(
+                // Only toast for real-time additions, never during the
+                // initial REST hydration of older notifications.
                 listenWhen: (previous, current) =>
-                    current.notifications.length > previous.notifications.length,
+                    current.notifications.isNotEmpty &&
+                    previous.notifications.isNotEmpty &&
+                    current.notifications.length >
+                        previous.notifications.length,
                 listener: (context, state) {
                   final notification = state.notifications.first;
                   _showNotificationToast(context, notification);
@@ -85,14 +90,13 @@ class DrayaApp extends StatelessWidget {
                 ),
                 child: Icon(
                   switch (notification.type) {
-                    AppNotificationType.examGeneration => Icons.quiz_outlined,
-                    AppNotificationType.examGrading => Icons.grading_rounded,
-                    AppNotificationType.materialParsed =>
-                      Icons.menu_book_outlined,
-                    AppNotificationType.reportGenerated =>
-                      Icons.assessment_outlined,
-                    AppNotificationType.studentAtRisk =>
+                    AppNotificationType.info =>
+                      Icons.notifications_none_rounded,
+                    AppNotificationType.success =>
+                      Icons.check_circle_outline,
+                    AppNotificationType.warning =>
                       Icons.warning_amber_rounded,
+                    AppNotificationType.error => Icons.error_outline_rounded,
                   },
                   size: 20,
                   color: colorScheme.onPrimaryContainer,

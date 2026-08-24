@@ -15,7 +15,6 @@ import "package:draya_mobile/core/widgets/app_label.dart";
 import "package:draya_mobile/core/widgets/app_logo_and_name.dart";
 import "package:draya_mobile/core/widgets/app_text_form_field.dart";
 import "package:draya_mobile/features/auth/data/models/login_request_model.dart";
-import "package:draya_mobile/features/auth/data/models/request_password_reset_model.dart";
 import "package:draya_mobile/features/auth/domain/entity/auth_entity.dart";
 import "package:draya_mobile/features/auth/presentation/signin/cubit/signin_cubit.dart";
 import "package:draya_mobile/features/auth/presentation/signin/cubit/signin_state.dart";
@@ -35,7 +34,6 @@ class _SigninPageState extends State<SigninPage> {
   late final GlobalKey<FormState> _formKey;
   late final TextEditingController _textEditingControllerEmail;
   late final TextEditingController _textEditingControllerPassword;
-  bool _validateEmailOnly = false;
 
   @override
   void initState() {
@@ -63,20 +61,8 @@ class _SigninPageState extends State<SigninPage> {
     );
   }
 
-  Future<void> _handleForgotPassword() async {
-    final result = await AppNavigator.push<bool>(
-      context: context,
-      path: AppRoutes.verificationCodePage,
-      queryParameters: {
-        "email": _textEditingControllerEmail.text,
-      },
-    );
-
-    if (result == true && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("تم تغيير كلمة المرور بنجاح")),
-      );
-    }
+  void _goToForgotPassword() {
+    AppNavigator.push(context: context, path: AppRoutes.forgotPasswordPage);
   }
 
   @override
@@ -85,11 +71,9 @@ class _SigninPageState extends State<SigninPage> {
       // listenWhen: (previous, current) =>
       //     previous.signinStatus != current.signinStatus,
       listener: (context, state) async {
-        if (state.signinStatus == CubitStatus.loading ||
-            state.requestPasswordResetStatus == CubitStatus.loading) {
+        if (state.signinStatus == CubitStatus.loading) {
           AppLoading.show();
-        } else if (state.signinStatus == CubitStatus.error ||
-            state.requestPasswordResetStatus == CubitStatus.error) {
+        } else if (state.signinStatus == CubitStatus.error) {
           AppLoading.hide();
 
           AppDialogHelper.display(
@@ -102,10 +86,6 @@ class _SigninPageState extends State<SigninPage> {
           AppLoading.hide;
 
           _signIn(authEntity: state.authEntity);
-        } else if (state.requestPasswordResetStatus == CubitStatus.success) {
-          AppLoading.hide();
-
-          await _handleForgotPassword();
         } else {
           AppLoading.hide();
         }
@@ -162,8 +142,6 @@ class _SigninPageState extends State<SigninPage> {
                       prefixIcon: Icons.lock_outline,
                       isObscure: true,
                       validator: (value) {
-                        if (_validateEmailOnly) return null;
-
                         final result = PasswordValidator.validate(
                           password: value,
                         );
@@ -191,18 +169,7 @@ class _SigninPageState extends State<SigninPage> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {
-                            _validateEmailOnly = true;
-
-                            if (_formKey.currentState!.validate()) {
-                              context.read<SigninCubit>().requestPasswordReset(
-                                requestPasswordResetModel:
-                                    RequestPasswordResetModel(
-                                      email: _textEditingControllerEmail.text,
-                                    ),
-                              );
-                            }
-                          },
+                          onPressed: _goToForgotPassword,
                           child: const Text("نسيت كلمة المرور؟"),
                         ),
                       ],
@@ -210,8 +177,6 @@ class _SigninPageState extends State<SigninPage> {
                     const SizedBox(height: AppSizes.s16),
                     AppElevatedButton(
                       onPressed: () {
-                        _validateEmailOnly = false;
-
                         if (_formKey.currentState!.validate()) {
                           context.read<SigninCubit>().signin(
                             loginRequestModel: LoginRequestModel(

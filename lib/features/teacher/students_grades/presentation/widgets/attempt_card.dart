@@ -7,6 +7,7 @@ import "package:intl/intl.dart";
 class AttemptCard extends StatelessWidget {
   final String studentName;
   final double finalScore;
+  final double? maxScore;
   final DateTime? submittedAt;
   final int index;
   final bool needsTeacherReview;
@@ -16,6 +17,7 @@ class AttemptCard extends StatelessWidget {
     super.key,
     required this.studentName,
     required this.finalScore,
+    this.maxScore,
     this.submittedAt,
     required this.index,
     this.needsTeacherReview = false,
@@ -30,11 +32,15 @@ class AttemptCard extends StatelessWidget {
     Color(0xFFB45309),
   ];
 
-  double get _clampedScore => finalScore.clamp(0, 100);
+  bool get _hasMaxScore => maxScore != null && maxScore! > 0;
+
+  double get _scorePercent => _hasMaxScore
+      ? ((finalScore / maxScore!) * 100).clamp(0.0, 100.0)
+      : finalScore.clamp(0.0, 100.0);
 
   Color get _scoreColor {
-    if (_clampedScore >= 85) return AppColors.chemistryBiology;
-    if (_clampedScore >= 60) return AppColors.amber;
+    if (_scorePercent >= 85) return AppColors.chemistryBiology;
+    if (_scorePercent >= 60) return AppColors.amber;
     return AppColors.error;
   }
 
@@ -42,6 +48,11 @@ class AttemptCard extends StatelessWidget {
       finalScore % 1 == 0
           ? finalScore.toInt().toString()
           : finalScore.toStringAsFixed(1);
+
+  String get _formattedMaxScore {
+    final max = maxScore!;
+    return max % 1 == 0 ? max.toInt().toString() : max.toStringAsFixed(1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -207,7 +218,7 @@ class AttemptCard extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(AppSizes.s6),
           child: TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0, end: _clampedScore / 100),
+            tween: Tween(begin: 0, end: _scorePercent / 100),
             duration: const Duration(milliseconds: 700),
             curve: Curves.easeOutCubic,
             builder:
@@ -270,8 +281,13 @@ class AttemptCard extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            _formattedScore,
-            style: AppTextStyles.h5.copyWith(color: Colors.white),
+            _hasMaxScore
+                ? "$_formattedScore/$_formattedMaxScore"
+                : _formattedScore,
+            style: AppTextStyles.h5.copyWith(
+              color: Colors.white,
+              fontSize: 13.5,
+            ),
           ),
           Text(
             "درجة",

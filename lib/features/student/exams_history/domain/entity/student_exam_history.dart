@@ -39,6 +39,7 @@ enum ExamAttemptStatus {
 class AttemptSummary {
   final String id;
   final double finalScore;
+  final double? maxScore;
   final bool needsTeacherReview;
   final bool isFinalized;
   final DateTime? startedAt;
@@ -47,11 +48,18 @@ class AttemptSummary {
   const AttemptSummary({
     required this.id,
     this.finalScore = 0.0,
+    this.maxScore,
     this.needsTeacherReview = false,
     this.isFinalized = false,
     this.startedAt,
     this.submittedAt,
   });
+
+  bool get hasMaxScore => maxScore != null && maxScore! > 0;
+
+  double get scorePercent => hasMaxScore
+      ? ((finalScore / maxScore!) * 100).clamp(0.0, 100.0)
+      : finalScore.clamp(0.0, 100.0);
 }
 
 class StudentExamWithAttempts {
@@ -60,6 +68,7 @@ class StudentExamWithAttempts {
   final String? classroomId;
   final String? classroomName;
   final double? latestScore;
+  final double? maxScore;
   final int usedAttempts;
   final int? allowedAttempts;
   final bool hasSubmitted;
@@ -72,6 +81,7 @@ class StudentExamWithAttempts {
     this.classroomId,
     this.classroomName,
     this.latestScore,
+    this.maxScore,
     this.usedAttempts = 0,
     this.allowedAttempts,
     this.hasSubmitted = false,
@@ -85,10 +95,19 @@ class StudentExamWithAttempts {
   bool get canRetake =>
       allowedAttempts == null || usedAttempts < allowedAttempts!;
 
+  bool get hasMaxScore => maxScore != null && maxScore! > 0;
+
+  double? get latestScorePercent {
+    if (latestScore == null) return null;
+    return hasMaxScore
+        ? ((latestScore! / maxScore!) * 100).clamp(0.0, 100.0)
+        : latestScore!.clamp(0.0, 100.0);
+  }
+
   AttemptSummary? get bestAttempt {
     if (attempts.isEmpty) return null;
     return attempts.reduce(
-      (a, b) => a.finalScore >= b.finalScore ? a : b,
+      (a, b) => a.scorePercent >= b.scorePercent ? a : b,
     );
   }
 }

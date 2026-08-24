@@ -1,9 +1,11 @@
 import "package:draya_mobile/core/helpers/app_token_helper.dart";
 import "package:draya_mobile/core/router/app_routes.dart";
+import "package:draya_mobile/features/auth/presentation/forgot_password/pages/forgot_password_page.dart";
+import "package:draya_mobile/features/auth/presentation/forgot_password/pages/otp_verification_page.dart";
+import "package:draya_mobile/features/auth/presentation/forgot_password/pages/reset_password_page.dart";
 import "package:draya_mobile/features/auth/presentation/signin/pages/signin_page.dart";
 import "package:draya_mobile/features/auth/presentation/signup/pages/signup_page.dart";
 import "package:draya_mobile/features/auth/presentation/signup_choice/pages/signup_choice_page.dart";
-import "package:draya_mobile/features/auth/presentation/verification_code_page/pages/verification_code_page.dart";
 import "package:draya_mobile/features/student/exams/presentation/pages/student_exam_details_screen.dart";
 import "package:draya_mobile/features/student/exams/presentation/pages/student_exams_screen.dart";
 import "package:draya_mobile/features/student/exams_history/presentation/pages/exams_history_screen.dart";
@@ -68,7 +70,9 @@ abstract final class AppRouter {
       final isAuthRoute =
           location == AppRoutes.signinPage ||
           location == AppRoutes.signupPage ||
-          location.startsWith("/verification_code/");
+          location == AppRoutes.forgotPasswordPage ||
+          location == AppRoutes.verificationCodePage ||
+          location == AppRoutes.resetPasswordPage;
 
       if (isSignedIn && isGoingToSignin) {
         final role = await AppTokenHelper.getUserRole();
@@ -105,13 +109,26 @@ abstract final class AppRouter {
         },
       ),
       GoRoute(
+        path: AppRoutes.forgotPasswordPage,
+        builder: (context, state) {
+          return const ForgotPasswordPage();
+        },
+      ),
+      GoRoute(
         path: AppRoutes.verificationCodePage,
         builder: (context, state) {
-          final email = state.uri.queryParameters["email"] as String;
+          final email = state.uri.queryParameters["email"] ?? "";
 
-          return VerificationCodePage(
-            email: email,
-          );
+          return OtpVerificationPage(email: email);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.resetPasswordPage,
+        builder: (context, state) {
+          final email = state.uri.queryParameters["email"] ?? "";
+          final token = state.extra is String ? state.extra as String : "";
+
+          return ResetPasswordPage(email: email, token: token);
         },
       ),
       GoRoute(

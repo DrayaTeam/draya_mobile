@@ -174,6 +174,20 @@ class SignalRClientService implements SignalRService {
     _addListener("MaterialParsed", callback);
   }
 
+  @override
+  void onReceiveNotification(
+    void Function(NotificationReceivedEvent) callback,
+  ) {
+    _addListener("ReceiveNotification", callback);
+  }
+
+  @override
+  void onAnswerScoreOverridden(
+    void Function(AnswerScoreOverriddenEvent) callback,
+  ) {
+    _addListener("AnswerScoreOverridden", callback);
+  }
+
   void _addListener(String eventName, Function callback) {
     _listeners.putIfAbsent(eventName, () => []).add(callback);
     _bindEvent(eventName);
@@ -210,6 +224,8 @@ class SignalRClientService implements SignalRService {
         "MaterialParsed" => MaterialParsedEvent.fromJson(payload),
         "ReportGenerated" => ReportGeneratedEvent.fromJson(payload),
         "StudentAtRisk" => StudentAtRiskEvent.fromJson(payload),
+        "ReceiveNotification" => NotificationReceivedEvent.fromJson(payload),
+        "AnswerScoreOverridden" => AnswerScoreOverriddenEvent.fromJson(payload),
         _ => null,
       };
       if (event == null) return;

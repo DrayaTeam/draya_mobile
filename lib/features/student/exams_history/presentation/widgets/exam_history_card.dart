@@ -102,8 +102,8 @@ class _ExamHistoryCardState extends State<ExamHistoryCard>
   @override
   Widget build(BuildContext context) {
     final hasAttempts = exam.attempts.isNotEmpty;
-    final bestScore = exam.bestAttempt?.finalScore;
-    final displayScore = exam.latestScore ?? bestScore;
+    final bestPercent = exam.bestAttempt?.scorePercent;
+    final displayScore = exam.latestScorePercent ?? bestPercent;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
@@ -237,7 +237,7 @@ class _ExamHistoryCardState extends State<ExamHistoryCard>
                     const SizedBox(width: AppSizes.s8),
                     // Score ring
                     if (displayScore != null && displayScore > 0)
-                      _ScoreRing(score: displayScore.clamp(0, 100))
+                      _ScoreRing(percent: displayScore)
                     else
                       Padding(
                         padding: const EdgeInsets.only(top: AppSizes.s10),
@@ -379,23 +379,23 @@ class _ExamHistoryCardState extends State<ExamHistoryCard>
 
 /// Circular animated score indicator, color-coded by performance.
 class _ScoreRing extends StatelessWidget {
-  final double score;
+  final double percent;
 
-  const _ScoreRing({required this.score});
+  const _ScoreRing({required this.percent});
 
   Color get _color {
-    if (score >= 75) return AppColors.success;
-    if (score >= 50) return AppColors.amber;
+    if (percent >= 75) return AppColors.success;
+    if (percent >= 50) return AppColors.amber;
     return AppColors.error;
   }
 
   String get _formatted =>
-      score % 1 == 0 ? score.toInt().toString() : score.toStringAsFixed(1);
+      percent % 1 == 0 ? percent.toInt().toString() : percent.toStringAsFixed(1);
 
   @override
   Widget build(BuildContext context) {
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0, end: score / 100),
+      tween: Tween(begin: 0, end: percent / 100),
       duration: const Duration(milliseconds: 900),
       curve: Curves.easeOutCubic,
       builder: (context, value, _) => CustomPaint(

@@ -124,13 +124,13 @@ class _ExamAttemptsScreenState extends State<ExamAttemptsScreen> {
                               state.attempts.isEmpty
                                   ? null
                                   : state.attempts
-                                          .map((a) => a.finalScore)
+                                          .map((a) => a.scorePercent)
                                           .reduce((a, b) => a + b) /
                                       state.attempts.length;
                           return AttemptsSummaryHeader(
                             totalCount: state.totalCount,
                             examTitle: widget.examTitle ?? "",
-                            averageScore: average,
+                            averagePercent: average,
                           );
                         },
                       ),
@@ -177,6 +177,7 @@ class _ExamAttemptsScreenState extends State<ExamAttemptsScreen> {
             child: AttemptCard(
               studentName: attempt.studentName,
               finalScore: attempt.finalScore,
+              maxScore: attempt.maxScore,
               submittedAt: attempt.submittedAt,
               index: index,
               needsTeacherReview: attempt.needsTeacherReview,

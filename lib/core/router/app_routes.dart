@@ -3,7 +3,9 @@ abstract final class AppRoutes {
   static const String signinPage = "/signin";
   static const String signupPage = "/signup";
   static const String mainPage = "/main";
-  static const String verificationCodePage = "/verification_code/:email";
+  static const String forgotPasswordPage = "/forgot_password";
+  static const String verificationCodePage = "/verification_code";
+  static const String resetPasswordPage = "/reset_password";
   static const String teacherDashboardPage = "/teacher_dashboard";
   static const String studentHomePage = "/student_home";
   static const String examGenerationPage1 = "/teacher/exam/generate/step_1";

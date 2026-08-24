@@ -17,9 +17,12 @@ class AttemptHistoryTile extends StatelessWidget {
 
   static final DateFormat _dateTimeFormat = DateFormat("d MMM yyyy، h:mm a", "ar");
 
+  static String _formatScore(double value) =>
+      value % 1 == 0 ? value.toInt().toString() : value.toStringAsFixed(1);
+
   Color get _scoreColor {
-    if (attempt.finalScore >= 75) return AppColors.success;
-    if (attempt.finalScore >= 50) return AppColors.amber;
+    if (attempt.scorePercent >= 75) return AppColors.success;
+    if (attempt.scorePercent >= 50) return AppColors.amber;
     return AppColors.error;
   }
 
@@ -140,9 +143,9 @@ class AttemptHistoryTile extends StatelessWidget {
               ],
             ),
             child: Text(
-              attempt.finalScore % 1 == 0
-                  ? attempt.finalScore.toInt().toString()
-                  : attempt.finalScore.toStringAsFixed(1),
+              attempt.hasMaxScore
+                  ? "${_formatScore(attempt.finalScore)} / ${_formatScore(attempt.maxScore!)}"
+                  : _formatScore(attempt.finalScore),
               style: AppTextStyles.label.copyWith(
                 fontSize: 13,
                 fontWeight: FontWeight.w900,

@@ -10,6 +10,7 @@ AttemptSummaryModel _$AttemptSummaryModelFromJson(Map<String, dynamic> json) =>
     AttemptSummaryModel(
       id: json['id'] as String,
       finalScore: (json['finalScore'] as num?)?.toDouble() ?? 0.0,
+      maxScore: (json['maxScore'] as num?)?.toDouble(),
       needsTeacherReview: json['needsTeacherReview'] as bool? ?? false,
       isFinalized: json['isFinalized'] as bool? ?? false,
       startedAt: json['startedAt'] == null
@@ -25,6 +26,7 @@ Map<String, dynamic> _$AttemptSummaryModelToJson(
 ) => <String, dynamic>{
   'id': instance.id,
   'finalScore': instance.finalScore,
+  'maxScore': instance.maxScore,
   'needsTeacherReview': instance.needsTeacherReview,
   'isFinalized': instance.isFinalized,
   'startedAt': instance.startedAt?.toIso8601String(),
@@ -39,6 +41,7 @@ StudentExamWithAttemptsModel _$StudentExamWithAttemptsModelFromJson(
   classroomId: json['classroomId'] as String?,
   classroomName: json['classroomName'] as String?,
   latestScore: (json['latestScore'] as num?)?.toDouble(),
+  maxScore: (json['maxScore'] as num?)?.toDouble(),
   usedAttempts: (json['usedAttempts'] as num?)?.toInt() ?? 0,
   allowedAttempts: (json['allowedAttempts'] as num?)?.toInt(),
   hasSubmitted: json['hasSubmitted'] as bool? ?? false,
@@ -58,6 +61,7 @@ Map<String, dynamic> _$StudentExamWithAttemptsModelToJson(
   'classroomId': instance.classroomId,
   'classroomName': instance.classroomName,
   'latestScore': instance.latestScore,
+  'maxScore': instance.maxScore,
   'usedAttempts': instance.usedAttempts,
   'allowedAttempts': instance.allowedAttempts,
   'hasSubmitted': instance.hasSubmitted,

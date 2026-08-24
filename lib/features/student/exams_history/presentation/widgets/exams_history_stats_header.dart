@@ -12,13 +12,13 @@ class ExamsHistoryStatsHeader extends StatelessWidget {
   int get _totalAttempts => exams.fold(0, (s, e) => s + e.usedAttempts);
 
   double? get _averageScore {
-    final scores = <double>[];
+    final percents = <double>[];
     for (final exam in exams) {
-      final score = exam.bestAttempt?.finalScore;
-      if (score != null && score > 0) scores.add(score);
+      final percent = exam.latestScorePercent ?? exam.bestAttempt?.scorePercent;
+      if (percent != null && percent > 0) percents.add(percent);
     }
-    if (scores.isEmpty) return null;
-    return scores.reduce((a, b) => a + b) / scores.length;
+    if (percents.isEmpty) return null;
+    return percents.reduce((a, b) => a + b) / percents.length;
   }
 
   int get _masteredCount => exams

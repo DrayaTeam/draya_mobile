@@ -191,6 +191,7 @@ import "package:draya_mobile/core/services/local_notification_service.dart";
 import "package:draya_mobile/features/student/teachers/domain/usecases/get_payment_status_use_case.dart";
 import "package:draya_mobile/features/student/teachers/presentation/cubit/payment_verification_cubit.dart";
 import "package:draya_mobile/features/notifications/presentation/cubit/notifications_cubit.dart";
+import "package:draya_mobile/features/notifications/data/source/notifications_api_service.dart";
 
 import "package:draya_mobile/features/teacher/profile/domain/usecases/upload_teacher_profile_picture_use_case.dart";
 
@@ -876,10 +877,15 @@ Future<void> setupGetIt() async {
     () => LocalNotificationService(),
   );
 
+  getIt.registerLazySingleton<NotificationsApiService>(
+    () => NotificationsApiService(getIt<Dio>()),
+  );
+
   getIt.registerLazySingleton<NotificationsCubit>(
     () => NotificationsCubit(
       getIt<SignalRService>(),
       getIt<LocalNotificationService>(),
+      getIt<NotificationsApiService>(),
     ),
   );
 

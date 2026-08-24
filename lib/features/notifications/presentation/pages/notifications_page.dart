@@ -8,6 +8,7 @@ import "package:draya_mobile/features/notifications/presentation/widgets/notific
 import "package:draya_mobile/features/notifications/presentation/widgets/notifications_empty_state.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
+import "package:go_router/go_router.dart";
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
@@ -15,14 +16,45 @@ class NotificationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: getIt<NotificationsCubit>()..ensureConnected(),
+      value:
+          getIt<NotificationsCubit>()
+            ..ensureConnected()
+            ..refresh(),
       child: const _NotificationsView(),
     );
   }
 }
 
-class _NotificationsView extends StatelessWidget {
+class _NotificationsView extends StatefulWidget {
   const _NotificationsView();
+
+  @override
+  State<_NotificationsView> createState() => _NotificationsViewState();
+}
+
+class _NotificationsViewState extends State<_NotificationsView> {
+  final ScrollController _scrollController = ScrollController();
+  NotificationsCubit? _cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _cubit?.loadNextPage();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +62,12 @@ class _NotificationsView extends StatelessWidget {
       appBar: const CustomAppBar(title: "الإشعارات"),
       body: BlocBuilder<NotificationsCubit, NotificationsState>(
         builder: (context, state) {
+          _cubit = context.read<NotificationsCubit>();
+
+          if (state.isInitialLoading && state.notifications.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             child:
@@ -40,6 +78,7 @@ class _NotificationsView extends StatelessWidget {
                 : _NotificationsList(
                     key: const ValueKey("list"),
                     state: state,
+                    scrollController: _scrollController,
                   ),
           );
         },
@@ -50,8 +89,13 @@ class _NotificationsView extends StatelessWidget {
 
 class _NotificationsList extends StatelessWidget {
   final NotificationsState state;
+  final ScrollController scrollController;
 
-  const _NotificationsList({super.key, required this.state});
+  const _NotificationsList({
+    super.key,
+    required this.state,
+    required this.scrollController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -83,22 +127,43 @@ class _NotificationsList extends StatelessWidget {
         ),
         Expanded(
           child: ListView.separated(
+            controller: scrollController,
             padding: const EdgeInsets.fromLTRB(
               AppSizes.s16,
               AppSizes.s4,
               AppSizes.s16,
               AppSizes.s24,
             ),
-            itemCount: state.notifications.length,
+            itemCount:
+                state.notifications.length + (state.hasMore ? 1 : 0),
             separatorBuilder: (_, _) => const SizedBox(height: AppSizes.s10),
             itemBuilder: (context, index) {
+              if (index >= state.notifications.length) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: AppSizes.s16),
+                  child: Center(
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
+                );
+              }
+
               final notification = state.notifications[index];
 
               return FadeInUp(
                 delay: index * 60,
                 child: NotificationCard(
                   notification: notification,
-                  onTap: () => cubit.markAsRead(notification.id),
+                  onTap: () {
+                    cubit.markAsRead(notification.id);
+                    final link = notification.link;
+                    if (link != null && link.isNotEmpty) {
+                      GoRouter.of(context).push(link);
+                    }
+                  },
                   onDismiss: () => cubit.removeNotification(notification.id),
                 ),
               );

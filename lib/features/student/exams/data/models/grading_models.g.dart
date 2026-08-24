@@ -83,6 +83,7 @@ ExamResultModel _$ExamResultModelFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['submittedAt'] as String),
       finalScore: (json['finalScore'] as num?)?.toDouble() ?? 0.0,
+      maxScore: (json['maxScore'] as num?)?.toDouble(),
       needsTeacherReview: json['needsTeacherReview'] as bool? ?? false,
       answers:
           (json['answers'] as List<dynamic>?)
@@ -100,6 +101,7 @@ Map<String, dynamic> _$ExamResultModelToJson(ExamResultModel instance) =>
       'isSubmitted': instance.isSubmitted,
       'submittedAt': instance.submittedAt?.toIso8601String(),
       'finalScore': instance.finalScore,
+      'maxScore': instance.maxScore,
       'needsTeacherReview': instance.needsTeacherReview,
       'answers': instance.answers,
     };

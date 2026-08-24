@@ -140,6 +140,7 @@ class ExamAttemptResult {
   final bool isSubmitted;
   final DateTime? submittedAt;
   final double finalScore;
+  final double? maxScore;
   final bool needsTeacherReview;
   final List<GradedAnswer> answers;
 
@@ -149,14 +150,18 @@ class ExamAttemptResult {
     required this.isSubmitted,
     this.submittedAt,
     required this.finalScore,
+    this.maxScore,
     required this.needsTeacherReview,
     this.answers = const [],
   });
 
-  double get maxPossibleScore => answers.fold<double>(
-        0.0,
-        (sum, a) => sum + (a.gradingResult?.maxScore ?? 1.0),
-      );
+  double get maxPossibleScore {
+    if (maxScore != null && maxScore! > 0) return maxScore!;
+    return answers.fold<double>(
+      0.0,
+      (sum, a) => sum + (a.gradingResult?.maxScore ?? 1.0),
+    );
+  }
 
   double get scorePercentage =>
       maxPossibleScore > 0 ? (finalScore / maxPossibleScore) * 100 : 0.0;

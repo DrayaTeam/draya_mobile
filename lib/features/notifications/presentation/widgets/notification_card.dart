@@ -18,30 +18,26 @@ class NotificationCard extends StatelessWidget {
 
   IconData get _icon {
     switch (notification.type) {
-      case AppNotificationType.examGeneration:
-        return Icons.quiz_outlined;
-      case AppNotificationType.examGrading:
-        return Icons.grading_rounded;
-      case AppNotificationType.materialParsed:
-        return Icons.menu_book_outlined;
-      case AppNotificationType.reportGenerated:
-        return Icons.assessment_outlined;
-      case AppNotificationType.studentAtRisk:
+      case AppNotificationType.info:
+        return Icons.notifications_none_rounded;
+      case AppNotificationType.success:
+        return Icons.check_circle_outline;
+      case AppNotificationType.warning:
         return Icons.warning_amber_rounded;
+      case AppNotificationType.error:
+        return Icons.error_outline_rounded;
     }
   }
 
   Color get _accentColor {
     switch (notification.type) {
-      case AppNotificationType.examGeneration:
-        return AppColors.ai700;
-      case AppNotificationType.examGrading:
-        return AppColors.success;
-      case AppNotificationType.materialParsed:
-        return AppColors.ai500;
-      case AppNotificationType.reportGenerated:
+      case AppNotificationType.info:
         return AppColors.primary600;
-      case AppNotificationType.studentAtRisk:
+      case AppNotificationType.success:
+        return AppColors.success;
+      case AppNotificationType.warning:
+        return AppColors.amber;
+      case AppNotificationType.error:
         return AppColors.error;
     }
   }
