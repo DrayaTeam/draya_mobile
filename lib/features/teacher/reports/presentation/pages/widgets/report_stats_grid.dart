@@ -32,8 +32,7 @@ class ReportStatsGrid extends StatelessWidget {
       _StatItem(
         icon: Icons.timer_outlined,
         label: "متوسط زمن الاختبار",
-        value:
-            "${report.averageExamDurationMinutes.toStringAsFixed(1)} دقيقة",
+        value: "${report.averageExamDurationMinutes.toStringAsFixed(1)} دقيقة",
         color: AppColors.amber,
       ),
     ];

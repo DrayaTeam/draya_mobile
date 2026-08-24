@@ -56,6 +56,7 @@ import "package:draya_mobile/features/teacher/profile/domain/usecases/get_teache
 import "package:draya_mobile/features/teacher/profile/domain/usecases/update_teacher_profile_use_case.dart";
 import "package:draya_mobile/features/teacher/profile/domain/usecases/upload_teacher_profile_picture_use_case.dart";
 import "package:draya_mobile/features/teacher/profile/presentation/cubit/teacher_profile_cubit.dart";
+import "package:draya_mobile/features/teacher/reports/domain/usecases/approve_report_use_case.dart";
 import "package:draya_mobile/features/teacher/reports/domain/usecases/get_performance_report_use_case.dart";
 import "package:draya_mobile/features/teacher/reports/presentation/cubit/reports_cubit.dart";
 import "package:draya_mobile/features/teacher/sections/domain/usecases/create_section_use_case.dart";
@@ -276,6 +277,7 @@ Future<void> main() async {
         BlocProvider(
           create: (context) => ReportsCubit(
             getIt<GetPerformanceReportUseCase>(),
+            getIt<ApproveReportUseCase>(),
           ),
         ),
         BlocProvider(

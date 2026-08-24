@@ -21,4 +21,15 @@ class ReportsRepoImpl implements ReportsRepo {
       return ApiResult.failure(ErrorHandler.handle(e));
     }
   }
+
+  @override
+  Future<ApiResult<void>> approveReport({required String reportId}) async {
+    try {
+      final response = await _reportsApiService.approveReport(reportId);
+
+      return ApiResult.success(response);
+    } catch (e) {
+      return ApiResult.failure(ErrorHandler.handle(e));
+    }
+  }
 }

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ReportsState {
 
- Map<String, PerformanceReportModel> get reportsByStudentId; Set<String> get loadingStudentIds; Map<String, ApiErrorModel> get errorsByStudentId; ApiErrorModel? get apiErrorModel;
+ Map<String, PerformanceReportModel> get reportsByStudentId; Set<String> get loadingStudentIds; Map<String, ApiErrorModel> get errorsByStudentId; CubitStatus get approveReportStatus; ApiErrorModel? get apiErrorModel;
 /// Create a copy of ReportsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ReportsStateCopyWith<ReportsState> get copyWith => _$ReportsStateCopyWithImpl<R
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReportsState&&const DeepCollectionEquality().equals(other.reportsByStudentId, reportsByStudentId)&&const DeepCollectionEquality().equals(other.loadingStudentIds, loadingStudentIds)&&const DeepCollectionEquality().equals(other.errorsByStudentId, errorsByStudentId)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReportsState&&const DeepCollectionEquality().equals(other.reportsByStudentId, reportsByStudentId)&&const DeepCollectionEquality().equals(other.loadingStudentIds, loadingStudentIds)&&const DeepCollectionEquality().equals(other.errorsByStudentId, errorsByStudentId)&&(identical(other.approveReportStatus, approveReportStatus) || other.approveReportStatus == approveReportStatus)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(reportsByStudentId),const DeepCollectionEquality().hash(loadingStudentIds),const DeepCollectionEquality().hash(errorsByStudentId),apiErrorModel);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(reportsByStudentId),const DeepCollectionEquality().hash(loadingStudentIds),const DeepCollectionEquality().hash(errorsByStudentId),approveReportStatus,apiErrorModel);
 
 @override
 String toString() {
-  return 'ReportsState(reportsByStudentId: $reportsByStudentId, loadingStudentIds: $loadingStudentIds, errorsByStudentId: $errorsByStudentId, apiErrorModel: $apiErrorModel)';
+  return 'ReportsState(reportsByStudentId: $reportsByStudentId, loadingStudentIds: $loadingStudentIds, errorsByStudentId: $errorsByStudentId, approveReportStatus: $approveReportStatus, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ReportsStateCopyWith<$Res>  {
   factory $ReportsStateCopyWith(ReportsState value, $Res Function(ReportsState) _then) = _$ReportsStateCopyWithImpl;
 @useResult
 $Res call({
- Map<String, PerformanceReportModel> reportsByStudentId, Set<String> loadingStudentIds, Map<String, ApiErrorModel> errorsByStudentId, ApiErrorModel? apiErrorModel
+ Map<String, PerformanceReportModel> reportsByStudentId, Set<String> loadingStudentIds, Map<String, ApiErrorModel> errorsByStudentId, CubitStatus approveReportStatus, ApiErrorModel? apiErrorModel
 });
 
 
@@ -62,12 +62,13 @@ class _$ReportsStateCopyWithImpl<$Res>
 
 /// Create a copy of ReportsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? reportsByStudentId = null,Object? loadingStudentIds = null,Object? errorsByStudentId = null,Object? apiErrorModel = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? reportsByStudentId = null,Object? loadingStudentIds = null,Object? errorsByStudentId = null,Object? approveReportStatus = null,Object? apiErrorModel = freezed,}) {
   return _then(_self.copyWith(
 reportsByStudentId: null == reportsByStudentId ? _self.reportsByStudentId : reportsByStudentId // ignore: cast_nullable_to_non_nullable
 as Map<String, PerformanceReportModel>,loadingStudentIds: null == loadingStudentIds ? _self.loadingStudentIds : loadingStudentIds // ignore: cast_nullable_to_non_nullable
 as Set<String>,errorsByStudentId: null == errorsByStudentId ? _self.errorsByStudentId : errorsByStudentId // ignore: cast_nullable_to_non_nullable
-as Map<String, ApiErrorModel>,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
+as Map<String, ApiErrorModel>,approveReportStatus: null == approveReportStatus ? _self.approveReportStatus : approveReportStatus // ignore: cast_nullable_to_non_nullable
+as CubitStatus,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
 as ApiErrorModel?,
   ));
 }
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<String, PerformanceReportModel> reportsByStudentId,  Set<String> loadingStudentIds,  Map<String, ApiErrorModel> errorsByStudentId,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<String, PerformanceReportModel> reportsByStudentId,  Set<String> loadingStudentIds,  Map<String, ApiErrorModel> errorsByStudentId,  CubitStatus approveReportStatus,  ApiErrorModel? apiErrorModel)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ReportsState() when $default != null:
-return $default(_that.reportsByStudentId,_that.loadingStudentIds,_that.errorsByStudentId,_that.apiErrorModel);case _:
+return $default(_that.reportsByStudentId,_that.loadingStudentIds,_that.errorsByStudentId,_that.approveReportStatus,_that.apiErrorModel);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.reportsByStudentId,_that.loadingStudentIds,_that.errorsByS
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<String, PerformanceReportModel> reportsByStudentId,  Set<String> loadingStudentIds,  Map<String, ApiErrorModel> errorsByStudentId,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<String, PerformanceReportModel> reportsByStudentId,  Set<String> loadingStudentIds,  Map<String, ApiErrorModel> errorsByStudentId,  CubitStatus approveReportStatus,  ApiErrorModel? apiErrorModel)  $default,) {final _that = this;
 switch (_that) {
 case _ReportsState():
-return $default(_that.reportsByStudentId,_that.loadingStudentIds,_that.errorsByStudentId,_that.apiErrorModel);case _:
+return $default(_that.reportsByStudentId,_that.loadingStudentIds,_that.errorsByStudentId,_that.approveReportStatus,_that.apiErrorModel);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +195,10 @@ return $default(_that.reportsByStudentId,_that.loadingStudentIds,_that.errorsByS
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<String, PerformanceReportModel> reportsByStudentId,  Set<String> loadingStudentIds,  Map<String, ApiErrorModel> errorsByStudentId,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<String, PerformanceReportModel> reportsByStudentId,  Set<String> loadingStudentIds,  Map<String, ApiErrorModel> errorsByStudentId,  CubitStatus approveReportStatus,  ApiErrorModel? apiErrorModel)?  $default,) {final _that = this;
 switch (_that) {
 case _ReportsState() when $default != null:
-return $default(_that.reportsByStudentId,_that.loadingStudentIds,_that.errorsByStudentId,_that.apiErrorModel);case _:
+return $default(_that.reportsByStudentId,_that.loadingStudentIds,_that.errorsByStudentId,_that.approveReportStatus,_that.apiErrorModel);case _:
   return null;
 
 }
@@ -209,7 +210,7 @@ return $default(_that.reportsByStudentId,_that.loadingStudentIds,_that.errorsByS
 
 
 class _ReportsState implements ReportsState {
-  const _ReportsState({final  Map<String, PerformanceReportModel> reportsByStudentId = const {}, final  Set<String> loadingStudentIds = const {}, final  Map<String, ApiErrorModel> errorsByStudentId = const {}, this.apiErrorModel}): _reportsByStudentId = reportsByStudentId,_loadingStudentIds = loadingStudentIds,_errorsByStudentId = errorsByStudentId;
+  const _ReportsState({final  Map<String, PerformanceReportModel> reportsByStudentId = const {}, final  Set<String> loadingStudentIds = const {}, final  Map<String, ApiErrorModel> errorsByStudentId = const {}, this.approveReportStatus = CubitStatus.initial, this.apiErrorModel}): _reportsByStudentId = reportsByStudentId,_loadingStudentIds = loadingStudentIds,_errorsByStudentId = errorsByStudentId;
   
 
  final  Map<String, PerformanceReportModel> _reportsByStudentId;
@@ -233,6 +234,7 @@ class _ReportsState implements ReportsState {
   return EqualUnmodifiableMapView(_errorsByStudentId);
 }
 
+@override@JsonKey() final  CubitStatus approveReportStatus;
 @override final  ApiErrorModel? apiErrorModel;
 
 /// Create a copy of ReportsState
@@ -245,16 +247,16 @@ _$ReportsStateCopyWith<_ReportsState> get copyWith => __$ReportsStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReportsState&&const DeepCollectionEquality().equals(other._reportsByStudentId, _reportsByStudentId)&&const DeepCollectionEquality().equals(other._loadingStudentIds, _loadingStudentIds)&&const DeepCollectionEquality().equals(other._errorsByStudentId, _errorsByStudentId)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReportsState&&const DeepCollectionEquality().equals(other._reportsByStudentId, _reportsByStudentId)&&const DeepCollectionEquality().equals(other._loadingStudentIds, _loadingStudentIds)&&const DeepCollectionEquality().equals(other._errorsByStudentId, _errorsByStudentId)&&(identical(other.approveReportStatus, approveReportStatus) || other.approveReportStatus == approveReportStatus)&&(identical(other.apiErrorModel, apiErrorModel) || other.apiErrorModel == apiErrorModel));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_reportsByStudentId),const DeepCollectionEquality().hash(_loadingStudentIds),const DeepCollectionEquality().hash(_errorsByStudentId),apiErrorModel);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_reportsByStudentId),const DeepCollectionEquality().hash(_loadingStudentIds),const DeepCollectionEquality().hash(_errorsByStudentId),approveReportStatus,apiErrorModel);
 
 @override
 String toString() {
-  return 'ReportsState(reportsByStudentId: $reportsByStudentId, loadingStudentIds: $loadingStudentIds, errorsByStudentId: $errorsByStudentId, apiErrorModel: $apiErrorModel)';
+  return 'ReportsState(reportsByStudentId: $reportsByStudentId, loadingStudentIds: $loadingStudentIds, errorsByStudentId: $errorsByStudentId, approveReportStatus: $approveReportStatus, apiErrorModel: $apiErrorModel)';
 }
 
 
@@ -265,7 +267,7 @@ abstract mixin class _$ReportsStateCopyWith<$Res> implements $ReportsStateCopyWi
   factory _$ReportsStateCopyWith(_ReportsState value, $Res Function(_ReportsState) _then) = __$ReportsStateCopyWithImpl;
 @override @useResult
 $Res call({
- Map<String, PerformanceReportModel> reportsByStudentId, Set<String> loadingStudentIds, Map<String, ApiErrorModel> errorsByStudentId, ApiErrorModel? apiErrorModel
+ Map<String, PerformanceReportModel> reportsByStudentId, Set<String> loadingStudentIds, Map<String, ApiErrorModel> errorsByStudentId, CubitStatus approveReportStatus, ApiErrorModel? apiErrorModel
 });
 
 
@@ -282,12 +284,13 @@ class __$ReportsStateCopyWithImpl<$Res>
 
 /// Create a copy of ReportsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? reportsByStudentId = null,Object? loadingStudentIds = null,Object? errorsByStudentId = null,Object? apiErrorModel = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? reportsByStudentId = null,Object? loadingStudentIds = null,Object? errorsByStudentId = null,Object? approveReportStatus = null,Object? apiErrorModel = freezed,}) {
   return _then(_ReportsState(
 reportsByStudentId: null == reportsByStudentId ? _self._reportsByStudentId : reportsByStudentId // ignore: cast_nullable_to_non_nullable
 as Map<String, PerformanceReportModel>,loadingStudentIds: null == loadingStudentIds ? _self._loadingStudentIds : loadingStudentIds // ignore: cast_nullable_to_non_nullable
 as Set<String>,errorsByStudentId: null == errorsByStudentId ? _self._errorsByStudentId : errorsByStudentId // ignore: cast_nullable_to_non_nullable
-as Map<String, ApiErrorModel>,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
+as Map<String, ApiErrorModel>,approveReportStatus: null == approveReportStatus ? _self.approveReportStatus : approveReportStatus // ignore: cast_nullable_to_non_nullable
+as CubitStatus,apiErrorModel: freezed == apiErrorModel ? _self.apiErrorModel : apiErrorModel // ignore: cast_nullable_to_non_nullable
 as ApiErrorModel?,
   ));
 }

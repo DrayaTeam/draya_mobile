@@ -41,6 +41,7 @@ import "package:draya_mobile/features/teacher/materials/domain/usecases/delete_m
 import "package:draya_mobile/features/teacher/reports/data/repos/reports_repo_impl.dart";
 import "package:draya_mobile/features/teacher/reports/data/sources/reports_api_service.dart";
 import "package:draya_mobile/features/teacher/reports/domain/repos/reports_repo.dart";
+import "package:draya_mobile/features/teacher/reports/domain/usecases/approve_report_use_case.dart";
 import "package:draya_mobile/features/teacher/reports/domain/usecases/get_performance_report_use_case.dart";
 import "package:draya_mobile/features/teacher/students_grades/data/repos/students_grades_repo_impl.dart";
 import "package:draya_mobile/features/teacher/students_grades/data/source/students_grades_remote_data_source.dart";
@@ -900,6 +901,10 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<GetPerformanceReportUseCase>(
     () => GetPerformanceReportUseCase(getIt<ReportsRepo>()),
+  );
+
+  getIt.registerLazySingleton<ApproveReportUseCase>(
+    () => ApproveReportUseCase(getIt<ReportsRepo>()),
   );
 
   // teacher students grades
