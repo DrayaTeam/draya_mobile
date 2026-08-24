@@ -71,7 +71,7 @@ dev_dependencies:
   # for updating your Flutter app's launcher icon.
   flutter_launcher_icons: ^0.14.4
   #Customize Flutter's default white native splash screen
-  flutter_native_splash: ^2.4.7
+  flutter_native_splash: ^2.4.8
   #A build system for Dart code generation and modular compilation
   build_runner: ^2.10.4
   # Code generator (mainly used with cubit & retrofit)
@@ -93,6 +93,8 @@ flutter:
     # - assets/images/
     - assets/svgs/
     - assets/images/
+    - assets/icon/
+    - assets/splash/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
