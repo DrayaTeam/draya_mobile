@@ -4,10 +4,12 @@ import "package:draya_mobile/core/helpers/app_token_helper.dart";
 import "package:draya_mobile/core/networking/api_error_handler.dart";
 import "package:draya_mobile/core/networking/api_result.dart";
 import "package:draya_mobile/features/auth/data/models/auth_response_model.dart";
+import "package:draya_mobile/features/auth/data/models/confirm_password_reset_model.dart";
 import "package:draya_mobile/features/auth/data/models/login_request_model.dart";
 import "package:draya_mobile/features/auth/data/models/refresh_token_request_model.dart";
 import "package:draya_mobile/features/auth/data/models/register_student_request_model.dart";
 import "package:draya_mobile/features/auth/data/models/register_teacher_request_model.dart";
+import "package:draya_mobile/features/auth/data/models/request_password_reset_model.dart";
 import "package:draya_mobile/features/auth/data/models/user_profile_model.dart";
 import "package:draya_mobile/features/auth/data/source/auth_api_service.dart";
 import "package:draya_mobile/features/auth/domain/repos/auth_repo.dart";
@@ -109,6 +111,36 @@ class AuthRepositoryImpl implements AuthRepo {
         AppSharedPrefKeys.userRole,
         role,
       );
+    }
+  }
+
+  @override
+  Future<ApiResult<void>> requestPasswordReset({
+    required RequestPasswordResetModel requestPasswordResetModel,
+  }) async {
+    try {
+      final response = await _authApiService.requestPasswordReset(
+        requestPasswordResetModel,
+      );
+
+      return ApiResult.success(response);
+    } catch (e) {
+      return ApiResult.failure(ErrorHandler.handle(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<void>> confirmPasswordReset({
+    required ConfirmPasswordResetModel confirmPasswordResetModel,
+  }) async {
+    try {
+      final response = await _authApiService.confirmPasswordReset(
+        confirmPasswordResetModel,
+      );
+
+      return ApiResult.success(response);
+    } catch (e) {
+      return ApiResult.failure(ErrorHandler.handle(e));
     }
   }
 }

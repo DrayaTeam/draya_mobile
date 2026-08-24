@@ -8,7 +8,8 @@ part "signin_state.freezed.dart";
 @freezed
 abstract class SigninState with _$SigninState {
   const factory SigninState({
-    @Default(CubitStatus.initial) CubitStatus status,
+    @Default(CubitStatus.initial) CubitStatus signinStatus,
+    @Default(CubitStatus.initial) CubitStatus requestPasswordResetStatus,
     @Default(false) bool rememberMe,
     AuthEntity? authEntity,
     ApiErrorModel? apiErrorModel,

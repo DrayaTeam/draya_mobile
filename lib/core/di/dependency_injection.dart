@@ -2,6 +2,8 @@ import "package:dio/dio.dart";
 import "package:draya_mobile/core/networking/dio_factory.dart";
 import "package:draya_mobile/core/signalr/signalr_service.dart";
 import "package:draya_mobile/core/signalr/signalr_client_service.dart";
+import "package:draya_mobile/features/auth/domain/usecases/confirm_password_reset_use_case.dart";
+import "package:draya_mobile/features/auth/domain/usecases/request_password_reset_use_case.dart";
 import "package:draya_mobile/features/teacher/classrooms/domain/usecases/delete_classroom_student_use_case.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart";
 import "package:draya_mobile/features/teacher/exam_generation/data/source/teacher_exam_remote_data_source.dart";
@@ -222,6 +224,14 @@ Future<void> setupGetIt() async {
 
   getIt.registerLazySingleton<GetCurrentUserProfileUseCase>(
     () => GetCurrentUserProfileUseCase(getIt<AuthRepo>()),
+  );
+
+  getIt.registerLazySingleton<RequestPasswordResetUseCase>(
+    () => RequestPasswordResetUseCase(getIt<AuthRepo>()),
+  );
+
+  getIt.registerLazySingleton<ConfirmPasswordResetUseCase>(
+    () => ConfirmPasswordResetUseCase(getIt<AuthRepo>()),
   );
 
   // student profile
