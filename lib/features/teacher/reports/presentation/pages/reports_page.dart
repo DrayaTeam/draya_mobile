@@ -1,9 +1,12 @@
 import "package:draya_mobile/core/enums/cubit_status.dart";
+import "package:draya_mobile/core/helpers/app_dialog_helper.dart";
 import "package:draya_mobile/core/theme/app_colors.dart";
 import "package:draya_mobile/core/theme/app_sizes.dart";
 import "package:draya_mobile/core/theme/app_text_styles.dart";
 import "package:draya_mobile/core/view_models/drawer_model.dart";
 import "package:draya_mobile/core/widgets/app_drawer.dart";
+import "package:draya_mobile/core/widgets/app_elevated_button.dart";
+import "package:draya_mobile/core/widgets/app_error_dialog.dart";
 import "package:draya_mobile/core/widgets/custom_app_bar.dart";
 import "package:draya_mobile/features/teacher/classrooms/data/models/classroom_model.dart";
 import "package:draya_mobile/features/teacher/classrooms/presentation/cubit/classroom_cubit.dart";
@@ -146,9 +149,9 @@ class _ReportsPageState extends State<ReportsPage> {
                       return _buildErrorState(
                         message: "حدث خطأ عند استرجاع طلاب الفصل",
                         onRetry: () {
-                          context
-                              .read<ClassroomStudentsCubit>()
-                              .getStudents(_selectedClassroomId!);
+                          context.read<ClassroomStudentsCubit>().getStudents(
+                            _selectedClassroomId!,
+                          );
                         },
                       );
                     }
@@ -271,8 +274,9 @@ class _ReportsPageState extends State<ReportsPage> {
                   color: isSelected ? AppColors.primary700 : AppColors.surface,
                   borderRadius: BorderRadius.circular(999),
                   border: Border.all(
-                    color:
-                        isSelected ? AppColors.primary700 : AppColors.borderStrong,
+                    color: isSelected
+                        ? AppColors.primary700
+                        : AppColors.borderStrong,
                     width: 1.2,
                   ),
                   boxShadow: isSelected
@@ -291,7 +295,9 @@ class _ReportsPageState extends State<ReportsPage> {
                     Icon(
                       Icons.class_outlined,
                       size: 16,
-                      color: isSelected ? Colors.white : AppColors.textSecondary,
+                      color: isSelected
+                          ? Colors.white
+                          : AppColors.textSecondary,
                     ),
                     const SizedBox(width: AppSizes.s6),
                     Text(
@@ -651,6 +657,40 @@ class _ReportsPageState extends State<ReportsPage> {
           const SizedBox(height: AppSizes.s10),
           WeakTopicsList(topics: report.weakTopics),
         ],
+
+        BlocConsumer<ReportsCubit, ReportsState>(
+          listener: (BuildContext context, ReportsState state) {
+            switch (state.approveReportStatus) {
+              case CubitStatus.success:
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("تم ارسال التقرير"),
+                  ),
+                );
+                break;
+              case CubitStatus.error:
+                AppDialogHelper.display(
+                  context,
+                  AppErrorDialog(apiErrorModel: state.apiErrorModel!),
+                );
+                break;
+              default:
+                break;
+            }
+          },
+          builder: (BuildContext context, ReportsState state) {
+            return AppElevatedButton(
+              onPressed: () {
+                context.read<ReportsCubit>().approveReport(
+                  reportId: report.id,
+                );
+              },
+              label: state.approveReportStatus == CubitStatus.loading
+                  ? "جار الارسال..."
+                  : "ارسال التقرير الى اولياء الامور",
+            );
+          },
+        ),
       ],
     );
   }

@@ -14,4 +14,9 @@ abstract class ReportsApiService {
   Future<PerformanceReportModel> getPerformanceReport(
     @Path(ReportsApiConstants.studentId) String studentId,
   );
+
+  @POST(ReportsApiConstants.approveReport)
+  Future<void> approveReport(
+    @Path(ReportsApiConstants.reportId) String reportId,
+  );
 }

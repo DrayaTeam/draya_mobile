@@ -1,13 +1,17 @@
+import "package:draya_mobile/core/enums/cubit_status.dart";
 import "package:draya_mobile/core/networking/api_result.dart";
+import "package:draya_mobile/features/teacher/reports/domain/usecases/approve_report_use_case.dart";
 import "package:draya_mobile/features/teacher/reports/domain/usecases/get_performance_report_use_case.dart";
 import "package:draya_mobile/features/teacher/reports/presentation/cubit/reports_state.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 
 class ReportsCubit extends Cubit<ReportsState> {
   final GetPerformanceReportUseCase _getPerformanceReportUseCase;
+  final ApproveReportUseCase _approveReportUseCase;
 
   ReportsCubit(
     this._getPerformanceReportUseCase,
+    this._approveReportUseCase,
   ) : super(const ReportsState());
 
   Future<void> getPerformanceReport({
@@ -26,6 +30,7 @@ class ReportsCubit extends Cubit<ReportsState> {
         errorsByStudentId: {
           ...state.errorsByStudentId,
         }..remove(studentId),
+        approveReportStatus: CubitStatus.initial,
       ),
     );
 
@@ -46,6 +51,7 @@ class ReportsCubit extends Cubit<ReportsState> {
               studentId: performanceReportModel,
             },
             loadingStudentIds: loadingIds,
+            approveReportStatus: CubitStatus.initial,
           ),
         );
       },
@@ -61,6 +67,7 @@ class ReportsCubit extends Cubit<ReportsState> {
               ...state.errorsByStudentId,
               studentId: apiErrorModel,
             },
+            approveReportStatus: CubitStatus.initial,
           ),
         );
       },
@@ -69,5 +76,33 @@ class ReportsCubit extends Cubit<ReportsState> {
 
   void clearReports() {
     emit(const ReportsState());
+  }
+
+  Future<void> approveReport({required String reportId}) async {
+    emit(
+      state.copyWith(
+        approveReportStatus: CubitStatus.loading,
+      ),
+    );
+
+    final result = await _approveReportUseCase(params: reportId);
+
+    result.when(
+      success: (nothing) {
+        emit(
+          state.copyWith(
+            approveReportStatus: CubitStatus.success,
+          ),
+        );
+      },
+      failure: (apiErrorModel) {
+        emit(
+          state.copyWith(
+            approveReportStatus: CubitStatus.error,
+            apiErrorModel: apiErrorModel,
+          ),
+        );
+      },
+    );
   }
 }

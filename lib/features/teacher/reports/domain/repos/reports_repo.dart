@@ -5,4 +5,6 @@ abstract interface class ReportsRepo {
   Future<ApiResult<PerformanceReportModel>> getPerformanceReport({
     required String studentId,
   });
+
+  Future<ApiResult<void>> approveReport({required String reportId});
 }
