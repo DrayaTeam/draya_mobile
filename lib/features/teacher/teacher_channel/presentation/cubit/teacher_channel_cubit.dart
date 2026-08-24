@@ -1,3 +1,5 @@
+import "dart:io";
+
 import "package:draya_mobile/core/enums/cubit_status.dart";
 import "package:draya_mobile/core/helpers/app_token_helper.dart";
 import "package:draya_mobile/core/networking/api_constants.dart";
@@ -152,6 +154,7 @@ class TeacherChannelCubit extends Cubit<TeacherChannelState> {
   Future<void> createQuestion({
     required String classroomId,
     required String content,
+    File? image,
   }) async {
     if (content.trim().isEmpty) return _validationError(isQuestion: true);
     emit(
@@ -164,6 +167,7 @@ class TeacherChannelCubit extends Cubit<TeacherChannelState> {
       params: CreateQuestionParams(
         classroomId: classroomId,
         content: content.trim(),
+        image: image,
       ),
     );
     result.when(
@@ -229,6 +233,7 @@ class TeacherChannelCubit extends Cubit<TeacherChannelState> {
     required String classroomId,
     required String questionId,
     required String content,
+    File? image,
   }) async {
     if (content.trim().isEmpty) return _validationError(isQuestion: false);
     emit(
@@ -242,6 +247,7 @@ class TeacherChannelCubit extends Cubit<TeacherChannelState> {
         classroomId: classroomId,
         questionId: questionId,
         content: content.trim(),
+        image: image,
       ),
     );
     result.when(

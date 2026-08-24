@@ -2,7 +2,11 @@ class ReplyEntity {
   final String id;
   final String questionId;
   final String authorId;
+  final String? authorName;
+  final String? authorRole;
+  final String? authorProfilePictureUrl;
   final String content;
+  final String? imageUrl;
   final DateTime createdAt;
   final bool isTeacherAnswer;
   final bool isAuthor;
@@ -11,7 +15,11 @@ class ReplyEntity {
     required this.id,
     required this.questionId,
     required this.authorId,
+    this.authorName,
+    this.authorRole,
+    this.authorProfilePictureUrl,
     required this.content,
+    this.imageUrl,
     required this.createdAt,
     required this.isTeacherAnswer,
     required this.isAuthor,

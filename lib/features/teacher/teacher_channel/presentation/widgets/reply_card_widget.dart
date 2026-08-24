@@ -1,6 +1,7 @@
+import "package:flutter/material.dart";
 import "package:draya_mobile/core/theme/app_colors.dart";
 import "package:draya_mobile/core/theme/app_text_styles.dart";
-import "package:flutter/material.dart";
+import "package:draya_mobile/core/widgets/tappable_network_image.dart";
 import "package:draya_mobile/features/teacher/teacher_channel/domain/entity/reply_entity.dart";
 import "package:intl/intl.dart";
 
@@ -53,11 +54,8 @@ class ReplyCardWidget extends StatelessWidget {
                           colors: isTeacher
                               ? [AppColors.primary700, AppColors.primary500]
                               : reply.isAuthor
-                              ? [AppColors.primary600, AppColors.primary400]
-                              : [
-                                  AppColors.backgroundMuted,
-                                  AppColors.borderStrong,
-                                ],
+                                  ? [AppColors.primary600, AppColors.primary400]
+                                  : [AppColors.backgroundMuted, AppColors.borderStrong],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -67,8 +65,8 @@ class ReplyCardWidget extends StatelessWidget {
                         isTeacher
                             ? Icons.school_rounded
                             : reply.isAuthor
-                            ? Icons.person_rounded
-                            : Icons.account_circle_outlined,
+                                ? Icons.person_rounded
+                                : Icons.account_circle_outlined,
                         size: 18,
                         color: isTeacher || reply.isAuthor
                             ? Colors.white
@@ -82,9 +80,7 @@ class ReplyCardWidget extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              isTeacher
-                                  ? "المدرس"
-                                  : (reply.isAuthor ? "أنت" : "طالب"),
+                              isTeacher ? "المدرس" : (reply.isAuthor ? "أنت" : "طالب"),
                               style: AppTextStyles.label.copyWith(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
@@ -110,10 +106,7 @@ class ReplyCardWidget extends StatelessWidget {
                 ),
                 if (isTeacher)
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 3,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: AppColors.primary,
                       borderRadius: BorderRadius.circular(12),
@@ -145,14 +138,28 @@ class ReplyCardWidget extends StatelessWidget {
             // Reply Content
             Padding(
               padding: const EdgeInsets.only(right: 42),
-              child: Text(
-                reply.content,
-                style: AppTextStyles.body.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textPrimary,
-                  height: 1.55,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    reply.content,
+                    style: AppTextStyles.body.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textPrimary,
+                      height: 1.55,
+                    ),
+                  ),
+                  if (reply.imageUrl != null &&
+                      reply.imageUrl!.trim().isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    TappableNetworkImage(
+                      imageUrl: reply.imageUrl!,
+                      width: double.infinity,
+                      height: 170,
+                    ),
+                  ],
+                ],
               ),
             ),
           ],
@@ -161,3 +168,4 @@ class ReplyCardWidget extends StatelessWidget {
     );
   }
 }
+

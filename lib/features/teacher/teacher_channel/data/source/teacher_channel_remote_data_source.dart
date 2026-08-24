@@ -31,6 +31,14 @@ abstract class TeacherChannelRemoteDataSource {
     @Body() CreateQuestionRequestModel request,
   );
 
+  @POST(TeacherChannelApiConstants.createQuestionWithPhoto)
+  @MultiPart()
+  Future<QuestionModel> createQuestionWithPhoto(
+    @Path("classroomId") String classroomId,
+    @Part(name: "content") String content,
+    @Part(name: "file") MultipartFile file,
+  );
+
   @GET(TeacherChannelApiConstants.questionById)
   Future<QuestionDetailsModel> getQuestionDetails(
     @Path("classroomId") String classroomId,
@@ -42,6 +50,15 @@ abstract class TeacherChannelRemoteDataSource {
     @Path("classroomId") String classroomId,
     @Path("questionId") String questionId,
     @Body() CreateReplyRequestModel request,
+  );
+
+  @POST(TeacherChannelApiConstants.createReplyWithPhoto)
+  @MultiPart()
+  Future<ReplyModel> createReplyWithPhoto(
+    @Path("classroomId") String classroomId,
+    @Path("questionId") String questionId,
+    @Part(name: "content") String content,
+    @Part(name: "file") MultipartFile file,
   );
 
   @POST(TeacherChannelApiConstants.voteQuestion)

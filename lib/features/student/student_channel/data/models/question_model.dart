@@ -8,7 +8,11 @@ class QuestionModel {
   final String id;
   final String classroomId;
   final String authorId;
+  final String? authorName;
+  final String? authorRole;
+  final String? authorProfilePictureUrl;
   final String content;
+  final String? imageUrl;
   final DateTime createdAt;
   final int voteCount;
   final int replyCount;
@@ -20,7 +24,11 @@ class QuestionModel {
     required this.id,
     required this.classroomId,
     required this.authorId,
+    this.authorName,
+    this.authorRole,
+    this.authorProfilePictureUrl,
     required this.content,
+    this.imageUrl,
     required this.createdAt,
     required this.voteCount,
     required this.replyCount,
@@ -40,7 +48,11 @@ extension QuestionModelExtension on QuestionModel {
     id: id,
     classroomId: classroomId,
     authorId: authorId,
+    authorName: authorName,
+    authorRole: authorRole,
+    authorProfilePictureUrl: authorProfilePictureUrl,
     content: content,
+    imageUrl: imageUrl,
     createdAt: createdAt,
     voteCount: voteCount,
     replyCount: replyCount,

@@ -1,6 +1,7 @@
+import "package:flutter/material.dart";
 import "package:draya_mobile/core/theme/app_colors.dart";
 import "package:draya_mobile/core/theme/app_text_styles.dart";
-import "package:flutter/material.dart";
+import "package:draya_mobile/core/widgets/tappable_network_image.dart";
 import "package:draya_mobile/features/teacher/teacher_channel/domain/entity/question_entity.dart";
 import "package:intl/intl.dart";
 
@@ -71,10 +72,7 @@ class QuestionCardWidget extends StatelessWidget {
                             gradient: LinearGradient(
                               colors: question.isAuthor
                                   ? [AppColors.primary600, AppColors.primary400]
-                                  : [
-                                      AppColors.backgroundMuted,
-                                      AppColors.borderStrong,
-                                    ],
+                                  : [AppColors.backgroundMuted, AppColors.borderStrong],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
@@ -85,9 +83,7 @@ class QuestionCardWidget extends StatelessWidget {
                                 ? Icons.person_rounded
                                 : Icons.account_circle_outlined,
                             size: 20,
-                            color: question.isAuthor
-                                ? Colors.white
-                                : AppColors.foregroundMuted,
+                            color: question.isAuthor ? Colors.white : AppColors.foregroundMuted,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -107,16 +103,11 @@ class QuestionCardWidget extends StatelessWidget {
                                 if (question.isAuthor) ...[
                                   const SizedBox(width: 6),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 6,
-                                      vertical: 1,
-                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                                     decoration: BoxDecoration(
                                       color: AppColors.primary50,
                                       borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(
-                                        color: AppColors.primary200,
-                                      ),
+                                      border: Border.all(color: AppColors.primary200),
                                     ),
                                     child: Text(
                                       "سؤالي",
@@ -136,10 +127,7 @@ class QuestionCardWidget extends StatelessWidget {
                     ),
                     if (question.hasTeacherAnswer)
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
                           color: AppColors.primary50,
                           borderRadius: BorderRadius.circular(20),
@@ -181,6 +169,15 @@ class QuestionCardWidget extends StatelessWidget {
                     height: 1.5,
                   ),
                 ),
+                if (question.imageUrl != null &&
+                    question.imageUrl!.trim().isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  TappableNetworkImage(
+                    imageUrl: question.imageUrl!,
+                    width: double.infinity,
+                    height: 160,
+                  ),
+                ],
                 const SizedBox(height: 14),
 
                 // Bottom actions row
@@ -197,10 +194,7 @@ class QuestionCardWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 200),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                               decoration: BoxDecoration(
                                 color: question.hasVoted
                                     ? AppColors.primary50
@@ -221,10 +215,7 @@ class QuestionCardWidget extends StatelessWidget {
                                       height: 14,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                              AppColors.primary,
-                                            ),
+                                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                                       ),
                                     )
                                   else
@@ -242,9 +233,8 @@ class QuestionCardWidget extends StatelessWidget {
                                     question.voteCount.toString(),
                                     style: AppTextStyles.label.copyWith(
                                       fontSize: 13,
-                                      fontWeight: question.hasVoted
-                                          ? FontWeight.w800
-                                          : FontWeight.w600,
+                                      fontWeight:
+                                          question.hasVoted ? FontWeight.w800 : FontWeight.w600,
                                       color: question.hasVoted
                                           ? AppColors.primary
                                           : AppColors.foregroundMuted,
@@ -259,10 +249,7 @@ class QuestionCardWidget extends StatelessWidget {
 
                         // Reply Count Pill
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
                             color: AppColors.backgroundSecondary,
                             borderRadius: BorderRadius.circular(20),
@@ -307,3 +294,4 @@ class QuestionCardWidget extends StatelessWidget {
     );
   }
 }
+

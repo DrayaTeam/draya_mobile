@@ -1,10 +1,13 @@
+import "dart:io";
+
+import "package:flutter/material.dart";
 import "package:draya_mobile/core/theme/app_colors.dart";
 import "package:draya_mobile/core/theme/app_text_styles.dart";
-import "package:flutter/material.dart";
+import "package:draya_mobile/core/widgets/question_image_attachment.dart";
 
 class AddReplyDialog extends StatefulWidget {
   final String questionId;
-  final ValueChanged<String> onSubmit;
+  final void Function(String content, File? image) onSubmit;
   final bool isLoading;
 
   const AddReplyDialog({
@@ -21,6 +24,7 @@ class AddReplyDialog extends StatefulWidget {
 class _AddReplyDialogState extends State<AddReplyDialog> {
   late final TextEditingController _controller;
   bool _hasText = false;
+  File? _attachedImage;
 
   @override
   void initState() {
@@ -109,6 +113,14 @@ class _AddReplyDialogState extends State<AddReplyDialog> {
                 ),
               ),
             ),
+            const SizedBox(height: 12),
+
+            // Image attachment section
+            QuestionImageAttachment(
+              enabled: !widget.isLoading,
+              hint: "إرفاق صورة (اختياري)",
+              onImageChanged: (image) => setState(() => _attachedImage = image),
+            ),
             const SizedBox(height: 20),
 
             // Action Buttons
@@ -116,9 +128,7 @@ class _AddReplyDialogState extends State<AddReplyDialog> {
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: widget.isLoading
-                        ? null
-                        : () => Navigator.pop(context),
+                    onPressed: widget.isLoading ? null : () => Navigator.pop(context),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.foregroundMuted,
                       side: const BorderSide(color: AppColors.borderStrong),
@@ -140,7 +150,7 @@ class _AddReplyDialogState extends State<AddReplyDialog> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: (!widget.isLoading && _hasText)
-                        ? () => widget.onSubmit(_controller.text.trim())
+                        ? () => widget.onSubmit(_controller.text.trim(), _attachedImage)
                         : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
@@ -159,13 +169,11 @@ class _AddReplyDialogState extends State<AddReplyDialog> {
                             height: 18,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
-                              ),
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           )
                         : Text(
-                            "نشر الرد",
+                            _attachedImage != null ? "رفع ونشر الرد" : "نشر الرد",
                             style: AppTextStyles.button.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,

@@ -1,9 +1,12 @@
+import "dart:io";
+
 import "package:flutter/material.dart";
 import "package:draya_mobile/core/theme/app_colors.dart";
 import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/core/widgets/question_image_attachment.dart";
 
 class AddQuestionBottomSheet extends StatefulWidget {
-  final ValueChanged<String> onSubmit;
+  final void Function(String content, File? image) onSubmit;
   final bool isLoading;
 
   const AddQuestionBottomSheet({
@@ -19,6 +22,7 @@ class AddQuestionBottomSheet extends StatefulWidget {
 class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
   late final TextEditingController _controller;
   bool _hasText = false;
+  File? _attachedImage;
 
   @override
   void initState() {
@@ -37,6 +41,8 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
     _controller.dispose();
     super.dispose();
   }
+
+  bool get _canSubmit => !widget.isLoading && _hasText;
 
   @override
   Widget build(BuildContext context) {
@@ -142,6 +148,14 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
               ),
             ),
           ),
+          const SizedBox(height: 12),
+
+          // Image attachment section
+          QuestionImageAttachment(
+            enabled: !widget.isLoading,
+            hint: "إرفاق صورة توضيحية (اختياري)",
+            onImageChanged: (image) => setState(() => _attachedImage = image),
+          ),
           const SizedBox(height: 20),
 
           // Submit Button
@@ -149,9 +163,8 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
             width: double.infinity,
             height: 50,
             child: ElevatedButton.icon(
-              onPressed: (!widget.isLoading && _hasText)
-                  ? () => widget.onSubmit(_controller.text.trim())
-                  : null,
+              onPressed:
+                  _canSubmit ? () => widget.onSubmit(_controller.text.trim(), _attachedImage) : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
@@ -173,7 +186,9 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
                     )
                   : const Icon(Icons.send_rounded, size: 20),
               label: Text(
-                widget.isLoading ? "جاري النشر..." : "نشر السؤال",
+                widget.isLoading
+                    ? (_attachedImage != null ? "جاري رفع الصورة والنشر..." : "جاري النشر...")
+                    : "نشر السؤال",
                 style: AppTextStyles.button.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
@@ -186,4 +201,3 @@ class _AddQuestionBottomSheetState extends State<AddQuestionBottomSheet> {
     );
   }
 }
-

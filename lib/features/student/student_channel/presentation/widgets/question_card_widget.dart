@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:draya_mobile/core/theme/app_colors.dart";
 import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/core/widgets/tappable_network_image.dart";
 import "package:draya_mobile/features/student/student_channel/domain/entity/question_entity.dart";
 import "package:intl/intl.dart";
 
@@ -168,6 +169,15 @@ class QuestionCardWidget extends StatelessWidget {
                     height: 1.5,
                   ),
                 ),
+                if (question.imageUrl != null &&
+                    question.imageUrl!.trim().isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  TappableNetworkImage(
+                    imageUrl: question.imageUrl!,
+                    width: double.infinity,
+                    height: 160,
+                  ),
+                ],
                 const SizedBox(height: 14),
 
                 // Bottom actions row

@@ -494,10 +494,11 @@ class _TeacherChannelContentState extends State<_TeacherChannelContent> {
               builder: (_, state) {
                 return AddQuestionBottomSheet(
                   isLoading: state.createQuestionStatus == CubitStatus.loading,
-                  onSubmit: (content) {
+                  onSubmit: (content, image) {
                     cubit.createQuestion(
                       classroomId: classroomId,
                       content: content,
+                      image: image,
                     );
                   },
                 );

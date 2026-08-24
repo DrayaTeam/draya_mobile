@@ -2,6 +2,7 @@ import "package:draya_mobile/core/enums/cubit_status.dart";
 import "package:draya_mobile/core/theme/app_colors.dart";
 import "package:draya_mobile/core/theme/app_text_styles.dart";
 import "package:draya_mobile/core/widgets/custom_app_bar.dart";
+import "package:draya_mobile/core/widgets/tappable_network_image.dart";
 import "package:draya_mobile/features/student/student_channel/presentation/cubit/student_channel_cubit.dart";
 import "package:draya_mobile/features/student/student_channel/presentation/cubit/student_channel_state.dart";
 import "package:draya_mobile/features/student/student_channel/presentation/widgets/add_reply_dialog.dart";
@@ -288,6 +289,18 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                                 height: 1.6,
                               ),
                             ),
+                            if (questionDetails.question.imageUrl != null &&
+                                questionDetails.question.imageUrl!
+                                    .trim()
+                                    .isNotEmpty) ...[
+                              const SizedBox(height: 14),
+                              TappableNetworkImage(
+                                imageUrl: questionDetails.question.imageUrl!,
+                                width: double.infinity,
+                                height: 220,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ],
                             const SizedBox(height: 18),
                             const Divider(color: AppColors.border, height: 1),
                             const SizedBox(height: 12),
@@ -547,11 +560,12 @@ class _QuestionDetailsContentState extends State<_QuestionDetailsContent> {
                 return AddReplyDialog(
                   questionId: widget.questionId,
                   isLoading: state.createReplyStatus == CubitStatus.loading,
-                  onSubmit: (content) {
+                  onSubmit: (content, image) {
                     cubit.createReply(
                       classroomId: widget.classroomId,
                       questionId: widget.questionId,
                       content: content,
+                      image: image,
                     );
                   },
                 );

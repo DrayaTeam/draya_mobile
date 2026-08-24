@@ -213,7 +213,7 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
                     controller: _dateOfBirthController,
                     hintText: "YYYY-MM-DD",
                     prefixIcon: Icons.calendar_month_outlined,
-                    isEnabled: false,
+                    isEnabled: true,
                     onTap: _pickDateOfBirth,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {

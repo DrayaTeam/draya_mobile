@@ -2,7 +2,11 @@ class QuestionEntity {
   final String id;
   final String classroomId;
   final String authorId;
+  final String? authorName;
+  final String? authorRole;
+  final String? authorProfilePictureUrl;
   final String content;
+  final String? imageUrl;
   final DateTime createdAt;
   final int voteCount;
   final int replyCount;
@@ -14,7 +18,11 @@ class QuestionEntity {
     required this.id,
     required this.classroomId,
     required this.authorId,
+    this.authorName,
+    this.authorRole,
+    this.authorProfilePictureUrl,
     required this.content,
+    this.imageUrl,
     required this.createdAt,
     required this.voteCount,
     required this.replyCount,
@@ -28,7 +36,11 @@ class QuestionEntity {
     String? id,
     String? classroomId,
     String? authorId,
+    String? authorName,
+    String? authorRole,
+    String? authorProfilePictureUrl,
     String? content,
+    String? imageUrl,
     DateTime? createdAt,
     int? voteCount,
     int? replyCount,
@@ -40,7 +52,12 @@ class QuestionEntity {
       id: id ?? this.id,
       classroomId: classroomId ?? this.classroomId,
       authorId: authorId ?? this.authorId,
+      authorName: authorName ?? this.authorName,
+      authorRole: authorRole ?? this.authorRole,
+      authorProfilePictureUrl:
+          authorProfilePictureUrl ?? this.authorProfilePictureUrl,
       content: content ?? this.content,
+      imageUrl: imageUrl ?? this.imageUrl,
       createdAt: createdAt ?? this.createdAt,
       voteCount: voteCount ?? this.voteCount,
       replyCount: replyCount ?? this.replyCount,

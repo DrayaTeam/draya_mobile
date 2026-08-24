@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:draya_mobile/core/theme/app_colors.dart";
 import "package:draya_mobile/core/theme/app_text_styles.dart";
+import "package:draya_mobile/core/widgets/tappable_network_image.dart";
 import "package:draya_mobile/features/student/student_channel/domain/entity/reply_entity.dart";
 import "package:intl/intl.dart";
 
@@ -137,14 +138,28 @@ class ReplyCardWidget extends StatelessWidget {
             // Reply Content
             Padding(
               padding: const EdgeInsets.only(right: 42),
-              child: Text(
-                reply.content,
-                style: AppTextStyles.body.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textPrimary,
-                  height: 1.55,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    reply.content,
+                    style: AppTextStyles.body.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textPrimary,
+                      height: 1.55,
+                    ),
+                  ),
+                  if (reply.imageUrl != null &&
+                      reply.imageUrl!.trim().isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    TappableNetworkImage(
+                      imageUrl: reply.imageUrl!,
+                      width: double.infinity,
+                      height: 170,
+                    ),
+                  ],
+                ],
               ),
             ),
           ],

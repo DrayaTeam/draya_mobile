@@ -1,3 +1,5 @@
+import "dart:io";
+
 import "package:draya_mobile/core/networking/api_result.dart";
 import "package:draya_mobile/features/teacher/teacher_channel/data/models/create_question_request_model.dart";
 import "package:draya_mobile/features/teacher/teacher_channel/data/models/create_reply_request_model.dart";
@@ -20,6 +22,12 @@ abstract class TeacherChannelRepo {
     CreateQuestionRequestModel request,
   );
 
+  Future<ApiResult<QuestionModel>> createQuestionWithPhoto(
+    String classroomId,
+    String content,
+    File image,
+  );
+
   Future<ApiResult<QuestionDetailsModel>> getQuestionDetails(
     String classroomId,
     String questionId,
@@ -29,6 +37,13 @@ abstract class TeacherChannelRepo {
     String classroomId,
     String questionId,
     CreateReplyRequestModel request,
+  );
+
+  Future<ApiResult<ReplyModel>> createReplyWithPhoto(
+    String classroomId,
+    String questionId,
+    String content,
+    File image,
   );
 
   Future<ApiResult<void>> voteQuestion(
